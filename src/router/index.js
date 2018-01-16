@@ -230,6 +230,12 @@ export const constantRouterMap = [
         hidden: true,
         component: _import('goodsmanage/publish-goods/step1'),
         meta: { title: 'Tree', icon: 'tree' }
+      },
+      {
+        path: 'publishstep2',
+        name: 'publishstep2',
+        hidden: true,
+        component: _import('goodsmanage/publish-goods/step2')
       }
     ]
   },
