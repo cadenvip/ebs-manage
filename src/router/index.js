@@ -221,14 +221,14 @@ export const constantRouterMap = [
       {
         path: 'publishgoods',
         name: 'publish-goods',
-        component: () => import('@/views/goodsmanage/publish-goods/index'),
+        component: _import('goodsmanage/publish-goods/index'),
         meta: { title: '发布商品', icon: 'form' }
       },
       {
         path: 'publishstep1',
         name: 'publishstep1',
         hidden: true,
-        component: () => import('@/views/goodsmanage/publish-goods/step1'),
+        component: _import('goodsmanage/publish-goods/step1'),
         meta: { title: 'Tree', icon: 'tree' }
       }
     ]

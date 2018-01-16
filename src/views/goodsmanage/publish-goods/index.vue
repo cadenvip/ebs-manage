@@ -207,5 +207,5 @@ h4{margin-bottom: 0;}
 .attention span{padding: 5px 20px;background: #ededef;border-radius: 20px;}
 .attention::after {content: '';position: absolute;width: 100%;height: 1px;border-top: 1px dotted #000;top: 10px;left: 110px; }
 .el-message-box {width: 600px;}
-.el-message-box__content p{max-height: 500px;overflow: scroll;}
+.el-message-box__content p{max-height: 500px;overflow: auto;}
 </style>
