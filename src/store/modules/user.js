@@ -25,7 +25,6 @@ const user = {
     },
     SET_USERINFO: (state, userinfo) => {
       state.userinfo = userinfo
-      console.log(state)
     }
   },
 
@@ -84,7 +83,6 @@ const user = {
     },
 
     UpdateUser({ commit }, userInfo) {
-      console.log(userInfo)
       commit('SET_USERINFO', userInfo)
     }
   }

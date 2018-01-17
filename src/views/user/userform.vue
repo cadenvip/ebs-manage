@@ -44,11 +44,13 @@
         <el-button @click="onCancel">Cancel</el-button>
       </el-form-item>
     </el-form>
-    <p>{{test}}</p>{{xx.id}}
+    <div v-show="sidebar">111</div>
+    <div v-if="userinfo">{{userinfo}}</div>
   </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
   data() {
     return {
@@ -77,9 +79,10 @@ export default {
     }
   },
   computed: {
-    xx() {
-      return this.$store.getters.userinfo
-   }   
+    ...mapGetters([
+      'userinfo',
+      'sidebar'
+    ])
   }
 }
 </script>
