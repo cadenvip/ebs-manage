@@ -190,8 +190,6 @@
         })
       },
       goPublish() {
-        console.log(111)
-        console.log(this.$router.push)
         this.$router.push({ path: '/goodsmanage/publishstep1' })
       }
     }

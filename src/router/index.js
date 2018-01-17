@@ -243,7 +243,14 @@ export const constantRouterMap = [
         name: 'publishstep1',
         hidden: true,
         component: () => import('@/views/goodsmanage/publish-goods/step1'),
-        meta: { title: 'Tree', icon: 'tree' }
+        meta: { title: '选择类别' }
+      },
+      {
+        path: 'publishstep2',
+        name: 'publishstep2',
+        hidden: true,
+        component: () => import('@/views/goodsmanage/publish-goods/step2'),
+        meta: { title: '填写详情' }
       }
     ]
   },
