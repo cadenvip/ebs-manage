@@ -6,7 +6,8 @@ const user = {
     token: getToken(),
     name: '',
     avatar: '',
-    roles: []
+    roles: [],
+    userinfo: {}
   },
 
   mutations: {
@@ -21,6 +22,10 @@ const user = {
     },
     SET_ROLES: (state, roles) => {
       state.roles = roles
+    },
+    SET_USERINFO: (state, userinfo) => {
+      state.userinfo = userinfo
+      console.log(state)
     }
   },
 
@@ -76,6 +81,11 @@ const user = {
         removeToken()
         resolve()
       })
+    },
+
+    UpdateUser({ commit }, userInfo) {
+      console.log(userInfo)
+      commit('SET_USERINFO', userInfo)
     }
   }
 }

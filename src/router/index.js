@@ -54,7 +54,7 @@ export const constantRouterMap = [
     component: Layout,
     name: 'user',
     hidden: false,
-    meta: { title: '账户管理', icon: 'table' },
+    meta: { title: '人员管理', icon: 'table' },
     children: [
       {
         path: 'regionmanagement',
@@ -73,6 +73,20 @@ export const constantRouterMap = [
         name: 'list',
         component: _import('user/usermanagement'),
         meta: { title: '人员管理', icon: 'table' }
+      },
+      {
+        path: 'add',
+        name: 'add',
+        hidden: true,
+        component: _import('user/userform'),
+        meta: { title: '新增人员', icon: 'table' }
+      },
+      {
+        path: 'update',
+        name: 'update',
+        hidden: true,
+        component: _import('user/userform'),
+        meta: { title: '修改人员', icon: 'table' }
       },
       {
         path: 'rolemanagement',
@@ -221,21 +235,15 @@ export const constantRouterMap = [
       {
         path: 'publishgoods',
         name: 'publish-goods',
-        component: _import('goodsmanage/publish-goods/index'),
+        component: () => import('@/views/goodsmanage/publish-goods/index'),
         meta: { title: '发布商品', icon: 'form' }
       },
       {
         path: 'publishstep1',
         name: 'publishstep1',
         hidden: true,
-        component: _import('goodsmanage/publish-goods/step1'),
+        component: () => import('@/views/goodsmanage/publish-goods/step1'),
         meta: { title: 'Tree', icon: 'tree' }
-      },
-      {
-        path: 'publishstep2',
-        name: 'publishstep2',
-        hidden: true,
-        component: _import('goodsmanage/publish-goods/step2')
       }
     ]
   },

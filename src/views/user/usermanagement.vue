@@ -38,21 +38,21 @@
       </el-table-column>
       <el-table-column align="center" prop="created_at" label="操作" width="200">
       <template slot-scope="scope">
-        <el-button @click="handleClick(scope.row)" type="text" size="small">修改</el-button>
+        <el-button @click="updateUser(scope.row)" type="text" size="small">修改</el-button>
         <el-button @click="handleClick(scope.row)" type="text" size="small">重置密码</el-button>
         <el-button @click="handleClick(scope.row)" type="text" size="small">详细</el-button>
       </template>
       </el-table-column>
     </el-table>
-    <div class="block" align="left">
+    <div class="block" align="right">
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="currentPage"
-        :page-sizes="[100, 200, 300, 400]"
-        :page-size="100"
+        :page-sizes="[10, 20, 50, 100]"
+        :page-size="10"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="400">
+        :total="213">
       </el-pagination>
     </div>
   </div>
@@ -95,16 +95,16 @@ export default {
       })
     },
     addUser() {
-      this.$router.push({ path: '/' })
+      this.$router.push({ path: '/user/add' })
     },
     getAllUsers() {
       getUserList().then(response => {
-        console.log(response.data.list)
         this.list = response.data.list
       })
     },
     updateUser(user) {
-      return
+      this.$store.dispatch('UpdateUser', user)
+      this.$router.push({ path: '/user/update' })
     },
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`)

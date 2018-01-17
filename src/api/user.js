@@ -7,3 +7,11 @@ export function getUserList(params) {
     params
   })
 }
+
+export function updateUser(params) {
+  return request({
+    url: '/user/form',
+    method: 'post',
+    params
+  })
+}
