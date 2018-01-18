@@ -32,6 +32,7 @@
   export default {
     data() {
       return {
+        goodstype: null,
         radio: '1',
         optionsWithDisabled: [{
           value: '1',
@@ -84,7 +85,7 @@
     },
     methods: {
       handleChange(value) {
-        console.log(value)
+        this.goodstype = value
       },
       open() {
         this.$alert('集推商品主要是展示给移动经销商，进行向集团客户推荐。建议该分类的商品价格低于商城直供价，具有批量订购吸引力，便于集团客户大量订购。', '急推商品', {
@@ -98,7 +99,11 @@
         this.$router.push({ path: '/goodsmanage/publishgoods' })
       },
       goNext() {
-        this.$router.push({ path: '/goodsmanage/publishstep2' })
+        if (this.goodstype) {
+          this.$router.push({ path: '/goodsmanage/publishstep2' })
+        } else {
+          this.$message.error('请选择您的商品类别')
+        }
       }
     }
   }
