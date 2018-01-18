@@ -71,22 +71,29 @@ export const constantRouterMap = [
       {
         path: 'list',
         name: 'list',
-        component: _import('user/usermanagement'),
-        meta: { title: '人员管理', icon: 'table' }
+        component: _import('user/list'),
+        meta: { title: '人员列表', icon: 'table' }
       },
       {
         path: 'add',
         name: 'add',
         hidden: true,
-        component: _import('user/userform'),
+        component: _import('user/add'),
         meta: { title: '新增人员', icon: 'table' }
       },
       {
         path: 'update',
         name: 'update',
         hidden: true,
-        component: _import('user/userform'),
+        component: _import('user/update'),
         meta: { title: '修改人员', icon: 'table' }
+      },
+      {
+        path: 'detail',
+        name: 'detail',
+        hidden: true,
+        component: _import('user/detail'),
+        meta: { title: '人员详情', icon: 'table' }
       },
       {
         path: 'rolemanagement',

@@ -5,7 +5,7 @@ import 'nprogress/nprogress.css'// Progress 进度条样式
 import { Message } from 'element-ui'
 import { getToken } from '@/utils/auth' // 验权
 
-const whiteList = ['/login', '/user/list', '/goodsmanage/publishgoods', '/goodsmanage/publishstep1', '/user/add', '/user/update'] // 不重定向白名单
+const whiteList = ['/login', '/user/list', '/goodsmanage/publishgoods', '/goodsmanage/publishstep1', '/user/add', '/user/update', '/user/detail'] // 不重定向白名单
 router.beforeEach((to, from, next) => {
   NProgress.start()
   if (getToken()) {
@@ -27,7 +27,6 @@ router.beforeEach((to, from, next) => {
       }
     }
   } else if (to.path === '/register') {
-    console.log(333)
     next()
   } else {
     if (whiteList.indexOf(to.path) !== -1) {
