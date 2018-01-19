@@ -1,30 +1,60 @@
 <template>
   <div class="app-container">
-    <h3 class="title">修改人员信息</h3>
-    <el-form :model="userForm" label-width="120px">
-      <el-form-item label="账号：">
-        <el-input v-model="userForm.loginname"></el-input>
+    <h3 class="title">新增人员</h3>
+    <el-form ref="userForm" :model="userForm" :rules="rules" label-width="120px">
+      <el-form-item label="类型：" prop="roletype">
+        <el-radio-group v-model="roletype">
+          <el-radio label="移动管理员"></el-radio>
+          <el-radio label="代运营管理员" ></el-radio>
+        </el-radio-group>
       </el-form-item>
-      <el-form-item label="密码：" prop="pass">
-        <el-input type="password" v-model="userForm.password" auto-complete="off"></el-input>
+      <el-form-item label="角色：" prop="roleids">
+        <el-radio-group v-model="userForm.roleids">
+          <el-row v-if="roletype === '移动管理员'">
+            <el-radio label="商企管理"></el-radio>
+            <el-radio label="财务管理"></el-radio>
+            <el-radio label="信息审核"></el-radio>
+            <el-radio label="财务对账"></el-radio>
+            <el-radio label="电商管理"></el-radio>
+            <el-radio label="内容管理"></el-radio>
+          </el-row>
+          <el-row v-if="roletype === '移动管理员'">
+            <el-radio label="企业管理"></el-radio>
+            <el-radio label="总经销商"></el-radio>
+            <el-radio label="经销商"></el-radio>
+            <el-radio label="分公司管理员"></el-radio>
+            <el-radio label="系统管理员"></el-radio>
+          </el-row>
+          <el-row v-if="roletype === '代运营管理员'">
+            <el-radio label="信息审核员"></el-radio>
+            <el-radio label="信息发布员"></el-radio>
+            <el-radio label="企业管理员"></el-radio>
+          </el-row>
+        </el-radio-group>
       </el-form-item>
-      <el-form-item label="确认密码：" prop="checkPass">
-        <el-input type="password" v-model="userForm.password" auto-complete="off"></el-input>
+      <el-form-item label="账号：" prop="loginname">
+        <el-input v-model="userForm.loginname" style="width: 300px;" placeholder="请输入账号"></el-input>
       </el-form-item>
-      <el-form-item label="姓名">
-        <el-input v-model="userForm.name"></el-input>
+      <el-form-item label="密码：" prop="password">
+        <el-input type="password" v-model="userForm.password" style="width: 300px;" placeholder="请输入密码"></el-input>
       </el-form-item>
-      <el-form-item label="归属区域：">
-        <el-input v-model="userForm.locationname"></el-input>
+      <el-form-item label="确认密码：" prop="repassword">
+        <el-input type="password" v-model="userForm.repassword" style="width: 300px;" placeholder="请再次输入密码"></el-input>
       </el-form-item>
-      <el-form-item label="单位：">
-        <el-input v-model="userForm.unitname"></el-input>
+      <el-form-item label="姓名：" prop="name">
+        <el-input v-model="userForm.name" style="width: 300px;" placeholder="请输入姓名"></el-input>
       </el-form-item>
-      <el-form-item label="邮件：">
-        <el-input v-model="userForm.email"></el-input>
+      <el-form-item label="归属区域：" prop="locationid">
+        <el-input v-model="userForm.locationid" style="width: 300px;" placeholder="请选择归属区域"></el-input>
       </el-form-item>
-      <el-form-item label="地址：">
-        <el-input v-model="userForm.address"></el-input>
+      <el-form-item label="单位：" prop="unitname">
+        <el-input v-model="userForm.unitname" style="width: 300px;" placeholder="请输入单位"></el-input>
+      </el-form-item>
+      <el-form-item label="邮件：" prop="email">
+        <el-input v-model="userForm.email" style="width: 300px;" placeholder="请输入邮件"></el-input>
+      </el-form-item>
+      <el-form-item label="地址：" prop="address">
+        <el-input v-model="userForm.address" style="width: 300px;" placeholder="请输入地址"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">提交</el-button>
@@ -40,16 +70,50 @@ import { addUser } from '@/api/user'
 
 export default {
   data() {
+    var validatePass = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请输入密码'))
+      } else {
+        if (this.userForm.repassword !== '') {
+          this.$refs.userForm.validateField('repassword')
+        }
+        callback()
+      }
+    }
+    var validateRepass = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请再次输入密码'))
+      } else if (value !== this.userForm.password) {
+        callback(new Error('两次输入密码不一致!'))
+      } else {
+        callback()
+      }
+    }
     return {
+      seen: true,
+      roletype: '移动管理员',
       userForm: {
+        roleids: '',
         loginname: '',
         password: '',
-        date1: '',
-        date2: '',
-        delivery: false,
-        type: [],
-        resource: '',
-        desc: ''
+        repassword: '',
+        name: '',
+        locationid: '',
+        unitname: '',
+        email: '',
+        address: ''
+      },
+      rules: {
+        roletype: [{ required: true, message: '请选择类型', trigger: 'blur' }],
+        roleids: [{ required: true, message: '请选择角色', trigger: 'blur' }],
+        loginname: [{ required: true, message: '请输入账号', trigger: 'blur' }],
+        password: [{ required: true, validator: validatePass, trigger: 'blur' }],
+        repassword: [{ required: true, validator: validateRepass, trigger: 'blur' }],
+        name: [{ required: true, message: '请输入名称', trigger: 'blur' }],
+        locationid: [{ required: true, message: '请选择归属区域', trigger: 'blur' }],
+        unitname: [{ required: true, message: '请选输入单位', trigger: 'blur' }],
+        email: [{ required: false, message: '请输入邮件', trigger: 'blur' }],
+        address: [{ required: false, message: '请输入地址', trigger: 'blur' }]
       }
     }
   },

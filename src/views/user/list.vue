@@ -1,28 +1,42 @@
 <template>
   <div>
-    <el-form ref="searchForm" :model="searchForm" label-width="120px">
-      <div>
-        <label>账号：</label>
-        <el-input name="loginname" type="text" style="width:20%" v-model="searchForm.loginname" autoComplete="on"/>
-        <label>手机号码：</label>
-        <el-input name="phoneno" type="text" style="width:20%" v-model="searchForm.phoneno" autoComplete="on"/>
-      </div>
-      <div>
-        <label>姓名：</label>
-        <el-input name="name" type="text" style="width:20%" v-model="searchForm.name" autoComplete="on"/>
-        <label>归属区域：</label>
-        <el-input name="locationid" type="text" style="width:20%" v-model="searchForm.locationid" autoComplete="on"/>
-      </div>
-      <div align="right">
-        <el-button type="primary" @click.native.prevent="queryUserList">
-          查询
-        </el-button>
-        <el-button type="primary" @click.native.prevent="addUser">
-          新增
-        </el-button>
-      </div>
+    <h3 style="padding-left: 20px;">人员查询条件</h3>
+    <el-form ref="searchForm" :model="searchForm" label-width="100px" class="demo-ruleForm">
+      <el-row>
+        <el-col :span="10">
+          <el-form-item label="账号：">
+            <el-input v-model="searchForm.loginname" style="width: 300px;"></el-input>
+          </el-form-item>  
+        </el-col>
+        <el-col :span="10">
+          <el-form-item label="手机号码：">
+            <el-input v-model="searchForm.phoneno" style="width: 300px;"></el-input>
+          </el-form-item>  
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="10">
+          <el-form-item label="姓名：">
+            <el-input v-model="searchForm.name" style="width: 300px;"></el-input>
+          </el-form-item>  
+        </el-col>
+        <el-col :span="10">
+          <el-form-item label="归属区域：">
+            <el-input v-model="searchForm.locationid" style="width: 300px;"></el-input>
+          </el-form-item>  
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="2" :offset="16">
+          <el-button type="primary" @click.native.prevent="queryUserList">查询</el-button>
+        </el-col>
+        <el-col :span="2">
+          <el-button type="primary" @click.native.prevent="addUser">新增</el-button>
+        </el-col>
+      </el-row>
     </el-form>
-    <el-table :data="list" border fit highlight-current-row>
+    <h3 style="padding-left: 20px;">人员列表</h3>
+    <el-table :data="list" border stripe fit highlight-current-row style="padding-left:10px">
       <el-table-column label='账号' prop="loginname" width="110">
       </el-table-column>
       <el-table-column label="姓名" prop="name" width="150">
@@ -35,7 +49,7 @@
       </el-table-column>
       <el-table-column prop="unitname" align="center" label="所属单位" width="200">
       </el-table-column>
-      <el-table-column align="center" label="操作" width="200">
+      <el-table-column align="center" label="操作" width="190">
       <template slot-scope="scope">
         <el-button @click="updateUser(scope.row)" type="text" size="small">修改</el-button>
         <el-button @click="resetPassword(scope.row)" type="text" size="small">重置密码</el-button>
@@ -43,7 +57,7 @@
       </template>
       </el-table-column>
     </el-table>
-    <div class="block" align="right">
+    <div class="block" align="right" style="padding-right:20px">
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
