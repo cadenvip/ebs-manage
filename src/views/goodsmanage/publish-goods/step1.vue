@@ -11,13 +11,13 @@
     <el-main>
       <div>
         <span style="padding-right: 20px;font-size:20px;">请选择您的商品类别:</span>
-        <el-cascader @change="handleChange" :options="optionsWithDisabled">
+        <el-cascader style="width: 300px;" @change="handleChange" :options="goodsOptions">
         </el-cascader>
       </div>
-      <div style="margin-top: 50px;">
+      <div style="display: none;margin-top: 50px;">
         <span style="padding-right: 20px;font-size:20px;">请选择您的商品类型:</span>
         <el-radio v-model="radio" label="1">普通商品</el-radio>
-        <el-radio v-model="radio" label="2">急推商品</el-radio><i @click="open" style="padding-left: 10px;cursor:pointer;" class="el-icon-question "></i>
+        <el-radio v-model="radio" label="2">急推商品</el-radio><i @click="tip" style="padding-left: 10px;cursor:pointer;" class="el-icon-question "></i>
       </div>
       <div style="margin-top: 50px; text-align: center;">
         <el-button @click="goBack" type="primary">返回上一步</el-button>
@@ -32,9 +32,9 @@
   export default {
     data() {
       return {
-        goodstype: null,
+        goodstype: [],
         radio: '1',
-        optionsWithDisabled: [{
+        goodsOptions: [{
           value: '1',
           label: '米面粮油',
           children: [{
@@ -86,8 +86,9 @@
     methods: {
       handleChange(value) {
         this.goodstype = value
+        console.log(value)
       },
-      open() {
+      tip() {
         this.$alert('集推商品主要是展示给移动经销商，进行向集团客户推荐。建议该分类的商品价格低于商城直供价，具有批量订购吸引力，便于集团客户大量订购。', '急推商品', {
           confirmButtonText: '确定',
           callback: action => {
@@ -99,8 +100,8 @@
         this.$router.push({ path: '/goodsmanage/publishgoods' })
       },
       goNext() {
-        if (this.goodstype) {
-          this.$router.push({ path: '/goodsmanage/publishstep2' })
+        if (this.goodstype.length > 0) {
+          this.$router.push({ name: 'publishstep2', params: { typeCode: this.goodstype[0], typeCodeName: this.goodstype[1] }})
         } else {
           this.$message.error('请选择您的商品类别')
         }

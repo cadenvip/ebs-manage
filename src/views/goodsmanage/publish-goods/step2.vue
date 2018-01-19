@@ -18,7 +18,7 @@
         <el-input style="width: 100px;" placeholder="特色卖点" v-model="ruleForm.maidian"></el-input>
       </el-form-item>
       <div>
-        <p style="font-size: 14px;color: #606266;margin-left: 30px;margin-top: 0;">商品名称展示效果: <span style="color: #67c23a">{{ruleForm.cuxiao+"&nbsp&nbsp"+ruleForm.pinpai+"&nbsp&nbsp"+ruleForm.mingchen+"&nbsp&nbsp"+ruleForm.guige+"&nbsp&nbsp"+ruleForm.maidian}}</span></p>
+        <p style="font-size: 14px;color: #606266;margin-left: 30px;margin-top: 0;">商品名称展示效果: <span style="color: #67c23a">{{ruleForm.cuxiao+"&nbsp&nbsp"+ruleForm.pinpai+"&nbsp&nbsp"+ruleForm.mingchen+"&nbsp&nbsp"}}<i v-show="ruleForm.guige">包装: </i>{{ruleForm.guige+"&nbsp&nbsp"+ruleForm.maidian}}</span></p>
       </div>
       <el-form-item style="display: block;" label="市场价" prop="shichangjia">
         <el-input style="width: 260px;" placeholder="输入同类市场价" v-model="ruleForm.shichangjia"></el-input>
@@ -149,7 +149,7 @@
         </el-col>
       </el-row>
       <h2 style="padding-left: 20px;">商品更多信息</h2>
-
+      {{goodsType.typeCode}}
 
       <el-form-item style="margin-top: 100px;text-align: center;">
         <el-button type="primary" @click="submitForm('ruleForm')">立即创建</el-button>
@@ -161,8 +161,18 @@
 <script>
   import Jieti from '@/components/Jieti/index'
   export default {
+    mounted() {
+      this.goodsType.typeCode = this.$route.params.typeCode
+      this.goodsType.typeCodeName = this.$route.params.typeCodeName
+      this.goodsType.pattern = this.$route.params.pattern
+    },
     data() {
       return {
+        goodsType: {
+          typeCode: '',
+          typeCodeName: '',
+          pattern: 0
+        },
         jietiItems: [],
         jietiItem1: {
           num: '',
