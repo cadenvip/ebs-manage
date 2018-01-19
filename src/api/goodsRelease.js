@@ -6,3 +6,10 @@ export function checkSeller () {
     method: 'post'
   })
 }
+
+export function getGoodsType () {
+  return request({
+    url: '/category/list',
+    method: 'get'
+  })
+}

@@ -40,12 +40,13 @@
       </el-form-item>
       <el-form-item style="display: block;" label="支付方式" prop="zhifufs">
         <el-checkbox-group v-model="ruleForm.zhifufs">
-          <el-checkbox label="支付宝支付" name="zhifufs"></el-checkbox>
-          <el-checkbox label="手机支付" name="zhifufs"></el-checkbox>
+          <el-checkbox @click="checkPayWay(23)" label="支付宝支付" name="zhifufs"></el-checkbox>
+          <el-checkbox @click="checkPayWay(22)" label="手机支付" name="zhifufs"></el-checkbox>
           <el-checkbox label="货到付款" name="zhifufs"></el-checkbox>
-          <el-checkbox label="网银支付" name="zhifufs"></el-checkbox>
+          <el-checkbox @click="checkPayWay(24)" label="网银支付" name="zhifufs"></el-checkbox>
           <el-alert title="温馨提示：在线支付将由支付渠道收取交易手续费，由商户承担，支付宝0.5%，手机支付0.3%。" type="error" :closable="false"></el-alert>
         </el-checkbox-group>
+        {{ruleForm.zhifufs}}
       </el-form-item>
       <el-form-item style="display: block;margin-bottom: 0;" label="阶梯价格" prop="jieti">
         <span style="color: #606266;" @click="handleJieti" v-if="!ruleForm.jieti">启用</span><span style="color: #606266;" @click="handleJieti" v-if="ruleForm.jieti">禁用</span>
@@ -55,7 +56,7 @@
         <span> 一次性购买 </span><el-input v-model="jietiItem1.num" size="mini" style="width: 80px;"></el-input>
         <span>件,商品价格优惠为</span>
         <el-input v-model="jietiItem1.dollar" size="mini" style="width: 80px;"></el-input> 元 
-        <el-button size="mini" @click="add">新增</el-button>
+        <el-button size="mini" @click="addJieti">新增</el-button>
         <div v-for="(item,index) in jietiItems">
           <jieti :item="item"></jieti>
           <el-button size="mini" @click="delejieti(index)">删除</el-button>
@@ -75,7 +76,7 @@
       </el-form-item>
       <h2 style="padding-left: 20px;">商品参数信息</h2>
       <el-row>
-        <el-col :span="6">
+        <el-col :span="8">
           <el-form-item label="商品编码">
             0000
           </el-form-item>          
@@ -93,14 +94,14 @@
             </el-select>       
           </el-form-item>  
         </el-col>
-        <el-col :span="10">
+        <el-col :span="8">
           <el-form-item label="商品规格">
             <el-input v-model="ruleForm.spgg"></el-input>
           </el-form-item>  
         </el-col>
       </el-row>
       <el-row>
-        <el-col :span="6">
+        <el-col :span="8">
           <el-form-item label="生产厂家" prop="sccj">
             <el-input v-model="ruleForm.sccj"></el-input>
           </el-form-item>  
@@ -110,14 +111,14 @@
             <el-input v-model="ruleForm.spcd"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="10">
+        <el-col :span="8">
           <el-form-item label="生产日期">
             <el-input v-model="ruleForm.scrq"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
       <el-row>
-        <el-col :span="6">
+        <el-col :span="8">
           <el-form-item label="保质期" prop="baozhiqi">
             <el-input style="width: 100px;" v-model="ruleForm.baozhiqi"></el-input>
             <el-select v-model="baozhiqi" style="width:80px;" placeholder="请选择">
@@ -135,7 +136,7 @@
             <el-input disabled="" v-model="ruleForm.spfl"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="10">
+        <el-col :span="8">
           <el-form-item label="计量单位" prop="jldw">
           <el-select style="width: 180px;" v-model="jiliangdw" placeholder="请选择">
             <el-option
@@ -302,7 +303,7 @@
       handleJieti() {
         this.ruleForm.jieti = !this.ruleForm.jieti
       },
-      add() {
+      addJieti() {
         this.jietiItems.push({})
       },
       delejieti(index) {
@@ -323,6 +324,11 @@
           this.$message.error('上传头像图片大小不能超过 2MB!')
         }
         return isJPG && isLt2M
+      },
+      checkPayWay(val) {
+        if (val) {
+          console.log(val)
+        }
       }
     },
     components: {

@@ -11,7 +11,7 @@
     <el-main>
       <div>
         <span style="padding-right: 20px;font-size:20px;">请选择您的商品类别:</span>
-        <el-cascader style="width: 300px;" @change="handleChange" :options="goodsOptions">
+        <el-cascader style="width: 300px;" @change="handleChange" :options="goodsOptions" v-model="goodstype">
         </el-cascader>
       </div>
       <div style="display: none;margin-top: 50px;">
@@ -29,64 +29,58 @@
 </template>
 
 <script>
+  import { getGoodsType } from '@/api/goodsRelease'
+  import { mapMutations, mapGetters } from 'vuex'
   export default {
     data() {
       return {
         goodstype: [],
         radio: '1',
-        goodsOptions: [{
-          value: '1',
-          label: '米面粮油',
-          children: [{
-            value: '11',
-            label: '食用油'
-          }, {
-            value: '12',
-            label: '大米'
-          },
-          {
-            value: '11',
-            label: '挂面'
-          }, {
-            value: '12',
-            label: '杂粮'
-          },
-          {
-            value: '11',
-            label: '面粉'
-          }]
-        },
-        {
-          value: '2',
-          label: '生鲜水果',
-          children: [{
-            value: '21',
-            label: '水果'
-          }, {
-            value: '22',
-            label: '蔬菜'
-          },
-          {
-            value: '23',
-            label: '肉类'
-          }, {
-            value: '24',
-            label: '蛋类'
-          },
-          {
-            value: '25',
-            label: '水产'
-          }, {
-            value: '26',
-            label: '家禽'
-          }]
-        }]
+        goodsOptions: []
       }
     },
+    created () {
+      this._getGoodsType()
+      if (this.getSelectedOption.length > 0) {
+        this.goodstype = this.getSelectedOption
+      }
+    },
+    computed: {
+      getSelectedOption() {
+        return this.selectedoption
+      },
+      ...mapGetters([
+        'selectedoption'
+      ])
+    },
     methods: {
+      _getGoodsType() {
+        getGoodsType().then((res) => {
+          if (res.status === 200) {
+            this.goodsTypeTemplate = res.data[0]
+            this.format()
+          } else {
+            this.$message.error('网络错误' + res.status)
+          }
+        })
+      },
+      format() {
+        if (this.goodsTypeTemplate) {
+          console.log('enter')
+          this.goodsTypeTemplate = this.goodsTypeTemplate.subCategories
+          for (var i = 0; i < this.goodsTypeTemplate.length; i++) {
+            var children = []
+            var temp = this.goodsTypeTemplate[i]
+            for (var j = 0; j < temp.subCategories.length; j++) {
+              children.push({ value: temp.subCategories[j]['categoryId'], label: temp.subCategories[j]['categoryName'] })
+            }
+            this.goodsOptions.push({ value: temp['categoryId'], label: temp['categoryName'], children: children })
+          }
+        }
+      },
       handleChange(value) {
         this.goodstype = value
-        console.log(value)
+        this.setSelectedOption(value)
       },
       tip() {
         this.$alert('集推商品主要是展示给移动经销商，进行向集团客户推荐。建议该分类的商品价格低于商城直供价，具有批量订购吸引力，便于集团客户大量订购。', '急推商品', {
@@ -105,7 +99,13 @@
         } else {
           this.$message.error('请选择您的商品类别')
         }
-      }
+      },
+      ...mapMutations({
+        setSelectedOption: 'SET_SELECTEDOPTION'
+      })
     }
   }
 </script>
+<style>
+.el-cascader-menu{height: 350px;}
+</style>
