@@ -100,7 +100,6 @@ export default {
         if (valid) {
           this.loading = true
           // 提供dispatch(action)方法更新state；
-          alert('正在登录...')
           this.$store.dispatch('Login', this.loginForm).then(() => {
             this.loading = false
             this.$router.push({ path: '/' })

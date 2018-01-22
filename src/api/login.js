@@ -9,7 +9,7 @@ export function login(params) {
     data: {
       'loginname': params.loginname,
       'password': params.password,
-      'unitids': params.unitid,
+      'unitid': params.unitid,
       'vercode': '123456'
     }
   })

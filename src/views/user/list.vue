@@ -61,11 +61,11 @@
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-        :current-page="currentPage"
-        :page-sizes="[10, 20, 50, 100]"
-        :page-size="10"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="213">
+        :current-page="currentPage"
+        :page-sizes="pagesizes"
+        :page-size="pagesize"
+        :total="total">
       </el-pagination>
     </div>
   </div>
@@ -84,7 +84,10 @@ export default {
         name: '',
         locationid: ''
       },
-      currentPage: 4
+      pagesizes: [10, 20, 30, 50],
+      pagesize: 10,
+      currentPage: 1,
+      total: 0
     }
   },
   created() {
@@ -97,11 +100,14 @@ export default {
       })
     },
     addUser() {
-      this.$router.push({ path: '/user/add' })
+      this.$router.push({ path: '/account/user/add' })
     },
     initUserList() {
       getAllUsers().then(response => {
         this.list = response.data.list
+        this.total = response.data.total
+        this.pagesize = response.data.pagesize
+        this.current = response.data.pages
       })
     },
     joinRoleName(row, column, cellValue) {
@@ -115,7 +121,7 @@ export default {
       return arrRoleNames.join()
     },
     updateUser(user) {
-      this.$router.push({ path: '/user/update', query: { id: user.id }})
+      this.$router.push({ path: '/account/user/update', query: { id: user.id }})
     },
     resetPassword(user) {
       this.$confirm(`您确定重置[${user.loginname}]的密码吗, 是否继续?`, '提示', {
@@ -136,7 +142,7 @@ export default {
       })
     },
     detail(user) {
-      this.$router.push({ path: '/user/detail', query: { id: user.id }})
+      this.$router.push({ path: '/account/user/detail', query: { id: user.id }})
     },
     handleSizeChange(val) {
       return
