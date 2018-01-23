@@ -58,6 +58,7 @@
         getGoodsType().then((res) => {
           if (res.status === 200) {
             this.goodsTypeTemplate = res.data[0]
+            console.log(this.goodsTypeTemplate)
             this.format()
           } else {
             this.$message.error('网络错误' + res.status)
@@ -66,7 +67,6 @@
       },
       format() {
         if (this.goodsTypeTemplate) {
-          console.log('enter')
           this.goodsTypeTemplate = this.goodsTypeTemplate.subCategories
           for (var i = 0; i < this.goodsTypeTemplate.length; i++) {
             var children = []
@@ -79,8 +79,22 @@
         }
       },
       handleChange(value) {
+        var label = ''
+        var subLabel = ''
+        for (var i in this.goodsTypeTemplate) {
+          if (this.goodsTypeTemplate[i].categoryId === value[0]) {
+            label = this.goodsTypeTemplate[i].categoryName
+            for (var j in this.goodsTypeTemplate[i].subCategories) {
+              if (this.goodsTypeTemplate[i].subCategories[j].categoryId === value[1]) {
+                subLabel = this.goodsTypeTemplate[i].subCategories[j].categoryName
+              }
+            }
+          }
+        }
+        console.log(label, subLabel)
         this.goodstype = value
         this.setSelectedOption(value)
+        this.setSelectedLabel(subLabel)
       },
       tip() {
         this.$alert('集推商品主要是展示给移动经销商，进行向集团客户推荐。建议该分类的商品价格低于商城直供价，具有批量订购吸引力，便于集团客户大量订购。', '急推商品', {
@@ -101,7 +115,8 @@
         }
       },
       ...mapMutations({
-        setSelectedOption: 'SET_SELECTEDOPTION'
+        setSelectedOption: 'SET_SELECTEDOPTION',
+        setSelectedLabel: 'SET_SELECTEDLABELS'
       })
     }
   }

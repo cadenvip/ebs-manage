@@ -1,10 +1,14 @@
 const goodstype = {
   state: {
-    selectedOptions: []
+    selectedOptions: [],
+    selectedLabels: ''
   },
   mutations: {
     SET_SELECTEDOPTION: (state, options) => {
       state.selectedOptions = options
+    },
+    SET_SELECTEDLABELS: (state, options) => {
+      state.selectedLabels = options
     }
   }
 }

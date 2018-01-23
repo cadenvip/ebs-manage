@@ -203,6 +203,9 @@
             this.$message.error('网络错误')
           }
         })
+        setTimeout(() => {
+          this.isClick = false
+        }, 5000)
       }
     }
   }

@@ -2,7 +2,7 @@
   <div>
     <el-form :model="ruleForm" :inline="true" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
       <h2 style="padding-left: 20px;">基本商品信息</h2>
-      <el-form-item label="商品名称" prop="cuxiao">
+      <el-form-item label="商品名称:" prop="cuxiao">
         <el-input style="width: 100px;" placeholder="促销信息" v-model="ruleForm.cuxiao"></el-input>
       </el-form-item>
       <el-form-item label="" prop="pinpai">
@@ -20,35 +20,51 @@
       <div>
         <p style="font-size: 14px;color: #606266;margin-left: 30px;margin-top: 0;">商品名称展示效果: <span style="color: #67c23a">{{ruleForm.cuxiao+"&nbsp&nbsp"+ruleForm.pinpai+"&nbsp&nbsp"+ruleForm.mingchen+"&nbsp&nbsp"}}<i v-show="ruleForm.guige">包装: </i>{{ruleForm.guige+"&nbsp&nbsp"+ruleForm.maidian}}</span></p>
       </div>
-      <el-form-item style="display: block;" label="市场价" prop="shichangjia">
+      <el-form-item style="display: block;" label="市场价:" prop="shichangjia">
         <el-input style="width: 260px;" placeholder="输入同类市场价" v-model="ruleForm.shichangjia"></el-input>
       </el-form-item>
-      <el-form-item style="display: block;" label="直供价" prop="zhigongjia">
+      <el-form-item style="display: block;" label="直供价:" prop="zhigongjia">
         <el-input style="width: 260px;" placeholder="输入在商城销售价格，应低于市场价" v-model="ruleForm.zhigongjia"></el-input>
       </el-form-item>
-      <el-form-item style="display: block;" label="物流" prop="wuliu">
-        <el-radio-group v-model="ruleForm.wuliu">
-          <el-radio :label="1">快递</el-radio>
-          <el-radio :label="2">自提</el-radio>
-          <el-button v-show="ruleForm.wuliu===1" type="primary" size="mini" style="margin-left: 40px;">快递模板</el-button>
-        </el-radio-group>
+      <el-form-item style="display: block;" label="物流:" prop="wuliu">
+        <el-popover
+          ref="popover"
+          placement="right"
+          width="400"
+          trigger="click"
+          v-model="popVisible"
+          content="这是一段内容,这是一段内容,这是一段内容,这是一段内容。"> 
+          <el-radio-group v-model="ruleForm.wuliuObjt">
+            <div style="margin-top: 14px;" v-for="item in ruleForm.wuliuObj">
+              <el-radio :label="item.templateCode">{{item.templateName}}</el-radio>
+            </div>
+          </el-radio-group>
+          <div style="text-align: center; margin: 14px;">
+            <el-button type="danger" size="mini" @click="popVisible = false">取消</el-button>
+            <el-button type="primary" size="mini" @click="popVisible = false">确定</el-button>
+          </div>
+        </el-popover>
+        <el-checkbox-group v-model="ruleForm.wuliu">
+          <el-checkbox label="物流"></el-checkbox>
+          <el-checkbox label="自提"></el-checkbox>
+          <el-button @click="openLogisticsTemplate" v-show="ruleForm.wuliu.indexOf('物流')>=0" type="primary" size="mini" style="margin-left: 40px;" v-popover:popover>快递模板</el-button>          
+        </el-checkbox-group>
       </el-form-item>
-      <el-form-item style="display: block;" label="库存" prop="kucun">
+      <el-form-item style="display: block;" label="库存:" prop="kucun">
         <el-input style="width: 100px;" placeholder="输入库存" v-model="ruleForm.kucun"></el-input>
         <el-checkbox style="margin-left: 50px;" v-model="ruleForm.kucuntx">库存提醒</el-checkbox>
         <span style="margin: 0 10px;color: #606266;">低于</span><el-input :disabled="!ruleForm.kucuntx" v-model="ruleForm.kucuntxNum" style="width: 100px;"></el-input>
       </el-form-item>
-      <el-form-item style="display: block;" label="支付方式" prop="zhifufs">
+      <el-form-item style="display: block;" label="支付方式:" prop="zhifufs">
         <el-checkbox-group v-model="ruleForm.zhifufs">
-          <el-checkbox @click="checkPayWay(23)" label="支付宝支付" name="zhifufs"></el-checkbox>
-          <el-checkbox @click="checkPayWay(22)" label="手机支付" name="zhifufs"></el-checkbox>
-          <el-checkbox label="货到付款" name="zhifufs"></el-checkbox>
-          <el-checkbox @click="checkPayWay(24)" label="网银支付" name="zhifufs"></el-checkbox>
+          <el-checkbox @change="checkPayWay(23)" label="支付宝支付" name="zhifufs"></el-checkbox>
+          <el-checkbox @change="checkPayWay(22)" label="手机支付" name="zhifufs"></el-checkbox>
+          <el-checkbox :checked=true disabled label="货到付款" name="zhifufs"></el-checkbox>
+          <el-checkbox @change="checkPayWay(24)" label="网银支付" name="zhifufs"></el-checkbox>
           <el-alert title="温馨提示：在线支付将由支付渠道收取交易手续费，由商户承担，支付宝0.5%，手机支付0.3%。" type="error" :closable="false"></el-alert>
         </el-checkbox-group>
-        {{ruleForm.zhifufs}}
       </el-form-item>
-      <el-form-item style="display: block;margin-bottom: 0;" label="阶梯价格" prop="jieti">
+      <el-form-item style="display: block;margin-bottom: 0;" label="阶梯价格:" prop="jieti">
         <span style="color: #606266;" @click="handleJieti" v-if="!ruleForm.jieti">启用</span><span style="color: #606266;" @click="handleJieti" v-if="ruleForm.jieti">禁用</span>
         <el-switch style="margin-left: 5px;" v-model="ruleForm.jieti"></el-switch>
       </el-form-item>
@@ -61,6 +77,9 @@
           <jieti :item="item"></jieti>
           <el-button size="mini" @click="delejieti(index)">删除</el-button>
         </div>
+        {{jietiItem1.num}}  {{jietiItem1.dollar}}
+        {{jietiItems}}
+
       </div>
       <el-form-item style="padding-left: 100px;">
         <el-upload
@@ -77,12 +96,12 @@
       <h2 style="padding-left: 20px;">商品参数信息</h2>
       <el-row>
         <el-col :span="8">
-          <el-form-item label="商品编码">
+          <el-form-item label="商品编码:">
             0000
           </el-form-item>          
         </el-col>
         <el-col :span="8">
-          <el-form-item label="商品重量" prop="spzl">
+          <el-form-item label="商品重量:" prop="spzl">
             <el-input style="width: 100px;" v-model="ruleForm.spzl"></el-input>
             <el-select v-model="danwei" style="width:80px;" placeholder="请选择">
               <el-option
@@ -95,33 +114,37 @@
           </el-form-item>  
         </el-col>
         <el-col :span="8">
-          <el-form-item label="商品规格">
+          <el-form-item label="商品规格:">
             <el-input v-model="ruleForm.spgg"></el-input>
           </el-form-item>  
         </el-col>
       </el-row>
       <el-row>
         <el-col :span="8">
-          <el-form-item label="生产厂家" prop="sccj">
+          <el-form-item label="生产厂家:" prop="sccj">
             <el-input v-model="ruleForm.sccj"></el-input>
           </el-form-item>  
         </el-col>
         <el-col :span="8">
-          <el-form-item label="商品产地" prop="spcd">
+          <el-form-item label="商品产地:" prop="spcd">
             <el-input v-model="ruleForm.spcd"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="生产日期">
-            <el-input v-model="ruleForm.scrq"></el-input>
+          <el-form-item label="生产日期:">
+            <el-date-picker
+              v-model="ruleForm.scrq"
+              type="date"
+              placeholder="选择日期">
+            </el-date-picker>
           </el-form-item>
         </el-col>
       </el-row>
       <el-row>
         <el-col :span="8">
-          <el-form-item label="保质期" prop="baozhiqi">
+          <el-form-item label="保质期:" prop="baozhiqi">
             <el-input style="width: 100px;" v-model="ruleForm.baozhiqi"></el-input>
-            <el-select v-model="baozhiqi" style="width:80px;" placeholder="请选择">
+            <el-select v-model="baozhiqidw" style="width:80px;" placeholder="请选择">
               <el-option
                 v-for="item in baozhiqiOptions"
                 :key="item.value"
@@ -132,12 +155,12 @@
           </el-form-item> 
         </el-col>
         <el-col :span="8">
-          <el-form-item label="商品分类" prop="spfl">
+          <el-form-item label="商品分类:" prop="spfl">
             <el-input disabled="" v-model="ruleForm.spfl"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="计量单位" prop="jldw">
+          <el-form-item label="计量单位:" prop="jldw">
           <el-select style="width: 180px;" v-model="jiliangdw" placeholder="请选择">
             <el-option
               v-for="item in jiliangdwOptions"
@@ -150,25 +173,109 @@
         </el-col>
       </el-row>
       <h2 style="padding-left: 20px;">商品更多信息</h2>
-      {{goodsType.typeCode}}
-
-      <el-form-item style="margin-top: 100px;text-align: center;">
-        <el-button type="primary" @click="submitForm('ruleForm')">立即创建</el-button>
-        <el-button @click="resetForm('ruleForm')">重置</el-button>
+      <el-form-item>
+        <span style="padding-left:30px;">定时上架:</span>
+        <el-checkbox :checked="ruleForm.dingssj" @change="iszdsj" style="margin-left: 10px;" v-model="ruleForm.dingssj">启用</el-checkbox>
+        <el-form-item label="上架时间：" prop="zdsjsj">
+          <el-date-picker
+            :clearable = "false"
+            @blur="checkTimeCorrect"
+            :disabled="ruleForm.iszisj"
+            v-model="ruleForm.zdsjsj"
+            type="datetime"
+            placeholder="选择日期">
+          </el-date-picker>
+        </el-form-item>
+        <el-form-item label="下架时间：">
+          <el-date-picker
+            :default-value = "new Date()"
+            @blur="checkTimeCorrect"
+            v-model="ruleForm.zdxjsj"
+            type="datetime"
+            placeholder="选择日期">
+          </el-date-picker>
+        </el-form-item>
       </el-form-item>
-    </el-form>
+      <el-form-item style="display: block;" label="上架提醒:">
+        <el-checkbox-group v-model="ruleForm.sjtx">
+          <el-checkbox label="邮件" name="sjtx"></el-checkbox>
+          <el-checkbox label="短信" name="sjtx"></el-checkbox>
+        </el-checkbox-group>
+      </el-form-item>
+      <el-form-item style="display: block;" label="发布渠道:">
+        <el-checkbox-group v-model="ruleForm.fbqd">
+          <el-checkbox checked label="12582网站" name="fbqd"></el-checkbox>
+          <el-checkbox checked label="12582热线" name="fbqd"></el-checkbox>
+          <el-checkbox checked label="WAP" name="fbqd"></el-checkbox>
+          <el-checkbox checked label="手机客户端" name="fbqd"></el-checkbox>
+          <el-checkbox label="农资商城" name="fbqd"></el-checkbox>
+        </el-checkbox-group>
+      </el-form-item>
+      <el-form-item style="display: block;" label="退换货:">
+        <el-checkbox-group v-model="ruleForm.thh">
+          <el-checkbox checked label="推荐" name="thh"></el-checkbox>
+          <el-checkbox checked label="支持退货" name="thh"></el-checkbox>
+          <el-checkbox checked label="支持换货" name="thh"></el-checkbox>
+        </el-checkbox-group>
+      </el-form-item>
+      <el-form-item style="display: block;" label="视频地址:">
+          <el-input v-model="ruleForm.spdz"></el-input>
+      </el-form-item>
+      <el-button @click="show = !show" style="margin-left: 30px;">更多信息展开</el-button>
+      <div style="margin-top: 20px;">
+        <el-collapse-transition>
+          <div v-show="show">
+            <div class="transition-box">
+              <label class="el-form-item__label" style="width: 100px;">商品简述:</label>
+              <el-input style="width: 70%;" type="textarea" placeholder="请输入内容" v-model="ruleForm.shangpjs"></el-input>
+            </div>
+            <div class="transition-box" style="margin-top: 20px;">
+              <label class="el-form-item__label" style="width: 100px;">推介短信:</label>
+              <el-input style="width: 70%;" type="textarea" placeholder="请输入内容" v-model="ruleForm.tuijdx"></el-input>
+            </div>
+            <div class="transition-box" style="margin-top: 20px;">
+              <label class="el-form-item__label" style="width: 100px;">商品清单:</label>
+              <el-input style="width: 70%;" type="textarea" placeholder="请输入内容" v-model="ruleForm.shangpqd"></el-input>
+            </div>
+            <div class="transition-box" style="margin-top: 20px;">
+              <el-form-item label="wappush内容:">
+                <el-input placeholder="请输入内容" v-model="ruleForm.wappushnr"></el-input>
+              </el-form-item>
+              <el-form-item label="wappush链接:">
+                <el-input placeholder="请输入内容" v-model="ruleForm.wappushlj"></el-input>
+              </el-form-item>
+            </div>
+          </div>
+        </el-collapse-transition>
+      </div>    
+      <!-- <h2 style="padding-left: 20px;">商品描述详情</h2>   -->
+      <div style="text-align: center;margin-top: 20px;">
+        <el-form-item>
+          <el-button type="primary" @click="submitForm('ruleForm')">立即创建</el-button>
+          <el-button @click="resetForm('ruleForm')">重置</el-button>          
+        </el-form-item>
+      </div>      
+    </el-form>   
+    {{selectedlabel}}
   </div>
 </template>
 <script>
+  import 'element-ui/lib/theme-chalk/base.css'
   import Jieti from '@/components/Jieti/index'
+  import { checkPayWay, goodsRelease, getLogisticsTemplate } from '@/api/goodsRelease'
+  import CollapseTransition from 'element-ui/lib/transitions/collapse-transition'
+  import { mapGetters } from 'vuex'
   export default {
     mounted() {
       this.goodsType.typeCode = this.$route.params.typeCode
       this.goodsType.typeCodeName = this.$route.params.typeCodeName
       this.goodsType.pattern = this.$route.params.pattern
+      console.log(this.goodsType)
     },
     data() {
       return {
+        popVisible: false,
+        show: true,
         goodsType: {
           typeCode: '',
           typeCodeName: '',
@@ -187,12 +294,8 @@
         {
           value: '千克',
           label: '千克'
-        },
-        {
-          value: '吨',
-          label: '吨'
         }],
-        baozhiqi: '天',
+        baozhiqidw: '天',
         baozhiqiOptions: [{
           value: '天',
           label: '天'
@@ -209,6 +312,14 @@
         jiliangdwOptions: [{
           value: '吨',
           label: '吨'
+        },
+        {
+          value: '千克',
+          label: '千克'
+        },
+        {
+          value: '克',
+          label: '克'
         }],
         imageUrl: '',
         ruleForm: {
@@ -219,7 +330,9 @@
           maidian: '',
           shichangjia: '',
           zhigongjia: '',
-          wuliu: '',
+          wuliu: [],
+          wuliuObj: {},
+          wuliuObjt: '',
           kucun: '',
           kucuntx: true,
           kucuntxNum: '',
@@ -232,7 +345,20 @@
           spcd: '', // 商品产地
           scrq: '', // 生产日期
           spfl: '从前一页取',
-          jldw: ''
+          jldw: '',
+          dingssj: true,
+          zdsjsj: new Date(),
+          iszisj: false,
+          zdxjsj: new Date(2099, 11, 31, 23, 59, 59),
+          sjtx: [],
+          fbqd: [],
+          thh: [],
+          spdz: '',
+          shangpjs: '',
+          tuijdx: '',
+          shangpqd: '',
+          wappushnr: '',
+          wappushlj: ''
         },
         rules: {
           cuxiao: [
@@ -282,6 +408,9 @@
           ],
           spfl: [
             { required: true }
+          ],
+          zdsjsj: [
+            { required: true, message: '请输入自动上架时间', trigger: 'blur' }
           ]
         }
       }
@@ -290,7 +419,58 @@
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            alert('submit!')
+            const parmas = {
+              name: this.ruleForm.mingchen,
+              promotionInfo: this.ruleForm.cuxiao,
+              brand: this.ruleForm.pinpai,
+              orderGoodsSpec1: this.ruleForm.guige,
+              features: this.ruleForm.maidian,
+              marketPrice: this.ruleForm.shichangjia,
+              price: this.ruleForm.zhigongjia,
+              logisticsTypes: this.ruleForm.wuliu,
+              logisticsTemplateCode: this.ruleForm.wuliuObjt,
+              stock: this.ruleForm.kucun,
+              stockAlarmFlag: this.ruleForm.kucuntx,
+              stockAlarm: this.ruleForm.kucuntxNum,
+              alipay: this.ruleForm.zhifufs.indexOf('支付宝支付') > -1 ? 1 : 0,
+              codpay: 1,
+              cmpay: this.ruleForm.zhifufs.indexOf('手机支付') > -1 ? 1 : 0,
+              unionpay: this.ruleForm.zhifufs.indexOf('网银支付') > -1 ? 1 : 0,
+              imageList: ['http://image1.qianqianhua.com/uploads/20171227/14/1514356264-OpIVSzBPAM.jpg'],
+              gradientPriceFlag: this.ruleForm.Jieti,  // true or false
+              gradientNumber: [11, 22],
+              gradientPrice: [1, 2],
+              weight: this.ruleForm.spzl,
+              weightUnit: this.danwei,
+              orderGoodsSpec2: this.ruleForm.spgg,
+              supplierName: this.ruleForm.sccj,
+              placeofOriginCode: this.ruleForm.spcd,
+              produceDate: this.ruleForm.scrq,
+              shelfLife: this.ruleForm.baozhiqi,
+              shelfLifeUnit: this.ruleForm.baozhiqidw,
+              typeCodeName: this.selectedlabel,
+              quantityUnits: this.ruleForm.jldw,
+              quantityUnitsValue: this.jiliangdw,
+              salsCatalogCode: this.ruleForm.dingssj,
+              onSaleTime: this.ruleForm.zdsjsj,
+              offSaleTime: this.ruleForm.zdxjsj,
+              isEmail: this.ruleForm.sjtx.indexOf('邮件') > -1 ? 1 : 0,
+              isSms: this.ruleForm.sjtx.indexOf('短信') > -1 ? 1 : 0,
+              website: this.ruleForm.fbqd.indexOf('12582网站') > -1 ? 1 : 0,
+              hotline: this.ruleForm.fbqd.indexOf('12582热线') > -1 ? 1 : 0,
+              wapsite: this.ruleForm.fbqd.indexOf('WAP') > -1 ? 1 : 0,
+              phoneline: this.ruleForm.fbqd.indexOf('手机客户端') > -1 ? 1 : 0,
+              agriculturalmall: this.ruleForm.fbqd.indexOf('农资商城') > -1 ? 1 : 0,
+              isPromote: this.ruleForm.thh.indexOf('推荐') > -1 ? 1 : 0,
+              isReturn: this.ruleForm.thh.indexOf('支持退货') > -1 ? 1 : 0,
+              isExchange: this.ruleForm.thh.indexOf('支持换货') > -1 ? 1 : 0,
+              videoUrl: this.ruleForm.spdz,
+              description: '',
+              smsInfo: '',
+              wapInfo: '',
+              wapUrl: ''
+            }
+            goodsRelease(parmas)
           } else {
             console.log('error submit!!')
             return false
@@ -326,13 +506,59 @@
         return isJPG && isLt2M
       },
       checkPayWay(val) {
-        if (val) {
-          console.log(val)
+        checkPayWay(val).then((res) => {
+          if (res.status === 200) {
+            console.log(res)
+          }
+        })
+      },
+      iszdsj() {
+        if (this.ruleForm.dingssj) {
+          this.ruleForm.iszisj = false
+          this.ruleForm.zdsjsj = new Date()
+        } else {
+          this.ruleForm.iszisj = true
+          this.ruleForm.zdsjsj = ''
         }
+      },
+      checkTimeCorrect() {
+        if (this.ruleForm.zdsjsj && this.ruleForm.zdxjsj) {
+          if (!this.compareTime) {
+            this.$message.error('下架时间不能小于上架时间！')
+            var self = this
+            setTimeout(function () {
+              self.ruleForm.zdxjsj = new Date(2099, 11, 31, 23, 59, 59)
+            }, 2000)
+          }
+        } else if (this.ruleForm.zdsjsj && this.ruleForm.zdsjsj < new Date()) {
+          this.$message.error('输入上架时间不能小于当前时间！')
+        }
+      },
+      openLogisticsTemplate() { // 获取物流模板
+        getLogisticsTemplate().then((res) => {
+          console.log(res.data)
+          if (res.status === 200) {
+            this.ruleForm.wuliuObj = res.data
+          } else {
+            this.$message.error('网络错误！')
+          }
+        }).catch(err => {
+          this.$message.error(err)
+        })
       }
     },
+    computed: {
+      compareTime() {
+        return this.ruleForm.zdsjsj < this.ruleForm.zdxjsj
+      },
+      ...mapGetters([
+        'selectedoption',
+        'selectedlabel'
+      ])
+    },
     components: {
-      Jieti
+      Jieti,
+      CollapseTransition
     }
   }
 </script>
@@ -359,5 +585,11 @@
     width: 178px;
     height: 178px;
     display: block;
+  }
+  .el-date-editor--date{
+    width: 180px !important;
+  }
+  .el-form-item__label{
+    width: 120px !important;
   }
 </style>
