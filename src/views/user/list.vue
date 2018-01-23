@@ -133,16 +133,11 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        resetUserPassword(user)
-        this.$message({
-          type: 'success',
-          message: '重置成功!'
+        resetUserPassword(user).then(response => {
+          this.$message({ type: 'success', message: '重置成功!' })
         })
       }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消重置'
-        })
+        this.$message({ type: 'info', message: '已取消重置' })
       })
     },
     detail(user) {

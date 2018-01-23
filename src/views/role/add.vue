@@ -6,10 +6,13 @@
         <el-input v-model="roleForm.rolename" style="width: 600px;" placeholder="请输入角色名称"></el-input>
       </el-form-item>
       <el-form-item label="角色类型：" prop="roletype">
-        <el-input v-model="roleForm.roletype" style="width: 600px;" placeholder="请选择角色类型"></el-input>
+        <el-select v-model="roleForm.roletype" clearable placeholder="请选择" style="width: 600px;">
+          <el-option label="系统管理" value="1"></el-option>
+          <el-option label="企业" value="2"></el-option>
+        </el-select>
       </el-form-item>
       <el-form-item label="角色描述：" prop="description">
-        <el-input v-model="roleForm.description" style="width: 600px;" placeholder="请输入角色描述"></el-input>
+        <el-input type="textarea" v-model="roleForm.description" style="width: 600px;" placeholder="请输入角色描述"></el-input>
       </el-form-item>
       <el-form-item label="权限绑定：" prop="permissions">
         <el-input v-model="roleForm.permissions" style="width: 600px;"></el-input>
@@ -31,7 +34,7 @@ export default {
     return {
       roleForm: {
         rolename: '',
-        roletype: '',
+        roletype: '1',
         description: '',
         permissions: ''
       },

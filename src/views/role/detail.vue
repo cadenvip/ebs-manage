@@ -3,16 +3,19 @@
     <h3 class="title">角色信息详情</h3>
     <el-form label-width="120px">
       <el-form-item label="角色名称：" prop="rolename">
-        <el-input v-model="roleForm.rolename" style="width: 600px;"></el-input>
+        <el-input v-model="roleForm.rolename" style="width: 600px;" disabled></el-input>
       </el-form-item>
       <el-form-item label="角色类型：" prop="roletype">
-        <el-input v-model="roleForm.roletype" style="width: 600px;"></el-input>
+        <el-select v-model="roleForm.roletype" clearable placeholder="请选择" style="width: 600px;" disabled >
+          <el-option label="系统管理" value="1"></el-option>
+          <el-option label="企业" value="2"></el-option>
+        </el-select>
       </el-form-item>
       <el-form-item label="角色描述：" prop="description">
-        <el-input v-model="roleForm.description" style="width: 600px;"></el-input>
+        <el-input type="textarea" v-model="roleForm.description" style="width: 600px;" placeholder="请输入角色描述" disabled ></el-input>
       </el-form-item>
       <el-form-item label="权限绑定：" prop="permissions">
-        <el-input v-model="roleForm.permissions" style="width: 600px;"></el-input>
+        <el-input v-model="roleForm.permissions" style="width: 600px;" disabled ></el-input>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onCancel">返回</el-button>

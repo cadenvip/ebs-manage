@@ -1,7 +1,7 @@
 <template>
   <div>
     <h3 style="padding-left: 20px;">角色查询条件</h3>
-    <el-form ref="searchForm" :model="searchForm" label-width="100px" class="demo-ruleForm">
+    <el-form ref="searchForm" :model="searchForm" label-width="100px">
       <el-row>
         <el-col :span="10">
           <el-form-item label="角色名称：">
@@ -10,19 +10,28 @@
         </el-col>
         <el-col :span="10">
           <el-form-item label="系统角色：">
-            <el-input v-model="searchForm.issystem" style="width: 300px;"></el-input>
+            <el-select v-model="searchForm.issystem" clearable placeholder="请选择" style="width: 300px;">
+              <el-option label="是" value="1"></el-option>
+              <el-option label="否" value="0"></el-option>
+            </el-select>
           </el-form-item>  
         </el-col>
       </el-row>
       <el-row>
         <el-col :span="10">
           <el-form-item label="角色类型：">
-            <el-input v-model="searchForm.roletype" style="width: 300px;"></el-input>
+            <el-select v-model="searchForm.roletype" clearable placeholder="请选择" style="width: 300px;">
+              <el-option label="系统管理" value="1"></el-option>
+              <el-option label="商家" value="2"></el-option>
+            </el-select>
           </el-form-item>  
         </el-col>
         <el-col :span="10">
           <el-form-item label="隐藏角色：">
-            <el-input v-model="searchForm.ishidden" style="width: 300px;"></el-input>
+            <el-select v-model="searchForm.ishidden" clearable placeholder="请选择" style="width: 300px;">
+              <el-option label="是" value="1"></el-option>
+              <el-option label="否" value="0"></el-option>
+            </el-select>
           </el-form-item>  
         </el-col>
       </el-row>
@@ -31,7 +40,7 @@
           <el-button type="primary" @click.native.prevent="queryRoleList">查询</el-button>
         </el-col>
         <el-col :span="2">
-          <el-button type="primary" @click.native.prevent="resetForm">重置</el-button>
+          <el-button type="primary" @click="resetForm('searchForm')">重置</el-button>
         </el-col>
         <el-col :span="2">
           <el-button type="primary" @click.native.prevent="addRole">新增</el-button>
@@ -139,8 +148,12 @@ export default {
     detail(role) {
       this.$router.push({ path: '/account/role/detail', query: { id: role.id }})
     },
-    resetForm() {
-      this.$refs[this.searchForm].resetFields()
+    resetForm(formname) {
+      // this.$refs[formname].resetFields()
+      this.searchForm.rolename = ''
+      this.searchForm.issystem = ''
+      this.searchForm.roletype = ''
+      this.searchForm.ishidden = ''
     },
     handleSizeChange(val) {
       this.queryRoleList()
