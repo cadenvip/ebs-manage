@@ -58,7 +58,6 @@
         getGoodsType().then((res) => {
           if (res.status === 200) {
             this.goodsTypeTemplate = res.data[0]
-            console.log(this.goodsTypeTemplate)
             this.format()
           } else {
             this.$message.error('网络错误' + res.status)
@@ -94,7 +93,10 @@
         console.log(label, subLabel)
         this.goodstype = value
         this.setSelectedOption(value)
-        this.setSelectedLabel(subLabel)
+        this.setSelectedLabel({
+          label: label,
+          subLabel: subLabel
+        })
       },
       tip() {
         this.$alert('集推商品主要是展示给移动经销商，进行向集团客户推荐。建议该分类的商品价格低于商城直供价，具有批量订购吸引力，便于集团客户大量订购。', '急推商品', {
