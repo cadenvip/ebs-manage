@@ -3,32 +3,32 @@
     <el-row :gutter="4">
       <el-col :span="3" v-if="grade >= 1 && showCountry">
         <el-select v-model="country" placeholder="请选择国" clearable filterable v-on:change="countryChanged">
-          <el-option v-for="item in countries" :label="item.label" :value="item.value"></el-option>
+          <el-option v-for="(item, key) in countries" :key="key" :label="item.label" :value="item.value"></el-option>
         </el-select>
       </el-col>
       <el-col :span="3" v-if="grade >= 2">
         <el-select v-model="province" placeholder="请选择省" clearable filterable v-on:change="provinceChanged">
-          <el-option v-for="item in provinces" :label="item.label" :value="item.value"></el-option>
+          <el-option v-for="(item, key) in provinces" :key="key" :label="item.label" :value="item.value"></el-option>
         </el-select>
       </el-col>
       <el-col :span="3" v-if="grade >= 3">
         <el-select v-model="city" placeholder="请选择市" clearable filterable v-on:change="cityChanged">
-          <el-option v-for="item in cities" :label="item.label" :value="item.value"></el-option>
+          <el-option v-for="(item,key) in cities" :key="key" :label="item.label" :value="item.value"></el-option>
         </el-select>
       </el-col>
       <el-col :span="3" v-if="grade >= 4">
         <el-select v-model="county" placeholder="请选择县" clearable filterable v-on:change="countyChanged">
-          <el-option v-for="item in counties" :label="item.label" :value="item.value"></el-option>
+          <el-option v-for="(item,key) in counties" :key="key" :label="item.label" :value="item.value"></el-option>
         </el-select>
       </el-col>
       <el-col :span="3" v-if="grade >= 5">
         <el-select v-model="town" placeholder="请选择镇" clearable filterable v-on:change="townChanged">
-          <el-option v-for="item in towns" :label="item.label" :value="item.value"></el-option>
+          <el-option v-for="(item,key) in towns" :key="key" :label="item.label" :value="item.value"></el-option>
         </el-select>
       </el-col>
       <el-col :span="3" v-if="grade >= 6">
         <el-select v-model="village" placeholder="请选择村" clearable filterable v-on:change="villageChanged">
-          <el-option v-for="item in villages" :label="item.label" :value="item.value"></el-option>
+          <el-option v-for="(item,key) in villages" :key="key" :label="item.label" :value="item.value"></el-option>
         </el-select>
       </el-col>
     </el-row>

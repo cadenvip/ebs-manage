@@ -14,7 +14,7 @@
           <svg-icon icon-class="user" />
         </span>
         <el-select v-model="loginForm.unitid" placeholder="请选择归属单位">
-          <el-option v-for="(item, index) in unitinfos" :label="item.businessesName" :value="item.code" selected></el-option>
+          <el-option v-for="(item, index) in unitinfos" :key="index" :label="item.businessesName" :value="item.code" selected></el-option>
         </el-select>
       </el-form-item>
       <el-form-item prop="password">
