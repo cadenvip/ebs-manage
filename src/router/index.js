@@ -57,9 +57,9 @@ export const constantRouterMap = [
     meta: { title: '账户管理', icon: 'table' },
     children: [
       {
-        path: 'regionmanagement',
-        name: 'regionmanagement',
-        component: _import('account/regionmanagement'),
+        path: 'location',
+        name: 'location',
+        component: _import('location/index'),
         meta: { title: '区域管理', icon: 'table' }
       },
       {

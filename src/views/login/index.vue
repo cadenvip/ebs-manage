@@ -102,6 +102,7 @@ export default {
           // 提供dispatch(action)方法更新state；
           this.$store.dispatch('Login', this.loginForm).then(() => {
             this.loading = false
+            // alert('登录成功...')
             this.$router.push({ path: '/' })
           }).catch(() => {
             this.loading = false

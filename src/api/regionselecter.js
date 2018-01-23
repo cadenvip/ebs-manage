@@ -47,3 +47,12 @@ export function getAllVillages(params) {
     data: {}
   })
 }
+
+// TODO
+export function getLocationList(params) {
+  return request({
+    url: '/location/list',
+    method: 'post',
+    data: {}
+  })
+}

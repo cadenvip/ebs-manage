@@ -15,11 +15,11 @@ export function login(params) {
   })
 }
 
-export function getInfo(token) {
+export function getInfo(userid) {
   return request({
     url: '/user/detail',
-    method: 'get',
-    params: { token }
+    method: 'post',
+    params: { 'userid': userid }
   })
 }
 

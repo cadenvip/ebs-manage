@@ -47,7 +47,7 @@
       </el-table-column>
       <el-table-column label="归属区域" prop="locationname" width="200" align="center">
       </el-table-column>
-      <el-table-column prop="unitname" align="center" label="所属单位" width="200">
+      <el-table-column label="所属单位" prop="unitname" align="center" width="200">
       </el-table-column>
       <el-table-column align="center" label="操作" width="190">
       <template slot-scope="scope">
@@ -97,6 +97,9 @@ export default {
     queryUserList() {
       getUserList(this.searchForm).then(response => {
         this.list = response.data.list
+        this.total = response.data.total
+        this.pagesize = response.data.pagesize
+        this.current = response.data.pages
       })
     },
     addUser() {

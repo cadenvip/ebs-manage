@@ -98,6 +98,9 @@ export default {
     queryRoleList() {
       getRoleList(this.searchForm).then(response => {
         this.list = response.data.list
+        this.total = response.data.total
+        this.pagesize = response.data.pagesize
+        this.current = response.data.pages
       })
     },
     addRole() {

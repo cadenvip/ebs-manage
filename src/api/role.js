@@ -53,9 +53,10 @@ export function deleteRole(params) {
 }
 
 export function getRoleDetail(params) {
+  alert(params)
   return request({
     url: '/role/detail',
     method: 'post',
-    data: { 'id': params }
+    data: { 'roleid': params }
   })
 }
