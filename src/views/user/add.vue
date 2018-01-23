@@ -33,40 +33,42 @@
         </el-radio-group>
       </el-form-item>
       <el-form-item label="账号：" prop="loginname">
-        <el-input v-model="userForm.loginname" style="width: 300px;" placeholder="请输入账号"></el-input>
+        <el-input v-model="userForm.loginname" style="width: 600px;" placeholder="请输入账号"></el-input>
       </el-form-item>
       <el-form-item label="密码：" prop="password">
-        <el-input type="password" v-model="userForm.password" style="width: 300px;" placeholder="请输入密码"></el-input>
+        <el-input type="password" v-model="userForm.password" style="width: 600px;" placeholder="请输入密码"></el-input>
       </el-form-item>
       <el-form-item label="确认密码：" prop="repassword">
-        <el-input type="password" v-model="userForm.repassword" style="width: 300px;" placeholder="请再次输入密码"></el-input>
+        <el-input type="password" v-model="userForm.repassword" style="width: 600px;" placeholder="请再次输入密码"></el-input>
       </el-form-item>
       <el-form-item label="姓名：" prop="name">
-        <el-input v-model="userForm.name" style="width: 300px;" placeholder="请输入姓名"></el-input>
+        <el-input v-model="userForm.name" style="width: 600px;" placeholder="请输入姓名"></el-input>
       </el-form-item>
       <el-form-item label="归属区域：" prop="locationid">
-        <el-input v-model="userForm.locationid" style="width: 300px;" placeholder="请选择归属区域"></el-input>
+        <el-input v-model="userForm.locationid" style="width: 600px;" placeholder="请选择归属区域"></el-input>
       </el-form-item>
       <el-form-item label="单位：" prop="unitname">
-        <el-input v-model="userForm.unitname" style="width: 300px;" placeholder="请输入单位"></el-input>
+        <el-input v-model="userForm.unitname" style="width: 600px;" placeholder="请输入单位"></el-input>
       </el-form-item>
       <el-form-item label="邮件：" prop="email">
-        <el-input v-model="userForm.email" style="width: 300px;" placeholder="请输入邮件"></el-input>
+        <el-input v-model="userForm.email" style="width: 600px;" placeholder="请输入邮件"></el-input>
       </el-form-item>
-      <el-form-item label="地址：" prop="address">
-        <el-input v-model="userForm.address" style="width: 300px;" placeholder="请输入地址"></el-input>
+      <el-form-item label="地址：" prop="regioncode">
+        <regionselector :grade="6" v-on:regionCodeChanged="getRegionCode" :showCountry="false"></regionselector>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">提交</el-button>
         <el-button @click="onCancel">返回</el-button>
       </el-form-item>
     </el-form>
+    <p>{{userForm.regioncode}}</p>
   </div>
 </template>
 
 <script>
 
 import { addUser } from '@/api/user'
+import regionselector from '@/components/RegionSelector/index'
 
 export default {
   data() {
@@ -90,7 +92,6 @@ export default {
       }
     }
     return {
-      seen: true,
       roletype: '移动管理员',
       userForm: {
         roleids: '',
@@ -101,7 +102,7 @@ export default {
         locationid: '',
         unitname: '',
         email: '',
-        address: ''
+        regioncode: ''
       },
       rules: {
         roletype: [{ required: true, message: '请选择类型', trigger: 'blur' }],
@@ -113,23 +114,36 @@ export default {
         locationid: [{ required: true, message: '请选择归属区域', trigger: 'blur' }],
         unitname: [{ required: true, message: '请选输入单位', trigger: 'blur' }],
         email: [{ required: false, message: '请输入邮件', trigger: 'blur' }],
-        address: [{ required: false, message: '请输入地址', trigger: 'blur' }]
+        regioncode: [{ required: false, message: '请输入地址', trigger: 'blur' }]
       }
     }
   },
+  components: {
+    regionselector
+  },
   methods: {
+    getRegionCode: function(data) {
+      this.userForm.regioncode = data
+    },
     onSubmit() {
-      return new Promise((resolve, reject) => {
-        addUser(this.userForm).then(response => {
-          this.userForm = response.data
-          resolve(response)
-        }).catch(error => {
-          reject(error)
-        })
+      this.$refs.userForm.validate(valid => {
+        if (valid) {
+          return new Promise((resolve, reject) => {
+            addUser(this.userForm).then(response => {
+              this.userForm = response.data
+              resolve(response)
+            }).catch(error => {
+              reject(error)
+            })
+          })
+        } else {
+          console.log('error submit!!')
+          return false
+        }
       })
     },
     onCancel() {
-      this.$router.push({ path: '/user/list' })
+      this.$router.push({ path: '/account/user/list' })
     }
   }
 }

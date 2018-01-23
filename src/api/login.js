@@ -1,28 +1,47 @@
 import request from '@/utils/request'
 
 // test branch ss
-export function login(username, password) {
+export function login(params) {
+  console.log(params)
   return request({
-    url: '/user/login',
+    url: '/login',
     method: 'post',
     data: {
-      username,
-      password
+      'loginname': params.loginname,
+      'password': params.password,
+      'unitid': params.unitid,
+      'vercode': '123456'
     }
   })
 }
 
-export function getInfo(token) {
+export function getInfo(userid) {
   return request({
-    url: '/user/info',
-    method: 'get',
-    params: { token }
+    url: '/user/detail',
+    method: 'post',
+    params: { 'userid': userid }
   })
 }
 
 export function logout() {
   return request({
-    url: '/user/logout',
+    url: '/logout',
     method: 'post'
+  })
+}
+
+export function getVercode(params) {
+  return request({
+    url: '/vercode',
+    method: 'post',
+    data: { 'loginname': params }
+  })
+}
+
+export function getUnitInfos(params) {
+  return request({
+    url: '/sreachunit',
+    method: 'post',
+    data: { 'loginname': params }
   })
 }

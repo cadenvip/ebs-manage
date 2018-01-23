@@ -50,16 +50,16 @@ export const constantRouterMap = [
   },
 
   {
-    path: '/user',
+    path: '/account',
     component: Layout,
-    name: 'user',
+    name: 'account',
     hidden: false,
-    meta: { title: '人员管理', icon: 'table' },
+    meta: { title: '账户管理', icon: 'table' },
     children: [
       {
-        path: 'regionmanagement',
-        name: 'regionmanagement',
-        component: _import('account/regionmanagement'),
+        path: 'location',
+        name: 'location',
+        component: _import('location/index'),
         meta: { title: '区域管理', icon: 'table' }
       },
       {
@@ -69,37 +69,58 @@ export const constantRouterMap = [
         meta: { title: '订购用户查询', icon: 'user' }
       },
       {
-        path: 'list',
-        name: 'list',
+        path: 'user/list',
+        name: 'userlist',
         component: _import('user/list'),
-        meta: { title: '人员列表', icon: 'table' }
+        meta: { title: '人员管理', icon: 'table' }
       },
       {
-        path: 'add',
-        name: 'add',
+        path: 'user/add',
+        name: 'useradd',
         hidden: true,
         component: _import('user/add'),
         meta: { title: '新增人员', icon: 'table' }
       },
       {
-        path: 'update',
-        name: 'update',
+        path: 'user/update',
+        name: 'userupdate',
         hidden: true,
         component: _import('user/update'),
         meta: { title: '修改人员', icon: 'table' }
       },
       {
-        path: 'detail',
-        name: 'detail',
+        path: 'user/detail',
+        name: 'userdetail',
         hidden: true,
         component: _import('user/detail'),
         meta: { title: '人员详情', icon: 'table' }
       },
       {
-        path: 'rolemanagement',
-        name: 'rolemanagement',
-        component: _import('account/rolemanagement'),
+        path: 'role/list',
+        name: 'rolelist',
+        component: _import('role/list'),
         meta: { title: '角色管理', icon: 'table' }
+      },
+      {
+        path: 'role/add',
+        name: 'roleadd',
+        hidden: true,
+        component: _import('role/add'),
+        meta: { title: '新增角色', icon: 'table' }
+      },
+      {
+        path: 'role/update',
+        name: 'roleupdate',
+        hidden: true,
+        component: _import('role/update'),
+        meta: { title: '修改角色', icon: 'table' }
+      },
+      {
+        path: 'role/detail',
+        name: 'roledetail',
+        hidden: true,
+        component: _import('role/detail'),
+        meta: { title: '角色详情', icon: 'table' }
       },
       {
         path: 'permissionsmanagement',

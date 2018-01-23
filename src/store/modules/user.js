@@ -1,9 +1,10 @@
 import { login, logout, getInfo } from '@/api/login'
-import { getToken, setToken, removeToken } from '@/utils/auth'
+import { getToken, setToken, removeToken, getUserId, setUserId, removeUserId } from '@/utils/auth'
 
 const user = {
   state: {
     token: getToken(),
+    userid: getUserId(),
     name: '',
     avatar: '',
     roles: []
@@ -12,6 +13,9 @@ const user = {
   mutations: {
     SET_TOKEN: (state, token) => {
       state.token = token
+    },
+    SET_USERID: (state, userid) => {
+      state.token = userid
     },
     SET_NAME: (state, name) => {
       state.name = name
@@ -27,12 +31,21 @@ const user = {
   actions: {
     // 登录
     Login({ commit }, userInfo) {
-      const username = userInfo.username.trim()
       return new Promise((resolve, reject) => {
-        login(username, userInfo.password).then(response => {
+        login(userInfo).then(response => {
+          // 此处将用户加密后的密码作为token
           const data = response.data
-          setToken(data.token)
-          commit('SET_TOKEN', data.token)
+          setToken(data.password)
+          setUserId(data.id)
+          commit('SET_TOKEN', data.password)
+          commit('SET_USERID', data.id)
+          commit('SET_NAME', data.loginname)
+          commit('SET_AVATAR', data.avatar)
+          var arrRoleNames = []
+          data.role.forEach(function(v) {
+            arrRoleNames.push(v.rolename)
+          })
+          commit('SET_ROLES', arrRoleNames)
           resolve()
         }).catch(error => {
           reject(error)
@@ -43,11 +56,15 @@ const user = {
     // 获取用户信息
     GetInfo({ commit, state }) {
       return new Promise((resolve, reject) => {
-        getInfo(state.token).then(response => {
+        getInfo(state.userid).then(response => {
           const data = response.data
+          commit('SET_USERID', data.id)
           commit('SET_ROLES', data.roles)
-          commit('SET_NAME', data.name)
+          commit('SET_NAME', data.loginname)
           commit('SET_AVATAR', data.avatar)
+          data.role.forEach(function(v) {
+            this.roles.push(v.rolename)
+          })
           resolve(response)
         }).catch(error => {
           reject(error)
@@ -62,6 +79,7 @@ const user = {
           commit('SET_TOKEN', '')
           commit('SET_ROLES', [])
           removeToken()
+          removeUserId()
           resolve()
         }).catch(error => {
           reject(error)

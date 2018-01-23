@@ -22,7 +22,7 @@ export function getUserList(params) {
 
 export function addUser(params) {
   return request({
-    url: '/user/update',
+    url: '/user/save',
     method: 'post',
     data: { 'loginname': params.id,
       'password': params.password,

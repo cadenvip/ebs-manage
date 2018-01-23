@@ -1,0 +1,64 @@
+<template>
+  <div class="app-container">
+    <h3 class="title">角色信息详情</h3>
+    <el-form label-width="120px">
+      <el-form-item label="角色名称：" prop="rolename">
+        <el-input v-model="roleForm.rolename" style="width: 600px;"></el-input>
+      </el-form-item>
+      <el-form-item label="角色类型：" prop="roletype">
+        <el-input v-model="roleForm.roletype" style="width: 600px;"></el-input>
+      </el-form-item>
+      <el-form-item label="角色描述：" prop="description">
+        <el-input v-model="roleForm.description" style="width: 600px;"></el-input>
+      </el-form-item>
+      <el-form-item label="权限绑定：" prop="permissions">
+        <el-input v-model="roleForm.permissions" style="width: 600px;"></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="onCancel">返回</el-button>
+      </el-form-item>
+    </el-form>
+  </div>
+</template>
+
+<script>
+
+import { getRoleDetail } from '@/api/role'
+
+export default {
+  data() {
+    return {
+      roleForm: {
+        rolename: '',
+        roletype: '',
+        description: '',
+        permissions: ''
+      }
+    }
+  },
+  created() {
+    this.getRoleInfo()
+  },
+  methods: {
+    getRoleInfo() {
+      return new Promise((resolve, reject) => {
+        getRoleDetail(this.$route.query.id).then(response => {
+          this.roleForm = response.data
+          resolve(response)
+        }).catch(error => {
+          reject(error)
+        })
+      })
+    },
+    onCancel() {
+      this.$router.go(-1)
+    }
+  }
+}
+</script>
+
+<style scoped>
+.line{
+  text-align: center;
+}
+</style>
