@@ -39,14 +39,14 @@
       </el-row>
     </el-form>
     <h3 style="padding-left: 20px;">角色列表</h3>
-    <el-table :data="list" border stripe fit highlight-current-row style="padding-left:10px">
+    <el-table :data="list" v-loading.body="loading" element-loading-text="Loading" border stripe fit highlight-current-row style="padding-left:10px">
       <el-table-column label='角色名称' prop="rolename" width="110">
       </el-table-column>
-      <el-table-column label="系统角色" prop="issystem" width="150">
+      <el-table-column label="系统角色" prop="issystem" :formatter="transformIsSystem" width="150">
       </el-table-column>
-      <el-table-column label="隐藏角色" prop="ishidden" width="110" align="center">
+      <el-table-column label="隐藏角色" prop="ishidden" :formatter="transformIsHidden" width="110" align="center">
       </el-table-column>
-      <el-table-column label="角色类型" prop="roletype" width="110" align="center">
+      <el-table-column label="角色类型" prop="roletype" :formatter="transformRoleType" width="110" align="center">
       </el-table-column>
       <el-table-column label="角色描述" prop="description" width="200" align="center">
       </el-table-column>
@@ -88,7 +88,8 @@ export default {
       pagesizes: [10, 20, 30, 50],
       pagesize: 10,
       currentPage: 1,
-      total: 0
+      total: 0,
+      loading: true
     }
   },
   created() {
@@ -96,22 +97,22 @@ export default {
   },
   methods: {
     queryRoleList() {
-      getRoleList(this.searchForm).then(response => {
+      this.loading = true
+      getRoleList(this.searchForm, this.currentPage, this.pagesize).then(response => {
         this.list = response.data.list
         this.total = response.data.total
-        this.pagesize = response.data.pagesize
-        this.current = response.data.pages
+        this.loading = false
       })
     },
     addRole() {
       this.$router.push({ path: '/account/role/add' })
     },
     initRoleList() {
-      getAllRoles().then(response => {
+      this.loading = true
+      getAllRoles(this.currentPage, this.pagesize).then(response => {
         this.list = response.data.list
         this.total = response.data.total
-        this.pagesize = response.data.pagesize
-        this.current = response.data.pages
+        this.loading = false
       })
     },
     updateRole(role) {
@@ -142,10 +143,33 @@ export default {
       this.$refs[this.searchForm].resetFields()
     },
     handleSizeChange(val) {
-      return
+      this.queryRoleList()
     },
     handleCurrentChange(val) {
-      return
+      this.queryRoleList()
+    },
+    transformIsSystem(row, column, cellValue) {
+      if (cellValue === '1') {
+        return '是'
+      } else {
+        return '否'
+      }
+    },
+    transformIsHidden(row, column, cellValue) {
+      if (cellValue === '1') {
+        return '是'
+      } else {
+        return '否'
+      }
+    },
+    transformRoleType(row, column, cellValue) {
+      if (cellValue === '1') {
+        return '系统管理'
+      } else if (cellValue === '2') {
+        return '商家'
+      } else {
+        return '未知'
+      }
     }
   }
 }

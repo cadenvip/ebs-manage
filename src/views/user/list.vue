@@ -36,7 +36,7 @@
       </el-row>
     </el-form>
     <h3 style="padding-left: 20px;">人员列表</h3>
-    <el-table :data="list" border stripe fit highlight-current-row style="padding-left:10px">
+    <el-table :data="list" v-loading.body="loading" element-loading-text="Loading" border stripe fit highlight-current-row style="padding-left:10px">
       <el-table-column label='账号' prop="loginname" width="110">
       </el-table-column>
       <el-table-column label="姓名" prop="name" width="150">
@@ -87,7 +87,8 @@ export default {
       pagesizes: [10, 20, 30, 50],
       pagesize: 10,
       currentPage: 1,
-      total: 0
+      total: 0,
+      loading: true
     }
   },
   created() {
@@ -95,30 +96,30 @@ export default {
   },
   methods: {
     queryUserList() {
-      getUserList(this.searchForm).then(response => {
+      this.loading = true
+      getUserList(this.searchForm, this.currentPage, this.pagesize).then(response => {
         this.list = response.data.list
         this.total = response.data.total
-        this.pagesize = response.data.pagesize
-        this.current = response.data.pages
+        this.loading = false
       })
     },
     addUser() {
       this.$router.push({ path: '/account/user/add' })
     },
     initUserList() {
-      getAllUsers().then(response => {
+      this.loading = true
+      getAllUsers(this.currentPage, this.pagesize).then(response => {
         this.list = response.data.list
         this.total = response.data.total
-        this.pagesize = response.data.pagesize
-        this.current = response.data.pages
+        this.loading = false
       })
     },
     joinRoleName(row, column, cellValue) {
       var arrRoleNames = []
-      if (arrRoleNames === undefined) {
+      if (cellValue === undefined) {
         return ''
       }
-      row[column.property].forEach(function(v) {
+      cellValue.forEach(function(v) {
         arrRoleNames.push(v.rolename)
       })
       return arrRoleNames.join()
@@ -148,10 +149,10 @@ export default {
       this.$router.push({ path: '/account/user/detail', query: { id: user.id }})
     },
     handleSizeChange(val) {
-      return
+      this.queryUserList()
     },
     handleCurrentChange(val) {
-      return
+      this.queryUserList()
     }
   }
 }

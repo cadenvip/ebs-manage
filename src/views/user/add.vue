@@ -45,7 +45,7 @@
         <el-input v-model="userForm.name" style="width: 600px;" placeholder="请输入姓名"></el-input>
       </el-form-item>
       <el-form-item label="归属区域：" prop="locationid">
-        <el-input v-model="userForm.locationid" style="width: 600px;" placeholder="请选择归属区域"></el-input>
+        <regionselector v-model="userForm.locationid" :grade="4" v-on:regionCodeChanged="getRegionCode" :showCountry="false"></regionselector>
       </el-form-item>
       <el-form-item label="单位：" prop="unitname">
         <el-input v-model="userForm.unitname" style="width: 600px;" placeholder="请输入单位"></el-input>
@@ -53,21 +53,21 @@
       <el-form-item label="邮件：" prop="email">
         <el-input v-model="userForm.email" style="width: 600px;" placeholder="请输入邮件"></el-input>
       </el-form-item>
-      <el-form-item label="地址：" prop="regioncode">
-        <regionselector :grade="6" v-on:regionCodeChanged="getRegionCode" :showCountry="false"></regionselector>
+      <el-form-item label="地址：" prop="address">
+        <el-input v-model="userForm.address" style="width: 600px;" placeholder="请输入地址"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">提交</el-button>
         <el-button @click="onCancel">返回</el-button>
       </el-form-item>
     </el-form>
-    <p>{{userForm.regioncode}}</p>
   </div>
 </template>
 
 <script>
 
 import { addUser } from '@/api/user'
+import { getAllRoles } from '@/api/role'
 import regionselector from '@/components/RegionSelector/index'
 
 export default {
@@ -93,6 +93,7 @@ export default {
     }
     return {
       roletype: '移动管理员',
+      roles: [],
       userForm: {
         roleids: '',
         loginname: '',
@@ -102,7 +103,7 @@ export default {
         locationid: '',
         unitname: '',
         email: '',
-        regioncode: ''
+        address: ''
       },
       rules: {
         roletype: [{ required: true, message: '请选择类型', trigger: 'blur' }],
@@ -114,16 +115,30 @@ export default {
         locationid: [{ required: true, message: '请选择归属区域', trigger: 'blur' }],
         unitname: [{ required: true, message: '请选输入单位', trigger: 'blur' }],
         email: [{ required: false, message: '请输入邮件', trigger: 'blur' }],
-        regioncode: [{ required: false, message: '请输入地址', trigger: 'blur' }]
+        address: [{ required: false, message: '请输入地址', trigger: 'blur' }]
       }
     }
   },
   components: {
     regionselector
   },
+  mounted () {
+    this.getRoleList()
+  },
   methods: {
     getRegionCode: function(data) {
-      this.userForm.regioncode = data
+      this.userForm.locationid = data
+    },
+    getRoleList() {
+      return new Promise((resolve, reject) => {
+        // 角色应该不会超过100个吧！
+        getAllRoles('1', '100').then(response => {
+          this.roles = response.data
+          resolve(response)
+        }).catch(error => {
+          reject(error)
+        })
+      })
     },
     onSubmit() {
       this.$refs.userForm.validate(valid => {

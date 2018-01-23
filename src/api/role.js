@@ -1,21 +1,24 @@
 import request from '@/utils/request'
 
-export function getAllRoles(params) {
+export function getAllRoles(currentpage, pagesize) {
   return request({
     url: '/role/list',
     method: 'post',
-    data: {}
+    data: { 'page': currentpage,
+      'limit': pagesize }
   })
 }
 
-export function getRoleList(params) {
+export function getRoleList(roleinfo, currentpage, pagesize) {
   return request({
     url: '/role/list',
     method: 'post',
-    data: { 'rolename': params.rolename,
-      'issystem': params.issystem,
-      'roletype': params.roletype,
-      'ishidden': params.ishidden
+    data: { 'rolename': roleinfo.rolename,
+      'issystem': roleinfo.issystem,
+      'roletype': roleinfo.roletype,
+      'ishidden': roleinfo.ishidden,
+      'page': currentpage,
+      'limit': pagesize
     }
   })
 }
