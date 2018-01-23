@@ -1,21 +1,24 @@
 import request from '@/utils/request'
 
-export function getAllUsers() {
+export function getAllUsers(currentpage, pagesize) {
   return request({
     url: '/user/list',
     method: 'post',
-    data: {}
+    data: { 'page': currentpage,
+      'limit': pagesize }
   })
 }
 
-export function getUserList(params) {
+export function getUserList(userinfo, currentpage, pagesize) {
   return request({
     url: '/user/list',
     method: 'post',
-    data: { 'loginname': params.loginname,
-      'name': params.name,
-      'phoneno': params.phoneno,
-      'locationid': params.locationid
+    data: { 'loginname': userinfo.loginname,
+      'name': userinfo.name,
+      'phoneno': userinfo.phoneno,
+      'locationid': userinfo.locationid,
+      'page': currentpage,
+      'limit': pagesize
     }
   })
 }

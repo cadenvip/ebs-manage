@@ -4,7 +4,7 @@ export function getAllCountries(params) {
   return request({
     url: '/location/list',
     method: 'post',
-    data: {}
+    data: { 'locationLevel': '0', 'parentId': '' }
   })
 }
 
@@ -12,7 +12,7 @@ export function getAllProvinces(params) {
   return request({
     url: '/location/list',
     method: 'post',
-    data: {}
+    data: { 'locationLevel': '1', 'parentId': `${params}` }
   })
 }
 
@@ -20,7 +20,7 @@ export function getAllCities(params) {
   return request({
     url: '/location/list',
     method: 'post',
-    data: {}
+    data: { 'locationLevel': '2', 'parentId': `${params}` }
   })
 }
 
@@ -28,7 +28,7 @@ export function getAllCounties(params) {
   return request({
     url: '/location/list',
     method: 'post',
-    data: {}
+    data: { 'locationLevel': '3', 'parentId': `${params}` }
   })
 }
 
@@ -36,7 +36,7 @@ export function getAllTowns(params) {
   return request({
     url: '/location/list',
     method: 'post',
-    data: {}
+    data: { 'locationLevel': '4', 'parentId': `${params}` }
   })
 }
 
@@ -44,7 +44,7 @@ export function getAllVillages(params) {
   return request({
     url: '/location/list',
     method: 'post',
-    data: {}
+    data: { 'locationLevel': '5', 'parentId': `${params}` }
   })
 }
 

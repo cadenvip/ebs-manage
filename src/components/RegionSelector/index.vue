@@ -3,32 +3,32 @@
     <el-row :gutter="4">
       <el-col :span="3" v-if="grade >= 1 && showCountry">
         <el-select v-model="country" placeholder="请选择国" clearable filterable v-on:change="countryChanged">
-          <el-option v-for="(item, key) in countries" :key="key" :label="item.label" :value="item.value"></el-option>
+          <el-option v-for="(item, key) in countries" :key="key" :label="item.locationName" :value="item.id"></el-option>
         </el-select>
       </el-col>
       <el-col :span="3" v-if="grade >= 2">
         <el-select v-model="province" placeholder="请选择省" clearable filterable v-on:change="provinceChanged">
-          <el-option v-for="(item, key) in provinces" :key="key" :label="item.label" :value="item.value"></el-option>
+          <el-option v-for="(item, key) in provinces" :key="key" :label="item.locationName" :value="item.id"></el-option>
         </el-select>
       </el-col>
       <el-col :span="3" v-if="grade >= 3">
         <el-select v-model="city" placeholder="请选择市" clearable filterable v-on:change="cityChanged">
-          <el-option v-for="(item,key) in cities" :key="key" :label="item.label" :value="item.value"></el-option>
+          <el-option v-for="(item,key) in cities" :key="key" :label="item.locationName" :value="item.id"></el-option>
         </el-select>
       </el-col>
       <el-col :span="3" v-if="grade >= 4">
         <el-select v-model="county" placeholder="请选择县" clearable filterable v-on:change="countyChanged">
-          <el-option v-for="(item,key) in counties" :key="key" :label="item.label" :value="item.value"></el-option>
+          <el-option v-for="(item,key) in counties" :key="key" :label="item.locationName" :value="item.id"></el-option>
         </el-select>
       </el-col>
       <el-col :span="3" v-if="grade >= 5">
         <el-select v-model="town" placeholder="请选择镇" clearable filterable v-on:change="townChanged">
-          <el-option v-for="(item,key) in towns" :key="key" :label="item.label" :value="item.value"></el-option>
+          <el-option v-for="(item,key) in towns" :key="key" :label="item.locationName" :value="item.id"></el-option>
         </el-select>
       </el-col>
       <el-col :span="3" v-if="grade >= 6">
         <el-select v-model="village" placeholder="请选择村" clearable filterable v-on:change="villageChanged">
-          <el-option v-for="(item,key) in villages" :key="key" :label="item.label" :value="item.value"></el-option>
+          <el-option v-for="(item,key) in villages" :key="key" :label="item.locationName" :value="item.id"></el-option>
         </el-select>
       </el-col>
     </el-row>
@@ -71,15 +71,16 @@ export default {
     if (this.showCountry) {
       this.getCountries()
     } else {
+      // 默认中国
+      this.country = '0'
       this.getProvinces()
     }
   },
   methods: {
     getCountries() {
-      this.countries = [{ value: '选项1', label: '黄金糕' }, { value: '选项2', label: '玉米糕' }]
       return new Promise((resolve, reject) => {
-        getAllCountries(this.regionCode).then(response => {
-          // this.countries = response.data
+        getAllCountries('-1').then(response => {
+          this.countries = response.data.list
           resolve(response)
         }).catch(error => {
           reject(error)
@@ -89,8 +90,8 @@ export default {
     getProvinces() {
       this.provinces = [{ value: '选项1', label: '黄金糕' }, { value: '选项2', label: '玉米糕' }]
       return new Promise((resolve, reject) => {
-        getAllProvinces(this.regionCode).then(response => {
-          // this.provinces = response.data
+        getAllProvinces(this.country).then(response => {
+          this.provinces = response.data.list
           resolve(response)
         }).catch(error => {
           reject(error)
@@ -98,10 +99,10 @@ export default {
       })
     },
     getCities() {
-      this.cities = [{ value: '选项1', label: '黄金糕' }, { value: '选项2', label: '玉米糕' }]
+      // this.cities = [{ value: '选项1', label: '黄金糕' }, { value: '选项2', label: '玉米糕' }]
       return new Promise((resolve, reject) => {
-        getAllCities(this.regionCode).then(response => {
-          // this.cities = response.data
+        getAllCities(this.province).then(response => {
+          this.cities = response.data.list
           resolve(response)
         }).catch(error => {
           reject(error)
@@ -109,10 +110,10 @@ export default {
       })
     },
     getCounties() {
-      this.counties = [{ value: '选项1', label: '黄金糕' }, { value: '选项2', label: '玉米糕' }]
+      // this.counties = [{ value: '选项1', label: '黄金糕' }, { value: '选项2', label: '玉米糕' }]
       return new Promise((resolve, reject) => {
-        getAllCounties(this.regionCode).then(response => {
-          // this.counties = response.data
+        getAllCounties(this.city).then(response => {
+          this.counties = response.data.list
           resolve(response)
         }).catch(error => {
           reject(error)
@@ -120,10 +121,10 @@ export default {
       })
     },
     getTowns() {
-      this.towns = [{ value: '选项1', label: '黄金糕' }, { value: '选项2', label: '玉米糕' }]
+      // this.towns = [{ value: '选项1', label: '黄金糕' }, { value: '选项2', label: '玉米糕' }]
       return new Promise((resolve, reject) => {
-        getAllTowns(this.regionCode).then(response => {
-          // this.towns = response.data
+        getAllTowns(this.county).then(response => {
+          this.towns = response.data.list
           resolve(response)
         }).catch(error => {
           reject(error)
@@ -131,10 +132,10 @@ export default {
       })
     },
     getVillages() {
-      this.villages = [{ value: '选项1', label: '黄金糕' }, { value: '选项2', label: '玉米糕' }]
+      // this.villages = [{ value: '选项1', label: '黄金糕' }, { value: '选项2', label: '玉米糕' }]
       return new Promise((resolve, reject) => {
-        getAllVillages(this.regionCode).then(response => {
-          // this.villages = response.data
+        getAllVillages(this.town).then(response => {
+          this.villages = response.data.list
           resolve(response)
         }).catch(error => {
           reject(error)
@@ -223,9 +224,9 @@ export default {
       } else if (this.country !== '') {
         this.regionCode = this.country
       } else {
-        this.regionCode = '0000000000'
-        this.$emit('regionCodeChanged', this.regionCode)
+        this.regionCode = ''
       }
+      this.$emit('regionCodeChanged', this.regionCode)
     }
   }
 }
