@@ -144,6 +144,7 @@ export default {
       this.$router.push({ path: '/account/user/detail', query: { id: user.id }})
     },
     handleSizeChange(val) {
+      this.pagesize = this.pagesize === val ? this.pagesize : val
       this.queryUserList()
     },
     handleCurrentChange(val) {

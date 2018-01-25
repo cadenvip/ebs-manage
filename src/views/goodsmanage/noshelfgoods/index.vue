@@ -1,0 +1,315 @@
+<template>
+  <div style="padding-top: 20px;">
+    <el-form :model="formT" ref="formT" label-width="100px" class="demo-ruleForm">
+      <el-row :gutter="20">
+        <el-col :span="6">
+          <el-form-item label="商品名称:" prop="shangpmc">
+            <el-input :maxlength=20 v-model="formT.shangpmc"></el-input>
+          </el-form-item> 
+        </el-col>
+        <el-col :span="6" class="price">
+          <el-form-item style="display:inline-block; width:48%;" label-width="20" prop="spzdjg" label="价格:">
+            <el-input style="width: 50%;display:inline-block;" :maxlength=5 v-model="formT.spzdjg"></el-input>
+          </el-form-item>
+          <el-form-item style="display:inline-block; width: 50%;" label-width="20" prop="spzdjg" label="至:">
+            <el-input style="width: 50%;display:inline-block;" :maxlength=5 v-model="formT.spzgjg"></el-input>
+            <span style="color: #606266;padding-left: 5px;">元</span>
+          </el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item label="商品编码:" prop="shangpbm">
+            <el-input :maxlength=20 v-model="formT.shangpbm"></el-input>
+          </el-form-item> 
+        </el-col>
+        <el-col :span="6">
+          <el-form-item label-width="0" style="text-align: center;">
+            <el-button size="small" type="primary" @click="submitForm('formT')">确定</el-button>
+            <el-button size="small" type="primary" @click="resetForm('formT')">重置</el-button>
+            <el-button @click="show = !show" size="small">更多搜索</el-button>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <div style="margin-top: 10px;">
+        <el-collapse-transition>
+          <div v-show="show">
+            <el-row :gutter="20">
+              <el-col :span="6">
+                <el-form-item label="商品状态:" prop="ssspzt">
+                  <el-select v-model="formT.ssspzt" placeholder="请选择">
+                    <el-option
+                      v-for="item in goodsStatusOptions"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value">
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+              <el-col :span="6">
+                <el-form-item label="审核状态:" prop="ssshzt">
+                  <el-select v-model="formT.ssshzt" placeholder="请选择">
+                    <el-option
+                      v-for="item in auditStatusOptions"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value">
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+              <el-col :span="6">
+                <el-form-item label="商品类型:" prop="sssplx">
+                  <el-select v-model="formT.sssplx" placeholder="请选择">
+                    <el-option
+                      v-for="item in goodsTypeOptions"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value">
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+            </el-row>
+          </div>
+        </el-collapse-transition>
+      </div>
+    </el-form>
+    <!-- table表 -->
+    <div style="padding: 0 2%;">
+      <el-tabs v-model="activeTab" type="border-card" @tab-click="handleTabClick">
+        <el-tab-pane align="center" label="待上架商品" name="first">
+          <el-table @selection-change="handleTableSelectionChange" v-loading="loading" element-loading-text="Loading" ref="multipleTable" :data="tableData" tooltip-effect="dark" border style="width: 100%" >
+            <el-table-column type="selection" width="55">
+            </el-table-column>
+            <el-table-column align="center" label="商品编码" width="140">
+              <template slot-scope="scope">{{ scope.row.goodsId }}</template>
+            </el-table-column>
+            <el-table-column prop="goodsName" align="center" label="商品名称" width="120">
+            </el-table-column>
+            <el-table-column prop="categoryName" align="center" label="商品类型" show-overflow-tooltip>
+            </el-table-column>
+            <el-table-column prop="price" align="center" width="60" label="价格">
+            </el-table-column>
+            <el-table-column prop="stock" align="center" width="60" label="库存" show-overflow-tooltip>
+            </el-table-column>
+            <el-table-column prop="upTime" align="center" label="上架时间" show-overflow-tooltip>
+            </el-table-column>
+            <el-table-column align="center" widht="60" label="状态" show-overflow-tooltip>
+              <template slot-scope="scope">{{ scope.row.status === '1' ? '正常' : '错误' }}</template>
+            </el-table-column>
+            <el-table-column align="center" label="审核状态" show-overflow-tooltip>
+              <template slot-scope="scope">{{ scope.row.auditStatus === '1' ? '上架审批中' : scope.row.auditStatus === '2' ? '上架审批通过' : scope.row.auditStatus === '3' ? '上架审批驳回' : '错误' }}</template>
+            </el-table-column>
+            <el-table-column align="center" label="操作" width="200">
+              <template slot-scope="scope">
+                <el-button @click="getGoodsDetail(scope.row)" type="text" size="small">详情</el-button>
+                <el-button v-if="scope.row.auditStatus === '3'" @click="saleOff(scope.row)" type="text" size="small">上架</el-button>
+                <el-button v-if="scope.row.auditStatus === '3'" @click="modifyGoods(scope.row)" type="text" size="small">修改</el-button>
+                <el-button v-if="scope.row.auditStatus === '3'" @click="modifyGoods(scope.row)" type="text" size="small">删除</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+          <el-row style="margin-top: 20px;">
+            <el-col :span="6" style="padding-left: 20px; text-align: left;padding-top: 5px;">
+              <el-button @click="toggleSelection(tableData)" type="text" size="mini">全选</el-button>
+              <el-button type="text" size="mini">批量上架</el-button>
+              <el-button type="text" size="mini">批量删除</el-button>
+            </el-col>
+            <el-col :span="18" style="text-align: right; padding-right: 20px;">
+              <el-pagination
+                @size-change="handleDSJsizeChange"
+                @current-change="handleDSJcurrentChange"
+                layout="total, sizes, prev, pager, next, jumper"
+                :current-page="DSJcurrentPage"
+                :page-sizes="pagesizes"
+                :page-size="pagesize"
+                :total="total">
+              </el-pagination>
+            </el-col>
+          </el-row>
+        </el-tab-pane>
+        <el-tab-pane label="草稿箱" name="second">草稿箱</el-tab-pane>
+        <el-tab-pane label="历史商品" name="third">历史商品</el-tab-pane>
+      </el-tabs>
+    </div>
+  </div>
+</template>
+
+<script>
+  import CollapseTransition from 'element-ui/lib/transitions/collapse-transition'
+  import { getGoodsTopType, getNoShelfGoods } from '@/api/goodsRelease'
+  export default {
+    created () {
+      this._getGoodsTopType()
+      this.dsjflag = false
+      this.cgxflag = true
+      this.lsspflag = true
+      this._getNoShelfGoods()
+    },
+    data() {
+      return {
+        loading: false,  // 是否展示loading
+        show: false,  // 下拉搜索内容是否展示
+        activeTab: 'first', // 选择的tab
+        total: 0, // 总条目数
+        pagesizes: [10, 20, 30, 50],  // 页码选项
+        pagesize: 10, // 每页展示条数
+        DSJcurrentPage: 1,  // 待上架商品当前页
+        formT: {
+          shangpmc: '',
+          spzdjg: '',
+          spzgjg: '',
+          shangpbm: '',
+          ssspzt: '',
+          ssshzt: '',
+          sssplx: ''
+        },
+        tableData: [],
+        multipleSelection: [],
+        goodsStatusOptions: [{
+          value: 1,
+          label: '正常'
+        }],
+        auditStatusOptions: [{
+          value: 1,
+          label: '上架审批中'
+        },
+        {
+          value: 2,
+          label: '上架审批通过'
+        },
+        {
+          value: 3,
+          label: '上架审批驳回'
+        }],
+        goodsTypeOptions: []
+      }
+    },
+    methods: {
+      _getGoodsTopType() {
+        getGoodsTopType().then(res => {
+          if (res.status === 200) {
+            const data = res.data
+            for (var i in data) {
+              this.goodsTypeOptions.push({
+                label: data[i].caption,
+                value: data[i].csid
+              })
+            }
+          } else {
+            this.$message.error('请求出错,请检查您的网络！')
+          }
+        })
+      },
+      _getNoShelfGoods(obj) {
+        this.loading = true
+        const params = Object.assign({
+          searchType: 2,
+          pageSize: this.pagesize
+        }, obj)
+        console.log(params)
+        getNoShelfGoods(params).then(res => {
+          if (res.status === 200) {
+            this.tableData = res.data
+            this.total = res.total
+          } else {
+            this.$message.error(res.message)
+          }
+          this.loading = false
+        }).catch(err => {
+          this.$message.error(err)
+        })
+      },
+      handleTabClick(tab, event) {
+        if (this.dsjflag === true && tab.name === 'first') {
+          this.dsjflag = false
+          alert('request')
+        }
+        if (this.cgxflag === true && tab.name === 'second') {
+          this.cgxflag = false
+          alert('request')
+        }
+        if (this.lsspflag === true && tab.name === 'third') {
+          this.lsspflag = false
+          alert('request')
+        }
+        console.log(tab)
+      },
+      toggleSelection(rows) {
+        alert(2)
+        if (rows) {
+          rows.forEach(row => {
+            this.$refs.multipleTable.toggleRowSelection(row)
+          })
+        } else {
+          this.$refs.multipleTable.clearSelection()
+        }
+      },
+      handleTableSelectionChange(val) {
+        this.multipleSelection = val
+        console.log(this.multipleSelection)
+      },
+      submitForm(formName) {
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            for (var i in this.formT) {
+              console.log(this.formT[i], i)
+              if (this.formT[i] !== '') {
+                const params = {
+                  downPrice: this.formT.spzdjg,
+                  upPrice: this.formT.spzgjg,
+                  goodsCode: this.formT.shangpbm,
+                  typeCode: this.formT.sssplx,
+                  approvestatusCode: this.formT.ssshzt,
+                  statusCode: this.formT.ssspzt,
+                  name: this.formT.shangpmc,
+                  pageSize: this.pagesize
+                }
+                this.tableData = []
+                this._getNoShelfGoods(params)
+                return false
+              } else if (i === 'sssplx' && this.formT[i] === '') {
+                this.$message.error('未输入任何搜索信息！')
+                return false
+              }
+            }
+          } else {
+            this.$message.error('提交有误！,请按正确格式填写！')
+            return false
+          }
+        })
+      },
+      resetForm(formName) {
+        this.$refs[formName].resetFields()
+      },
+      getGoodsDetail(val) {
+        console.log(val)
+      },
+      // 待上架商品
+      handleDSJsizeChange(val) {
+        console.log(val)
+        this.pagesize = this.pagesize === val ? this.pagesize : val
+      },
+      handleDSJcurrentChange(val) {
+        const params = {
+          page: val
+        }
+        this.tableData = []
+        this._getNoShelfGoods(params)
+      }
+
+    },
+    components: {
+      CollapseTransition
+    }
+  }
+</script>
+<style>
+.price .el-input__inner {
+  padding: 0 5px !important;
+}
+.el-table .cell, .el-table th div, .el-table--border td:first-child .cell, .el-table--border th:first-child .cell {
+  padding: 0 5px !important;
+  text-align: center; 
+}
+</style>

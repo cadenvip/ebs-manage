@@ -56,10 +56,10 @@
       </el-form-item>
       <el-form-item style="display: block;" label="支付方式:" prop="zhifufs">
         <el-checkbox-group v-model="ruleForm.zhifufs">
-          <el-checkbox @change="checkPayWay(23)" label="支付宝支付" name="zhifufs"></el-checkbox>
-          <el-checkbox @change="checkPayWay(22)" label="手机支付" name="zhifufs"></el-checkbox>
+          <el-checkbox @change="_checkPayWay({payAccountType: 23})" label="支付宝支付" name="zhifufs"></el-checkbox>
+          <el-checkbox @change="_checkPayWay({payAccountType: 22})" label="手机支付" name="zhifufs"></el-checkbox>
           <el-checkbox :checked=true disabled label="货到付款" name="zhifufs"></el-checkbox>
-          <el-checkbox @change="checkPayWay(24)" label="网银支付" name="zhifufs"></el-checkbox>
+          <el-checkbox @change="_checkPayWay({payAccountType: 24})" label="网银支付" name="zhifufs"></el-checkbox>
           <el-alert title="温馨提示：在线支付将由支付渠道收取交易手续费，由商户承担，支付宝0.5%，手机支付0.3%。" type="error" :closable="false"></el-alert>
         </el-checkbox-group>
       </el-form-item>
@@ -262,7 +262,6 @@
   </div>
 </template>
 <script>
-  import 'element-ui/lib/theme-chalk/base.css'
   import Jieti from '@/components/Jieti/index'
   import { checkPayWay, goodsRelease, getLogisticsTemplate } from '@/api/goodsRelease'
   import CollapseTransition from 'element-ui/lib/transitions/collapse-transition'
@@ -735,10 +734,12 @@
         }
         return isJPG && isLt2M
       },
-      checkPayWay(val) {
+      _checkPayWay(val) {
         checkPayWay(val).then((res) => {
           if (res.status === 200) {
             console.log(res)
+          } else {
+            this.$message.error('网络错误')
           }
         })
       },
