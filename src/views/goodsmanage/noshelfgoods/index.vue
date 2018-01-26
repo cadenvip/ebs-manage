@@ -112,15 +112,15 @@
           <el-row style="margin-top: 20px;">
             <el-col :span="6" style="padding-left: 20px; text-align: left;padding-top: 5px;">
               <el-button @click="toggleSelection(tableData)" type="text" size="mini">全选</el-button>
-              <el-button type="text" size="mini">批量上架</el-button>
-              <el-button type="text" size="mini">批量删除</el-button>
+              <el-button @click="batchShelf" type="text" size="mini">批量上架</el-button>
+              <el-button @click="batchDelete" type="text" size="mini">批量删除</el-button>
             </el-col>
             <el-col :span="18" style="text-align: right; padding-right: 20px;">
               <el-pagination
                 @size-change="handleDSJsizeChange"
                 @current-change="handleDSJcurrentChange"
                 layout="total, sizes, prev, pager, next, jumper"
-                :current-page="DSJcurrentPage"
+                :current-page.sync="DSJcurrentPage"
                 :page-sizes="pagesizes"
                 :page-size="pagesize"
                 :total="total">
@@ -144,10 +144,12 @@
       this.dsjflag = false
       this.cgxflag = true
       this.lsspflag = true
+      this.selectAll = false
       this._getNoShelfGoods()
     },
     data() {
       return {
+        searchFlag: false,
         loading: false,  // 是否展示loading
         show: false,  // 下拉搜索内容是否展示
         activeTab: 'first', // 选择的tab
@@ -165,7 +167,7 @@
           sssplx: ''
         },
         tableData: [],
-        multipleSelection: [],
+        DSJseletedData: [], // 待上架选中的数据
         goodsStatusOptions: [{
           value: 1,
           label: '正常'
@@ -197,7 +199,7 @@
               })
             }
           } else {
-            this.$message.error('请求出错,请检查您的网络！')
+            this.$message.error(res.message)
           }
         })
       },
@@ -207,7 +209,6 @@
           searchType: 2,
           pageSize: this.pagesize
         }, obj)
-        console.log(params)
         getNoShelfGoods(params).then(res => {
           if (res.status === 200) {
             this.tableData = res.data
@@ -223,7 +224,6 @@
       handleTabClick(tab, event) {
         if (this.dsjflag === true && tab.name === 'first') {
           this.dsjflag = false
-          alert('request')
         }
         if (this.cgxflag === true && tab.name === 'second') {
           this.cgxflag = false
@@ -236,25 +236,21 @@
         console.log(tab)
       },
       toggleSelection(rows) {
-        alert(2)
-        if (rows) {
-          rows.forEach(row => {
-            this.$refs.multipleTable.toggleRowSelection(row)
-          })
-        } else {
-          this.$refs.multipleTable.clearSelection()
-        }
+        this.selectAll = !this.selectAll
+        rows.forEach(row => {
+          this.$refs.multipleTable.toggleRowSelection(row, this.selectAll)
+        })
       },
       handleTableSelectionChange(val) {
-        this.multipleSelection = val
-        console.log(this.multipleSelection)
+        this.DSJseletedData = val
       },
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
             for (var i in this.formT) {
-              console.log(this.formT[i], i)
               if (this.formT[i] !== '') {
+                this.searchFlag = true
+                this.DSJcurrentPage = 1
                 const params = {
                   downPrice: this.formT.spzdjg,
                   upPrice: this.formT.spzgjg,
@@ -269,7 +265,9 @@
                 this._getNoShelfGoods(params)
                 return false
               } else if (i === 'sssplx' && this.formT[i] === '') {
-                this.$message.error('未输入任何搜索信息！')
+                this.searchFlag = false
+                this.DSJcurrentPage = 1
+                this._getNoShelfGoods()
                 return false
               }
             }
@@ -285,17 +283,53 @@
       getGoodsDetail(val) {
         console.log(val)
       },
-      // 待上架商品
+      // 批量上架
+      batchShelf() {
+        const len = this.DSJseletedData.length
+        if (len === 0) {
+          this.$message.error('未选中任何商品！')
+        } else {
+          for (var i in this.DSJseletedData) {
+            if (this.DSJseletedData[i]['auditStatus'] !== '3') {
+              this.$message.error('所选的数据中包含不能执行该操作的数据，请重新选择！')
+              return false
+            }
+          }
+          // 请求批量上架接口
+          console.log('请求批量上架接口')
+        }
+      },
+      batchDelete() {
+        const len = this.DSJseletedData.length
+        if (len === 0) {
+          this.$message.error('未选中任何商品！')
+        } else {
+          for (var i in this.DSJseletedData) {
+            if (this.DSJseletedData[i]['auditStatus'] !== '3') {
+              this.$message.error('所选的数据中包含不能执行该操作的数据，请重新选择！')
+              return false
+            }
+          }
+          // 请求批量删除接口
+          console.log('请求批量删除接口')
+        }
+      },
       handleDSJsizeChange(val) {
-        console.log(val)
         this.pagesize = this.pagesize === val ? this.pagesize : val
       },
       handleDSJcurrentChange(val) {
-        const params = {
-          page: val
-        }
+        const params = this.objHasVal(this.formT) && this.searchFlag ? Object.assign({ page: val }, this.formT) : { page: val }
         this.tableData = []
         this._getNoShelfGoods(params)
+      },
+      objHasVal(val) {
+        var flag = false
+        for (var i in val) {
+          if (val[i] !== '') {
+            flag = true
+          }
+        }
+        return flag
       }
 
     },
