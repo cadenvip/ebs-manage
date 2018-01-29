@@ -137,7 +137,8 @@
 
 <script>
   import CollapseTransition from 'element-ui/lib/transitions/collapse-transition'
-  import { getGoodsTopType, getNoShelfGoods } from '@/api/goodsRelease'
+  import { getGoodsTopType } from '@/api/goodsRelease'
+  import { getNoShelfGoods } from '@/api/noshelfgoods'
   export default {
     created () {
       this._getGoodsTopType()
@@ -281,7 +282,9 @@
         this.$refs[formName].resetFields()
       },
       getGoodsDetail(val) {
-        console.log(val)
+        if (val.goodsId) {
+          this.$router.push({ name: 'goodsdetail', query: { goodsId: val.goodsId }})
+        }
       },
       // 批量上架
       batchShelf() {
@@ -331,7 +334,6 @@
         }
         return flag
       }
-
     },
     components: {
       CollapseTransition

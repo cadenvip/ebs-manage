@@ -290,6 +290,13 @@ export const constantRouterMap = [
         name: 'noshelfgoods',
         component: _import('goodsmanage/noshelfgoods/index'),
         meta: { title: '未上架商品', icon: 'form' }
+      },
+      {
+        path: 'goodsdetail',
+        name: 'goodsdetail',
+        component: _import('goodsmanage/goodsdetail/index'),
+        meta: { title: '商品详情' },
+        hidden: true
       }
     ]
   },
