@@ -1,193 +1,306 @@
+
+
 <template>
   <div class="LocationSelector">
-    <el-tree :props="props1" :load="loadNode1" lazy>
-    </el-tree>
+    <el-row :gutter="6">
+      <el-col :span="10" :offset="6">
+        <el-input placeholder="输入关键字进行过滤" v-model="filterText"></el-input>
+      </el-col>
+      <el-col :span="2">
+        <el-button type="primary" @click.native.prevent="queryLocationName">查询</el-button>
+      </el-col>
+    </el-row>
+    <div v-show="showLazyTree">
+      <el-tree
+        lazy
+        :highlight-current="true"
+        :load="loadNode"
+        :props="defaultProps"
+        @node-click="handleNodeClick"
+        ref="lazyTree">
+      </el-tree>
+    </div>
+    <div v-show="showQueryResult">
+      <el-tree
+        :data="data"
+        :highlight-current="true"
+        :default-expand-all="true"
+        :props="defaultProps"
+        @node-click="handleNodeClick"
+        ref="resultTree">
+      </el-tree>
+    </div>
   </div>
 </template>
 
-<script type="text/ecmascript-6">
+<script>
 
-import { getAllCountries, getAllProvinces, getAllCities, getAllCounties, getAllTowns, getAllVillages } from '@/api/regionselecter'
+  import { // getAllCountries
+    getAllProvinces,
+    getAllCities,
+    getAllCounties,
+    getAllTowns,
+    getAllVillages,
+    queryLocationName,
+    getParentInfo
+  } from '@/api/regionselecter'
 
-export default {
-  props: {
-    grade: {
-      type: Number,
-      default: 3
-    },
-    showCountry: {
-      type: Boolean,
-      default: true
-    }
-  },
-  data: function () {
-    return {
-      props1: {
-        label: 'name',
-        children: 'zones',
-        isLeaf: 'leaf'
+  export default {
+    data() {
+      return {
+        showLazyTree: true,
+        showQueryResult: false,
+        data: [],
+        arrProvinces: [],
+        arrCities: [],
+        arrCounties: [],
+        arrTowns: [],
+        arrVillages: [],
+        filterText: '',
+        defaultProps: {
+          id: '',
+          label: 'label',
+          children: 'children',
+          parentId: ''
+        }
       }
-    }
-  },
-  methods: {
-    getCountries() {
-      return new Promise((resolve, reject) => {
-        getAllCountries('-1').then(response => {
-          this.countries = response.data.list
-          resolve(response)
+    },
+    methods: {
+      handleNodeClick(data) {
+        this.$emit('locationSelected', data)
+      },
+      queryLocationName() {
+        // 切换树
+        this.filterText = this.filterText.trim()
+        if (this.filterText === '') {
+          this.showLazyTree = true
+          this.showQueryResult = false
+          return
+        } else {
+          this.showLazyTree = false
+          this.showQueryResult = true
+        }
+
+        this.data = []
+        this.arrProvinces = []
+        this.arrCities = []
+        this.arrCounties = []
+        this.arrTowns = []
+        this.arrVillages = []
+        queryLocationName(this.filterText).then(response => {
+          if (response.data.list.length === 0) {
+            return
+          }
+          response.data.list.forEach(v => {
+            v.label = v.locationName
+            if (v.locationLevel === 1) {
+              this.arrProvinces.push(v)
+            } else if (v.locationLevel === 2) {
+              this.arrCities.push(v)
+            } else if (v.locationLevel === 3) {
+              this.arrCounties.push(v)
+            } else if (v.locationLevel === 4) {
+              this.arrTowns.push(v)
+            } else if (v.locationLevel === 5) {
+              this.arrVillages.push(v)
+            }
+          })
+          this.getTowns().then(() => {
+            this.getCounties().then(() => {
+              this.getCities().then(() => {
+                this.getProvinces().then(() => {
+                  this.arrTowns = this.removeDuplicatedItem(this.arrTowns)
+                  this.arrCounties = this.removeDuplicatedItem(this.arrCounties)
+                  this.arrCities = this.removeDuplicatedItem(this.arrCities)
+                  this.arrProvinces = this.removeDuplicatedItem(this.arrProvinces)
+                  var dataTemp = [{ 'id': 0, 'locationName': '全国', 'locationCode': '100', 'lastLevelCode': '',
+                    'parentId': -1, 'locationLevel': 0, 'description': '中国', 'orderindex': '', 'locationLevelName': '', 'label': '全国' }]
+                  dataTemp.push.apply(dataTemp, this.arrProvinces)
+                  dataTemp.push.apply(dataTemp, this.arrCities)
+                  dataTemp.push.apply(dataTemp, this.arrCounties)
+                  dataTemp.push.apply(dataTemp, this.arrTowns)
+                  dataTemp.push.apply(dataTemp, this.arrVillages)
+                  for (var i = 0; i < dataTemp.length; i++) {
+                    delete dataTemp[i].lastLevelCode
+                    delete dataTemp[i].locationLevelName
+                    delete dataTemp[i].orderindex
+                    delete dataTemp[i].locationCode
+                    delete dataTemp[i].locationLevel
+                    delete dataTemp[i].description
+                    delete dataTemp[i].locationName
+                  }
+                  this.data = this.list2Tree(dataTemp, { 'idKey': 'id', 'parentKey': 'parentId', 'childrenKey': 'children' })
+                })
+              })
+            })
+          })
         }).catch(error => {
-          reject(error)
+          console.log(error)
         })
-      })
-    },
-    getProvinces() {
-      return new Promise((resolve, reject) => {
-        getAllProvinces(this.country).then(response => {
-          this.provinces = response.data.list
-          resolve(response)
-        }).catch(error => {
-          reject(error)
+      },
+      getTowns() {
+        const villagePromises = this.arrVillages.map(village => {
+          return getParentInfo(village.parentId, 4).then(response => {
+            for (var j = 0; j < response.data.list.length; j++) {
+              response.data.list[j].label = response.data.list[j].locationName
+              this.arrTowns.push(response.data.list[j])
+            }
+          })
         })
-      })
-    },
-    getCities() {
-      return new Promise((resolve, reject) => {
-        getAllCities(this.province).then(response => {
-          this.cities = response.data.list
-          resolve(response)
-        }).catch(error => {
-          reject(error)
+        return Promise.all(villagePromises)
+      },
+      getCounties() {
+        const townPromises = this.arrTowns.map(town => {
+          return getParentInfo(town.parentId, 3).then(response => {
+            for (var j = 0; j < response.data.list.length; j++) {
+              response.data.list[j].label = response.data.list[j].locationName
+              this.arrCounties.push(response.data.list[j])
+            }
+          })
         })
-      })
-    },
-    getCounties() {
-      return new Promise((resolve, reject) => {
-        getAllCounties(this.city).then(response => {
-          this.counties = response.data.list
-          resolve(response)
-        }).catch(error => {
-          reject(error)
+        return Promise.all(townPromises)
+      },
+      getCities() {
+        const countyPromises = this.arrCounties.map(county => {
+          return getParentInfo(county.parentId, 2).then(response => {
+            for (var j = 0; j < response.data.list.length; j++) {
+              response.data.list[j].label = response.data.list[j].locationName
+              this.arrCities.push(response.data.list[j])
+            }
+          })
         })
-      })
-    },
-    getTowns() {
-      return new Promise((resolve, reject) => {
-        getAllTowns(this.county).then(response => {
-          this.towns = response.data.list
-          resolve(response)
-        }).catch(error => {
-          reject(error)
+        return Promise.all(countyPromises)
+      },
+      getProvinces() {
+        const cityPromises = this.arrCities.map(city => {
+          return getParentInfo(city.parentId, 1).then(response => {
+            for (var j = 0; j < response.data.list.length; j++) {
+              response.data.list[j].label = response.data.list[j].locationName
+              this.arrProvinces.push(response.data.list[j])
+            }
+          })
         })
-      })
-    },
-    getVillages() {
-      return new Promise((resolve, reject) => {
-        getAllVillages(this.town).then(response => {
-          this.villages = response.data.list
-          resolve(response)
-        }).catch(error => {
-          reject(error)
-        })
-      })
-    },
-    countryChanged() {
-      this.province = ''
-      this.city = ''
-      this.county = ''
-      this.town = ''
-      this.village = ''
-      if (this.country !== '') {
-        this.getProvinces()
-      } else {
-        this.provinces = []
+        return Promise.all(cityPromises)
+      },
+      loadNode(node, resolve) {
+        if (node.level === 0) {
+          return resolve([{ label: '全国', id: '0', 'parentId': '-1' }])
+        }
+        // if (node.level === 1) {
+        //   getAllCountries('-1').then(response => {
+        //     var arrCountries = []
+        //     response.data.list.forEach(function(v) {
+        //       arrCountries.push({ 'id': v.id, 'label': v.locationName, 'parent': v.parentId })
+        //       return resolve(arrCountries)
+        //     })
+        //   }).catch(error => {
+        //     console.log(error)
+        //   })
+        //   return resolve([])
+        // }
+        if (node.level === 1) {
+          getAllProvinces(node.data.id).then(response => {
+            var arrProvinces = []
+            response.data.list.forEach(function(v) {
+              arrProvinces.push({ 'id': v.id, 'label': v.locationName, 'parent': v.parentId })
+              return resolve(arrProvinces)
+            })
+          }).catch(error => {
+            console.log(error)
+          })
+          return resolve([])
+        }
+        if (node.level === 2) {
+          getAllCities(node.data.id).then(response => {
+            var arrCities = []
+            response.data.list.forEach(function(v) {
+              arrCities.push({ 'id': v.id, 'label': v.locationName, 'parent': v.parentId })
+              return resolve(arrCities)
+            })
+          }).catch(error => {
+            console.log(error)
+          })
+          return resolve([])
+        }
+        if (node.level === 3) {
+          getAllCounties(node.data.id).then(response => {
+            var arrCounties = []
+            response.data.list.forEach(function(v) {
+              arrCounties.push({ 'id': v.id, 'label': v.locationName, 'parent': v.parentId })
+              return resolve(arrCounties)
+            })
+          }).catch(error => {
+            console.log(error)
+          })
+          return resolve([])
+        }
+        if (node.level === 4) {
+          getAllTowns(node.data.id).then(response => {
+            var arrTowns = []
+            response.data.list.forEach(function(v) {
+              arrTowns.push({ 'id': v.id, 'label': v.locationName, 'parent': v.parentId })
+              return resolve(arrTowns)
+            })
+          }).catch(error => {
+            console.log(error)
+          })
+          return resolve([])
+        }
+        if (node.level === 5) {
+          getAllVillages(node.data.id).then(response => {
+            var arrVillages = []
+            response.data.list.forEach(function(v) {
+              arrVillages.push({ 'id': v.id, 'label': v.locationName, 'parent': v.parentId })
+              return resolve(arrVillages)
+            })
+          }).catch(error => {
+            console.log(error)
+          })
+          return resolve([])
+        }
+        if (node.level > 6) {
+          return resolve([])
+        }
+        resolve([])
+      },
+      removeDuplicatedItem(ar) {
+        var ret = []
+        for (var i = 0, j = ar.length; i < j; i++) {
+          if (ret.indexOf(ar[i]) === -1) {
+            ret.push(ar[i])
+          }
+        }
+        return ret
+      },
+      list2Tree(arr, options) {
+        options = options || {}
+        var ID_KEY = options.idKey || 'id'
+        var PARENT_KEY = options.parentKey || 'parent'
+        var CHILDREN_KEY = options.childrenKey || 'children'
+
+        var tree = []
+        var childrenOf = {}
+        var item, id, parent
+
+        for (var i = 0, length = arr.length; i < length; i++) {
+          item = arr[i]
+          id = item[ID_KEY]
+          parent = item[PARENT_KEY] || 0
+          // every item may have children
+          childrenOf[id] = childrenOf[id] || []
+          // init its children
+          item[CHILDREN_KEY] = childrenOf[id]
+          if (parent !== -1) {
+            // init its parent's children
+            childrenOf[parent] = childrenOf[parent] || []
+            // push it into its parent's children
+            childrenOf[parent].push(item)
+          } else {
+            tree.push(item)
+          }
+        }
+        return tree
       }
-      this.cities = []
-      this.counties = []
-      this.towns = []
-      this.villages = []
-      this.getRegionCode()
-    },
-    provinceChanged() {
-      this.city = ''
-      this.county = ''
-      this.town = ''
-      this.village = ''
-      if (this.province !== '') {
-        this.getCities()
-      } else {
-        this.cities = []
-      }
-      this.counties = []
-      this.towns = []
-      this.villages = []
-      this.getRegionCode()
-    },
-    cityChanged() {
-      this.county = ''
-      this.town = ''
-      this.village = ''
-      if (this.city !== '') {
-        this.getCounties()
-      } else {
-        this.counties = []
-      }
-      this.towns = []
-      this.villages = []
-      this.getRegionCode()
-    },
-    countyChanged() {
-      this.town = ''
-      this.village = ''
-      if (this.county !== '') {
-        this.getTowns()
-      } else {
-        this.towns = []
-      }
-      this.villages = []
-      this.getRegionCode()
-    },
-    townChanged() {
-      this.village = ''
-      if (this.town !== '') {
-        this.getVillages()
-      } else {
-        this.getVillages = []
-      }
-      this.getRegionCode()
-    },
-    villageChanged() {
-      this.getRegionCode()
-    },
-    getRegionCode () {
-      if (this.village !== '') {
-        this.regionCode = this.village
-      } else if (this.town !== '') {
-        this.regionCode = this.town
-      } else if (this.county !== '') {
-        this.regionCode = this.county
-      } else if (this.city !== '') {
-        this.regionCode = this.city
-      } else if (this.province !== '') {
-        this.regionCode = this.province
-      } else if (this.country !== '') {
-        this.regionCode = this.country
-      } else {
-        this.regionCode = ''
-      }
-      this.$emit('regionCodeChanged', this.regionCode)
-    },
-    loadNode1(node, resolve) {
-      if (node.level === 0) {
-        return resolve([{ name: 'region' }])
-      }
-      if (node.level > 1) {
-        return resolve([])
-      }
-      setTimeout(() => {
-        const data = [{ name: 'leaf', leaf: true }, { name: 'zone' }]
-        resolve(data)
-      }, 500)
     }
   }
-}
 </script>

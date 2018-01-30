@@ -30,7 +30,9 @@ export function addRole(params) {
     data: { 'roleame': `${params.rolename}`,
       'roletype': `${params.roletype}`,
       'description': `${params.description}`,
-      'resourceids': `${params.permissions}`
+      'resourceids': `${params.permissions}`,
+      'issystem': '1',
+      'ishidden': '0'
     }
   })
 }
@@ -42,7 +44,9 @@ export function updateRole(params) {
     data: { 'id': `${params.id}`,
       'roleame': `${params.rolename}`,
       'description': `${params.description}`,
-      'resourceids': `${params.permissions}`
+      'resourceids': `${params.permissions}`,
+      'issystem': '1',
+      'ishidden': '0'
     }
   })
 }
@@ -56,7 +60,6 @@ export function deleteRole(params) {
 }
 
 export function getRoleDetail(params) {
-  alert(params)
   return request({
     url: '/role/detail',
     method: 'post',

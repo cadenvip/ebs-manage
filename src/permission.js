@@ -22,7 +22,8 @@ const whiteList = ['/',
   '/account/role/add',
   '/account/role/update',
   '/account/role/detail',
-  '/vercode'] // 不重定向白名单
+  '/account/permissions'
+] // 不重定向白名单
 
 router.beforeEach((to, from, next) => {
   NProgress.start()
