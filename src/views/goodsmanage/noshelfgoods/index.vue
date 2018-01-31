@@ -11,7 +11,7 @@
           <el-form-item style="display:inline-block; width:48%;" label-width="20" prop="spzdjg" label="价格:">
             <el-input style="width: 50%;display:inline-block;" :maxlength=5 v-model="formT.spzdjg"></el-input>
           </el-form-item>
-          <el-form-item style="display:inline-block; width: 50%;" label-width="20" prop="spzdjg" label="至:">
+          <el-form-item style="display:inline-block; width: 50%;" label-width="20" prop="spzgjg" label="至:">
             <el-input style="width: 50%;display:inline-block;" :maxlength=5 v-model="formT.spzgjg"></el-input>
             <span style="color: #606266;padding-left: 5px;">元</span>
           </el-form-item>
@@ -82,7 +82,7 @@
             <el-table-column type="selection" width="55">
             </el-table-column>
             <el-table-column align="center" label="商品编码" width="140">
-              <template slot-scope="scope">{{ scope.row.goodsId }}</template>
+              <template slot-scope="scope">{{ scope.row.goodsCode }}</template>
             </el-table-column>
             <el-table-column prop="goodsName" align="center" label="商品名称" width="120">
             </el-table-column>
