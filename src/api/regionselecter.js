@@ -48,11 +48,26 @@ export function getAllVillages(params) {
   })
 }
 
-// TODO
-export function getLocationList(params) {
+export function queryLocationName(params) {
   return request({
     url: '/location/list',
     method: 'post',
-    data: {}
+    data: { 'locationName': `${params}` }
   })
 }
+
+export function getParentInfo(parentId, locationLevel) {
+  return request({
+    url: '/location/list',
+    method: 'post',
+    data: { 'id': `${parentId}`,
+      'locationLevel': `${locationLevel}` }
+  })
+}
+
+// export function getChinaAll(params) {
+//   return request({
+//     url: '/location/listchina',
+//     method: 'post'
+//   })
+// }

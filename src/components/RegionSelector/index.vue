@@ -88,7 +88,6 @@ export default {
       })
     },
     getProvinces() {
-      this.provinces = [{ value: '选项1', label: '黄金糕' }, { value: '选项2', label: '玉米糕' }]
       return new Promise((resolve, reject) => {
         getAllProvinces(this.country).then(response => {
           this.provinces = response.data.list

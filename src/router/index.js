@@ -123,9 +123,9 @@ export const constantRouterMap = [
         meta: { title: '角色详情', icon: 'table' }
       },
       {
-        path: 'permissionsmanagement',
-        name: 'permissionsmanagement',
-        component: _import('account/permissionsmanagement'),
+        path: 'permissions',
+        name: 'permissions',
+        component: _import('authentication/index'),
         meta: { title: '权限管理', icon: 'table' }
       },
       {
