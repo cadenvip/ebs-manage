@@ -14,7 +14,7 @@
       <el-form-item label="角色描述：" prop="description">
         <el-input type="textarea" v-model="roleForm.description" style="width: 600px;" placeholder="请输入角色描述" disabled ></el-input>
       </el-form-item>
-      <el-form-item label="权限绑定：" prop="permissions">
+      <el-form-item label="权限绑定：" prop="resourceids">
         <el-tree
           :data="data"
           show-checkbox
@@ -22,6 +22,7 @@
           :highlight-current="true"
           :default-expand-all="false"
           :props="defaultProps"
+          v-loading="loading"
           ref="tree">
         </el-tree>
       </el-form-item>
@@ -35,7 +36,7 @@
 <script>
 
 import { getRoleDetail } from '@/api/role'
-import { getAllPermissions } from '@/api/authentication'
+import { getAllResources } from '@/api/authentication'
 
 export default {
   data() {
@@ -44,30 +45,32 @@ export default {
         rolename: '',
         roletype: '',
         description: '',
-        permissions: ''
+        resourceids: []
       },
       data: [],
-      resources: [],
+      allResources: [],
       filterText: '',
       defaultProps: {
         id: '',
         label: 'label',
         children: 'children',
         parentId: ''
-      }
+      },
+      loading: false
     }
   },
   created() {
     this.getRoleInfo()
   },
-  mounted () {
-    this.getAllPermissions()
-  },
   methods: {
     getRoleInfo() {
       return new Promise((resolve, reject) => {
         getRoleDetail(this.$route.query.id).then(response => {
-          this.roleForm = response.data
+          this.roleForm.rolename = response.data.rolename
+          this.roleForm.roletype = response.data.roletype
+          this.roleForm.description = response.data.description
+          this.roleForm.resourceids = response.data.resourceids.split(',')
+          this.getAllPermissions()
           resolve(response)
         }).catch(error => {
           reject(error)
@@ -75,13 +78,23 @@ export default {
       })
     },
     getAllPermissions() {
+      this.data = []
+      var issystem = ''
+      // 1系统管理 2企业 （roletype: 1----> issystem: 1, roletype: 2---->issystem: 0)
+      if (this.roleForm.roletype === '1') {
+        issystem = 0
+      } else {
+        issystem = 1
+      }
+      this.loading = true
       return new Promise((resolve, reject) => {
-        // TODO 根据用户id（不一定是id，可能是其他用户信息）获取所有可选权限
-        getAllPermissions().then(response => {
-          this.resources = response.list
-          var permissions = []
-          response.list.forEach(v => {
+        getAllResources(issystem).then(response => {
+          this.allResources = response.data
+          var aliveResources = []
+          response.data.forEach(v => {
+            // 所有节点禁用
             v.label = v.name
+            v.disabled = true
             delete v.type
             delete v.url
             delete v.permission
@@ -91,12 +104,19 @@ export default {
             delete v.image
             delete v.typestr
             delete v.rootNode
-            permissions.push(v)
+            if (v.status === 0) {
+              // status: 0-激活，1-禁用（激活后页面可见，功能可用）
+              aliveResources.push(v)
+            }
           })
           // 整理数据
-          this.data = this.list2Tree(permissions, { 'idKey': 'id', 'parentKey': 'parentid', 'childrenKey': 'children' })
+          this.data = this.list2Tree(aliveResources, { 'idKey': 'id', 'parentKey': 'parentid', 'childrenKey': 'children' })
+          // 设置选中
+          this.$refs.tree.setCheckedKeys(this.roleForm.resourceids)
+          this.loading = false
           resolve(response)
         }).catch(error => {
+          this.loading = false
           reject(error)
         })
       })

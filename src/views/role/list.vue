@@ -63,7 +63,7 @@
       <template slot-scope="scope">
         <el-button @click="detail(scope.row)" type="text" size="small">详细</el-button>
         <el-button @click="updateRole(scope.row)" type="text" size="small">修改</el-button>
-        <el-button @click="delete(scope.row)" type="text" size="small">删除</el-button>
+        <el-button @click="deleteRole(scope.row)" type="text" size="small">删除</el-button>
       </template>
       </el-table-column>
     </el-table>
@@ -111,6 +111,9 @@ export default {
         this.list = response.data.list
         this.total = response.data.total
         this.loading = false
+      }).catch(error => {
+        this.loading = false
+        console.log(error)
       })
     },
     addRole() {
@@ -122,21 +125,35 @@ export default {
         this.list = response.data.list
         this.total = response.data.total
         this.loading = false
+      }).catch(error => {
+        this.loading = false
+        console.log(error)
       })
     },
     updateRole(role) {
       this.$router.push({ path: '/account/role/update', query: { id: role.id }})
     },
-    delete(role) {
+    deleteRole(role) {
       this.$confirm(`您确定删除名称为[${role.rolename}]的角色吗, 是否继续?`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        deleteRole(role)
-        this.$message({
-          type: 'success',
-          message: '删除成功!'
+        deleteRole(role.id).then(response => {
+          // 页面删除处理
+          var index = this.list.indexOf(role)
+          if (index > -1) {
+            this.list.splice(index, 1)
+          }
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          })
+        }).catch(() => {
+          this.$message({
+            type: 'warning',
+            message: '删除失败'
+          })
         })
       }).catch(() => {
         this.$message({

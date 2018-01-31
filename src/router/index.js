@@ -52,6 +52,7 @@ export const constantRouterMap = [
   {
     path: '/account',
     component: Layout,
+    redirect: '/account/location',
     name: 'account',
     hidden: false,
     meta: { title: '账户管理', icon: 'table' },
