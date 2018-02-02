@@ -101,6 +101,9 @@ export default {
         this.list = response.data.list
         this.total = response.data.total
         this.loading = false
+      }).catch(error => {
+        this.loading = false
+        console.log(error)
       })
     },
     addUser() {
@@ -112,6 +115,9 @@ export default {
         this.list = response.data.list
         this.total = response.data.total
         this.loading = false
+      }).catch(error => {
+        this.loading = false
+        console.log(error)
       })
     },
     joinRoleName(row, column, cellValue) {

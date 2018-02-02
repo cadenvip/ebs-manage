@@ -27,10 +27,10 @@ export function addRole(params) {
   return request({
     url: '/role/save',
     method: 'post',
-    data: { 'roleame': `${params.rolename}`,
+    data: { 'rolename': `${params.rolename}`,
       'roletype': `${params.roletype}`,
       'description': `${params.description}`,
-      'resourceids': `${params.permissions}`,
+      'resourceids': params.resourceids,
       'issystem': '1',
       'ishidden': '0'
     }
@@ -42,9 +42,9 @@ export function updateRole(params) {
     url: '/role/update',
     method: 'post',
     data: { 'id': `${params.id}`,
-      'roleame': `${params.rolename}`,
+      'rolename': `${params.rolename}`,
       'description': `${params.description}`,
-      'resourceids': `${params.permissions}`,
+      'resourceids': params.resourceids,
       'issystem': '1',
       'ishidden': '0'
     }
@@ -53,9 +53,9 @@ export function updateRole(params) {
 
 export function deleteRole(params) {
   return request({
-    url: '/role/delete',
-    method: 'post',
-    data: { 'id': `${params}` }
+    url: '/role/delete/' + `${params}`,
+    method: 'post'
+    // data: { 'id': `${params}` }
   })
 }
 

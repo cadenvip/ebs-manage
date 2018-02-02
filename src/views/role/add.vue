@@ -6,7 +6,7 @@
         <el-input v-model="roleForm.rolename" style="width: 600px;" placeholder="请输入角色名称"></el-input>
       </el-form-item>
       <el-form-item label="角色类型：" prop="roletype">
-        <el-select v-model="roleForm.roletype" clearable placeholder="请选择" style="width: 600px;">
+        <el-select v-model="roleForm.roletype" clearable placeholder="请选择" @change="getAllPermissions" style="width: 600px;">
           <el-option label="系统管理" value="1"></el-option>
           <el-option label="企业" value="2"></el-option>
         </el-select>
@@ -14,7 +14,7 @@
       <el-form-item label="角色描述：" prop="description">
         <el-input type="textarea" v-model="roleForm.description" style="width: 600px;" placeholder="请输入角色描述"></el-input>
       </el-form-item>
-      <el-form-item label="权限绑定：" prop="permissions">
+      <el-form-item label="权限绑定：" prop="resourceids">
         <el-tree
           :data="data"
           show-checkbox
@@ -22,6 +22,7 @@
           :highlight-current="true"
           :default-expand-all="false"
           :props="defaultProps"
+          v-loading="loading"
           ref="tree">
         </el-tree>
       </el-form-item>
@@ -34,9 +35,8 @@
 </template>
 
 <script>
-
 import { addRole } from '@/api/role'
-import { getAllPermissions } from '@/api/authentication'
+import { getAllResources } from '@/api/authentication'
 
 export default {
   data() {
@@ -45,7 +45,7 @@ export default {
         rolename: '',
         roletype: '1',
         description: '',
-        permissions: ''
+        resourceids: []
       },
       rules: {
         rolename: [{ required: true, message: '请输入角色名称', trigger: 'blur' }],
@@ -60,7 +60,8 @@ export default {
         label: 'label',
         children: 'children',
         parentId: ''
-      }
+      },
+      loading: false
     }
   },
   mounted () {
@@ -68,12 +69,20 @@ export default {
   },
   methods: {
     getAllPermissions() {
+      this.data = []
+      var issystem = ''
+      // 1系统管理 2企业 （roletype: 1----> issystem: 0, roletype: 2---->issystem: 1)
+      if (this.roleForm.roletype === '1') {
+        issystem = 0
+      } else {
+        issystem = 1
+      }
+      this.loading = true
       return new Promise((resolve, reject) => {
-        // TODO 根据用户id（不一定是id，可能是其他用户信息）获取所有可选权限
-        getAllPermissions().then(response => {
-          this.resources = response.list
-          var permissions = []
-          response.list.forEach(v => {
+        getAllResources(issystem).then(response => {
+          this.resources = response.data
+          var aliveResources = []
+          response.data.forEach(v => {
             v.label = v.name
             delete v.type
             delete v.url
@@ -84,12 +93,17 @@ export default {
             delete v.image
             delete v.typestr
             delete v.rootNode
-            permissions.push(v)
+            if (v.status === 0) {
+              // status: 0-激活，1-禁用（激活后页面可见，功能可用）
+              aliveResources.push(v)
+            }
           })
           // 整理数据
-          this.data = this.list2Tree(permissions, { 'idKey': 'id', 'parentKey': 'parentid', 'childrenKey': 'children' })
+          this.data = this.list2Tree(aliveResources, { 'idKey': 'id', 'parentKey': 'parentid', 'childrenKey': 'children' })
+          this.loading = false
           resolve(response)
         }).catch(error => {
+          this.loading = false
           reject(error)
         })
       })
@@ -128,11 +142,11 @@ export default {
       this.$refs.roleForm.validate(valid => {
         if (valid) {
           var checkedKeys = this.$refs.tree.getCheckedKeys()
-          console.log(checkedKeys)
+          this.roleForm.resourceids = checkedKeys.join(',')
           return new Promise((resolve, reject) => {
             addRole(this.roleForm).then(response => {
-              this.roleForm = response.data
               resolve(response)
+              this.$router.go(-1)
             }).catch(error => {
               reject(error)
             })

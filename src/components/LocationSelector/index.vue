@@ -27,6 +27,7 @@
         :default-expand-all="true"
         :props="defaultProps"
         @node-click="handleNodeClick"
+        v-loading="loading"
         ref="resultTree">
       </el-tree>
     </div>
@@ -62,7 +63,8 @@
           label: 'label',
           children: 'children',
           parentId: ''
-        }
+        },
+        loading: false
       }
     },
     methods: {
@@ -87,8 +89,10 @@
         this.arrCounties = []
         this.arrTowns = []
         this.arrVillages = []
+        this.loading = true
         queryLocationName(this.filterText).then(response => {
           if (response.data.list.length === 0) {
+            this.loading = false
             return
           }
           response.data.list.forEach(v => {
@@ -130,11 +134,13 @@
                     delete dataTemp[i].locationName
                   }
                   this.data = this.list2Tree(dataTemp, { 'idKey': 'id', 'parentKey': 'parentId', 'childrenKey': 'children' })
+                  this.loading = false
                 })
               })
             })
           })
         }).catch(error => {
+          this.loading = false
           console.log(error)
         })
       },
