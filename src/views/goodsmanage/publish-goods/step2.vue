@@ -2,32 +2,33 @@
   <div>
     <el-form :model="ruleForm" :inline="true" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
       <h2 style="padding-left: 20px;">基本商品信息</h2>
-      <el-form-item label="商品名称:" prop="cuxiao">
+      <el-form-item label="商品名称:">
         <el-input style="width: 100px;" placeholder="促销信息" :maxlength=20 v-model="ruleForm.cuxiao"></el-input>
       </el-form-item>
-      <el-form-item label="" prop="pinpai">
+      <el-form-item label="">
         <el-input style="width: 100px;" placeholder="品牌" :maxlength=20 v-model="ruleForm.pinpai"></el-input>
       </el-form-item>
       <el-form-item label="" prop="mingchen">
-        <el-input style="width: 100px;" placeholder="名称" :maxlength=20 v-model="ruleForm.mingchen"></el-input>
+        <el-input style="width: 180px;" placeholder="名称" :maxlength=20 v-model="ruleForm.mingchen"></el-input>
       </el-form-item>
-      <el-form-item label="" prop="guige">
+      <el-form-item label="">
         <el-input style="width: 100px;" placeholder="规格" :maxlength=20 v-model="ruleForm.guige"></el-input>
       </el-form-item>
-      <el-form-item label="" prop="maidian">
+      <el-form-item label="">
         <el-input style="width: 100px;" placeholder="特色卖点" :maxlength=20 v-model="ruleForm.maidian"></el-input>
       </el-form-item>
       <div>
         <p style="font-size: 14px;color: #606266;margin-left: 30px;margin-top: 0;">商品名称展示效果: <span style="color: #67c23a">{{ruleForm.cuxiao+"&nbsp&nbsp"+ruleForm.pinpai+"&nbsp&nbsp"+ruleForm.mingchen+"&nbsp&nbsp"}}<i v-show="ruleForm.guige">包装: </i>{{ruleForm.guige+"&nbsp&nbsp"+ruleForm.maidian}}</span></p>
       </div>
       <el-form-item style="display: block;" label="市场价:" prop="shichangjia">
-        <el-input style="width: 260px;" :maxlength=7 placeholder="输入同类市场价" v-model="ruleForm.shichangjia"></el-input>
+        <el-input style="width: 260px;" :maxlength=7 placeholder="输入同类市场价" v-model.number="ruleForm.shichangjia"></el-input>
       </el-form-item>
       <el-form-item style="display: block;" label="直供价:" prop="zhigongjia">
-        <el-input style="width: 260px;" :maxlength=7 placeholder="输入在商城销售价格，应低于市场价" v-model="ruleForm.zhigongjia"></el-input>
+        <el-input style="width: 260px;" :maxlength=7 placeholder="输入在商城销售价格，应低于市场价" v-model.number="ruleForm.zhigongjia"></el-input>
       </el-form-item>
       <el-form-item style="display: block;" label="物流:" prop="wuliu">
         <el-popover
+          v-loading="templateLoading"
           ref="popover"
           placement="right"
           width="400"
@@ -45,21 +46,21 @@
         <el-checkbox-group style="display: inline-block;" v-model="ruleForm.wuliu">
           <el-checkbox label="物流"></el-checkbox>
           <el-checkbox label="自提"></el-checkbox>
-          <el-button @click="openLogisticsTemplate" v-show="ruleForm.wuliu.indexOf('物流')>-1" type="primary" size="mini" style="margin-left: 40px;" v-popover:popover>快递模板</el-button> 
+          <el-button v-show="ruleForm.wuliu.indexOf('物流')>-1?true:false" @click="openLogisticsTemplate" type="primary" size="mini" style="margin-left: 40px;" v-popover:popover>快递模板</el-button> 
         </el-checkbox-group>          
-        <span style="font-size: 14px;color: #606266; padding-left: 20px;" v-if="ruleForm.wuliuObjN">已选模板: {{ruleForm.wuliuObjN}}</span>
+        <span style="font-size: 14px;color: #606266; padding-left: 20px;" v-if="ruleForm.wuliuObjN">已选模板: {{ruleForm.wuliuObjN}} tt{{ruleForm.wuliu}}</span>
       </el-form-item>
       <el-form-item style="display: block;" :maxlength=5 label="库存:" prop="kucun">
-        <el-input style="width: 100px;" placeholder="输入库存" v-model="ruleForm.kucun"></el-input>
-        <el-checkbox style="margin-left: 50px;" v-model="ruleForm.kucuntx">库存提醒</el-checkbox>
+        <el-input style="width: 100px;" placeholder="输入库存" v-model.number="ruleForm.kucun"></el-input>
+        <el-checkbox style="margin-left: 50px;" v-model.number="ruleForm.kucuntx">库存提醒</el-checkbox>
         <span style="margin: 0 10px;color: #606266;">低于</span><el-input  :maxlength=5 :disabled="!ruleForm.kucuntx" v-model="ruleForm.kucuntxNum" style="width: 100px;"></el-input>
       </el-form-item>
       <el-form-item style="display: block;" label="支付方式:" prop="zhifufs">
         <el-checkbox-group v-model="ruleForm.zhifufs">
-          <el-checkbox @change="_checkPayWay({payAccountType: 23})" label="支付宝支付" name="zhifufs"></el-checkbox>
-          <el-checkbox @change="_checkPayWay({payAccountType: 22})" label="手机支付" name="zhifufs"></el-checkbox>
+          <el-checkbox @change="_checkPayWay(23)" label="支付宝支付" name="zhifufs"></el-checkbox>
+          <el-checkbox @change="_checkPayWay(22)" label="手机支付" name="zhifufs"></el-checkbox>
           <el-checkbox :checked=true disabled label="货到付款" name="zhifufs"></el-checkbox>
-          <el-checkbox @change="_checkPayWay({payAccountType: 24})" label="网银支付" name="zhifufs"></el-checkbox>
+          <el-checkbox @change="_checkPayWay(24)" label="网银支付" name="zhifufs"></el-checkbox>
           <el-alert title="温馨提示：在线支付将由支付渠道收取交易手续费，由商户承担，支付宝0.5%，手机支付0.3%。" type="error" :closable="false"></el-alert>
         </el-checkbox-group>
       </el-form-item>
@@ -266,14 +267,59 @@
   import { checkPayWay, goodsRelease, getLogisticsTemplate } from '@/api/goodsRelease'
   import CollapseTransition from 'element-ui/lib/transitions/collapse-transition'
   import { mapGetters } from 'vuex'
+  import axios from 'axios'
   export default {
     mounted() {
-      this.goodsType.typeCode = this.$route.params.typeCode
+      this.isFromModify = Number(this.$route.query.isFromModify)
+      if (this.isFromModify === 1) {
+        console.log(111)
+        var url = process.env.BASE_API + '/goods/get/' + this.$route.query.goodsId
+        axios.get(url).then(res => {
+          if (res.status === 200) {
+            this.goodsBean = res.data.data.goodsBean
+            console.log(this.goodsBean.logisticsTypes)
+            this.ruleForm.cuxiao =  this.goodsBean.promotionInfo
+            this.ruleForm = this.goodsBean
+            this.ruleForm.mingchen =  this.goodsBean.name
+            this.ruleForm.pinpai = this.goodsBean.brand
+            this.ruleForm.guige = this.goodsBean.orderGoodsSpec1
+            this.ruleForm.maidian = this.goodsBean.features
+            this.ruleForm.shichangjia = this.goodsBean.marketPrice
+            this.ruleForm.zhigongjia = this.goodsBean.price
+
+            // this.goodsBean.logisticsTypes.toString().indexOf('2') > -1 ? this.ruleForm.wuliu.push('物流') : this.ruleForm.wuliu
+            // String(this.goodsBean.logisticsTypes).indexOf('1') > -1 ? this.ruleForm.wuliu.push('自提') : this.ruleForm.wuliu
+            // this.ruleForm.wuliu = this.goodsBean.logisticsTypes
+            // this.ruleForm = this.goodsBean
+            // this.ruleForm = this.goodsBean
+            // this.ruleForm = this.goodsBean
+            // this.ruleForm = this.goodsBean
+            // this.ruleForm = this.goodsBean
+            // this.ruleForm = this.goodsBean
+            // this.ruleForm = this.goodsBean
+            // this.ruleForm = this.goodsBean
+            // this.ruleForm = this.goodsBean
+            // this.ruleForm = this.goodsBean
+            // this.ruleForm = this.goodsBean
+          } else {
+            this.$message.error(res.msg)
+          }
+        }).catch(err => {
+          this.$message.error(err)
+        })
+      }
+      this.goodsType.typeCode = this.$route.query.typeCode
       this.goodsType.typeCodeName = this.selectedlabel.label + '/' + this.selectedlabel.subLabel
-      this.goodsType.pattern = 0
+      if (this.goodsType.typeCodeName === '/') {
+        this.goodsType.typeCodeName = window.localStorage.getItem('typeName')
+      } else {
+        window.localStorage.setItem('typeName', this.goodsType.typeCodeName)
+      }
     },
     data() {
       return {
+        templateLoading: false,
+        goodsBean: {},
         popVisible: false,
         show: false,
         goodsType: {
@@ -561,7 +607,7 @@
           wuliuObjN: '',
           kucun: '',
           kucuntx: true,
-          kucuntxNum: '',
+          kucuntxNum: 10,
           zhifufs: [],
           jieti: false,
           spzl: '',
@@ -587,41 +633,34 @@
           wappushlj: ''
         },
         rules: {
-          cuxiao: [
-            { required: true, message: '请输入促销信息', trigger: 'blur' }
-          ],
-          pinpai: [
-            { required: true, message: '请输入商品名称', trigger: 'blur' }
-          ],
           mingchen: [
             { required: true, message: '请输入商品名称', trigger: 'blur' }
           ],
-          guige: [
-            { required: true, message: '请输入商品规格', trigger: 'blur' }
-          ],
-          maidian: [
-            { required: true, message: '请输入商品卖点', trigger: 'blur' }
-          ],
           shichangjia: [
-            { required: true, message: '请输入市场价', trigger: 'blur' }
+            { required: true, message: '请输入市场价', trigger: 'blur' },
+            { type: 'number', message: '市场价必须为数字值' }
           ],
           zhigongjia: [
-            { required: true, message: '请输入直供价价', trigger: 'blur' }
+            { required: true, message: '请输入直供价价', trigger: 'blur' },
+            { type: 'number', message: '直供价必须为数字值' }
           ],
           wuliu: [
-            { required: true, message: '请选择物流', trigger: 'change' }
+            { required: true, message: '请选择物流' }
           ],
           kucun: [
-            { required: true, message: '请输入库存', trigger: 'blur' }
+            { required: true, message: '请输入库存', trigger: 'blur' },
+            { type: 'number', message: '库存必须为数字值' }
           ],
           kucuntxNum: [
-            { required: true, message: '请输入库存提醒数量', trigger: 'blur' }
+            { required: true, message: '请输入库存提醒数量', trigger: 'blur' },
+            { type: 'number', message: '库存必须为数字值' }
           ],
           zhifufs: [
             { type: 'array', required: true, message: '请至少选择一种支付方式', trigger: 'change' }
           ],
           spzl: [
-            { required: true, message: '请输入商品重量', trigger: 'blur' }
+            { required: true, message: '请输入商品重量', trigger: 'blur' },
+            { type: 'number', message: '商品重量必须为数字值' }
           ],
           sccj: [
             { required: true, message: '请输入生产厂家', trigger: 'blur' }
@@ -735,11 +774,12 @@
         return isJPG && isLt2M
       },
       _checkPayWay(val) {
-        checkPayWay(val).then((res) => {
+        const params = { payAccountType: val }
+        checkPayWay(params).then((res) => {
           if (res.status === 200) {
             console.log(res)
           } else {
-            this.$message.error('网络错误')
+            this.$message.error(res.msg)
           }
         })
       },
@@ -767,13 +807,17 @@
       },
       openLogisticsTemplate() { // 获取物流模板
         getLogisticsTemplate().then((res) => {
+          this.templateLoading = true
           if (res.status === 200) {
+            this.templateLoading = false
             this.ruleForm.wuliuObj = res.data
             console.log(this.ruleForm.wuliuObj)
           } else {
-            this.$message.error('网络错误！')
+            this.templateLoading = false
+            this.$message.error(res.msg)
           }
         }).catch(err => {
+          this.templateLoading = false
           this.$message.error(err)
         })
       },

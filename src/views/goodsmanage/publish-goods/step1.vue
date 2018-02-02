@@ -31,6 +31,7 @@
 <script>
   import { getGoodsType } from '@/api/goodsRelease'
   import { mapMutations, mapGetters } from 'vuex'
+  import axios from 'axios'
   export default {
     data() {
       return {
@@ -41,9 +42,6 @@
     },
     created () {
       this._getGoodsType()
-      if (this.getSelectedOption.length > 0) {
-        this.goodstype = this.getSelectedOption
-      }
     },
     computed: {
       getSelectedOption() {
@@ -54,11 +52,32 @@
       ])
     },
     methods: {
+      isFromModify() {
+        this.goodsId = this.$route.query.goodsId
+        if (this.goodsId) {
+          this.isFromModify = 1
+          var url = process.env.BASE_API + '/goods/get/' + this.goodsId
+          axios.get(url).then(res => {
+            if (res.status === 200) {
+              this.goodstype = []
+              this.goodstype.push(res.data.data.goodsBean.catalogId)
+              this.goodstype.push(res.data.data.goodsBean.typeCode)
+            } else {
+              this.$message.error(res.msg)
+            }
+          }).catch(err => {
+            this.$message.error(err)
+          })
+        } else if (this.getSelectedOption.length > 0) {
+          this.goodstype = this.getSelectedOption
+        }
+      },
       _getGoodsType() {
         getGoodsType().then((res) => {
           if (res.status === 200) {
             this.goodsTypeTemplate = res.data[0]
             this.format()
+            this.isFromModify()
           } else {
             this.$message.error('网络错误' + res.status)
           }
@@ -90,8 +109,8 @@
             }
           }
         }
-        console.log(label, subLabel)
         this.goodstype = value
+        console.log(this.goodstype)
         this.setSelectedOption(value)
         this.setSelectedLabel({
           label: label,
@@ -111,7 +130,11 @@
       },
       goNext() {
         if (this.goodstype.length > 0) {
-          this.$router.push({ name: 'publishstep2', params: { typeCode: this.goodstype[0], typeCodeName: this.goodstype[1] }})
+          if (this.isFromModify) {
+            this.$router.push({ name: 'publishstep2', query: { typeCode: this.goodstype[0], typeCodeName: this.goodstype[1], goodsId: this.goodsId, isFromModify: this.isFromModify }})
+          } else {
+            this.$router.push({ name: 'publishstep2', query: { typeCode: this.goodstype[0], typeCodeName: this.goodstype[1] }})
+          }
         } else {
           this.$message.error('请选择您的商品类别')
         }

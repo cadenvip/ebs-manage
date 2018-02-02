@@ -103,7 +103,7 @@
             <el-table-column align="center" label="操作" width="200">
               <template slot-scope="scope">
                 <el-button @click="getGoodsDetail(scope.row)" type="text" size="small">详情</el-button>
-                <el-button v-if="scope.row.auditStatus === '3'" @click="saleOff(scope.row)" type="text" size="small">上架</el-button>
+                <el-button v-if="scope.row.auditStatus === '3'" @click="upGoods(scope.row)" type="text" size="small">上架</el-button>
                 <el-button v-if="scope.row.auditStatus === '3'" @click="modifyGoods(scope.row)" type="text" size="small">修改</el-button>
                 <el-button v-if="scope.row.auditStatus === '3'" @click="modifyGoods(scope.row)" type="text" size="small">删除</el-button>
               </template>
@@ -138,7 +138,7 @@
 <script>
   import CollapseTransition from 'element-ui/lib/transitions/collapse-transition'
   import { getGoodsTopType } from '@/api/goodsRelease'
-  import { getNoShelfGoods } from '@/api/noshelfgoods'
+  import { getNoShelfGoods, upGoods } from '@/api/noshelfgoods'
   export default {
     created () {
       this._getGoodsTopType()
@@ -281,10 +281,30 @@
       resetForm(formName) {
         this.$refs[formName].resetFields()
       },
+      // 获取商品详情
       getGoodsDetail(val) {
         if (val.goodsId) {
           this.$router.push({ name: 'goodsdetail', query: { goodsId: val.goodsId }})
         }
+      },
+      // 修改商品
+      modifyGoods(val) {
+        this.$router.push({ name: 'publishstep1', query: { goodsId: val.goodsId }})
+      },
+      // 单个商品上架
+      upGoods(val) {
+        const params = {
+          goodsIds: val.goodsId
+        }
+        upGoods(params).then(res => {
+          if (res.status === 200) {
+            console.log('success')
+          } else {
+            this.$message.error(res.msg)
+          }
+        }).catch(err => {
+          this.$message.error(err)
+        })
       },
       // 批量上架
       batchShelf() {

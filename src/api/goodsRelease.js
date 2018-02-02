@@ -24,6 +24,9 @@ export function getGoodsTopType () {
 
 export function checkGoodsType (params) {
   return request({
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+    },
     url: '/goods/stepTwo',
     method: 'post',
     data: params

@@ -17,3 +17,12 @@ export function getGoodsDetail (params) {
     params: params
   })
 }
+
+// 上架商品
+export function upGoods (params) {
+  return request({
+    url: '/goods/up',
+    method: 'post',
+    params: params
+  })
+}
