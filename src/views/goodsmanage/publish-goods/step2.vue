@@ -57,10 +57,10 @@
       </el-form-item>
       <el-form-item style="display: block;" label="支付方式:" prop="zhifufs">
         <el-checkbox-group v-model="ruleForm.zhifufs">
-          <el-checkbox @change="_checkPayWay(23)" label="支付宝支付" name="zhifufs"></el-checkbox>
-          <el-checkbox @change="_checkPayWay(22)" label="手机支付" name="zhifufs"></el-checkbox>
+          <el-checkbox :disabled="zfbDisable" @change="_checkPayWay(23, 1)" label="支付宝支付" name="zhifufs"></el-checkbox>
+          <el-checkbox :disabled="sjzfDisable" @change="_checkPayWay(22, 2)" label="手机支付" name="zhifufs"></el-checkbox>
           <el-checkbox :checked=true disabled label="货到付款" name="zhifufs"></el-checkbox>
-          <el-checkbox @change="_checkPayWay(24)" label="网银支付" name="zhifufs"></el-checkbox>
+          <el-checkbox :disabled="wyzjDisable" @change="_checkPayWay(24, 3)" label="网银支付" name="zhifufs"></el-checkbox>
           <el-alert title="温馨提示：在线支付将由支付渠道收取交易手续费，由商户承担，支付宝0.5%，手机支付0.3%。" type="error" :closable="false"></el-alert>
         </el-checkbox-group>
       </el-form-item>
@@ -84,7 +84,7 @@
       <el-form-item style="padding-left: 100px;">
         <el-upload
           class="avatar-uploader"
-          action="https://jsonplaceholder.typicode.com/posts/"
+          action="http://183.230.101.142:58080/ebs/common/upload"
           :show-file-list="false"
           :on-success="handleAvatarSuccess"
           :before-upload="beforeAvatarUpload">
@@ -270,8 +270,8 @@
   import axios from 'axios'
   export default {
     mounted() {
-      this.isFromModify = Number(this.$route.query.isFromModify)
-      if (this.isFromModify === 1) {
+      this.isFromModifyFlag = Number(this.$route.query.isFromModifyFlag)
+      if (this.isFromModifyFlag === 1) {
         console.log(111)
         var url = process.env.BASE_API + '/goods/get/' + this.$route.query.goodsId
         axios.get(url).then(res => {
@@ -318,6 +318,9 @@
     },
     data() {
       return {
+        zfbDisable: false,
+        sjzfDisable: false,
+        wyzjDisable: false,
         templateLoading: false,
         goodsBean: {},
         popVisible: false,
@@ -694,6 +697,7 @@
               price: this.ruleForm.zhigongjia,
               logisticsTypes: this.logisticsTypes,
               logisticsTemplateCode: this.logisticsTypes.indexOf(2) > -1 ? this.ruleForm.wuliuObjt : '',
+              logisticsTemplateName: this.logisticsTypes.indexOf(2) > -1 ? this.ruleForm.wuliuObjN : '',
               stock: this.ruleForm.kucun,
               stockAlarmFlag: this.ruleForm.kucuntx,
               stockAlarm: this.ruleForm.kucuntxNum,
@@ -773,13 +777,33 @@
         }
         return isJPG && isLt2M
       },
-      _checkPayWay(val) {
+      deleArrElement(originArr, ele) {
+        if (originArr.length > 0) {
+          var index = originArr.indexOf(ele)
+          return originArr.splice(index, 1)
+        }
+      },
+      _checkPayWay(val, index) {
         const params = { payAccountType: val }
         checkPayWay(params).then((res) => {
           if (res.status === 200) {
-            console.log(res)
+            if (res.data === '1') {
+              return false
+            } else {
+              if (index === 1) {
+                this.zfbDisable = true
+                this.deleArrElement(this.ruleForm.zhifufs, '支付宝支付')
+              } else if (index === 2) {
+                this.sjzfDisable = true
+                this.deleArrElement(this.ruleForm.zhifufs, '手机支付')
+              } else if (index === 3) {
+                this.wyzjDisable = true
+                this.deleArrElement(this.ruleForm.zhifufs, '网银支付')
+              }
+              this.$message.error('商家不支持该付款方式！')
+            }
           } else {
-            this.$message.error(res.msg)
+            this.$message.error('商家不支持该付款方式！')
           }
         })
       },
@@ -811,7 +835,6 @@
           if (res.status === 200) {
             this.templateLoading = false
             this.ruleForm.wuliuObj = res.data
-            console.log(this.ruleForm.wuliuObj)
           } else {
             this.templateLoading = false
             this.$message.error(res.msg)

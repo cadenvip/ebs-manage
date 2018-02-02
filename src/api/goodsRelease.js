@@ -24,9 +24,6 @@ export function getGoodsTopType () {
 
 export function checkGoodsType (params) {
   return request({
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
-    },
     url: '/goods/stepTwo',
     method: 'post',
     data: params
@@ -34,11 +31,12 @@ export function checkGoodsType (params) {
 }
 // 检查支付方式
 export function checkPayWay (params) {
-  console.log(params)
   return request({
     url: '/enterprise/payAccount/check',
     method: 'post',
-    data: params
+    data: {
+      'payAccountType': '22'
+    }
   })
 }
 // 发布商品
@@ -54,5 +52,13 @@ export function getLogisticsTemplate () {
   return request({
     url: '/logistic/delivery/template/list/simple',
     method: 'get'
+  })
+}
+// 检查能否跳到第二步
+export function checkGoStepTwo (params) {
+  return request({
+    url: '/goods/stepTwo',
+    method: 'post',
+    data: params
   })
 }

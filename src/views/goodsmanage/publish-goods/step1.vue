@@ -29,7 +29,7 @@
 </template>
 
 <script>
-  import { getGoodsType } from '@/api/goodsRelease'
+  import { getGoodsType, checkGoStepTwo } from '@/api/goodsRelease'
   import { mapMutations, mapGetters } from 'vuex'
   import axios from 'axios'
   export default {
@@ -55,7 +55,7 @@
       isFromModify() {
         this.goodsId = this.$route.query.goodsId
         if (this.goodsId) {
-          this.isFromModify = 1
+          this.isFromModifyFlag = 1
           var url = process.env.BASE_API + '/goods/get/' + this.goodsId
           axios.get(url).then(res => {
             if (res.status === 200) {
@@ -130,10 +130,30 @@
       },
       goNext() {
         if (this.goodstype.length > 0) {
-          if (this.isFromModify) {
-            this.$router.push({ name: 'publishstep2', query: { typeCode: this.goodstype[0], typeCodeName: this.goodstype[1], goodsId: this.goodsId, isFromModify: this.isFromModify }})
+          const params = {
+            typeCode: this.goodstype[1],
+            pattern: 0
+          }
+          if (this.isFromModifyFlag) {
+            checkGoStepTwo(params).then(res => {
+              if (res.status === 200) {
+                this.$router.push({ name: 'publishstep2', query: { typeCode: this.goodstype[0], typeCodeName: this.goodstype[1], goodsId: this.goodsId, isFromModifyFlag: this.isFromModifyFlag }})
+              } else {
+                this.$message.error(res.msg)
+              }
+            }).catch(err => {
+              this.$message.error(err)
+            })
           } else {
-            this.$router.push({ name: 'publishstep2', query: { typeCode: this.goodstype[0], typeCodeName: this.goodstype[1] }})
+            checkGoStepTwo(params).then(res => {
+              if (res.status === 200) {
+                this.$router.push({ name: 'publishstep2', query: { typeCode: this.goodstype[0], typeCodeName: this.goodstype[1] }})
+              } else {
+                this.$message.error(res.msg)
+              }
+            }).catch(err => {
+              this.$message.error(err)
+            })
           }
         } else {
           this.$message.error('请选择您的商品类别')
