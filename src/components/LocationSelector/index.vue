@@ -48,12 +48,6 @@
   } from '@/api/regionselecter'
 
   export default {
-    props: {
-      height: {
-        type: Number,
-        default: 400
-      }
-    },
     data() {
       return {
         showLazyTree: true,
@@ -69,18 +63,17 @@
           id: '',
           label: 'label',
           children: 'children',
-          parentId: ''
+          parentId: '',
+          locationCode: '',
+          locationLevel: ''
         },
         loading: false
       }
     },
-    // mounted () {
-    //   this.$refs.lazyTree.$el.style.height = this.height + 'px'
-    //   this.$refs.lazyTree.$el.style.overflow = 'scroll'
-    // },
     methods: {
       handleNodeClick(data) {
         this.$emit('locationSelected', data)
+        console.log(data)
       },
       queryLocationName() {
         // 切换树
@@ -139,11 +132,12 @@
                     delete dataTemp[i].lastLevelCode
                     delete dataTemp[i].locationLevelName
                     delete dataTemp[i].orderindex
-                    delete dataTemp[i].locationCode
-                    delete dataTemp[i].locationLevel
+                    // delete dataTemp[i].locationCode
+                    // delete dataTemp[i].locationLevel
                     delete dataTemp[i].description
                     delete dataTemp[i].locationName
                   }
+                  console.log(dataTemp)
                   this.data = this.list2Tree(dataTemp, { 'idKey': 'id', 'parentKey': 'parentId', 'childrenKey': 'children' })
                   this.loading = false
                 })
@@ -201,7 +195,7 @@
       },
       loadNode(node, resolve) {
         if (node.level === 0) {
-          return resolve([{ label: '全国', id: '0', 'parentId': '-1' }])
+          return resolve([{ label: '全国', id: '0', 'parentId': '-1', 'locationCode': '100', 'locationLevel': '0' }])
         }
         // if (node.level === 1) {
         //   getAllCountries('-1').then(response => {
@@ -219,7 +213,7 @@
           getAllProvinces(node.data.id).then(response => {
             var arrProvinces = []
             response.data.list.forEach(function(v) {
-              arrProvinces.push({ 'id': v.id, 'label': v.locationName, 'parent': v.parentId })
+              arrProvinces.push({ 'id': v.id, 'label': v.locationName, 'parent': v.parentId, 'locationCode': v.locationCode, 'locationLevel': v.locationLevel })
               return resolve(arrProvinces)
             })
           }).catch(error => {
@@ -231,7 +225,7 @@
           getAllCities(node.data.id).then(response => {
             var arrCities = []
             response.data.list.forEach(function(v) {
-              arrCities.push({ 'id': v.id, 'label': v.locationName, 'parent': v.parentId })
+              arrCities.push({ 'id': v.id, 'label': v.locationName, 'parent': v.parentId, 'locationCode': v.locationCode, 'locationLevel': v.locationLevel })
               return resolve(arrCities)
             })
           }).catch(error => {
@@ -243,7 +237,7 @@
           getAllCounties(node.data.id).then(response => {
             var arrCounties = []
             response.data.list.forEach(function(v) {
-              arrCounties.push({ 'id': v.id, 'label': v.locationName, 'parent': v.parentId })
+              arrCounties.push({ 'id': v.id, 'label': v.locationName, 'parent': v.parentId, 'locationCode': v.locationCode, 'locationLevel': v.locationLevel })
               return resolve(arrCounties)
             })
           }).catch(error => {
@@ -255,7 +249,7 @@
           getAllTowns(node.data.id).then(response => {
             var arrTowns = []
             response.data.list.forEach(function(v) {
-              arrTowns.push({ 'id': v.id, 'label': v.locationName, 'parent': v.parentId })
+              arrTowns.push({ 'id': v.id, 'label': v.locationName, 'parent': v.parentId, 'locationCode': v.locationCode, 'locationLevel': v.locationLevel })
               return resolve(arrTowns)
             })
           }).catch(error => {
@@ -267,7 +261,7 @@
           getAllVillages(node.data.id).then(response => {
             var arrVillages = []
             response.data.list.forEach(function(v) {
-              arrVillages.push({ 'id': v.id, 'label': v.locationName, 'parent': v.parentId })
+              arrVillages.push({ 'id': v.id, 'label': v.locationName, 'parent': v.parentId, 'locationCode': v.locationCode, 'locationLevel': v.locationLevel })
               return resolve(arrVillages)
             })
           }).catch(error => {

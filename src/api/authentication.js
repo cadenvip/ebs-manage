@@ -7,3 +7,13 @@ export function getAllResources(params) {
     data: { 'issystem': `${params}` }
   })
 }
+
+export function givePermission(params) {
+  console.log(params)
+  return request({
+    url: '/resource/setStatus',
+    method: 'post',
+    data: { 'updateList': params }
+  })
+}
+

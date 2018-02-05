@@ -14,21 +14,22 @@
     <br/>
     <div class="buttons" >
       <!-- <el-button type="primary" @click="getCheckedNodes">提交</el-button> -->
-      <el-button type="primary" @click="getCheckedKeys">提交</el-button>
+      <el-button type="primary" @click="submitSelected">提交</el-button>
       <el-button type="primary" @click="resetChecked">清空</el-button>
     </div>
   </div>
 </template>
 
 <script>
-  import store from '../../store'
-  import { getAllResources } from '@/api/authentication'
+  // import store from '../../store'
+  import { getAllResources, givePermission } from '@/api/authentication'
 
   export default {
     data() {
       return {
         data: [],
         allResources: [],
+        defaultCheckedKeys: [],
         filterText: '',
         defaultProps: {
           id: '',
@@ -46,7 +47,7 @@
       getAllPermissions() {
         this.loading = true
         return new Promise((resolve, reject) => {
-          console.log(store.getters.userinfos)
+          // console.log(store.getters.userinfos)
           // 1系统管理 2企业 （roletype: 1----> issystem: 0, roletype: 2---->issystem: 1)
           getAllResources(1).then(response => {
             this.allResources = response.data
@@ -62,13 +63,18 @@
               delete v.image
               delete v.typestr
               delete v.rootNode
+              aliveResources.push(v)
               if (v.status === 0) {
               // status: 0-激活，1-禁用（激活后页面可见，功能可用）
-                aliveResources.push(v)
+                this.defaultCheckedKeys.push(v.id)
               }
             })
+            console.log('allResources: ' + this.allResources)
+            console.log('defaultCheckedKeys: ' + this.defaultCheckedKeys)
             // 整理数据
             this.data = this.list2Tree(aliveResources, { 'idKey': 'id', 'parentKey': 'parentid', 'childrenKey': 'children' })
+            // 设置选中
+            this.$refs.tree.setCheckedKeys(this.defaultCheckedKeys)
             this.loading = false
             resolve(response)
           }).catch(error => {
@@ -107,10 +113,49 @@
         }
         return tree
       },
-      getCheckedKeys() {
-        var checkedKeys = console.log(this.$refs.tree.getCheckedKeys())
-        // 提交选择
-        this.$emit('commited', checkedKeys)
+      submitSelected() {
+        var checkedKeys = this.$refs.tree.getCheckedKeys()
+        console.log('checkedKeys: ' + checkedKeys)
+        var changedKeys = []
+        // 对比前后状态
+        for (let i = 0; i < this.defaultCheckedKeys.length; i++) {
+          let j = 0
+          for (; j < checkedKeys.length; j++) {
+            if (this.defaultCheckedKeys[i] === checkedKeys[j]) {
+              break
+            }
+          }
+          if (j === checkedKeys.length) {
+            // 选中变为未选中
+            changedKeys.push({ 'id': this.defaultCheckedKeys[i], 'status': '1' })
+          }
+        }
+        for (let i = 0; i < checkedKeys.length; i++) {
+          let j = 0
+          for (; j < this.defaultCheckedKeys.length; j++) {
+            if (checkedKeys[i] === this.defaultCheckedKeys[j]) {
+              break
+            }
+          }
+          if (j === this.defaultCheckedKeys.length) {
+            // 未选中变为选中
+            changedKeys.push({ 'id': checkedKeys[i], 'status': '0' })
+          }
+        }
+        console.log(changedKeys)
+        // 提交状态变化的项
+        givePermission(changedKeys).then(response => {
+          this.$message({
+            type: 'success',
+            message: '授权成功!'
+          })
+        }).catch(error => {
+          this.$message({
+            type: 'error',
+            message: '授权失败!'
+          })
+          console.log(error)
+        })
       },
       resetChecked() {
         this.$refs.tree.setCheckedKeys([])
