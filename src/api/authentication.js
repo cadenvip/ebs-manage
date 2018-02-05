@@ -9,7 +9,6 @@ export function getAllResources(params) {
 }
 
 export function givePermission(params) {
-  console.log(params)
   return request({
     url: '/resource/setStatus',
     method: 'post',

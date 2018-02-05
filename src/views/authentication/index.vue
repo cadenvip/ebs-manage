@@ -28,14 +28,14 @@
     data() {
       return {
         data: [],
-        allResources: [],
+        aliveResources: [],
         defaultCheckedKeys: [],
         filterText: '',
         defaultProps: {
           id: '',
           label: 'label',
           children: 'children',
-          parentId: ''
+          parentid: ''
         },
         loading: false
       }
@@ -50,8 +50,6 @@
           // console.log(store.getters.userinfos)
           // 1系统管理 2企业 （roletype: 1----> issystem: 0, roletype: 2---->issystem: 1)
           getAllResources(1).then(response => {
-            this.allResources = response.data
-            var aliveResources = []
             response.data.forEach(v => {
               v.label = v.name
               delete v.type
@@ -60,19 +58,21 @@
               delete v.ordernum
               delete v.createdate
               delete v.statusdate
+              delete v.isdisplay
               delete v.image
               delete v.typestr
               delete v.rootNode
-              aliveResources.push(v)
+              this.aliveResources.push(v)
               if (v.status === 0) {
               // status: 0-激活，1-禁用（激活后页面可见，功能可用）
                 this.defaultCheckedKeys.push(v.id)
               }
             })
-            console.log('allResources: ' + this.allResources)
-            console.log('defaultCheckedKeys: ' + this.defaultCheckedKeys)
+
             // 整理数据
-            this.data = this.list2Tree(aliveResources, { 'idKey': 'id', 'parentKey': 'parentid', 'childrenKey': 'children' })
+            // 如果有id=-1的根目录，则删除
+            console.log(this.aliveResources[0])
+            this.data = this.list2Tree(this.aliveResources, { 'idKey': 'id', 'parentKey': 'parentid', 'childrenKey': 'children' })
             // 设置选中
             this.$refs.tree.setCheckedKeys(this.defaultCheckedKeys)
             this.loading = false
@@ -115,7 +115,7 @@
       },
       submitSelected() {
         var checkedKeys = this.$refs.tree.getCheckedKeys()
-        console.log('checkedKeys: ' + checkedKeys)
+        console.log(checkedKeys)
         var changedKeys = []
         // 对比前后状态
         for (let i = 0; i < this.defaultCheckedKeys.length; i++) {
@@ -127,7 +127,7 @@
           }
           if (j === checkedKeys.length) {
             // 选中变为未选中
-            changedKeys.push({ 'id': this.defaultCheckedKeys[i], 'status': '1' })
+            changedKeys.push({ 'id': `${this.defaultCheckedKeys[i]}`, 'status': '1' })
           }
         }
         for (let i = 0; i < checkedKeys.length; i++) {
@@ -139,21 +139,17 @@
           }
           if (j === this.defaultCheckedKeys.length) {
             // 未选中变为选中
-            changedKeys.push({ 'id': checkedKeys[i], 'status': '0' })
+            changedKeys.push({ 'id': `${checkedKeys[i]}`, 'status': '0' })
           }
         }
-        console.log(changedKeys)
         // 提交状态变化的项
+        console.log(changedKeys)
         givePermission(changedKeys).then(response => {
-          this.$message({
-            type: 'success',
-            message: '授权成功!'
-          })
+          this.$message({ type: 'success', message: '授权成功!' })
+          // 更新
+          this.defaultCheckedKeys = checkedKeys
         }).catch(error => {
-          this.$message({
-            type: 'error',
-            message: '授权失败!'
-          })
+          this.$message({ type: 'error', message: '授权失败!' })
           console.log(error)
         })
       },
