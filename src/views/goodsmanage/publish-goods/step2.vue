@@ -65,10 +65,11 @@
         </el-checkbox-group>
       </el-form-item>
       <el-form-item style="display: block;margin-bottom: 0;" label="阶梯价格:" prop="jieti">
-        <span style="color: #606266;" @click="handleJieti" v-if="!ruleForm.jieti">启用</span><span style="color: #606266;" @click="handleJieti" v-if="ruleForm.jieti">禁用</span>
-        <el-switch style="margin-left: 5px;" v-model="ruleForm.jieti"></el-switch>
+        <!-- <span style="color: #606266;" v-if="ruleForm.jietiFlag">启用</span>
+        <span style="color: #606266;" v-if="!ruleForm.jietiFlag">禁用</span> -->
+        <el-switch style="margin-left: 5px;" v-model="ruleForm.jietiFlag"></el-switch>
       </el-form-item>
-      <div v-if="ruleForm.jieti" style="display: inline-block;padding: 20px;background-color: lightblue;margin-left:100px;border-radius: 5px;">
+      <div v-if="ruleForm.jietiFlag" style="display: inline-block;padding: 20px;background-color: lightblue;margin-left:100px;border-radius: 5px;">
         <span> 一次性购买 </span><el-input :maxlength=5 v-model="jietiItem1.num" size="mini" style="width: 80px;"></el-input>
         <span>件,商品价格优惠为</span>
         <el-input v-model="jietiItem1.dollar" :maxlength=7 size="mini" style="width: 80px;"></el-input> 元 
@@ -77,7 +78,7 @@
           <jieti :item="item"></jieti>
           <el-button size="mini" @click="delejieti(index)">删除</el-button>
         </div>
-        {{jietiItem1.num}}  {{jietiItem1.dollar}}
+        {{convertJTnums}}{{convertJTamount}}
         {{jietiItems}}
 
       </div>
@@ -102,7 +103,7 @@
         </el-col>
         <el-col :span="8">
           <el-form-item label="商品重量:" prop="spzl">
-            <el-input style="width: 100px;" :maxlength=5 v-model="ruleForm.spzl"></el-input>
+            <el-input style="width: 100px;" :maxlength=5 v-model.number="ruleForm.spzl"></el-input>
             <el-select v-model="danwei" style="width:80px;" placeholder="请选择">
               <el-option
                 v-for="item in danweiOptions"
@@ -143,7 +144,7 @@
       </el-row>
       <el-row>
         <el-col :span="8">
-          <el-form-item label="保质期:" prop="baozhiqi">
+          <el-form-item label="保质期:" prop="baozhiqi">{{baozhiqidw}}
             <el-input :maxlength=5 style="width: 100px;" v-model="ruleForm.baozhiqi"></el-input>
             <el-select v-model="baozhiqidw" style="width:80px;" placeholder="请选择">
               <el-option
@@ -265,6 +266,7 @@
 <script>
   import Jieti from '@/components/Jieti/index'
   import { checkPayWay, goodsRelease, getLogisticsTemplate } from '@/api/goodsRelease'
+  import { parseTime } from '@/utils/index'
   import CollapseTransition from 'element-ui/lib/transitions/collapse-transition'
   import { mapGetters } from 'vuex'
   import axios from 'axios'
@@ -344,7 +346,7 @@
           value: '2',
           label: '千克'
         }],
-        baozhiqidw: '天',
+        baozhiqidw: '1',
         baozhiqiOptions: [{
           value: '1',
           label: '天'
@@ -357,7 +359,7 @@
           value: '3',
           label: '年'
         }],
-        jiliangdw: '吨',
+        jiliangdw: '1',
         jiliangdwOptions: [{
           value: '1',
           label: '吨'
@@ -612,7 +614,7 @@
           kucuntx: true,
           kucuntxNum: 10,
           zhifufs: [],
-          jieti: false,
+          jietiFlag: false,
           spzl: '',
           baozhiqi: '',
           spgg: '', // 商品规格
@@ -622,9 +624,9 @@
           spfl: '从前一页取',
           jldw: '',
           dingssj: true,
-          zdsjsj: '', // new Date(),
+          zdsjsj: parseTime(new Date()),
           iszisj: false,
-          zdxjsj: '', // new Date(2099, 11, 31, 23, 59, 59),
+          zdxjsj: parseTime(new Date(2099, 11, 31, 23, 59, 59)),
           sjtx: [],
           fbqd: [],
           thh: [],
@@ -684,8 +686,15 @@
       }
     },
     methods: {
+      // 提交
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
+          if (this.ruleForm.jietiFlag) {
+            if (this.jietiItem1.num === '' || this.jietiItem1.dollar === '') {
+              this.$message.error('阶梯价格第一行不能有空！')
+              return false
+            }
+          }
           if (valid) {
             const parmas = {
               name: this.ruleForm.mingchen,
@@ -697,7 +706,7 @@
               price: this.ruleForm.zhigongjia,
               logisticsTypes: this.logisticsTypes,
               logisticsTemplateCode: this.logisticsTypes.indexOf(2) > -1 ? this.ruleForm.wuliuObjt : '',
-              logisticsTemplateName: this.logisticsTypes.indexOf(2) > -1 ? this.ruleForm.wuliuObjN : '',
+              // logisticsTemplateName: this.logisticsTypes.indexOf(2) > -1 ? this.ruleForm.wuliuObjN : '',
               stock: this.ruleForm.kucun,
               stockAlarmFlag: this.ruleForm.kucuntx,
               stockAlarm: this.ruleForm.kucuntxNum,
@@ -706,22 +715,23 @@
               cmpay: this.ruleForm.zhifufs.indexOf('手机支付') > -1 ? 0 : 1,
               unionpay: this.ruleForm.zhifufs.indexOf('网银支付') > -1 ? 0 : 1,
               imageList: ['http://image1.qianqianhua.com/uploads/20171227/14/1514356264-OpIVSzBPAM.jpg'],
-              gradientPriceFlag: true,  // true or false  this.ruleForm.Jieti
-              gradientNumber: [11, 22],
-              gradientPrice: [1, 2],
+              gradientPriceFlag: this.ruleForm.jietiFlag ? 1 : 0,  // true or false  this.ruleForm.Jieti
+              gradientNumber: this.convertJTnums,
+              gradientPrice: this.convertJTamount,
               weight: this.ruleForm.spzl,
               weightUnit: this.danwei,
               orderGoodsSpec2: this.ruleForm.spgg,
               supplierName: this.ruleForm.sccj,
               placeofOriginCode: this.ruleForm.spcd,
+              placeofOriginName: '',
               produceDate: this.ruleForm.scrq,
               shelfLife: this.ruleForm.baozhiqi,
               shelfLifeUnit: this.baozhiqidw,
               typeCode: this.goodsType.typeCode,
               typeCodeName: this.goodsType.typeCodeName,
               pattern: this.goodsType.pattern,
-              quantityUnits: this.ruleForm.jldw,
-              quantityUnitsValue: this.jiliangdw,
+              quantityUnits: this.jiliangdw,
+              quantityUnitsValue: 1,
               salsCatalogCode: this.ruleForm.dingssj ? 0 : 1,
               onSaleTime: this.ruleForm.zdsjsj,
               offSaleTime: this.ruleForm.zdxjsj,
@@ -753,7 +763,8 @@
         this.$refs[formName].resetFields()
       },
       handleJieti() {
-        this.ruleForm.jieti = !this.ruleForm.jieti
+        console.log(222)
+        this.ruleForm.jieti === 1 ? this.ruleForm.jieti = 0 : this.ruleForm.jieti = 1
       },
       addJieti() {
         this.jietiItems.push({})
@@ -822,7 +833,8 @@
             this.$message.error('下架时间不能小于上架时间！')
             var self = this
             setTimeout(function () {
-              self.ruleForm.zdxjsj = new Date(2099, 11, 31, 23, 59, 59)
+              self.ruleForm.zdxjsj = parseTime(new Date(2099, 11, 31, 23, 59, 59))
+              self.ruleForm.zdsjsj = parseTime(new Date())
             }, 2000)
           }
         } else if (this.ruleForm.zdsjsj && this.ruleForm.zdsjsj < new Date()) {
@@ -865,6 +877,26 @@
           return this.ruleForm.wuliu.indexOf('物流') > -1 ? '2' : '' + this.ruleForm.wuliu.indexOf('自提') > -1 ? '1' : ''
         } else if (this.ruleForm.wuliu.length === 2) {
           return '2,1'
+        }
+      },
+      convertJTnums() {
+        if (this.ruleForm.jietiFlag) {
+          var arr = []
+          arr.push(this.jietiItem1.num)
+          for (var i in this.jietiItems) {
+            arr.push(this.jietiItems[i].num)
+          }
+          return arr
+        }
+      },
+      convertJTamount() {
+        if (this.ruleForm.jietiFlag) {
+          var arr = []
+          arr.push(this.jietiItem1.dollar)
+          for (var i in this.jietiItems) {
+            arr.push(this.jietiItems[i].dollar)
+          }
+          return arr
         }
       },
       ...mapGetters([
