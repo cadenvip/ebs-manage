@@ -296,8 +296,15 @@ export const constantRouterMap = [
         meta: { title: '填写详情' }
       },
       {
+        path: 'publishstep3',
+        name: 'publishstep3',
+        hidden: true,
+        component: _import('goodsmanage/publish-goods/step3'),
+        meta: { title: '提交入库' }
+      },
+      {
         path: 'onsalegoods',
-        name: 'onsale-goods',
+        name: 'onsalegoods',
         component: _import('goodsmanage/onsalegoods/index'),
         meta: { title: '销售中商品', icon: 'form' }
       },

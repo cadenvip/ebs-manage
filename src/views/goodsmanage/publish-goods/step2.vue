@@ -2,7 +2,7 @@
   <div>
     <el-form :model="ruleForm" :inline="true" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
       <h2 style="padding-left: 20px;">基本商品信息</h2>
-      <el-form-item label="商品名称:">
+      <el-form-item label="商品名称:" class="goods-name">
         <el-input style="width: 100px;" placeholder="促销信息" :maxlength=20 v-model="ruleForm.cuxiao"></el-input>
       </el-form-item>
       <el-form-item label="">
@@ -48,7 +48,7 @@
           <el-checkbox label="自提"></el-checkbox>
           <el-button v-show="ruleForm.wuliu.indexOf('物流')>-1?true:false" @click="openLogisticsTemplate" type="primary" size="mini" style="margin-left: 40px;" v-popover:popover>快递模板</el-button> 
         </el-checkbox-group>          
-        <span style="font-size: 14px;color: #606266; padding-left: 20px;" v-if="ruleForm.wuliuObjN">已选模板: {{ruleForm.wuliuObjN}} tt{{ruleForm.wuliu}}</span>
+        <span style="font-size: 14px;color: #606266; padding-left: 20px;" v-show="ruleForm.wuliuObjN&&ruleForm.wuliu.indexOf('物流')>-1?true:false">已选模板: {{ruleForm.wuliuObjN}}</span>
       </el-form-item>
       <el-form-item style="display: block;" :maxlength=5 label="库存:" prop="kucun">
         <el-input style="width: 100px;" placeholder="输入库存" v-model.number="ruleForm.kucun"></el-input>
@@ -78,9 +78,6 @@
           <jieti :item="item"></jieti>
           <el-button size="mini" @click="delejieti(index)">删除</el-button>
         </div>
-        {{convertJTnums}}{{convertJTamount}}
-        {{jietiItems}}
-
       </div>
       <el-form-item style="padding-left: 100px;">
         <el-upload
@@ -127,8 +124,8 @@
           </el-form-item>  
         </el-col>
         <el-col :span="8">
-          <el-form-item label="商品产地:" prop="spcd">
-            <el-input :maxlength=25 v-model="ruleForm.spcd"></el-input>
+          <el-form-item label="商品产地:" prop="spcd" class="spcd">
+            <el-input :maxlength=25 v-model="ruleForm.spcd" @focus="regionVisible = true"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="8">
@@ -144,7 +141,7 @@
       </el-row>
       <el-row>
         <el-col :span="8">
-          <el-form-item label="保质期:" prop="baozhiqi">{{baozhiqidw}}
+          <el-form-item label="保质期:" prop="baozhiqi">
             <el-input :maxlength=5 style="width: 100px;" v-model="ruleForm.baozhiqi"></el-input>
             <el-select v-model="baozhiqidw" style="width:80px;" placeholder="请选择">
               <el-option
@@ -198,7 +195,6 @@
             value-format="yyyy-MM-dd HH:mm:ss"
             placeholder="选择日期">
           </el-date-picker>
-          {{ruleForm.zdxjsj}}
         </el-form-item>
       </el-form-item>
       <el-form-item style="display: block;" label="上架提醒:">
@@ -261,6 +257,16 @@
         </el-form-item>
       </div>      
     </el-form>   
+    <el-dialog
+      title="请选择区域"
+      :visible.sync="regionVisible"
+      width="40%"
+      :before-close="handleClose">
+      <locationselector @locationSelected="getLocationInfo"></locationselector>
+      <span slot="footer" class="dialog-footer" style="text-align: center;">
+        <el-button type="primary" size="mini" @click="regionVisible = false">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -270,6 +276,7 @@
   import CollapseTransition from 'element-ui/lib/transitions/collapse-transition'
   import { mapGetters } from 'vuex'
   import axios from 'axios'
+  import locationselector from '@/components/LocationSelector/index'
   export default {
     mounted() {
       this.isFromModifyFlag = Number(this.$route.query.isFromModifyFlag)
@@ -320,6 +327,7 @@
     },
     data() {
       return {
+        regionVisible: false,  // 地址区域是否显示
         zfbDisable: false,
         sjzfDisable: false,
         wyzjDisable: false,
@@ -608,8 +616,8 @@
           zhigongjia: '',
           wuliu: [],
           wuliuObj: {},
-          wuliuObjt: '',
-          wuliuObjN: '',
+          wuliuObjt: '',  // 物流模板编码
+          wuliuObjN: '',  // 物流模板名称
           kucun: '',
           kucuntx: true,
           kucuntxNum: 10,
@@ -620,6 +628,7 @@
           spgg: '', // 商品规格
           sccj: '', // 生产厂家
           spcd: '', // 商品产地
+          spcdcode: '', // 商品产地代码
           scrq: '', // 生产日期
           spfl: '从前一页取',
           jldw: '',
@@ -671,10 +680,10 @@
             { required: true, message: '请输入生产厂家', trigger: 'blur' }
           ],
           spcd: [
-            { required: true, message: '请输入商品产地', trigger: 'blur' }
+            { message: '请输入商品产地', trigger: 'blur' }
           ],
           baozhiqi: [
-            { required: true, message: '请输入商品产地', trigger: 'blur' }
+            { required: true, message: '请输入保质期', trigger: 'blur' }
           ],
           spfl: [
             { required: true }
@@ -695,6 +704,18 @@
               return false
             }
           }
+          if (this.ruleForm.spcd === '') {
+            this.$message.error('商品产地不能为空！')
+            return false
+          }
+          if (this.ruleForm.wuliu.indexOf('物流') > -1 && this.ruleForm.wuliuObjN === '') {
+            this.$message.error('物流模板不能为空！')
+            return false
+          }
+          if (this.ruleForm.kucun < this.ruleForm.kucuntxNum) {
+            this.$message.error('库存不能小于库存提醒！')
+            return false
+          }
           if (valid) {
             const parmas = {
               name: this.ruleForm.mingchen,
@@ -708,8 +729,8 @@
               logisticsTemplateCode: this.logisticsTypes.indexOf(2) > -1 ? this.ruleForm.wuliuObjt : '',
               // logisticsTemplateName: this.logisticsTypes.indexOf(2) > -1 ? this.ruleForm.wuliuObjN : '',
               stock: this.ruleForm.kucun,
-              stockAlarmFlag: this.ruleForm.kucuntx,
-              stockAlarm: this.ruleForm.kucuntxNum,
+              stockAlarmFlag: this.ruleForm.kucuntx ? 1 : 0,
+              stockAlarm: this.ruleForm.kucuntx ? this.ruleForm.kucuntxNum : '',
               alipay: this.ruleForm.zhifufs.indexOf('支付宝支付') > -1 ? 0 : 1,
               codpay: 0,
               cmpay: this.ruleForm.zhifufs.indexOf('手机支付') > -1 ? 0 : 1,
@@ -722,8 +743,8 @@
               weightUnit: this.danwei,
               orderGoodsSpec2: this.ruleForm.spgg,
               supplierName: this.ruleForm.sccj,
-              placeofOriginCode: this.ruleForm.spcd,
-              placeofOriginName: '',
+              placeofOriginCode: this.ruleForm.spcdcode,
+              placeofOriginName: this.ruleForm.spcd,
               produceDate: this.ruleForm.scrq,
               shelfLife: this.ruleForm.baozhiqi,
               shelfLifeUnit: this.baozhiqidw,
@@ -752,7 +773,12 @@
               wapUrl: ''
             }
             console.log(parmas)
-            goodsRelease(parmas)
+            goodsRelease(parmas).then(res => {
+              if (res.status === 200) {
+                this.$message.success(res.message)
+                // 跳转
+              }
+            })
           } else {
             this.$message.error('有未完成的必选项！')
             return false
@@ -761,6 +787,13 @@
       },
       resetForm(formName) {
         this.$refs[formName].resetFields()
+      },
+      handleClose(done) {
+        done()
+      },
+      getLocationInfo(data) {
+        this.ruleForm.spcd = data.label
+        this.ruleForm.spcdcode = data.id
       },
       handleJieti() {
         console.log(222)
@@ -906,7 +939,8 @@
     },
     components: {
       Jieti,
-      CollapseTransition
+      CollapseTransition,
+      locationselector
     }
   }
 </script>
@@ -939,5 +973,13 @@
   }
   .el-form-item__label{
     width: 120px !important;
+  }
+  .spcd .el-form-item__label:before, .goods-name .el-form-item__label:before{
+    content: '*';
+    color: #f56c6c;
+    margin-right: 4px;
+  } 
+  .el-dialog__footer {
+    text-align: center;
   }
 </style>
