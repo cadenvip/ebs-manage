@@ -10,7 +10,7 @@
         <el-button type="primary" @click.native.prevent="queryLocationName">查询</el-button>
       </el-col>
     </el-row>
-    <div v-show="showLazyTree">
+    <div v-show="showLazyTree" class="Tree">
       <el-tree
         lazy
         :highlight-current="true"
@@ -20,9 +20,10 @@
         ref="lazyTree">
       </el-tree>
     </div>
-    <div v-show="showQueryResult">
+    <div v-show="showQueryResult" class="Tree">
       <el-tree
         :data="data"
+        :load="loadNode"
         :highlight-current="true"
         :default-expand-all="true"
         :props="defaultProps"
@@ -47,6 +48,12 @@
   } from '@/api/regionselecter'
 
   export default {
+    props: {
+      height: {
+        type: Number,
+        default: 400
+      }
+    },
     data() {
       return {
         showLazyTree: true,
@@ -67,6 +74,10 @@
         loading: false
       }
     },
+    // mounted () {
+    //   this.$refs.lazyTree.$el.style.height = this.height + 'px'
+    //   this.$refs.lazyTree.$el.style.overflow = 'scroll'
+    // },
     methods: {
       handleNodeClick(data) {
         this.$emit('locationSelected', data)
@@ -310,3 +321,11 @@
     }
   }
 </script>
+
+<style rel="stylesheet/scss" lang="scss">
+  .Tree {
+    margin-left: 20px;
+    height: 400px;
+    overflow-x: auto
+  }
+</style>

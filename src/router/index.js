@@ -151,22 +151,37 @@ export const constantRouterMap = [
   },
 
   {
-    path: '/enterprisemanagement',
+    path: '/enterprise',
     component: Layout,
+    redirect: 'enterprise/list',
     name: 'enterprise',
     hidden: false,
     meta: { title: '企业管理', icon: 'table' },
     children: [
       {
-        path: 'enterpriselist',
+        path: 'list',
         name: 'enterpriselist',
-        component: _import('enterprise/enterpriselist'),
+        component: _import('enterprise/list'),
         meta: { title: '企业列表', icon: 'table' }
       },
       {
-        path: 'auditenterprise',
-        name: 'auditenterprise',
-        component: _import('enterprise/auditenterprise'),
+        path: 'add',
+        name: 'enterpriseadd',
+        hidden: true,
+        component: _import('enterprise/add'),
+        meta: { title: '新增人员', icon: 'table' }
+      },
+      {
+        path: 'detail',
+        name: 'enterprisedetail',
+        hidden: true,
+        component: _import('enterprise/detail'),
+        meta: { title: '人员详情', icon: 'table' }
+      },
+      {
+        path: 'audit',
+        name: 'enterpriseaudit',
+        component: _import('enterprise/audit'),
         meta: { title: '企业审核', icon: 'user' }
       },
       {

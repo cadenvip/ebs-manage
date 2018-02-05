@@ -22,7 +22,11 @@ const whiteList = ['/',
   '/account/role/add',
   '/account/role/update',
   '/account/role/detail',
-  '/account/permissions'
+  '/account/permissions',
+  '/enterprise/list',
+  '/enterprise/add',
+  '/enterprise/detail',
+  '/enterprise/audit'
 ] // 不重定向白名单
 
 router.beforeEach((to, from, next) => {

@@ -31,13 +31,13 @@
         <el-input v-model="userForm.name" style="width: 600px;" placeholder="请输入姓名"></el-input>
       </el-form-item>
       <el-form-item label="归属区域：" prop="locationid">
-        <regionselector v-model="userForm.locationid" :grade="4" v-on:regionCodeChanged="getRegionCode" :showCountry="false"></regionselector>
+        <el-input v-model="userForm.locationname" style="width: 600px;" placeholder="请输入地址" @focus="dialogVisible = true"></el-input>
       </el-form-item>
       <el-form-item label="邮件：" prop="email">
         <el-input v-model="userForm.email" style="width: 600px;" placeholder="请输入邮件"></el-input>
       </el-form-item>
       <el-form-item label="地址：" prop="address">
-        <el-input v-model="userForm.address" style="width: 600px;" placeholder="请输入地址" @focus="dialogVisible = true"></el-input>
+        <el-input v-model="userForm.address" style="width: 600px;" placeholder="请输入地址"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">提交</el-button>
@@ -45,15 +45,11 @@
       </el-form-item>
     </el-form>
     <el-dialog
-      title="提示"
+      title="请选择区域"
       :visible.sync="dialogVisible"
-      width="30%"
+      width="40%"
       :before-close="handleClose">
       <locationselector @locationSelected="getLocationInfo"></locationselector>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
-      </span>
     </el-dialog>
   </div>
 </template>
@@ -96,6 +92,7 @@ export default {
         repassword: '',
         name: '',
         locationid: '',
+        locationname: '',
         email: '',
         address: ''
       },
@@ -106,7 +103,7 @@ export default {
         password: [{ required: true, validator: validatePass, trigger: 'blur' }],
         repassword: [{ required: true, validator: validateRepass, trigger: 'blur' }],
         name: [{ required: true, message: '请输入名称', trigger: 'blur' }],
-        locationid: [{ required: true, message: '请选择归属区域', trigger: 'blur' }],
+        locationname: [{ required: true, message: '请选择归属区域', trigger: 'blur' }],
         email: [{ required: false, message: '请输入邮件', trigger: 'blur' }],
         address: [{ required: false, message: '请输入地址', trigger: 'blur' }]
       },
@@ -122,15 +119,13 @@ export default {
   },
   methods: {
     handleClose(done) {
-      this.$confirm('确认关闭？').then(_ => {
-        done()
-      }).catch(_ => {})
-    },
-    getRegionCode: function(data) {
-      this.userForm.locationid = data
+      // this.$confirm('确认关闭？').then(_ => {
+      done()
+      // }).catch(_ => {})
     },
     getLocationInfo: function(data) {
-      this.userForm.address = data.label
+      this.userForm.locationid = data.id
+      this.userForm.locationname = data.label
     },
     getRoleList() {
       return new Promise((resolve, reject) => {

@@ -5,24 +5,24 @@
       <el-row>
         <el-col :span="10">
           <el-form-item label="账号：">
-            <el-input v-model="searchForm.loginname" style="width: 300px;"></el-input>
+            <el-input v-model="searchForm.loginname" clearable style="width: 300px;"></el-input>
           </el-form-item>  
         </el-col>
         <el-col :span="10">
           <el-form-item label="手机号码：">
-            <el-input v-model="searchForm.phoneno" style="width: 300px;"></el-input>
+            <el-input v-model="searchForm.phoneno" clearable style="width: 300px;"></el-input>
           </el-form-item>  
         </el-col>
       </el-row>
       <el-row>
         <el-col :span="10">
           <el-form-item label="姓名：">
-            <el-input v-model="searchForm.name" style="width: 300px;"></el-input>
+            <el-input v-model="searchForm.name" clearable style="width: 300px;"></el-input>
           </el-form-item>  
         </el-col>
         <el-col :span="10">
           <el-form-item label="归属区域：">
-            <el-input v-model="searchForm.locationid" style="width: 300px;"></el-input>
+            <el-input v-model="searchForm.locationname" clearable style="width: 300px;" @focus="handleLocationFocus"></el-input>
           </el-form-item>  
         </el-col>
       </el-row>
@@ -35,6 +35,13 @@
         </el-col>
       </el-row>
     </el-form>
+    <el-dialog
+      title="请选择区域"
+      :visible.sync="dialogVisible"
+      width="440px"
+      :before-close="handleClose">
+      <locationselector @locationSelected="getLocationInfo"></locationselector>
+    </el-dialog>
     <h3 style="padding-left: 20px;">人员列表</h3>
     <el-table :data="list" v-loading.body="loading" element-loading-text="Loading" border stripe fit highlight-current-row style="padding-left:10px">
       <el-table-column label='账号' prop="loginname" width="110">
@@ -73,6 +80,7 @@
 
 <script>
 import { getAllUsers, getUserList, resetUserPassword } from '@/api/user'
+import locationselector from '@/components/LocationSelector/index'
 
 export default {
   data() {
@@ -82,14 +90,19 @@ export default {
         loginname: '',
         phoneno: '',
         name: '',
-        locationid: ''
+        locationid: '',
+        locationname: ''
       },
       pagesizes: [10, 20, 30, 50],
       pagesize: 10,
       currentPage: 1,
       total: 0,
-      loading: true
+      loading: true,
+      dialogVisible: false
     }
+  },
+  components: {
+    locationselector
   },
   created() {
     this.initUserList()
@@ -155,6 +168,20 @@ export default {
     },
     handleCurrentChange(val) {
       this.queryUserList()
+    },
+    getLocationInfo: function(data) {
+      this.searchForm.locationid = data.id
+      this.searchForm.locationname = data.label
+    },
+    handleClose(done) {
+      // this.$confirm('确认关闭？').then(_ => {
+      done()
+      // }).catch(_ => {})
+    },
+    handleLocationFocus() {
+      this.dialogVisible = true
+      this.searchForm.locationid = ''
+      this.searchForm.locationname = ''
     }
   }
 }

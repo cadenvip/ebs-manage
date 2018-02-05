@@ -1,5 +1,5 @@
 <template>
   <div>
-      企业列表
+      企业详情
   </div>
 </template>
