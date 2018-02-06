@@ -81,6 +81,8 @@
           } else {
             this.$message.error('网络错误' + res.status)
           }
+        }).catch(err => {
+          this.$message.error(err)
         })
       },
       format() {

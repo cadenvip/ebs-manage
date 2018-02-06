@@ -1,6 +1,6 @@
 <template>
   <div style="padding-top: 20px;">
-    <el-form :model="formT" ref="formT" label-width="100px" class="demo-ruleForm">
+    <el-form :model="formT" ref="formT" label-width="100px" >
       <el-row :gutter="20">
         <el-col :span="6">
           <el-form-item label="商品名称:" prop="shangpmc">
@@ -103,7 +103,7 @@
             <el-table-column align="center" label="操作" width="200">
               <template slot-scope="scope">
                 <el-button @click="getGoodsDetail(scope.row)" type="text" size="small">详情</el-button>
-                <el-button v-if="scope.row.auditStatus === '3'" @click="upGoods(scope.row)" type="text" size="small">上架</el-button>
+                <el-button v-if="scope.row.auditStatus === '3'" @click="_upGoods(scope.row)" type="text" size="small">上架</el-button>
                 <el-button v-if="scope.row.auditStatus === '3'" @click="modifyGoods(scope.row)" type="text" size="small">修改</el-button>
                 <el-button v-if="scope.row.auditStatus === '3'" @click="modifyGoods(scope.row)" type="text" size="small">删除</el-button>
               </template>
@@ -292,7 +292,7 @@
         this.$router.push({ name: 'publishstep1', query: { goodsId: val.goodsId }})
       },
       // 单个商品上架
-      upGoods(val) {
+      _upGoods(val) {
         const params = {
           goodsIds: val.goodsId
         }

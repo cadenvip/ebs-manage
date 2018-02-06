@@ -23,6 +23,6 @@ export function upGoods (params) {
   return request({
     url: '/goods/up',
     method: 'post',
-    params: params
+    data: params
   })
 }

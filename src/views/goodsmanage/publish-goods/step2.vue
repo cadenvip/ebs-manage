@@ -39,7 +39,7 @@
               <el-radio :label="item.templateCode">{{item.templateName}}</el-radio>
             </div>
           </el-radio-group>
-          <div style="text-align: center; margin: 14px;">
+          <div class="confirm-btn" style="text-align: center; margin: 14px;">
             <el-button type="primary" size="mini" @click="confirmLogisticsTemplate">确定</el-button>
           </div>
         </el-popover>
@@ -82,7 +82,7 @@
       <el-form-item style="padding-left: 100px;">
         <el-upload
           class="avatar-uploader"
-          action="http://183.230.101.142:58080/ebs/common/upload"
+          action="http://10.189.13.151:8080/ebs/common/upload"
           :show-file-list="false"
           :on-success="handleAvatarSuccess"
           :before-upload="beforeAvatarUpload">
@@ -775,8 +775,10 @@
             console.log(parmas)
             goodsRelease(parmas).then(res => {
               if (res.status === 200) {
-                this.$message.success(res.message)
                 // 跳转
+                this.$router.push({ path: '/goodsmanage/publishstep3' })
+              } else {
+                this.$message.error(res.msg)
               }
             })
           } else {
@@ -793,7 +795,7 @@
       },
       getLocationInfo(data) {
         this.ruleForm.spcd = data.label
-        this.ruleForm.spcdcode = data.id
+        this.ruleForm.spcdcode = data.locationCode
       },
       handleJieti() {
         console.log(222)
@@ -913,8 +915,8 @@
         }
       },
       convertJTnums() {
+        var arr = []
         if (this.ruleForm.jietiFlag) {
-          var arr = []
           arr.push(this.jietiItem1.num)
           for (var i in this.jietiItems) {
             arr.push(this.jietiItems[i].num)
@@ -923,8 +925,8 @@
         }
       },
       convertJTamount() {
+        var arr = []
         if (this.ruleForm.jietiFlag) {
-          var arr = []
           arr.push(this.jietiItem1.dollar)
           for (var i in this.jietiItems) {
             arr.push(this.jietiItems[i].dollar)
@@ -981,5 +983,16 @@
   } 
   .el-dialog__footer {
     text-align: center;
+  }
+  .el-popover{
+    position: relative;
+    max-height: 370px;
+    overflow-y: hidden;
+    padding-bottom: 100px;
+  }
+  .el-radio-group{
+    max-height: 300px;
+    width: 100%;
+    overflow-y: scroll;
   }
 </style>

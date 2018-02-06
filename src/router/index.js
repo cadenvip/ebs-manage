@@ -275,6 +275,7 @@ export const constantRouterMap = [
     meta: { title: '商品管理', icon: 'form' },
     name: '商品管理',
     children: [
+      // 商家
       {
         path: 'publishgoods',
         name: 'publish-goods',
@@ -320,6 +321,13 @@ export const constantRouterMap = [
         component: _import('goodsmanage/goodsdetail/index'),
         meta: { title: '商品详情' },
         hidden: true
+      },
+      // 管理员
+      {
+        path: 'updownaudit',
+        name: 'updownaudit',
+        component: _import('goodsmanageAdmin/updownaudit/index'),
+        meta: { title: '商品上下架审核', icon: 'form' }
       }
     ]
   },
