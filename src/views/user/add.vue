@@ -49,7 +49,7 @@
       :visible.sync="dialogVisible"
       width="40%"
       :before-close="handleClose">
-      <locationselector @locationSelected="getLocationInfo"></locationselector>
+      <LocationSelector @locationSelected="getLocationInfo"></LocationSelector>
     </el-dialog>
   </div>
 </template>
@@ -58,8 +58,7 @@
 
 import { addUser } from '@/api/user'
 import { getAllRoles } from '@/api/role'
-import regionselector from '@/components/RegionSelector/index'
-import locationselector from '@/components/LocationSelector/index'
+import LocationSelector from '@/components/LocationSelector/index'
 
 export default {
   data() {
@@ -111,8 +110,7 @@ export default {
     }
   },
   components: {
-    regionselector,
-    locationselector
+    LocationSelector
   },
   mounted () {
     this.getRoleList()

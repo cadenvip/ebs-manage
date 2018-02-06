@@ -53,6 +53,12 @@ router.beforeEach((to, from, next) => {
     }
   } else if (to.path === '/register') {
     next()
+  } else if (to.path === '/regStepTwo') {
+    next()
+  } else if (to.path === '/regStepThree') {
+    next()
+  } else if (to.path === '/regStepFour') {
+    next()
   } else {
     if (whiteList.indexOf(to.path) !== -1) {
       next()
