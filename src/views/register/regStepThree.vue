@@ -9,8 +9,21 @@
       </el-steps>
     </el-header>
     <el-main>
-      <div>
-        资质上传
+      <div style="border:1px solid #000">
+        <div style="margin:6px">
+          <h5>企业经营资质</h5>
+          <hr style="height:1px;border:none;border-top:1px dashed #0066CC;" />
+          <el-form-item>
+
+          </el-form-item>
+        </div>
+        <div style="margin:6px">
+          <h5>产品经营许可</h5>
+          <hr style="height:1px;border:none;border-top:1px dashed #0066CC;" />
+          <el-form-item>
+            
+          </el-form-item>
+        </div>        
       </div>
       <div style="margin-top: 20px; text-align: center;">
         <el-button @click="goBack" type="primary">返回上一步</el-button>
