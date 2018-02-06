@@ -106,4 +106,5 @@
   .mid-con{min-width: 560px;border: 1px solid #ddd;padding: 8px;}
   .mid-con .pad-title{background: #ECF0F1;height: 40px;line-height: 40px;}
   .mid-con .pad-title span{font-weight: bold;}
+  p{font-size: 14px;}
 </style>

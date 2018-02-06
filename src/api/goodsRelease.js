@@ -34,9 +34,7 @@ export function checkPayWay (params) {
   return request({
     url: '/enterprise/payAccount/check',
     method: 'post',
-    data: {
-      'payAccountType': '22'
-    }
+    data: params
   })
 }
 // 发布商品

@@ -35,7 +35,7 @@
             <el-row :gutter="20">
               <el-col :span="6">
                 <el-form-item label="商品状态:" prop="ssspzt">
-                  <el-select v-model="formT.ssspzt" placeholder="请选择">
+                  <el-select clearable v-model="formT.ssspzt" placeholder="请选择">
                     <el-option
                       v-for="item in goodsStatusOptions"
                       :key="item.value"
@@ -47,7 +47,7 @@
               </el-col>
               <el-col :span="6">
                 <el-form-item label="审核状态:" prop="ssshzt">
-                  <el-select v-model="formT.ssshzt" placeholder="请选择">
+                  <el-select clearable v-model="formT.ssshzt" placeholder="请选择">
                     <el-option
                       v-for="item in auditStatusOptions"
                       :key="item.value"
@@ -59,7 +59,7 @@
               </el-col>
               <el-col :span="6">
                 <el-form-item label="商品类型:" prop="sssplx">
-                  <el-select v-model="formT.sssplx" placeholder="请选择">
+                  <el-select clearable v-model="formT.sssplx" placeholder="请选择">
                     <el-option
                       v-for="item in goodsTypeOptions"
                       :key="item.value"
