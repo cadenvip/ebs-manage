@@ -55,7 +55,7 @@ export default {
         description: [{ required: false, message: '请输入角色描述', trigger: 'blur' }]
       },
       data: [],
-      allResources: [],
+      resources: [],
       filterText: '',
       defaultProps: {
         id: '',
@@ -96,7 +96,6 @@ export default {
       this.loading = true
       return new Promise((resolve, reject) => {
         getAllResources(issystem).then(response => {
-          this.allResources = response.data
           var aliveResources = []
           response.data.forEach(v => {
             v.label = v.name
@@ -106,14 +105,38 @@ export default {
             delete v.ordernum
             delete v.createdate
             delete v.statusdate
+            delete v.isdisplay
             delete v.image
             delete v.typestr
             delete v.rootNode
+            this.resources.push(v)
             if (v.status === 0) {
               // status: 0-激活，1-禁用（激活后页面可见，功能可用）
               aliveResources.push(v)
             }
           })
+          // 只要子节点展示，则父节点要展示
+          for (let k = 0; k < aliveResources.length; k++) {
+            let m = 0
+            for (; m < aliveResources.length; m++) {
+              if (aliveResources[k].parentid === aliveResources[m].id) {
+                aliveResources[m].status = 0
+                break
+              }
+            }
+            if (m === aliveResources.length) {
+              let n = 0
+              for (; n < this.resources.length; n++) {
+                if (this.resources[n].id === aliveResources[k].parentid) {
+                  this.resources[n].status = 0
+                  aliveResources.push(this.resources[n])
+                  break
+                }
+              }
+            }
+          }
+          // 排序（id从小到）
+          aliveResources.sort(this.compare('id'))
           // 整理数据
           this.data = this.list2Tree(aliveResources, { 'idKey': 'id', 'parentKey': 'parentid', 'childrenKey': 'children' })
           // 设置选中
@@ -125,6 +148,13 @@ export default {
           reject(error)
         })
       })
+    },
+    compare(property) {
+      return function(a, b) {
+        var value1 = a[property]
+        var value2 = b[property]
+        return value1 - value2
+      }
     },
     list2Tree(arr, options) {
       options = options || {}
