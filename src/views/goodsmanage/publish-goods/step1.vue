@@ -63,7 +63,7 @@
               this.goodstype.push(res.data.data.goodsBean.catalogId)
               this.goodstype.push(res.data.data.goodsBean.typeCode)
             } else {
-              this.$message.error(res.msg)
+              this.$message.error(res.message)
             }
           }).catch(err => {
             this.$message.error(err)
@@ -141,7 +141,7 @@
               if (res.status === 200) {
                 this.$router.push({ name: 'publishstep2', query: { typeCode: this.goodstype[0], typeCodeName: this.goodstype[1], goodsId: this.goodsId, isFromModifyFlag: this.isFromModifyFlag }})
               } else {
-                this.$message.error(res.msg)
+                this.$message.error(res.message)
               }
             }).catch(err => {
               this.$message.error(err)
@@ -151,7 +151,7 @@
               if (res.status === 200) {
                 this.$router.push({ name: 'publishstep2', query: { typeCode: this.goodstype[0], typeCodeName: this.goodstype[1] }})
               } else {
-                this.$message.error(res.msg)
+                this.$message.error(res.message)
               }
             }).catch(err => {
               this.$message.error(err)

@@ -327,6 +327,12 @@ export const constantRouterMap = [
       },
       // 管理员
       {
+        path: 'goodssearch',
+        name: 'goodssearch',
+        component: _import('goodsmanageAdmin/goodssearch/index'),
+        meta: { title: '商品查询', icon: 'form' }
+      },
+      {
         path: 'updownaudit',
         name: 'updownaudit',
         component: _import('goodsmanageAdmin/updownaudit/index'),

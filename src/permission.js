@@ -16,6 +16,7 @@ const whiteList = ['/',
   '/goodsmanage/goodsdetail',
   // 管理员
   '/goodsmanage/updownaudit',
+  '/goodsmanage/goodssearch',
   '/account/location',
   '/account/user/list',
   '/account/user/add',

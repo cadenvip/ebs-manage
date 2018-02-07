@@ -83,7 +83,7 @@
             console.log(this.goodsBean)
           } else {
             this.loading = false
-            this.$message.error(res.msg)
+            this.$message.error(res.message)
           }
         }).catch(err => {
           console.log(err)

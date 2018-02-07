@@ -311,7 +311,7 @@
             // this.ruleForm = this.goodsBean
             // this.ruleForm = this.goodsBean
           } else {
-            this.$message.error(res.msg)
+            this.$message.error(res.message)
           }
         }).catch(err => {
           this.$message.error(err)
@@ -778,7 +778,7 @@
                 // 跳转
                 this.$router.push({ path: '/goodsmanage/publishstep3' })
               } else {
-                this.$message.error(res.msg)
+                this.$message.error(res.message)
               }
             })
           } else {
@@ -884,7 +884,7 @@
             this.ruleForm.wuliuObj = res.data
           } else {
             this.templateLoading = false
-            this.$message.error(res.msg)
+            this.$message.error(res.message)
           }
         }).catch(err => {
           this.templateLoading = false

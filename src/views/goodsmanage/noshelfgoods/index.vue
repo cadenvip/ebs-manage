@@ -300,7 +300,7 @@
           if (res.status === 200) {
             console.log('success')
           } else {
-            this.$message.error(res.msg)
+            this.$message.error(res.message)
           }
         }).catch(err => {
           this.$message.error(err)
@@ -311,6 +311,7 @@
         const len = this.DSJseletedData.length
         if (len === 0) {
           this.$message.error('未选中任何商品！')
+          return false
         } else {
           for (var i in this.DSJseletedData) {
             if (this.DSJseletedData[i]['auditStatus'] !== '3') {
@@ -326,6 +327,7 @@
         const len = this.DSJseletedData.length
         if (len === 0) {
           this.$message.error('未选中任何商品！')
+          return false
         } else {
           for (var i in this.DSJseletedData) {
             if (this.DSJseletedData[i]['auditStatus'] !== '3') {
