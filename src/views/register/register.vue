@@ -1,44 +1,55 @@
 <template>
   <el-container>
-    <el-header>
-      <el-steps :active="0" simple>
-        <el-step title="查阅协议" icon="el-icon-document"></el-step>
-        <el-step title="基本信息" icon="el-icon-edit"></el-step>
-        <el-step title="资质上传" icon="el-icon-upload"></el-step>
-        <el-step title="提交待审核" icon="el-icon-circle-check-outline"></el-step>
-      </el-steps>
-    </el-header>
-    <el-main>
-      <div>
-        <el-row gutter="20">
-          <el-col span="4">
-            <ul>
-              <li><a href="#one">主协议</a></li>
-              <li><a href="#two">消费者权益保障服务</a></li>
-              <li><a href="#three">反商业贿赂条款</a></li>
-              <li><a href="#four">保密协议</a></li>
-              <li><a href="#five">信息安全承诺责任书</a></li>
-              <li><a href="#six">附属协议</a></li>
-            </ul>
-          </el-col>
-          <el-col span="20">
+    <Regheader></Regheader>
+    <el-container style="width:1000px;margin:0 auto 20px">
+      <el-header style="margin-top:20px">
+        <el-steps :active="0" simple>
+          <el-step title="查阅协议" icon="el-icon-document"></el-step>
+          <el-step title="基本信息" icon="el-icon-edit"></el-step>
+          <el-step title="资质上传" icon="el-icon-upload"></el-step>
+          <el-step title="提交待审核" icon="el-icon-circle-check-outline"></el-step>
+        </el-steps>
+      </el-header>
+      <el-container>
+        <el-aside style="width:180px; margin-left:20px" >
+          <a href="#one" style="margin-left:10px">主协议</a>
+          <hr style="height:1px;border:none;border-top:1px dashed #0066CC;" />
+          <a href="#two" style="margin-left:10px">消费者权益保障服务</a>
+          <hr style="height:1px;border:none;border-top:1px dashed #0066CC;" />
+          <a href="#three" style="margin-left:10px">反商业贿赂条款</a>
+          <hr style="height:1px;border:none;border-top:1px dashed #0066CC;" />
+          <a href="#four" style="margin-left:10px">保密协议</a>
+          <hr style="height:1px;border:none;border-top:1px dashed #0066CC;" />
+          <a href="#five" style="margin-left:10px">信息安全承诺责任书</a>
+          <hr style="height:1px;border:none;border-top:1px dashed #0066CC;" />
+          <a href="#six" style="margin-left:10px">附属协议</a>
+          <hr style="height:1px;border:none;border-top:1px dashed #0066CC;" />
+        </el-aside>
+        <el-main>
+          <div>
             <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 20}" v-model="textarea">
             </el-input>
-          </el-col>
-        </el-row>
-        <br/>
-        <div align="center">
-          <el-checkbox v-model="checked">我已阅读并同意《商户管理系统平台合作协议》</el-checkbox>
-        </div>
-      </div>
-      <div style="margin-top: 20px; text-align: center;">
-        <el-button @click="goNext" type="primary" :disabled="disabled">下一步</el-button>
-      </div>
-    </el-main>
+            <br>
+            <div align="center">
+              <el-checkbox v-model="checked">我已阅读并同意《商户管理系统平台合作协议》</el-checkbox>
+            </div>
+          </div>
+          <div style="margin-top: 20px; text-align: center;">
+            <el-button @click="goNext" type="primary" :disabled="disabled">下一步</el-button>
+          </div>
+        </el-main>
+      </el-container>
+    </el-container>
+    <el-footer>
+      <Regfooter></Regfooter>
+    </el-footer>
   </el-container>
 </template>
 
 <script>
+  import Regheader from '@/components/Register/regheader'
+  import Regfooter from '@/components/Register/regfooter'
+
   export default {
     data() {
       return {
@@ -576,6 +587,10 @@
         this.disabled = false
       }, 5000)
     },
+    components: {
+      Regheader,
+      Regfooter
+    },
     methods: {
       goNext() {
         if (this.checked === false) {
@@ -588,3 +603,12 @@
     }
   }
 </script>
+
+<style>
+.header {
+    height: 70px;
+    background-color: #f1f1f1;
+    border-bottom: #e5e5e5 solid 1px;
+}
+</style>
+
