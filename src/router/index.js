@@ -327,16 +327,23 @@ export const constantRouterMap = [
       },
       // 管理员
       {
-        path: 'goodssearch',
+        path: 'goodssearch',  // 商品搜索
         name: 'goodssearch',
         component: _import('goodsmanageAdmin/goodssearch/index'),
         meta: { title: '商品查询', icon: 'form' }
       },
       {
-        path: 'updownaudit',
+        path: 'updownaudit',  // 上下架
         name: 'updownaudit',
         component: _import('goodsmanageAdmin/updownaudit/index'),
         meta: { title: '商品上下架审核', icon: 'form' }
+      },
+      {
+        path: 'preview',  // 预览
+        name: 'preview',
+        component: _import('goodsmanageAdmin/preview/index'),
+        meta: { title: '商品预览', icon: 'form' },
+        hidden: true
       }
     ]
   },

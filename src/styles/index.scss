@@ -69,3 +69,10 @@ a:hover {
 .inline-block {
   display: inline-block;
 }
+
+.clearfix:after{
+  content: "";
+  display: block;
+  line-height: 0;
+  clear: both;
+}

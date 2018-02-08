@@ -346,15 +346,15 @@
         this.searchForm.spcdcode = data.locationCode
       },
       goPreview(val) {
-        console.log('go preview')
-        console.log(val)
+        if (val.goodsId) {
+          this.$router.push({ name: 'preview', query: { goodsId: val.goodsId }})
+        }
       },
       _getSearches(obj) {
         this.tableData = []
         const params = Object.assign({
           searchType: 4
         }, obj)
-        console.log('参数', params)
         this.loading = true
         getSearches(params).then(res => {
           if (res.status === 200) {
@@ -396,14 +396,14 @@
         }
         if (this.seletedData.length <= 1) {
           selectedGoodsIds = this.seletedData[0].goodsId
-          params.goodsId = selectedGoodsIds
+          params.goodsIds = selectedGoodsIds
         } else {
           var tempArr = []
           for (var i in this.seletedData) {
             tempArr.push(this.seletedData[i].goodsId)
           }
           selectedGoodsIds = tempArr.join(',')
-          params.goodsId = selectedGoodsIds
+          params.goodsIds = selectedGoodsIds
         }
         if (this.auditForm.auditStatus === '1' && this.auditForm.auditAdvice === '') {
           this.$message.error('请填写审批意见！')
@@ -411,7 +411,11 @@
         } else {
           console.log(params)
           upDownAudit(params).then(res => {
-            console.log(res)
+            if (res.status === 200) {
+              console.log(res)
+            } else {
+              this.$message.error(res.msg)
+            }
           }).catch(err => {
             this.$message.error(err)
           })

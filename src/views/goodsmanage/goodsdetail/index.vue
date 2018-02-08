@@ -8,14 +8,15 @@
           </el-carousel-item>
         </el-carousel>
       </div>
-      <div class="inline-block" style="padding-left: 50px;">
+      <div class="inline-block" style="padding-left: 50px;vertical-align: top;">
         <h3>{{goodsBean.name}}</h3>
         <p>市场价：<span class="through">￥{{goodsBean.marketPrice}}</span></p>
         <p>销售价格：<span style="color: #FF3300;font-size:30px;font-weight: bold;">￥{{goodsBean.price}}</span></p>
         <p>商品编码：<span>{{format(goodsBean.goodsCode)}}</span></p>
-        <p>商品重量：<span>{{goodsBean.weight}} {{goodsBean.weightUnit == '1'?'克':'千克'}}</span></p>
-        <p>使用物流：<span>{{goodsBean.logisticsTypes === '1' ? '自提' : '物流 '}}{{goodsBean.logisticsTypes === '2' ? '物流模板：'+goodsBean.logisticsTemplateCode : ''}}</span></p>
+        <p>商品重量：<span>{{goodsBean.weight}} {{goodsBean.weightUnit === '1'?'克':'千克'}}</span></p>
+        <p>使用物流：<span v-if="goodsBean.logisticsTypes">{{goodsBean.logisticsTypes.indexOf('1') > -1 ? '自提' : ''}} {{goodsBean.logisticsTypes.indexOf('2')>-1 ? '物流' : ''}} {{goodsBean.logisticsTypes.indexOf('2')>-1 ? '物流模板：'+goodsBean.logisticsTemplateCode : ''}}</span></p>
         <p class="payway">支付方式：
+          <span>货到付款</span>
           <span v-if="goodsBean.alipay==='0'">支付宝</span>
           <span v-if="goodsBean.cmpay==='0'">手机支付</span>
           <span v-if="goodsBean.unionpay==='0'">银联支付</span>
@@ -31,7 +32,7 @@
         支持换货：<span>{{goodsBean.isexchange?'不支持':'支持'}}</span>
       </p>
       <p>促销信息：{{format(goodsBean.promotionInfo)}}</p>
-      <p>特色买点：{{format(goodsBean.features)}}</p>
+      <p>特色卖点：{{format(goodsBean.features)}}</p>
       <p>生产厂家：{{format(goodsBean.supplierName)}}</p>
       <p>品牌：{{format(goodsBean.brand)}}</p>
       <p>wappush内容：{{format(goodsBean.wapUrl)}}</p>
@@ -61,7 +62,7 @@
   export default {
     mounted () {
       if (!this.$route.query.goodsId) {
-        this.$message.error('something wrong!')
+        this.$message.error('未获取到商品id！')
       } else {
         this.getGoodsDetail()
       }
@@ -80,10 +81,9 @@
           if (res.status === 200) {
             this.loading = false
             this.goodsBean = res.data.data.goodsBean
-            console.log(this.goodsBean)
           } else {
             this.loading = false
-            this.$message.error(res.message)
+            this.$message.error(res.msg)
           }
         }).catch(err => {
           console.log(err)

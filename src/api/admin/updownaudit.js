@@ -10,7 +10,7 @@ export function getSearches (params) {
 
 export function upDownAudit (params) {
   return request({
-    url: '/upOrDown/audit',
+    url: '/goods/upOrDown/audit',
     method: 'post',
     data: params
   })
