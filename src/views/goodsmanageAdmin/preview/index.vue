@@ -90,7 +90,7 @@
       </el-tabs>    
     </div>
     <div style="text-align: center; margin-top: 20px;">
-      <el-button size="medium" type="primary">返回</el-button>
+      <el-button size="medium" type="primary" @click="goBack">返回</el-button>
     </div>
   </div>
 </template>
@@ -150,6 +150,11 @@
       },
       handleTabClick(tab, event) {
         console.log(tab, event)
+      },
+      goBack () {
+        window.history.length > 1
+          ? this.$router.go(-1)
+          : this.$router.push('/')
       }
     },
     computed: {

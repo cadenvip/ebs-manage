@@ -53,10 +53,22 @@
 
 <script>
 
-import { getVercode, getUnitInfos } from '@/api/login'
+import { getVercode, getUnitInfos, getUnits } from '@/api/login'
 import { validatPhone } from '@/utils/validate'
 
 export default {
+  created() {
+    getUnits().then(res => {
+      if (res.status === 200) {
+        this.units = res.data
+        window.localStorage.setItem('units', JSON.stringify(this.units))
+      } else {
+        this.$message.error(res.msg)
+      }
+    }).catch(err => {
+      this.$message.error(err)
+    })
+  },
   data() {
     var validateLoginname = (rule, value, callback) => {
       if (value === '') {

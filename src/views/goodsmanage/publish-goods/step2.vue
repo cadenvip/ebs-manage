@@ -133,7 +133,7 @@
             <el-date-picker
               v-model="ruleForm.scrq"
               type="date"
-              value-format="yyyy-MM-dd"
+              value-format="yyyyMMdd"
               placeholder="选择日期">
             </el-date-picker>
           </el-form-item>

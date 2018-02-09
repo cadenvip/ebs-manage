@@ -45,3 +45,10 @@ export function getUnitInfos(params) {
     data: { 'loginname': `${params}` }
   })
 }
+
+export function getUnits () {
+  return request({
+    url: '/goods/unit/list',
+    method: 'get'
+  })
+}
