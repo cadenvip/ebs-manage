@@ -56,3 +56,18 @@ export function formatTime (time, option) {
     return d.getMonth() + 1 + '月' + d.getDate() + '日' + d.getHours() + '时' + d.getMinutes() + '分'
   }
 }
+
+export function getUnitsOptions () {
+  const Units = JSON.parse(window.localStorage.getItem('units'))
+  var unitsOptions = []
+  if (Units) {
+    for (var i in Units) {
+      var obj = {
+        label: Units[i].udesc,
+        value: Units[i].usid
+      }
+      unitsOptions.push(obj)
+    }
+  }
+  return unitsOptions
+}

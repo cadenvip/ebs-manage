@@ -97,8 +97,10 @@
 
 <script>
   import axios from 'axios'
+  import { getUnitsOptions } from '@/utils/index'
   export default {
     mounted () {
+      console.log(getUnitsOptions())
       if (!this.$route.query.goodsId) {
         this.$message.error('未获取到商品id！')
       } else {
