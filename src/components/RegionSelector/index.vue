@@ -1,33 +1,33 @@
 <template>
   <div class="RegionSelector">
     <el-row :gutter="4">
-      <el-col :span="3" v-if="grade >= 1 && showCountry">
+      <el-col :span="4" v-if="grade >= 1 && showCountry">
         <el-select v-model="country" placeholder="请选择国" clearable filterable v-on:change="countryChanged">
           <el-option v-for="(item, key) in countries" :key="key" :label="item.locationName" :value="item.id"></el-option>
         </el-select>
       </el-col>
-      <el-col :span="3" v-if="grade >= 2">
+      <el-col :span="4" v-if="grade >= 2">
         <el-select v-model="province" placeholder="请选择省" clearable filterable v-on:change="provinceChanged">
           <el-option v-for="(item, key) in provinces" :key="key" :label="item.locationName" :value="item.id"></el-option>
         </el-select>
       </el-col>
-      <el-col :span="3" v-if="grade >= 3">
+      <el-col :span="4" v-if="grade >= 3">
         <el-select v-model="city" placeholder="请选择市" clearable filterable v-on:change="cityChanged">
           <el-option v-for="(item,key) in cities" :key="key" :label="item.locationName" :value="item.id"></el-option>
         </el-select>
       </el-col>
-      <el-col :span="3" v-if="grade >= 4">
-        <el-select v-model="county" placeholder="请选择县" clearable filterable v-on:change="countyChanged">
+      <el-col :span="4" v-if="grade >= 4">
+        <el-select v-model="county" placeholder="请选择区县" clearable filterable v-on:change="countyChanged">
           <el-option v-for="(item,key) in counties" :key="key" :label="item.locationName" :value="item.id"></el-option>
         </el-select>
       </el-col>
-      <el-col :span="3" v-if="grade >= 5">
-        <el-select v-model="town" placeholder="请选择镇" clearable filterable v-on:change="townChanged">
+      <el-col :span="4" v-if="grade >= 5">
+        <el-select v-model="town" placeholder="请选择乡镇" clearable filterable v-on:change="townChanged">
           <el-option v-for="(item,key) in towns" :key="key" :label="item.locationName" :value="item.id"></el-option>
         </el-select>
       </el-col>
-      <el-col :span="3" v-if="grade >= 6">
-        <el-select v-model="village" placeholder="请选择村" clearable filterable v-on:change="villageChanged">
+      <el-col :span="4" v-if="grade >= 6">
+        <el-select v-model="village" placeholder="请选择村街道" clearable filterable v-on:change="villageChanged">
           <el-option v-for="(item,key) in villages" :key="key" :label="item.locationName" :value="item.id"></el-option>
         </el-select>
       </el-col>
@@ -37,7 +37,8 @@
 
 <script type="text/ecmascript-6">
 
-import { getAllCountries, getAllProvinces, getAllCities, getAllCounties, getAllTowns, getAllVillages } from '@/api/regionselecter'
+import { getAllCountries, getAllProvinces, getAllCities, getAllCounties, getAllTowns,
+  getAllVillages, getLocationInfoById, getLocationInfoByCode } from '@/api/regionselecter'
 
 export default {
   props: {
@@ -48,6 +49,14 @@ export default {
     showCountry: {
       type: Boolean,
       default: false
+    },
+    locationCode: {
+      type: String,
+      default: ''
+    },
+    locationId: {
+      type: Number,
+      default: 0
     }
   },
   data: function () {
@@ -64,7 +73,16 @@ export default {
       counties: [],
       towns: [],
       villages: [],
-      regionCode: ''
+      locationInfo: {}
+    }
+  },
+  created () {
+    if (this.code !== undefined && this.code !== '') {
+      // 根据locationCode获取区域信息
+      this.getLocationByCode(this.code)
+    } else if (this.locationId !== undefined && this.locationId !== '') {
+      // 根据id获取区域信息
+      this.getLocationById(this.locationId)
     }
   },
   mounted () {
@@ -77,6 +95,86 @@ export default {
     }
   },
   methods: {
+    getLocationByCode (locationCode) {
+      return new Promise((resolve, reject) => {
+        getLocationInfoByCode(locationCode).then(response => {
+          var resultData = response.data.list[0]
+          this.getLocationById(resultData.id).then(response => {
+            resolve(response)
+          }).catch(error => {
+            reject(error)
+          })
+        }).catch(error => {
+          console.log(error)
+        })
+      })
+    },
+    getLocationById (locationId) {
+      return new Promise((resolve, reject) => {
+        getLocationInfoById(locationId).then(response => {
+          var resultData = response.data.list[0]
+          switch (resultData.locationLevel) {
+            case 5:
+              this.village = resultData.id
+              getAllVillages(resultData.parentId).then(response => {
+                this.villages = response.data.list
+                this.getLocationById(resultData.parentId)
+              }).catch(error => {
+                console.log(error)
+              })
+              break
+            case 4:
+              this.town = resultData.id
+              getAllTowns(resultData.parentId).then(response => {
+                this.towns = response.data.list
+                this.getLocationById(resultData.parentId)
+              }).catch(error => {
+                console.log(error)
+              })
+              break
+            case 3:
+              this.county = resultData.id
+              getAllCounties(resultData.parentId).then(response => {
+                this.counties = response.data.list
+                this.getLocationById(resultData.parentId)
+              }).catch(error => {
+                console.log(error)
+              })
+              break
+            case 2:
+              this.city = resultData.id
+              getAllCities(resultData.parentId).then(response => {
+                this.cities = response.data.list
+                this.getLocationById(resultData.parentId)
+              }).catch(error => {
+                console.log(error)
+              })
+              break
+            case 1:
+              this.province = resultData.id
+              getAllProvinces(resultData.parentId).then(response => {
+                this.provinces = response.data.list
+                this.getLocationById(resultData.parentId)
+              }).catch(error => {
+                console.log(error)
+              })
+              break
+            case 0:
+              this.country = resultData.id
+              getAllCountries(resultData.parentId).then(response => {
+                this.countries = response.data.list
+              }).catch(error => {
+                console.log(error)
+              })
+              break
+            default:
+              break
+          }
+        }).catch(error => {
+          reject(error)
+        })
+      })
+    },
     getCountries() {
       return new Promise((resolve, reject) => {
         getAllCountries('-1').then(response => {
@@ -152,7 +250,7 @@ export default {
       this.counties = []
       this.towns = []
       this.villages = []
-      this.getRegionCode()
+      this.getLocationInfo()
     },
     provinceChanged() {
       this.city = ''
@@ -167,7 +265,7 @@ export default {
       this.counties = []
       this.towns = []
       this.villages = []
-      this.getRegionCode()
+      this.getLocationInfo()
     },
     cityChanged() {
       this.county = ''
@@ -180,7 +278,7 @@ export default {
       }
       this.towns = []
       this.villages = []
-      this.getRegionCode()
+      this.getLocationInfo()
     },
     countyChanged() {
       this.town = ''
@@ -191,7 +289,7 @@ export default {
         this.towns = []
       }
       this.villages = []
-      this.getRegionCode()
+      this.getLocationInfo()
     },
     townChanged() {
       this.village = ''
@@ -200,32 +298,62 @@ export default {
       } else {
         this.getVillages = []
       }
-      this.getRegionCode()
+      this.getLocationInfo()
     },
     villageChanged() {
-      this.getRegionCode()
+      this.getLocationInfo()
     },
-    getRegionCode () {
+    getLocationInfo () {
       if (this.village !== '') {
-        this.regionCode = this.village
+        for (let i = 0; i < this.villages.length; i++) {
+          if (this.villages[i].id === this.village) {
+            this.locationInfo = this.villages[i]
+            break
+          }
+        }
       } else if (this.town !== '') {
-        this.regionCode = this.town
+        for (let i = 0; i < this.towns.length; i++) {
+          if (this.towns[i].id === this.town) {
+            this.locationInfo = this.towns[i]
+            break
+          }
+        }
       } else if (this.county !== '') {
-        this.regionCode = this.county
+        for (let i = 0; i < this.counties.length; i++) {
+          if (this.counties[i].id === this.county) {
+            this.locationInfo = this.counties[i]
+            break
+          }
+        }
       } else if (this.city !== '') {
-        this.regionCode = this.city
+        for (let i = 0; i < this.cities.length; i++) {
+          if (this.cities[i].id === this.city) {
+            this.locationInfo = this.cities[i]
+            break
+          }
+        }
       } else if (this.province !== '') {
-        this.regionCode = this.province
+        for (let i = 0; i < this.provinces.length; i++) {
+          if (this.provinces[i].id === this.province) {
+            this.locationInfo = this.provinces[i]
+            break
+          }
+        }
       } else if (this.country !== '') {
         if (this.showCountry) {
-          this.regionCode = this.country
+          for (let i = 0; i < this.provinces.length; i++) {
+            if (this.provinces[i].id === this.province) {
+              this.locationInfo = this.provinces[i]
+              break
+            }
+          }
         } else {
-          this.regionCode = ''
+          this.locationInfo = {}
         }
       } else {
-        this.regionCode = ''
+        this.locationInfo = {}
       }
-      this.$emit('regionCodeChanged', this.regionCode)
+      this.$emit('locationChanged', this.locationInfo)
     }
   }
 }

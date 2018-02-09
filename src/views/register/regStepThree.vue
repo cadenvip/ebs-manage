@@ -11,8 +11,8 @@
         </el-steps>
       </el-header>
       <el-main>
-        <div style="border:1px solid #000">
-          <el-form style="margin:6px">
+        <div style="border:1px solid #000">   
+          <el-form ref="registerForm" :model="registerForm" :rules="registerRules" label-width="170px" style="margin:6px">
             <h5>企业经营资质</h5>
             <hr style="height:1px;border:none;border-top:1px dashed #0066CC;" />
             <el-form-item label="企业营业执照：" prop="businesslicenseNum">
@@ -27,16 +27,16 @@
                 :on-preview="handlePictureCardPreview"
                 :on-remove="handleRemove"
                 :before-upload="beforeAvatarUpload">
-                <img v-if="registerForm.licencepicpath" :src="registerForm.licencepicpath" class="avatar">
+                <!-- <img v-if="registerForm.licencepicpath" :src="registerForm.licencepicpath" class="avatar"> -->
                 <el-button size="small" type="primary">点击上传</el-button>
-                <el-button v-if="registerForm.licencepicpath" size="small" type="primary" @click="handlePictureCardPreview">预览</el-button>
+                <el-button v-if="registerForm.licencepicpath" size="small" type="primary" @click="handlePictureCardPreview(registerForm.licencepicpath)">上传成功，点击预览</el-button>
                 <!-- <i v-else class="el-icon-plus avatar-uploader-icon"></i> -->
               </el-upload>
             </el-form-item>
-          <el-form-item label="经办人身份证：" prop="businesslicenseNum">
-            <el-input v-model="registerForm.businesslicenseNum" clearable style="width: 270px;" placeholder="输入身份证号码"></el-input>
+          <el-form-item label="经办人身份证：" prop="operatoridnum">
+            <el-input v-model="registerForm.operatoridnum" clearable style="width: 270px;" placeholder="输入身份证号码"></el-input>
           </el-form-item>
-          <el-form-item label="身份证正面：">
+          <el-form-item label="身份证正面：" prop="sfzmpicpath">
               <el-upload
                 action="http://10.189.13.151:8080/ebs/common/upload"
                 list-type="picture-card"
@@ -49,7 +49,7 @@
                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
               </el-upload>
             </el-form-item>
-            <el-form-item label="身份证反面：">
+            <el-form-item label="身份证反面：" prop="sffmpicpath">
               <el-upload
                 action="http://10.189.13.151:8080/ebs/common/upload"
                 list-type="picture-card"
@@ -93,7 +93,7 @@
                 :on-preview="handlePictureCardPreview"
                 :on-remove="handleRemove"
                 :before-upload="beforeAvatarUpload">
-                <img v-if="registerForm.foodsafetypath" :src="registerForm.foodsafetypath" class="avatar">
+                <img v-if="registerForm.foodsafetypicpath" :src="registerForm.foodsafetypicpath" class="avatar">
                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
               </el-upload>
             </el-form-item>
@@ -106,7 +106,7 @@
                 :on-preview="handlePictureCardPreview"
                 :on-remove="handleRemove"
                 :before-upload="beforeAvatarUpload">
-                <img v-if="registerForm.foodcirculationpath" :src="registerForm.foodcirculationpath" class="avatar">
+                <img v-if="registerForm.foodpathpicpath" :src="registerForm.foodpathpicpath" class="avatar">
                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
               </el-upload>
             </el-form-item>
@@ -151,6 +151,8 @@
         registerForm: {
           // businessesForm: {
           businessesName: '',
+          businessesShortName: '',	// 企业简称
+          businessType: '',			// 商家类型
           locationCode: '',
           businesslicenseNum: '',
           merchantKind: '',
@@ -164,16 +166,47 @@
           sellPersonMobile: '',
           financePersonName: '',
           financePersonMobile: '',
+          financePersonPhone: '',	// 财务联系人电话
+          financePersonEmail: '',	// 财务邮箱
+          financePersonAddress: '',	// 财务通信地址
           operatoridnum: '',
+          registerMoney: '',			// 注册资金
+          margin: '',					// 保证金
+          liquidatedDamages: '',	// 违约金
+          taxRegistrationNum: '',	// 税务登记号码
+          officePhone: '',		// 办公室电话
+          operateHours: '',	// 营业时间
+          employeesNum: '',			// 雇员数量
+          fax: '',				// 传真
+          zipCode: '',				// 邮编
+          ownershipType: '',		// 所有制类型 国有企业/集体企业/私营企业/混合所有制企业
           isInvoice: '',
+          merchantPayable: '',  // 是否开启语音支付(0-关闭，1-开启)
+          merchantNo: '',       // 语音支付号码
+          aliPayNoPayable: '',	// 是否开启支付宝支付(0-关闭 ，1-开启)
+          aliPayAccount: '',		// 支付宝卖家账号（email或者手机号）
+          aliPaySignKey: '',		// 支付宝平台签名Key
+          aliPaySellerAccountName: '',	// 支付宝卖家名字
+          cmPayNoPayable: '',			// 是否开启手机和包支付(0关闭 1开启)
+          cmPayMerchantId: '',		// 手机和包支付平台商家ID
+          cmPaySignKey: '',		// 手机和包支付平台签名KEY
+          umPayNoPayable: '',			// 是否支持联动优势
+          umPayMerchantId: '',		// 联动优势平台商家ID
+          umPayBankAccountName: '',		// 联动优势银行账号名
+          umPayBankAccountNo: '',	// 联动优势银行账号
+          wirelesscityno: '',		// 无线城市话费支付商号
+          wirelesscityname: '',		// 无线城市话费支付商户名称
+          wirelesscitypayable: '1',		// 是否开启无线城市话费支付（0关闭 1开启）
+          wirelesstpcode: '',		// 无线城市话费支付渠道编码
+          wirelesstpname: '',		// 无线城市话费支付渠道名称
           // },
           // attachmentForm: {
           sfzmpicpath: '',
           sffmpicpath: '',
           licencepicpath: '',
           proxytestifypicpath: '',
-          foodsafetypath: '',
-          foodcirculationpath: '',
+          foodsafetypicpath: '',
+          foodpathpicpath: '',
           foodotherpicpath: [],
           // },
           goodsListForm: [
@@ -225,14 +258,26 @@
           ]
         },
         registerRules: {
-          businessesName: [{ required: true, message: '请输入企业名称', trigger: 'blur' }],
-          locationCode: [{ required: true, message: '请选择地址', trigger: 'change' }]
+          businesslicenseNum: [{ required: true, message: '请输入营业执照号码', trigger: 'blur' }],
+          operatoridnum: [{ required: true, message: '请输入经办人身份证号码', trigger: 'blur' }],
+          sfxmpicpath: [{ required: true, message: '请上传经办人身份证正面', trigger: 'change' }],
+          sffmpicpath: [{ required: true, message: '请上传经办人身份证发面', trigger: 'change' }]
         }
       }
     },
     components: {
       Regheader,
       Regfooter
+    },
+    mounted () {
+      // 从下一步返回到上一步时取出之前填写的值
+      var registerInfo = window.localStorage.getItem('registerInfo')
+      if (registerInfo !== undefined && registerInfo !== '') {
+        var defaultRegisterInfo = JSON.parse(registerInfo)
+        if (defaultRegisterInfo.businessesName !== '') {
+          this.registerForm = defaultRegisterInfo
+        }
+      }
     },
     methods: {
       beforeAvatarUpload(file) {
@@ -260,10 +305,10 @@
         this.registerForm.proxytestifypicpath = URL.createObjectURL(file.raw)
       },
       handleFoodSafetySuccess(res, file) {
-        this.registerForm.foodsafetypath = URL.createObjectURL(file.raw)
+        this.registerForm.foodsafetypicpath = URL.createObjectURL(file.raw)
       },
       handleFoodCirculationSuccess(res, file) {
-        this.registerForm.foodcirculationpath = URL.createObjectURL(file.raw)
+        this.registerForm.foodpathpicpath = URL.createObjectURL(file.raw)
       },
       handleFoodOtherSuccess(res, file) {
         this.registerForm.foodotherpicpath.push(URL.createObjectURL(file.raw))
@@ -273,13 +318,35 @@
         console.log(file, fileList)
       },
       handlePictureCardPreview(file) {
-        this.dialogImageUrl = file.url
+        this.dialogImageUrl = file
         this.dialogVisible = true
       },
       goBack() {
         this.$router.push({ path: '/regStepTwo' })
       },
       goNext() {
+        // 校验输入数据
+        // 提交到后台
+        if (this.registerForm.businesslicenseNum !== '') {
+          this.$message({ type: 'warning', message: '请输入营业执照号码' })
+          return
+        }
+        if (this.registerForm.sfzmpicpath !== '') {
+          this.$message({ type: 'warning', message: '请上传营业执照' })
+          return
+        }
+        if (this.registerForm.operatoridnum !== '') {
+          this.$message({ type: 'warning', message: '请输入经办人身份证号码' })
+          return
+        }
+        if (this.registerForm.sfzmpicpath !== '') {
+          this.$message({ type: 'warning', message: '请上传身份证正面' })
+          return
+        }
+        if (this.registerForm.sffmpicpath !== '') {
+          this.$message({ type: 'warning', message: '请上传身份证反面' })
+          return
+        }
         this.$router.push({ path: '/regStepFour' })
       }
     }

@@ -65,9 +65,18 @@ export function getParentInfo(parentId, locationLevel) {
   })
 }
 
-// export function getChinaAll(params) {
-//   return request({
-//     url: '/location/listchina',
-//     method: 'post'
-//   })
-// }
+export function getLocationInfoById(id) {
+  return request({
+    url: '/location/list',
+    method: 'post',
+    data: { 'id': `${id}` }
+  })
+}
+
+export function getLocationInfoByCode(locationCode) {
+  return request({
+    url: '/location/list',
+    method: 'post',
+    data: { 'locationCode': `${locationCode}` }
+  })
+}

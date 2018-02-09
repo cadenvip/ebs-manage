@@ -14,9 +14,9 @@
         <div>
           您的资料提交，正在审核...
         </div>
-        <div style="margin-top: 20px; text-align: center;">
+        <!-- <div style="margin-top: 20px; text-align: center;">
           <el-button @click="goBack" type="primary">返回上一步</el-button>
-        </div>
+        </div> -->
       </el-main>
     </el-container>
     <el-footer>
@@ -38,10 +38,13 @@
       Regheader,
       Regfooter
     },
+    mounted () {
+      window.localStorage.removeItem('registerInfo')
+    },
     methods: {
-      goBack() {
-        this.$router.push({ path: '/regStepTwo' })
-      }
+      // goBack() {
+      //   this.$router.push({ path: '/regStepTwo' })
+      // }
     }
   }
 </script>
