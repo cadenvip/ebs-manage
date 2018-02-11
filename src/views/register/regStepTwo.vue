@@ -68,6 +68,11 @@
                 </el-form-item>                
               </el-col>
             </el-row>
+            <el-form-item label="业务联系人邮箱：" prop="relationEmail">
+              <el-input v-model="registerForm.relationEmail" clearable style="width: 200px;" placeholder="请输入业务联系人邮箱"></el-input>
+            </el-form-item>
+            <hr style="height:1px;border:none;border-top:1px dashed #0066CC;" />
+            <h5>售后信息</h5>
             <el-row :gutter="30">
               <el-col :span="12">
                 <el-form-item label="售后联系人：" prop="sellPersonName">
@@ -80,6 +85,38 @@
                 </el-form-item>                
               </el-col>
             </el-row>
+            <!-- <el-row :gutter="30">
+              <el-col :span="20">
+                <el-form-item label="售后处理点：" prop="sellAddressListForm">
+                  <AddressSelector></AddressSelector>
+                </el-form-item>
+              </el-col>
+              <el-col :span="4">
+                <el-button @click="addSellAddress" type="primary">添加</el-button>
+              </el-col>              
+            </el-row> -->
+
+            <div style="display: inline-block;padding: 20px;margin-left:100px;border-radius: 5px;">
+              <el-row :gutter="4">
+                <el-col :span="20">
+                  <AddressSelector></AddressSelector>
+                </el-col>
+                <el-col :span="4">
+                  <el-button size="mini" @click="addSellAddress">新增</el-button>                  
+                </el-col>
+              </el-row>
+              <div v-for="(item,index) in registerForm.sellAddressListForm">
+                <el-row :gutter="4">
+                  <el-col :span="20">
+                    <AddressSelector :locationId="item.locationcode" :detailAddress="item.selladdress"></AddressSelector>
+                  </el-col>
+                  <el-col :span="4">
+                    <el-button size="mini" @click="deleteSellAddress(index)">删除</el-button>
+                  </el-col>
+                </el-row>
+              </div>
+            </div>
+
             <hr style="height:1px;border:none;border-top:1px dashed #0066CC;" />
             <h5>财务信息</h5>
             <el-row :gutter="30">
@@ -330,6 +367,7 @@
   import Regheader from '@/components/Register/regheader'
   import Regfooter from '@/components/Register/regfooter'
   import RegionSelector from '@/components/RegionSelector/index'
+  import AddressSelector from '@/components/AddressSelector/index'
 
   export default {
     data() {
@@ -348,6 +386,7 @@
           address: '',
           relationPerson: '',
           relationPhone: '',
+          relationEmail: '', // 联系人邮箱
           sellPersonName: '',
           sellPersonMobile: '',
           financePersonName: '',
@@ -386,6 +425,16 @@
           wirelesstpcode: '',		// 无线城市话费支付渠道编码
           wirelesstpname: '',		// 无线城市话费支付渠道名称
           // },
+          sellAddressListForm: [
+            {
+              'locationcode': '2606020000',
+              'selladdress': '地址地址地址地址'
+            },
+            {
+              'locationcode': '2606020000',
+              'selladdress': '地址地址地址地址222'
+            }
+          ],
           // attachmentForm: {
           sfzmpicpath: '',
           sffmpicpath: '',
@@ -454,6 +503,7 @@
           relationPhone: [{ required: true, message: '请输入业务联系人手机号码', trigger: 'blur' }],
           sellPersonName: [{ required: true, message: '请输入售后联系人', trigger: 'blur' }],
           sellPersonMobile: [{ required: true, message: '请输入售后电话', trigger: 'blur' }],
+          sellAddressListForm: [{ required: true, message: '请输入售后处理点', trigger: 'change' }],
           financePersonName: [{ required: true, message: '请输入财务联系人', trigger: 'blur' }],
           financePersonMobile: [{ required: true, message: '请输入财务手机', trigger: 'blur' }],
           isInvoice: [{ required: true, message: '请选择能否开具发票', trigger: 'change' }]
@@ -463,7 +513,8 @@
     components: {
       Regheader,
       Regfooter,
-      RegionSelector
+      RegionSelector,
+      AddressSelector
     },
     created () {
       // 从下一步返回到上一步时取出之前填写的值
@@ -478,6 +529,18 @@
     methods: {
       getLocationCode(locationInfo) {
         this.registerForm.locationCode = locationInfo.id
+      },
+      addSellAddress() {
+        alert('增加一项')
+        var xxxx = []
+        xxxx.push({})
+        debugger
+        this.registerForm.sellAddressListForm.push({ 'haha': 'fdasf' })
+      },
+      deleteSellAddress(index) {
+        alert('减少一项')
+        console.log(this.registerForm.sellAddressListForm, index)
+        this.registerForm.sellAddressListForm.splice(index, 1)
       },
       goBack() {
         this.$router.push({ path: '/register' })

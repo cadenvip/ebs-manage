@@ -18,7 +18,7 @@
             <el-form-item label="企业营业执照：" prop="businesslicenseNum">
               <el-input v-model="registerForm.businesslicenseNum" clearable style="width: 270px;" placeholder="请输入营业执照号码"></el-input>
             </el-form-item>
-            <el-form-item label="营业执照图片：">
+            <el-form-item label="营业执照：" prop="licencepicpath">
               <el-upload
                 action="http://10.189.13.151:8080/ebs/common/upload"
                 list-type="text"
@@ -71,7 +71,7 @@
                 <el-radio :label="2">经销商</el-radio>
               </el-radio-group>
             </el-form-item>
-            <el-form-item v-show="registerForm.merchantKind === 2" label="代理授权证明：">
+            <el-form-item v-show="registerForm.merchantKind === 2" label="代理授权证明：" prop="proxytestifypicpath">
               <el-upload
                 action="http://10.189.13.151:8080/ebs/common/upload"
                 list-type="picture-card"
@@ -142,6 +142,7 @@
 <script>
   import Regheader from '@/components/Register/regheader'
   import Regfooter from '@/components/Register/regfooter'
+  import { EnterpriseRegister } from '@/api/register'
 
   export default {
     data() {
@@ -162,6 +163,7 @@
           address: '',
           relationPerson: '',
           relationPhone: '',
+          relationEmail: '', // 联系人邮箱
           sellPersonName: '',
           sellPersonMobile: '',
           financePersonName: '',
@@ -200,6 +202,7 @@
           wirelesstpcode: '',		// 无线城市话费支付渠道编码
           wirelesstpname: '',		// 无线城市话费支付渠道名称
           // },
+          sellAddressListForm: [],
           // attachmentForm: {
           sfzmpicpath: '',
           sffmpicpath: '',
@@ -259,9 +262,11 @@
         },
         registerRules: {
           businesslicenseNum: [{ required: true, message: '请输入营业执照号码', trigger: 'blur' }],
+          licencepicpath: [{ required: true, message: '请上传营业执照', trigger: 'change' }],
           operatoridnum: [{ required: true, message: '请输入经办人身份证号码', trigger: 'blur' }],
-          sfxmpicpath: [{ required: true, message: '请上传经办人身份证正面', trigger: 'change' }],
-          sffmpicpath: [{ required: true, message: '请上传经办人身份证发面', trigger: 'change' }]
+          sfzmpicpath: [{ required: true, message: '请上传经办人身份证正面', trigger: 'change' }],
+          sffmpicpath: [{ required: true, message: '请上传经办人身份证发面', trigger: 'change' }],
+          proxytestifypicpath: [{ required: true, message: '请上传代理授权证明', trigger: 'change' }]
         }
       }
     },
@@ -326,28 +331,39 @@
       },
       goNext() {
         // 校验输入数据
-        // 提交到后台
-        if (this.registerForm.businesslicenseNum !== '') {
+        if (this.registerForm.businesslicenseNum === '') {
           this.$message({ type: 'warning', message: '请输入营业执照号码' })
           return
         }
-        if (this.registerForm.sfzmpicpath !== '') {
-          this.$message({ type: 'warning', message: '请上传营业执照' })
-          return
-        }
-        if (this.registerForm.operatoridnum !== '') {
+        // if (this.registerForm.sfzmpicpath === '') {
+        //   this.$message({ type: 'warning', message: '请上传营业执照' })
+        //   return
+        // }
+        if (this.registerForm.operatoridnum === '') {
           this.$message({ type: 'warning', message: '请输入经办人身份证号码' })
           return
         }
-        if (this.registerForm.sfzmpicpath !== '') {
-          this.$message({ type: 'warning', message: '请上传身份证正面' })
-          return
-        }
-        if (this.registerForm.sffmpicpath !== '') {
-          this.$message({ type: 'warning', message: '请上传身份证反面' })
-          return
-        }
-        this.$router.push({ path: '/regStepFour' })
+        // if (this.registerForm.sfzmpicpath === '') {
+        //   this.$message({ type: 'warning', message: '请上传身份证正面' })
+        //   return
+        // }
+        // if (this.registerForm.sffmpicpath === '') {
+        //   this.$message({ type: 'warning', message: '请上传身份证反面' })
+        //   return
+        // }
+        // if (this.registerForm.proxytestifypicpath === '') {
+        //   this.$message({ type: 'warning', message: '请上传代理授权证明' })
+        //   return
+        // }
+        var registerInfo = JSON.stringify(this.registerForm)
+        window.localStorage.setItem('registerInfo', registerInfo)
+        // 提交到后台
+        EnterpriseRegister(this.registerForm).then(response => {
+          alert('提交成功')
+          // this.$router.push({ path: '/regStepFour' })
+        }).catch(error => {
+          console.log(error)
+        })
       }
     }
   }

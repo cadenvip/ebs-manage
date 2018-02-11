@@ -1,11 +1,6 @@
 <template>
-  <div class="RegionSelector">
+  <div class="AddressSelector">
     <el-row :gutter="4">
-      <el-col :span="4" v-if="grade >= 1 && showCountry">
-        <el-select v-model="country" placeholder="请选择国" clearable filterable v-on:change="countryChanged">
-          <el-option v-for="(item, key) in countries" :key="key" :label="item.locationName" :value="item.id"></el-option>
-        </el-select>
-      </el-col>
       <el-col :span="4" v-if="grade >= 2">
         <el-select v-model="province" placeholder="请选择省" clearable filterable v-on:change="provinceChanged">
           <el-option v-for="(item, key) in provinces" :key="key" :label="item.locationName" :value="item.id"></el-option>
@@ -21,15 +16,8 @@
           <el-option v-for="(item,key) in counties" :key="key" :label="item.locationName" :value="item.id"></el-option>
         </el-select>
       </el-col>
-      <el-col :span="4" v-if="grade >= 5">
-        <el-select v-model="town" placeholder="请选择乡镇" clearable filterable v-on:change="townChanged">
-          <el-option v-for="(item,key) in towns" :key="key" :label="item.locationName" :value="item.id"></el-option>
-        </el-select>
-      </el-col>
-      <el-col :span="4" v-if="grade >= 6">
-        <el-select v-model="village" placeholder="请选择村街道" clearable filterable v-on:change="villageChanged">
-          <el-option v-for="(item,key) in villages" :key="key" :label="item.locationName" :value="item.id"></el-option>
-        </el-select>
+      <el-col :span="10">
+        <el-input v-model="detailAddress" clearable placeholder="请输入详细地址"></el-input>
       </el-col>
     </el-row>
   </div>
@@ -37,18 +25,13 @@
 
 <script type="text/ecmascript-6">
 
-import { getAllCountries, getAllProvinces, getAllCities, getAllCounties, getAllTowns,
-  getAllVillages, getLocationInfoById, getLocationInfoByCode } from '@/api/regionselecter'
+import { getAllProvinces, getAllCities, getAllCounties, getLocationInfoById, getLocationInfoByCode } from '@/api/regionselecter'
 
 export default {
   props: {
     grade: {
       type: Number,
       default: 4
-    },
-    showCountry: {
-      type: Boolean,
-      default: false
     },
     locationCode: {
       type: String,
@@ -57,22 +40,20 @@ export default {
     locationId: {
       type: Number,
       default: 0
+    },
+    detailAddress: {
+      type: String,
+      default: ''
     }
   },
   data: function () {
     return {
-      country: '',
       province: '',
       city: '',
       county: '',
-      town: '',
-      village: '',
-      countries: [],
       provinces: [],
       cities: [],
       counties: [],
-      towns: [],
-      villages: [],
       locationInfo: {}
     }
   },
@@ -86,13 +67,8 @@ export default {
     }
   },
   mounted () {
-    if (this.showCountry) {
-      this.getCountries()
-    } else {
-      // 默认中国
-      this.country = '0'
-      this.getProvinces()
-    }
+    // 默认中国
+    this.getProvinces()
   },
   methods: {
     getLocationByCode (locationCode) {
@@ -114,24 +90,6 @@ export default {
         getLocationInfoById(locationId).then(response => {
           var resultData = response.data.list[0]
           switch (resultData.locationLevel) {
-            case 5:
-              this.village = resultData.id
-              getAllVillages(resultData.parentId).then(response => {
-                this.villages = response.data.list
-                this.getLocationById(resultData.parentId)
-              }).catch(error => {
-                console.log(error)
-              })
-              break
-            case 4:
-              this.town = resultData.id
-              getAllTowns(resultData.parentId).then(response => {
-                this.towns = response.data.list
-                this.getLocationById(resultData.parentId)
-              }).catch(error => {
-                console.log(error)
-              })
-              break
             case 3:
               this.county = resultData.id
               getAllCounties(resultData.parentId).then(response => {
@@ -159,14 +117,6 @@ export default {
                 console.log(error)
               })
               break
-            case 0:
-              this.country = resultData.id
-              getAllCountries(resultData.parentId).then(response => {
-                this.countries = response.data.list
-              }).catch(error => {
-                console.log(error)
-              })
-              break
             default:
               break
           }
@@ -175,19 +125,9 @@ export default {
         })
       })
     },
-    getCountries() {
-      return new Promise((resolve, reject) => {
-        getAllCountries('-1').then(response => {
-          this.countries = response.data.list
-          resolve(response)
-        }).catch(error => {
-          reject(error)
-        })
-      })
-    },
     getProvinces() {
       return new Promise((resolve, reject) => {
-        getAllProvinces(this.country).then(response => {
+        getAllProvinces('0').then(response => {
           this.provinces = response.data.list
           resolve(response)
         }).catch(error => {
@@ -215,110 +155,31 @@ export default {
         })
       })
     },
-    getTowns() {
-      return new Promise((resolve, reject) => {
-        getAllTowns(this.county).then(response => {
-          this.towns = response.data.list
-          resolve(response)
-        }).catch(error => {
-          reject(error)
-        })
-      })
-    },
-    getVillages() {
-      return new Promise((resolve, reject) => {
-        getAllVillages(this.town).then(response => {
-          this.villages = response.data.list
-          resolve(response)
-        }).catch(error => {
-          reject(error)
-        })
-      })
-    },
-    countryChanged() {
-      this.province = ''
-      this.city = ''
-      this.county = ''
-      this.town = ''
-      this.village = ''
-      if (this.country !== '') {
-        this.getProvinces()
-      } else {
-        this.provinces = []
-      }
-      this.cities = []
-      this.counties = []
-      this.towns = []
-      this.villages = []
-      this.getLocationInfo()
-    },
     provinceChanged() {
       this.city = ''
       this.county = ''
-      this.town = ''
-      this.village = ''
       if (this.province !== '') {
         this.getCities()
       } else {
         this.cities = []
       }
       this.counties = []
-      this.towns = []
-      this.villages = []
       this.getLocationInfo()
     },
     cityChanged() {
       this.county = ''
-      this.town = ''
-      this.village = ''
       if (this.city !== '') {
         this.getCounties()
       } else {
         this.counties = []
       }
-      this.towns = []
-      this.villages = []
       this.getLocationInfo()
     },
     countyChanged() {
-      this.town = ''
-      this.village = ''
-      if (this.county !== '') {
-        this.getTowns()
-      } else {
-        this.towns = []
-      }
-      this.villages = []
-      this.getLocationInfo()
-    },
-    townChanged() {
-      this.village = ''
-      if (this.town !== '') {
-        this.getVillages()
-      } else {
-        this.getVillages = []
-      }
-      this.getLocationInfo()
-    },
-    villageChanged() {
       this.getLocationInfo()
     },
     getLocationInfo () {
-      if (this.village !== '') {
-        for (let i = 0; i < this.villages.length; i++) {
-          if (this.villages[i].id === this.village) {
-            this.locationInfo = this.villages[i]
-            break
-          }
-        }
-      } else if (this.town !== '') {
-        for (let i = 0; i < this.towns.length; i++) {
-          if (this.towns[i].id === this.town) {
-            this.locationInfo = this.towns[i]
-            break
-          }
-        }
-      } else if (this.county !== '') {
+      if (this.county !== '') {
         for (let i = 0; i < this.counties.length; i++) {
           if (this.counties[i].id === this.county) {
             this.locationInfo = this.counties[i]
@@ -339,20 +200,10 @@ export default {
             break
           }
         }
-      } else if (this.country !== '') {
-        if (this.showCountry) {
-          for (let i = 0; i < this.provinces.length; i++) {
-            if (this.provinces[i].id === this.province) {
-              this.locationInfo = this.provinces[i]
-              break
-            }
-          }
-        } else {
-          this.locationInfo = {}
-        }
       } else {
         this.locationInfo = {}
       }
+      this.locationInfo.detailAddress = this.detailAddress
       this.$emit('locationChanged', this.locationInfo)
     }
   }
