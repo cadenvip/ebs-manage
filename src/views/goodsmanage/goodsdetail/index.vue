@@ -54,6 +54,9 @@
       </div>
       <p>库存预警：{{goodsBean.stockAlarm}}</p>
     </div>
+    <div style="text-align: center; margin-top:20px;">
+      <el-button size="medium" type="primary" @click="goBack">返回</el-button>
+    </div>
   </div>
 </template>
 
@@ -75,7 +78,7 @@
     },
     methods: {
       getGoodsDetail() {
-        var url = process.env.BASE_API + '/goods/get/' + this.$route.query.goodsId
+        var url = process.env.BASE_API + 'goods/get/' + this.$route.query.goodsId
         this.loading = true
         axios.get(url).then(res => {
           if (res.status === 200) {
@@ -91,6 +94,11 @@
       },
       format(val) {
         return val || '暂无信息'
+      },
+      goBack () {
+        window.history.length > 1
+          ? this.$router.go(-1)
+          : this.$router.push('/')
       }
     }
   }

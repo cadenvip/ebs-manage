@@ -91,7 +91,7 @@
     <el-dialog
       title="请选择区域"
       :visible.sync="regionVisible"
-      width="40%"
+      width="20%"
       :before-close="handleClose">
       <location-selector @locationSelected="getLocationInfo"></location-selector>
       <span slot="footer" class="dialog-footer" style="text-align: center;">
@@ -136,7 +136,7 @@
     <!-- 分页 -->
     <el-row style="margin-top: 20px;">
       <el-col :span="6" style="padding-left: 20px; text-align: left;padding-top: 5px;">
-        <el-button @click="batchAudit" type="primary" size="mini">批量审批</el-button>
+        <el-button @click="batchAudit" type="primary" size="mini">审批/批量审批</el-button>
       </el-col>
       <el-col :span="18" style="text-align: right; padding-right: 20px;">
         <el-pagination
@@ -151,7 +151,7 @@
       </el-col>
     </el-row>  
     <div>
-      <el-dialog title="审核商品" :visible.sync="dialogFormVisible">
+      <el-dialog title="审核商品" width="40%" :visible.sync="dialogFormVisible">
         <el-form :model="auditForm">
           <el-form-item label="审批状态:" label-width="120px">
             <el-radio v-model="auditForm.auditStatus" label="1">是</el-radio>
@@ -171,7 +171,7 @@
             </p>
           </el-form-item>
         </el-form>
-        <div slot="footer" style="text-align: center;" class="dialog-footer">
+        <div slot="footer" style="text-align: center;margin-top: -30px;" class="dialog-footer">
           <el-button @click="dialogFormVisible = false">取 消</el-button>
           <el-button type="primary" @click="disalogConfirm">确 定</el-button>
         </div>
@@ -412,6 +412,11 @@
           console.log(params)
           upDownAudit(params).then(res => {
             if (res.status === 200) {
+              this.seletedData = [] // 审批成功后，取消选择的行
+              this.$message.success(res.msg)
+              this.dialogFormVisible = false  // 隐藏弹出框
+              this.auditForm.auditAdvice = '' // 清空审批意见
+              this.submitForm('searchFrom') // 重新请求数据
               console.log(res)
             } else {
               this.$message.error(res.msg)

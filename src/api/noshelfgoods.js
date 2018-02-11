@@ -10,14 +10,6 @@ export function getNoShelfGoods (params) {
   })
 }
 
-export function getGoodsDetail (params) {
-  return request({
-    url: '/goods/get',
-    method: 'get',
-    params: params
-  })
-}
-
 // 上架商品
 export function upGoods (params) {
   return request({

@@ -56,7 +56,7 @@
         this.goodsId = this.$route.query.goodsId
         if (this.goodsId) {
           this.isFromModifyFlag = 1
-          var url = process.env.BASE_API + '/goods/get/' + this.goodsId
+          var url = process.env.BASE_API + 'goods/get/' + this.goodsId
           axios.get(url).then(res => {
             if (res.status === 200) {
               this.goodstype = []

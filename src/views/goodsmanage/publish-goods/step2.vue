@@ -282,7 +282,7 @@
       this.isFromModifyFlag = Number(this.$route.query.isFromModifyFlag)
       if (this.isFromModifyFlag === 1) {
         console.log(111)
-        var url = process.env.BASE_API + '/goods/get/' + this.$route.query.goodsId
+        var url = process.env.BASE_API + 'goods/get/' + this.$route.query.goodsId
         axios.get(url).then(res => {
           if (res.status === 200) {
             this.goodsBean = res.data.data.goodsBean
@@ -859,7 +859,7 @@
           this.ruleForm.zdsjsj = new Date()
         } else {
           this.ruleForm.iszisj = true
-          this.ruleForm.zdsjsj = ''
+          this.ruleForm.zdsjsj = new Date()
         }
       },
       checkTimeCorrect() {
@@ -973,9 +973,9 @@
   .el-date-editor--date{
     width: 180px !important;
   }
-  .el-form-item__label{
+  /* .el-form-item__label{
     width: 120px !important;
-  }
+  } */
   .spcd .el-form-item__label:before, .goods-name .el-form-item__label:before{
     content: '*';
     color: #f56c6c;

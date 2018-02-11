@@ -7,11 +7,11 @@
             <el-input :maxlength=20 v-model="formT.shangpmc"></el-input>
           </el-form-item> 
         </el-col>
-        <el-col :span="6" class="price">
-          <el-form-item style="display:inline-block; width:48%;" label-width="20" prop="spzdjg" label="价格:">
+        <el-col :span="6" class="price flex">
+          <el-form-item class="it1" label-width="20" prop="spzdjg" style="white-space: nowrap;" label="价格:">
             <el-input style="width: 50%;display:inline-block;" :maxlength=5 v-model="formT.spzdjg"></el-input>
           </el-form-item>
-          <el-form-item style="display:inline-block; width: 50%;" label-width="20" prop="spzgjg" label="至:">
+          <el-form-item class="it1" label-width="20" prop="spzgjg" style="white-space: nowrap;" label="至:">
             <el-input style="width: 50%;display:inline-block;" :maxlength=5 v-model="formT.spzgjg"></el-input>
             <span style="color: #606266;padding-left: 5px;">元</span>
           </el-form-item>
@@ -220,6 +220,7 @@
           this.loading = false
         }).catch(err => {
           this.$message.error(err)
+          this.loading = false
         })
       },
       handleTabClick(tab, event) {
@@ -248,10 +249,10 @@
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
+            this.DSJcurrentPage = 1
+            this.searchFlag = true
             for (var i in this.formT) {
               if (this.formT[i] !== '') {
-                this.searchFlag = true
-                this.DSJcurrentPage = 1
                 const params = {
                   downPrice: this.formT.spzdjg,
                   upPrice: this.formT.spzgjg,
@@ -298,9 +299,14 @@
         }
         upGoods(params).then(res => {
           if (res.status === 200) {
-            console.log('success')
+            for (var i in this.tableData) {
+              if (this.tableData[i].goodsId === val.goodsId) {
+                this.tableData.splice(i, 1)
+              }
+            }
+            this.$message.success(res.msg)
           } else {
-            this.$message.error(res.message)
+            this.$message.error(res.msg)
           }
         }).catch(err => {
           this.$message.error(err)
