@@ -3,10 +3,10 @@
     <h3 class="title">新增角色</h3>
     <el-form ref="roleForm" :model="roleForm" :rules="rules" label-width="120px">
       <el-form-item label="角色名称：" prop="rolename">
-        <el-input v-model="roleForm.rolename" style="width: 600px;" placeholder="请输入角色名称"></el-input>
+        <el-input v-model="roleForm.rolename" style="width: 400px;" placeholder="请输入角色名称"></el-input>
       </el-form-item>
       <el-form-item label="角色类型：" prop="roletype">
-        <el-select v-model="roleForm.roletype" clearable placeholder="请选择" @change="getAllPermissions" style="width: 600px;">
+        <el-select v-model="roleForm.roletype" clearable placeholder="请选择" @change="getAllPermissions" style="width: 200px;">
           <el-option label="系统管理" value="1"></el-option>
           <el-option label="企业" value="2"></el-option>
         </el-select>

@@ -56,7 +56,7 @@
     </el-form>
     <h3 style="padding-left: 20px;">企业列表</h3>
     <el-table :data="list" v-loading.body="loading" element-loading-text="Loading" border stripe fit highlight-current-row style="padding-left:10px">
-      <el-table-column label='企业名称' prop="enterpriseName" width="240">
+      <el-table-column label='企业名称' prop="enterpriseName" width="280">
       </el-table-column>
       <el-table-column label="区域" prop="locationId" width="110">
       </el-table-column>

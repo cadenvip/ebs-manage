@@ -14,7 +14,7 @@
           <svg-icon icon-class="user" />
         </span>
         <el-select v-model="loginForm.unitid" placeholder="请选择归属单位">
-          <el-option v-for="(item, index) in unitinfos" :key="index" :label="item.businessesName" :value="item.code" selected></el-option>
+          <el-option v-for="(item, index) in unitinfos" :key="index" :label="item.businessesName" :value="item.id" selected></el-option>
         </el-select>
       </el-form-item>
       <el-form-item prop="password">
@@ -54,7 +54,7 @@
 <script>
 
 import { getVercode, getUnitInfos, getUnits } from '@/api/login'
-import { validatPhone } from '@/utils/validate'
+import { validateMobilePhone } from '@/utils/validate'
 
 export default {
   created() {
@@ -74,7 +74,7 @@ export default {
       if (value === '') {
         callback(new Error('请输入手机号码'))
       } else {
-        if (!validatPhone(value.trim())) {
+        if (!validateMobilePhone(value.trim())) {
           callback(new Error('请输入有效的手机号码'))
         }
         callback()
@@ -130,7 +130,7 @@ export default {
       if (this.loginForm.loginname === '') {
         return
       } else {
-        if (!validatPhone(this.loginForm.loginname.trim())) {
+        if (!validateMobilePhone(this.loginForm.loginname.trim())) {
           return
         }
       }

@@ -14,48 +14,16 @@
         <div style="border:1px solid #000" >
           <el-form ref="registerForm" :model="registerForm" :rules="registerRules" label-width="170px" style="margin:6px">
             <h5>企业基本信息</h5>
-            <el-row :gutter="30">
-              <el-col :span="12">
-                <el-form-item label="企业名称：" prop="businessesName">
-                  <el-input v-model="registerForm.businessesName" clearable style="width: 200px;" placeholder="请输入企业名称"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="12">
-                <el-form-item label="企业简称：" prop="businessesShortName">
-                  <el-input v-model="registerForm.businessesShortName" clearable style="width: 200px;" placeholder="请输入企业简称"></el-input>
-                </el-form-item>                
-              </el-col>
+              <el-form-item label="企业名称：" prop="businessesName">
+                <el-input v-model="registerForm.businessesName" clearable style="width: 200px;" placeholder="请输入企业名称"></el-input>
+              </el-form-item>
             </el-row>
-            <el-form-item label="商家类型：" prop="businessType">
-              <el-select v-model="registerForm.businessType" clearable style="width: 200px;" placeholder="请选择商家类型">
-                <el-option label="合作商家" value="1"></el-option>
-              </el-select>
-            </el-form-item>
             <el-form-item label="企业地址：" prop="locationCode">
               <RegionSelector v-model="registerForm.locationCode" :grade="4" :showCountry="false" @locationChanged="getLocationCode" :locationId="registerForm.locationCode"></RegionSelector>
             </el-form-item>
             <el-form-item label="" prop="address">
               <el-input v-model="registerForm.address" clearable style="width: 400px;" placeholder="请输入企业详细地址"></el-input>
             </el-form-item>
-            <el-form-item label="法人姓名：" prop="legalName">
-              <el-input v-model="registerForm.legalName" clearable style="width: 200px;" placeholder="请输入法人姓名"></el-input>
-            </el-form-item>
-            <el-row :gutter="30">
-              <el-col :span="12">
-                <el-form-item label="法人证件类型：" prop="legalPaperType">
-                  <el-select v-model="registerForm.legalPaperType" clearable style="width: 200px;" placeholder="请选择法人证件类型">
-                    <el-option label="身份证" value="1"></el-option>
-                    <el-option label="户口本" value="2"></el-option>
-                    <el-option label="驾驶本" value="3"></el-option>
-                  </el-select>
-                </el-form-item>
-              </el-col>
-              <el-col :span="12">
-                <el-form-item label="法人证件号码：" prop="legalPaperNumber">
-                  <el-input v-model="registerForm.legalPaperNumber" clearable style="width: 200px;" placeholder="请输入法人证件号码"></el-input>
-                </el-form-item>
-              </el-col>
-            </el-row>
             <el-row :gutter="30">
               <el-col :span="12">
                 <el-form-item label="业务联系人：" prop="relationPerson">
@@ -68,11 +36,6 @@
                 </el-form-item>                
               </el-col>
             </el-row>
-            <el-form-item label="业务联系人邮箱：" prop="relationEmail">
-              <el-input v-model="registerForm.relationEmail" clearable style="width: 200px;" placeholder="请输入业务联系人邮箱"></el-input>
-            </el-form-item>
-            <hr style="height:1px;border:none;border-top:1px dashed #0066CC;" />
-            <h5>售后信息</h5>
             <el-row :gutter="30">
               <el-col :span="12">
                 <el-form-item label="售后联系人：" prop="sellPersonName">
@@ -85,40 +48,6 @@
                 </el-form-item>                
               </el-col>
             </el-row>
-            <!-- <el-row :gutter="30">
-              <el-col :span="20">
-                <el-form-item label="售后处理点：" prop="sellAddressListForm">
-                  <AddressSelector></AddressSelector>
-                </el-form-item>
-              </el-col>
-              <el-col :span="4">
-                <el-button @click="addSellAddress" type="primary">添加</el-button>
-              </el-col>              
-            </el-row> -->
-
-            <div style="display: inline-block;padding: 20px;margin-left:100px;border-radius: 5px;">
-              <el-row :gutter="4">
-                <el-col :span="20">
-                  <AddressSelector></AddressSelector>
-                </el-col>
-                <el-col :span="4">
-                  <el-button size="mini" @click="addSellAddress">新增</el-button>                  
-                </el-col>
-              </el-row>
-              <div v-for="(item,index) in registerForm.sellAddressListForm">
-                <el-row :gutter="4">
-                  <el-col :span="20">
-                    <AddressSelector :locationId="item.locationcode" :detailAddress="item.selladdress"></AddressSelector>
-                  </el-col>
-                  <el-col :span="4">
-                    <el-button size="mini" @click="deleteSellAddress(index)">删除</el-button>
-                  </el-col>
-                </el-row>
-              </div>
-            </div>
-
-            <hr style="height:1px;border:none;border-top:1px dashed #0066CC;" />
-            <h5>财务信息</h5>
             <el-row :gutter="30">
               <el-col :span="12">
                 <el-form-item label="财务联系人：" prop="financePersonName">
@@ -131,33 +60,12 @@
                 </el-form-item>                
               </el-col>
             </el-row>
-            <el-row :gutter="30">
-              <el-col :span="12">
-                <el-form-item label="财务联系人电话：" prop="financePersonPhone">
-                  <el-input v-model="registerForm.financePersonPhone" clearable style="width: 200px;" placeholder="请输入财务联系人电话"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="12">
-                <el-form-item label="财务邮箱：" prop="financePersonEmail">
-                  <el-input v-model="registerForm.financePersonEmail" clearable style="width: 200px;" placeholder="请输入财务邮箱"></el-input>
-                </el-form-item>                
-              </el-col>
-            </el-row>
-            <el-row :gutter="30">
-              <el-col :span="12">
-                <el-form-item label="财务通信地址：" prop="financePersonAddress">
-                  <el-input v-model="registerForm.financePersonAddress" clearable style="width: 200px;" placeholder="请输入通信地址"></el-input>
-                </el-form-item>  
-              </el-col>
-              <el-col :span="12">
-                <el-form-item label="能否开具发票：" prop="isInvoice">
-                  <el-radio-group v-model="registerForm.isInvoice">
-                    <el-radio :label="1">能</el-radio>
-                    <el-radio :label="0">不能</el-radio>
-                  </el-radio-group>
-                </el-form-item>               
-              </el-col>
-            </el-row>
+            <el-form-item label="能否开具发票：" prop="isInvoice">
+              <el-radio-group v-model="registerForm.isInvoice">
+                <el-radio :label="1">能</el-radio>
+                <el-radio :label="0">不能</el-radio>
+              </el-radio-group>
+            </el-form-item>               
             <hr style="height:1px;border:none;border-top:1px dashed #0066CC;" />
             <h5>商品销售信息</h5>
             <el-table :data="registerForm.goodsListForm" border style="width:100%">
@@ -195,159 +103,6 @@
                 </template>
               </el-table-column>
             </el-table>
-            <hr style="height:1px;border:none;border-top:1px dashed #0066CC;" />
-            <h5>支付信息</h5>
-            <el-form-item label="启用语音支付：" prop="merchantPayable">
-              <el-checkbox v-model="registerForm.merchantPayable"></el-checkbox>
-            </el-form-item>
-            <el-form-item label="语音支付商户号：" prop="merchantNo">
-              <el-input v-model="registerForm.merchantNo" clearable style="width: 200px;" placeholder="请输入语音支付商户号" :disabled="!registerForm.merchantPayable"></el-input>
-            </el-form-item>
-            <el-form-item label="启用话费支付：" prop="wirelesscitypayable">
-              <el-checkbox v-model="registerForm.wirelesscitypayable"></el-checkbox>
-            </el-form-item>
-            <el-row :gutter="30">
-              <el-col :span="12">
-                <el-form-item label="话费支付商户号：" prop="wirelesscityno">
-                  <el-input v-model="registerForm.wirelesscityno" clearable style="width: 200px;" placeholder="请输入话费支付商户号" :disabled="!registerForm.wirelesscitypayable"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="12">
-                <el-form-item label="话费支付商户名称：" prop="wirelesscityname">
-                  <el-input v-model="registerForm.wirelesscityname" clearable style="width: 200px;" placeholder="请输入话费支付商户名称" :disabled="!registerForm.wirelesscitypayable"></el-input>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row :gutter="30">
-              <el-col :span="12">
-                <el-form-item label="话费支付渠道编号：" prop="wirelesstpcode">
-                  <el-input v-model="registerForm.wirelesstpcode" clearable style="width: 200px;" placeholder="请输入话费支付渠道编号" :disabled="!registerForm.wirelesscitypayable"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="12">
-                <el-form-item label="话费支付渠道名称：" prop="wirelesstpname">
-                  <el-input v-model="registerForm.wirelesstpname" clearable style="width: 200px;" placeholder="请输入话费支付渠道名称" :disabled="!registerForm.wirelesscitypayable"></el-input>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-form-item label="启用支付宝支付：" prop="aliPayNoPayable">
-              <el-checkbox v-model="registerForm.aliPayNoPayable"></el-checkbox>
-            </el-form-item>
-            <el-row :gutter="30">
-              <el-col :span="12">
-                <el-form-item label="支付宝卖家账号：" prop="aliPayAccount">
-                  <el-input v-model="registerForm.aliPayAccount" clearable style="width: 200px;" placeholder="请输入支付宝卖家账号" :disabled="!registerForm.aliPayNoPayable"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="12">
-                <el-form-item label="支付宝平台签名Key：" prop="aliPaySignKey">
-                  <el-input v-model="registerForm.aliPaySignKey" clearable style="width: 200px;" placeholder="请输入支付宝平台签名Key" :disabled="!registerForm.aliPayNoPayable"></el-input>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-form-item label="支付宝卖家名字：" prop="aliPaySellerAccountName">
-              <el-input v-model="registerForm.aliPaySellerAccountName" clearable style="width: 200px;" placeholder="请输入支付宝卖家名字" :disabled="!registerForm.aliPayNoPayable"></el-input>
-            </el-form-item>
-            <el-form-item label="启用手机和包支付：" prop="cmPayNoPayable">
-              <el-checkbox v-model="registerForm.cmPayNoPayable"></el-checkbox>
-            </el-form-item>
-            <el-row :gutter="30">
-              <el-col :span="12">
-                <el-form-item label="和包支付平台商家ID：" prop="cmPayMerchantId">
-                  <el-input v-model="registerForm.cmPayMerchantId" clearable style="width: 200px;" placeholder="请输入和包支付平台商家ID" :disabled="!registerForm.cmPayNoPayable"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="12">
-                <el-form-item label="和包支付平台签名KEY：" prop="cmPaySignKey">
-                  <el-input v-model="registerForm.cmPaySignKey" clearable style="width: 200px;" placeholder="请输入和包支付平台签名KEY" :disabled="!registerForm.cmPayNoPayable"></el-input>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-form-item label="启用联动优势支付：" prop="umPayNoPayable">
-              <el-checkbox v-model="registerForm.umPayNoPayable"></el-checkbox>
-            </el-form-item>
-            <el-row :gutter="30">
-              <el-col :span="12">
-                <el-form-item label="联动优势平台商家ID：" prop="umPayMerchantId">
-                  <el-input v-model="registerForm.umPayMerchantId" clearable style="width: 200px;" placeholder="请输入联动优势平台商家ID" :disabled="!registerForm.umPayNoPayable"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="12">
-                <el-form-item label="联动优势银行账号名：" prop="umPayBankAccountName">
-                  <el-input v-model="registerForm.umPayBankAccountName" clearable style="width: 200px;" placeholder="请输入联动优势银行账号名" :disabled="!registerForm.umPayNoPayable"></el-input>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-form-item label="联动优势银行账号：" prop="umPayBankAccountNo">
-              <el-input v-model="registerForm.umPayBankAccountNo" clearable style="width: 200px;" placeholder="联动优势银行账号" :disabled="!registerForm.umPayNoPayable"></el-input>
-            </el-form-item>
-            <hr style="height:1px;border:none;border-top:1px dashed #0066CC;" />
-            <h5>其他信息</h5>
-            <el-row :gutter="30">
-              <el-col :span="12">
-                <el-form-item label="注册资金：" prop="registerMoney">
-                  <el-input v-model="registerForm.registerMoney" clearable style="width: 200px;" placeholder="请输入注册资金"></el-input>
-                </el-form-item>                
-              </el-col>
-              <el-col :span="12">
-                <el-form-item label="保证金：" prop="margin">
-                  <el-input v-model="registerForm.margin" clearable style="width: 200px;" placeholder="请输入保证金"></el-input>
-                </el-form-item>                 
-              </el-col>
-            </el-row>
-            <el-row :gutter="30">
-              <el-col :span="12">
-                <el-form-item label="违约金：" prop="liquidatedDamages">
-                  <el-input v-model="registerForm.liquidatedDamages" clearable style="width: 200px;" placeholder="请输入违约金"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="12">
-                <el-form-item label="税务登记号：" prop="taxRegistrationNum">
-                  <el-input v-model="registerForm.taxRegistrationNum" clearable style="width: 200px;" placeholder="请输入税务登记号"></el-input>
-                </el-form-item>                
-              </el-col>
-            </el-row>
-            <el-row :gutter="30">
-              <el-col :span="12">
-                <el-form-item label="办公室电话：" prop="officePhone">
-                  <el-input v-model="registerForm.officePhone" clearable style="width: 200px;" placeholder="请输入办公室电话"></el-input>
-                </el-form-item>  
-              </el-col>
-              <el-col :span="12">
-                <el-form-item label="营业时间：" prop="operateHours">
-                  <el-input v-model="registerForm.operateHours" clearable style="width: 200px;" placeholder="请输入营业时间"></el-input>
-                </el-form-item>                  
-              </el-col>
-            </el-row>
-            <el-row :gutter="30">
-              <el-col :span="12">
-                <el-form-item label="雇员数量：" prop="employeesNum">
-                  <el-input v-model="registerForm.employeesNum" clearable style="width: 200px;" placeholder="请输入雇员数量"></el-input>
-                </el-form-item>   
-              </el-col>
-              <el-col :span="12">
-                <el-form-item label="传真：" prop="fax">
-                  <el-input v-model="registerForm.fax" clearable style="width: 200px;" placeholder="请输入传真号码"></el-input>
-                </el-form-item>                   
-              </el-col>
-            </el-row>
-            <el-row :gutter="30">
-              <el-col :span="12">
-                <el-form-item label="邮编：" prop="zipCode">
-                  <el-input v-model="registerForm.zipCode" clearable style="width: 200px;" placeholder="请输入邮编"></el-input>
-                </el-form-item>   
-              </el-col>
-              <el-col :span="12">
-                <el-form-item label="所有制类型：" prop="ownershipType">
-                  <el-select v-model="registerForm.ownershipType" clearable style="width: 200px;" placeholder="请选择所有制类型">
-                    <el-option label="国有企业" value="1"></el-option>
-                    <el-option label="集体企业" value="2"></el-option>
-                    <el-option label="私营企业" value="3"></el-option>
-                    <el-option label="混合所有制企业" value="4"></el-option>
-                  </el-select>
-                </el-form-item>                   
-              </el-col>
-            </el-row>
           </el-form>
           <br/>
         </div>
@@ -368,73 +123,48 @@
   import Regfooter from '@/components/Register/regfooter'
   import RegionSelector from '@/components/RegionSelector/index'
   import AddressSelector from '@/components/AddressSelector/index'
+  import { validateMobilePhone } from '@/utils/validate'
+  // import { validateMobilePhone, validateTelephone } from '@/utils/validate'
 
   export default {
     data() {
+      var validateMobile = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('请输入手机号码'))
+        } else {
+          if (!validateMobilePhone(value.trim())) {
+            callback(new Error('请输入有效的手机号码'))
+          }
+          callback()
+        }
+      }
+      // var validateTele = (rule, value, callback) => {
+      //   if (value === '') {
+      //     callback(new Error('请输入座机号码'))
+      //   } else {
+      //     if (!validatTelephone(value.trim())) {
+      //       callback(new Error('请输入有效的座机号码'))
+      //     }
+      //     callback()
+      //   }
+      // }
       return {
         registerForm: {
           // businessesForm: {
           businessesName: '',
-          businessesShortName: '',	// 企业简称
-          businessType: '',			// 商家类型
-          locationCode: '',
+          locationCode: 0,
           businesslicenseNum: '',
           merchantKind: '',
-          legalName: '',
-          legalPaperType: '',
-          legalPaperNumber: '',
           address: '',
           relationPerson: '',
           relationPhone: '',
-          relationEmail: '', // 联系人邮箱
           sellPersonName: '',
           sellPersonMobile: '',
           financePersonName: '',
           financePersonMobile: '',
-          financePersonPhone: '',	// 财务联系人电话
-          financePersonEmail: '',	// 财务邮箱
-          financePersonAddress: '',	// 财务通信地址
           operatoridnum: '',
-          registerMoney: '',			// 注册资金
-          margin: '',					// 保证金
-          liquidatedDamages: '',	// 违约金
-          taxRegistrationNum: '',	// 税务登记号码
-          officePhone: '',		// 办公室电话
-          operateHours: '',	// 营业时间
-          employeesNum: '',			// 雇员数量
-          fax: '',				// 传真
-          zipCode: '',				// 邮编
-          ownershipType: '',		// 所有制类型 国有企业/集体企业/私营企业/混合所有制企业
           isInvoice: '',
-          merchantPayable: '',  // 是否开启语音支付(0-关闭，1-开启)
-          merchantNo: '',       // 语音支付号码
-          aliPayNoPayable: '',	// 是否开启支付宝支付(0-关闭 ，1-开启)
-          aliPayAccount: '',		// 支付宝卖家账号（email或者手机号）
-          aliPaySignKey: '',		// 支付宝平台签名Key
-          aliPaySellerAccountName: '',	// 支付宝卖家名字
-          cmPayNoPayable: '',			// 是否开启手机和包支付(0关闭 1开启)
-          cmPayMerchantId: '',		// 手机和包支付平台商家ID
-          cmPaySignKey: '',		// 手机和包支付平台签名KEY
-          umPayNoPayable: '',			// 是否支持联动优势
-          umPayMerchantId: '',		// 联动优势平台商家ID
-          umPayBankAccountName: '',		// 联动优势银行账号名
-          umPayBankAccountNo: '',	// 联动优势银行账号
-          wirelesscityno: '',		// 无线城市话费支付商号
-          wirelesscityname: '',		// 无线城市话费支付商户名称
-          wirelesscitypayable: '1',		// 是否开启无线城市话费支付（0关闭 1开启）
-          wirelesstpcode: '',		// 无线城市话费支付渠道编码
-          wirelesstpname: '',		// 无线城市话费支付渠道名称
           // },
-          sellAddressListForm: [
-            {
-              'locationcode': '2606020000',
-              'selladdress': '地址地址地址地址'
-            },
-            {
-              'locationcode': '2606020000',
-              'selladdress': '地址地址地址地址222'
-            }
-          ],
           // attachmentForm: {
           sfzmpicpath: '',
           sffmpicpath: '',
@@ -496,16 +226,12 @@
           businessesName: [{ required: true, message: '请输入企业名称', trigger: 'blur' }],
           locationCode: [{ required: true, message: '请选择地址', trigger: 'change' }],
           address: [{ required: true, message: '请输入企业详细地址', trigger: 'blur' }],
-          legalName: [{ required: true, message: '请输入法人姓名', trigger: 'blur' }],
-          legalPaperType: [{ required: true, message: '请选择法人证件类型', trigger: 'change' }],
-          legalPaperNumber: [{ required: true, message: '请输入法人证件号码', trigger: 'blur' }],
           relationPerson: [{ required: true, message: '请输入业务联系人', trigger: 'blur' }],
-          relationPhone: [{ required: true, message: '请输入业务联系人手机号码', trigger: 'blur' }],
+          relationPhone: [{ required: true, trigger: 'blur', validator: validateMobile }],
           sellPersonName: [{ required: true, message: '请输入售后联系人', trigger: 'blur' }],
-          sellPersonMobile: [{ required: true, message: '请输入售后电话', trigger: 'blur' }],
-          sellAddressListForm: [{ required: true, message: '请输入售后处理点', trigger: 'change' }],
+          sellPersonMobile: [{ required: true, message: '请输入售后电话', trigger: 'blur', validator: validateMobile }],
           financePersonName: [{ required: true, message: '请输入财务联系人', trigger: 'blur' }],
-          financePersonMobile: [{ required: true, message: '请输入财务手机', trigger: 'blur' }],
+          financePersonMobile: [{ required: true, message: '请输入财务手机', trigger: 'blur', validator: validateMobile }],
           isInvoice: [{ required: true, message: '请选择能否开具发票', trigger: 'change' }]
         }
       }
@@ -530,17 +256,9 @@
       getLocationCode(locationInfo) {
         this.registerForm.locationCode = locationInfo.id
       },
-      addSellAddress() {
-        alert('增加一项')
-        var xxxx = []
-        xxxx.push({})
-        debugger
-        this.registerForm.sellAddressListForm.push({ 'haha': 'fdasf' })
-      },
-      deleteSellAddress(index) {
-        alert('减少一项')
-        console.log(this.registerForm.sellAddressListForm, index)
-        this.registerForm.sellAddressListForm.splice(index, 1)
+      getAddressInfo(addressInfo) {
+        console.log(addressInfo)
+        return
       },
       goBack() {
         this.$router.push({ path: '/register' })
@@ -557,18 +275,6 @@
         }
         if (this.registerForm.address === '') {
           this.$message({ type: 'warning', message: '请输入企业详细地址' })
-          return
-        }
-        if (this.registerForm.legalName === '') {
-          this.$message({ type: 'warning', message: '请输入法人姓名' })
-          return
-        }
-        if (this.registerForm.legalPaperType === '') {
-          this.$message({ type: 'warning', message: '请选择法人证件类型' })
-          return
-        }
-        if (this.registerForm.legalPaperNumber === '') {
-          this.$message({ type: 'warning', message: '请输入法人证件号码' })
           return
         }
         if (this.registerForm.relationPerson === '') {
@@ -605,13 +311,31 @@
         }
         // 校验表格
         for (let i = 1; i < this.registerForm.goodsListForm.length; i++) {
-          // name: '',
-          // unit: '',
-          // origin: '',
-          // price: '',
-          // description: '',
-          // url: ''
           if (i === 1) {
+            if (this.registerForm.goodsListForm[i].name.trim() === '') {
+              this.$message({ type: 'warning', message: '请输入商品名称' })
+              return
+            }
+            if (this.registerForm.goodsListForm[i].unit.trim() === '') {
+              this.$message({ type: 'warning', message: '请输入商品规格' })
+              return
+            }
+            if (this.registerForm.goodsListForm[i].origin.trim() === '') {
+              this.$message({ type: 'warning', message: '请输入商品产地' })
+              return
+            }
+            if (this.registerForm.goodsListForm[i].price.trim() === '') {
+              this.$message({ type: 'warning', message: '请输入商品价格' })
+              return
+            }
+          }
+          debugger
+          if ((this.registerForm.goodsListForm[i].name.trim() !== undefined && this.registerForm.goodsListForm[i].name.trim() !== '') ||
+            (this.registerForm.goodsListForm[i].unit.trim() !== undefined && this.registerForm.goodsListForm[i].unit.trim() !== '') ||
+            (this.registerForm.goodsListForm[i].origin.trim() !== undefined && this.registerForm.goodsListForm[i].origin.trim() !== '') ||
+            (this.registerForm.goodsListForm[i].name.trim() !== undefined && this.registerForm.goodsListForm[i].price.trim() !== '') ||
+            (this.registerForm.goodsListForm[i].description.trim() !== undefined && this.registerForm.goodsListForm[i].description.trim() !== '') ||
+            (this.registerForm.goodsListForm[i].url.trim() !== undefined && this.registerForm.goodsListForm[i].url.trim() !== '')) {
             if (this.registerForm.goodsListForm[i].name.trim() === '') {
               this.$message({ type: 'warning', message: '请输入商品名称' })
               return

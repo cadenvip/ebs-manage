@@ -152,57 +152,19 @@
         registerForm: {
           // businessesForm: {
           businessesName: '',
-          businessesShortName: '',	// 企业简称
-          businessType: '',			// 商家类型
           locationCode: '',
           businesslicenseNum: '',
           merchantKind: '',
-          legalName: '',
-          legalPaperType: '',
-          legalPaperNumber: '',
           address: '',
           relationPerson: '',
           relationPhone: '',
-          relationEmail: '', // 联系人邮箱
           sellPersonName: '',
           sellPersonMobile: '',
           financePersonName: '',
           financePersonMobile: '',
-          financePersonPhone: '',	// 财务联系人电话
-          financePersonEmail: '',	// 财务邮箱
-          financePersonAddress: '',	// 财务通信地址
           operatoridnum: '',
-          registerMoney: '',			// 注册资金
-          margin: '',					// 保证金
-          liquidatedDamages: '',	// 违约金
-          taxRegistrationNum: '',	// 税务登记号码
-          officePhone: '',		// 办公室电话
-          operateHours: '',	// 营业时间
-          employeesNum: '',			// 雇员数量
-          fax: '',				// 传真
-          zipCode: '',				// 邮编
-          ownershipType: '',		// 所有制类型 国有企业/集体企业/私营企业/混合所有制企业
           isInvoice: '',
-          merchantPayable: '',  // 是否开启语音支付(0-关闭，1-开启)
-          merchantNo: '',       // 语音支付号码
-          aliPayNoPayable: '',	// 是否开启支付宝支付(0-关闭 ，1-开启)
-          aliPayAccount: '',		// 支付宝卖家账号（email或者手机号）
-          aliPaySignKey: '',		// 支付宝平台签名Key
-          aliPaySellerAccountName: '',	// 支付宝卖家名字
-          cmPayNoPayable: '',			// 是否开启手机和包支付(0关闭 1开启)
-          cmPayMerchantId: '',		// 手机和包支付平台商家ID
-          cmPaySignKey: '',		// 手机和包支付平台签名KEY
-          umPayNoPayable: '',			// 是否支持联动优势
-          umPayMerchantId: '',		// 联动优势平台商家ID
-          umPayBankAccountName: '',		// 联动优势银行账号名
-          umPayBankAccountNo: '',	// 联动优势银行账号
-          wirelesscityno: '',		// 无线城市话费支付商号
-          wirelesscityname: '',		// 无线城市话费支付商户名称
-          wirelesscitypayable: '1',		// 是否开启无线城市话费支付（0关闭 1开启）
-          wirelesstpcode: '',		// 无线城市话费支付渠道编码
-          wirelesstpname: '',		// 无线城市话费支付渠道名称
           // },
-          sellAddressListForm: [],
           // attachmentForm: {
           sfzmpicpath: '',
           sffmpicpath: '',
@@ -358,9 +320,68 @@
         var registerInfo = JSON.stringify(this.registerForm)
         window.localStorage.setItem('registerInfo', registerInfo)
         // 提交到后台
-        EnterpriseRegister(this.registerForm).then(response => {
-          alert('提交成功')
-          // this.$router.push({ path: '/regStepFour' })
+        var goodsSamplelist = []
+        for (let i = 1; i < this.registerForm.goodsListForm.length; i++) {
+          if ((this.registerForm.goodsListForm[i].name.trim() !== undefined && this.registerForm.goodsListForm[i].name.trim() !== '')) {
+            goodsSamplelist.push({
+              'name': `${this.registerForm.goodsListForm[i].name}`,
+              'unit': `${this.registerForm.goodsListForm[i].unit}`,
+              'origin': `${this.registerForm.goodsListForm[i].origin}`,
+              'price': `${this.registerForm.goodsListForm[i].price}`,
+              'description': `${this.registerForm.goodsListForm[i].description}`,
+              'url': `${this.registerForm.goodsListForm[i].url}`
+            })
+          }
+        }
+        var params = {
+          'businessesBean': {
+            'businessesName': this.registerForm.businessesName,       // 企业名称
+            'locationCode': `${this.registerForm.locationCode}`,		// 归属区域ID
+            'merchantKind': `${this.registerForm.merchantKind}`,
+            'businesslicenseNum': this.registerForm.businesslicenseNum, // 企业营业执照号码
+            'address': this.registerForm.address,				// 详细地址
+            'relationPerson': this.registerForm.relationPerson,			// 联系人姓名
+            'relationPhone': this.registerForm.relationPhone,		// 联系人电话，用于登陆，初始密码123456
+            'sellPersonName': this.registerForm.sellPersonName,			// 售后联系人
+            'sellPersonMobile': this.registerForm.sellPersonMobile,	// 售后联系人电话
+            'financePersonName': this.registerForm.financePersonName,		// 财务姓名
+            'financePersonMobile': this.registerForm.financePersonMobile, // 财务联系人手机
+            'operatoridnum': this.registerForm.operatoridnum,	// 经办人身份证
+            'isInvoice': `${this.registerForm.isInvoice}`   // 是否可开发票，0:不开，1：可以开发票
+          },
+          'registerAttachmentBean': {
+            'sfzmpicpath': `http:www.baidu.com`,
+            'sffmpicpath': `http:www.baidu.com`,
+            'licencepicpath': `http:www.baidu.com`,
+            'proxytestifypicpath': `http:www.baidu.com`,
+            'foodsafetypicpath': `http:www.baidu.com`,
+            'foodpathpicpath': `http:www.baidu.com`,
+            'foodotherpicpath': [
+              'http:www.baidu.com',
+              'http:www.baidu.com',
+              'http:www.baidu.com'
+            ]
+          },
+          // 'registerAttachmentBean': {
+          //   'sfzmpicpath': this.registerForm.sfzmpicpath,
+          //   'sffmpicpath': this.registerForm.sffmpicpath,
+          //   'licencepicpath': this.registerForm.licencepicpath,
+          //   'proxytestifypicpath': this.registerForm.proxytestifypicpath,
+          //   'foodsafetypicpath': this.registerForm.foodsafetypicpath,
+          //   'foodpathpicpath': this.registerForm.foodpathpicpath,
+          //   'foodotherpicpath': [
+          //     '其他URL1',
+          //     '其他URL2',
+          //     '其他URL3'
+          //   ]
+          // },
+          'goodsSamplelist': goodsSamplelist
+        }
+
+        // console.log(params)
+
+        EnterpriseRegister(params).then(response => {
+          this.$router.push({ path: '/regStepFour' })
         }).catch(error => {
           console.log(error)
         })

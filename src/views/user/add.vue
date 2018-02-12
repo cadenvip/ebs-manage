@@ -19,30 +19,49 @@
         </el-radio-group>
       </el-form-item>
       <el-form-item label="账号：" prop="loginname">
-        <el-input v-model="userForm.loginname" style="width: 600px;" placeholder="请输入账号"></el-input>
+        <el-input v-model="userForm.loginname" style="width: 300px;" placeholder="请输入账号"></el-input>
       </el-form-item>
-      <el-form-item label="密码：" prop="password">
-        <el-input type="password" v-model="userForm.password" style="width: 600px;" placeholder="请输入密码"></el-input>
-      </el-form-item>
-      <el-form-item label="确认密码：" prop="repassword">
-        <el-input type="password" v-model="userForm.repassword" style="width: 600px;" placeholder="请再次输入密码"></el-input>
-      </el-form-item>
-      <el-form-item label="姓名：" prop="name">
-        <el-input v-model="userForm.name" style="width: 600px;" placeholder="请输入姓名"></el-input>
-      </el-form-item>
-      <el-form-item label="归属区域：" prop="locationid">
-        <el-input v-model="userForm.locationname" style="width: 600px;" placeholder="请输入地址" @focus="dialogVisible = true"></el-input>
-      </el-form-item>
-      <el-form-item label="邮件：" prop="email">
-        <el-input v-model="userForm.email" style="width: 600px;" placeholder="请输入邮件"></el-input>
-      </el-form-item>
-      <el-form-item label="地址：" prop="address">
-        <el-input v-model="userForm.address" style="width: 600px;" placeholder="请输入地址"></el-input>
-      </el-form-item>
-      <el-form-item>
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <el-form-item label="密码：" prop="password">
+            <el-input type="password" v-model="userForm.password" style="width: 300px;" placeholder="请输入密码"></el-input>
+          </el-form-item>          
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="确认密码：" prop="repassword">
+            <el-input type="password" v-model="userForm.repassword" style="width: 300px;" placeholder="请再次输入密码"></el-input>
+          </el-form-item>          
+        </el-col>
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <el-form-item label="姓名：" prop="name">
+            <el-input v-model="userForm.name" style="width: 300px;" placeholder="请输入姓名"></el-input>
+          </el-form-item>        
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="归属区域：" prop="locationid">
+            <el-input v-model="userForm.locationname" style="width: 300px;" placeholder="请输入地址" @focus="dialogVisible = true"></el-input>
+          </el-form-item>          
+        </el-col>
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <el-form-item label="邮件：" prop="email">
+            <el-input v-model="userForm.email" style="width: 300px;" placeholder="请输入邮件"></el-input>
+          </el-form-item>        
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="地址：" prop="address">
+            <el-input v-model="userForm.address" style="width: 300px;" placeholder="请输入地址"></el-input>
+          </el-form-item>          
+        </el-col>
+      </el-row>
+      <br/>
+      <div style="text-align: center">
         <el-button type="primary" @click="onSubmit">提交</el-button>
         <el-button @click="onCancel">返回</el-button>
-      </el-form-item>
+      </div>
     </el-form>
     <el-dialog
       title="请选择区域"

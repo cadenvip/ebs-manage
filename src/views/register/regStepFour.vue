@@ -14,9 +14,9 @@
         <div>
           您的资料提交，正在审核...
         </div>
-        <!-- <div style="margin-top: 20px; text-align: center;">
-          <el-button @click="goBack" type="primary">返回上一步</el-button>
-        </div> -->
+        <div style="margin-top: 20px; text-align: center;">
+          <el-button @click="goLogin" type="primary">返回登录</el-button>
+        </div>
       </el-main>
     </el-container>
     <el-footer>
@@ -42,9 +42,9 @@
       window.localStorage.removeItem('registerInfo')
     },
     methods: {
-      // goBack() {
-      //   this.$router.push({ path: '/regStepTwo' })
-      // }
+      goLogin() {
+        this.$router.push({ path: '/login' })
+      }
     }
   }
 </script>
