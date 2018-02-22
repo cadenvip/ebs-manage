@@ -204,7 +204,7 @@ export default {
         this.locationInfo = {}
       }
       this.locationInfo.detailAddress = this.detailAddress
-      this.$emit('locationChanged', this.locationInfo)
+      this.$emit('addressChanged', this.locationInfo)
     }
   }
 }

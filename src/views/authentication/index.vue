@@ -1,5 +1,5 @@
 <template>
-  <div class="Authenticater" style="margin: 20px">
+  <div class="Authenticater" style="margin-left: 30px;margin-top:30px">
     <h3 class="title">授权管理</h3>
     <el-tree
       :data="data"

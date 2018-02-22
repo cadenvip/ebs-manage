@@ -2,33 +2,58 @@
   <div class="app-container">
     <h3 class="title">人员信息详情</h3>
     <el-form label-width="120px">
-      <el-form-item label="账号：">
-        <el-input v-model="userForm.loginname" :disabled="true" style="width: 600px;"></el-input>
-      </el-form-item>
-      <el-form-item label="姓名：">
-        <el-input v-model="userForm.name" :disabled="true" style="width: 600px;"></el-input>
-      </el-form-item>
-      <el-form-item label="手机号码：">
-        <el-input v-model="userForm.name" :disabled="true" style="width: 600px;"></el-input>
-      </el-form-item>
-      <el-form-item label="账号类型：">
-        <el-input v-model="roletypes" :disabled="true" style="width: 600px;"></el-input>
-      </el-form-item>
-      <el-form-item label="归属区域：">
-        <el-input v-model="userForm.locationname" :disabled="true" style="width: 600px;"></el-input>
-      </el-form-item>
-      <el-form-item label="邮件：">
-        <el-input v-model="userForm.email" :disabled="true" style="width: 600px;"></el-input>
-      </el-form-item>
-      <el-form-item label="地址：">
-        <el-input v-model="userForm.address" :disabled="true" style="width: 600px;"></el-input>
-      </el-form-item>
-      <el-form-item label="角色：">
-        <el-input v-model="rolenames" :disabled="true" style="width: 600px;"></el-input>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" @click="onCancel">返回</el-button>
-      </el-form-item>
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <el-form-item label="账号：">
+            <el-input v-model="userForm.loginname" :disabled="true" style="width: 300px;"></el-input>
+          </el-form-item>
+        </el-col>
+      <el-col :span="12">
+        <el-form-item label="姓名：">
+          <el-input v-model="userForm.name" :disabled="true" style="width: 300px;"></el-input>
+        </el-form-item>          
+      </el-col>
+    </el-row>
+    <el-row :gutter="20">
+      <el-col :span="12">
+        <el-form-item label="手机号码：">
+          <el-input v-model="userForm.name" :disabled="true" style="width: 300px;"></el-input>
+        </el-form-item>
+      </el-col>
+      <el-col :span="12">
+        <el-form-item label="账号类型：">
+          <el-input v-model="roletypes" :disabled="true" style="width: 300px;"></el-input>
+        </el-form-item>        
+      </el-col>
+    </el-row>
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <el-form-item label="归属区域：">
+            <el-input v-model="userForm.locationname" :disabled="true" style="width: 300px;"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="邮件：">
+            <el-input v-model="userForm.email" :disabled="true" style="width: 300px;"></el-input>
+          </el-form-item>          
+        </el-col>
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <el-form-item label="地址：">
+            <el-input v-model="userForm.address" :disabled="true" style="width: 300px;"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="角色：">
+            <el-input v-model="rolenames" :disabled="true" style="width: 300px;"></el-input>
+          </el-form-item>          
+        </el-col>
+      </el-row>
+      <br/>
+      <div style="text-align: center">
+        <el-button @click="onCancel">返回</el-button>
+      </div>
     </el-form>
   </div>
 </template>

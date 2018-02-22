@@ -3,33 +3,52 @@
     <h3 class="title">修改人员信息</h3>
     <el-form ref="userForm" :model="userForm" :rules="rules" label-width="120px">
       <el-form-item label="账号：" prop="loginname">
-        <el-input v-model="userForm.loginname" style="width: 600px;" :disabled="true"></el-input>
+        <el-input v-model="userForm.loginname" style="width: 300px;" :disabled="true"></el-input>
       </el-form-item>
-      <el-form-item label="密码：" prop="password">
-        <el-input type="password" v-model="userForm.password" style="width: 600px;"></el-input>
-      </el-form-item>
-      <el-form-item label="确认密码：" prop="repassword">
-        <el-input type="password" v-model="userForm.repassword" style="width: 600px;"></el-input>
-      </el-form-item>
-      <el-form-item label="姓名：" prop="name">
-        <el-input v-model="userForm.name" style="width: 600px;"></el-input>
-      </el-form-item>
-      <el-form-item label="归属区域：" prop="locationname">
-        <el-input v-model="userForm.locationname" style="width: 600px;" :disabled="true"></el-input>
-      </el-form-item>
-      <el-form-item label="单位：" prop="unitname">
-        <el-input v-model="userForm.unitname" style="width: 600px;" :disabled="true"></el-input>
-      </el-form-item>
-      <el-form-item label="邮件：" prop="email">
-        <el-input v-model="userForm.email" style="width: 600px;"></el-input>
-      </el-form-item>
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <el-form-item label="密码：" prop="password">
+            <el-input type="password" v-model="userForm.password" style="width: 300px;"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="确认密码：" prop="repassword">
+            <el-input type="password" v-model="userForm.repassword" style="width: 300px;"></el-input>
+          </el-form-item>          
+        </el-col>
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <el-form-item label="姓名：" prop="name">
+            <el-input v-model="userForm.name" style="width: 300px;"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="归属区域：" prop="locationname">
+            <el-input v-model="userForm.locationname" style="width: 300px;" :disabled="true"></el-input>
+          </el-form-item>          
+        </el-col>
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <el-form-item label="单位：" prop="unitname">
+            <el-input v-model="userForm.unitname" style="width: 300px;" :disabled="true"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="邮件：" prop="email">
+            <el-input v-model="userForm.email" style="width: 300px;"></el-input>
+          </el-form-item>          
+        </el-col>
+      </el-row>
       <el-form-item label="地址：" prop="address">
-        <el-input v-model="userForm.address" style="width: 600px;"></el-input>
+        <el-input v-model="userForm.address" style="width: 300px;"></el-input>
       </el-form-item>
-      <el-form-item>
+      <br/>
+      <div style="text-align: center">
         <el-button type="primary" @click="onSubmit">提交</el-button>
         <el-button @click="onCancel">返回</el-button>
-      </el-form-item>
+      </div>
     </el-form>
   </div>
 </template>
