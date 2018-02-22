@@ -19,7 +19,7 @@ export function getInfo(userid) {
   return request({
     url: '/user/detail',
     method: 'post',
-    params: { 'userid': userid }
+    data: { 'userid': userid }
   })
 }
 

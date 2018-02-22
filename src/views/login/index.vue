@@ -83,7 +83,7 @@ export default {
     return {
       unitinfos: [],
       loginForm: {
-        loginname: '',
+        loginname: '15888882345',
         password: '',
         unitid: '',
         vercode: ''
