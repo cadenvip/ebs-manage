@@ -347,7 +347,8 @@
             'financePersonName': this.registerForm.financePersonName,		// 财务姓名
             'financePersonMobile': this.registerForm.financePersonMobile, // 财务联系人手机
             'operatoridnum': this.registerForm.operatoridnum,	// 经办人身份证
-            'isInvoice': `${this.registerForm.isInvoice}`   // 是否可开发票，0:不开，1：可以开发票
+            'isInvoice': `${this.registerForm.isInvoice}`,   // 是否可开发票，0:不开，1：可以开发票
+            'createsource': '1'           // 录入渠道 1、商家注册 2、管理员添加
           },
           'registerAttachmentBean': {
             'sfzmpicpath': `http:www.baidu.com`,
