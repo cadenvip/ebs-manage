@@ -797,15 +797,10 @@
         this.ruleForm.spcd = data.label
         this.ruleForm.spcdcode = data.locationCode
       },
-      handleJieti() {
-        console.log(222)
-        this.ruleForm.jieti === 1 ? this.ruleForm.jieti = 0 : this.ruleForm.jieti = 1
-      },
       addJieti() {
         this.jietiItems.push({})
       },
       delejieti(index) {
-        console.log(this.jietiItems, index)
         this.jietiItems.splice(index, 1)
       },
       handleAvatarSuccess(res, file) {
