@@ -153,49 +153,49 @@ export const constantRouterMap = [
   },
 
   {
-    path: '/enterprise',
+    path: '/businesses',
     component: Layout,
-    redirect: 'enterprise/list',
-    name: 'enterprise',
+    redirect: 'businesses/list',
+    name: 'businesses',
     hidden: false,
     meta: { title: '企业管理', icon: 'table' },
     children: [
       {
         path: 'list',
-        name: 'enterpriselist',
-        component: _import('enterprise/list'),
+        name: 'businesseslist',
+        component: _import('businesses/list'),
         meta: { title: '企业列表', icon: 'table' }
       },
       {
         path: 'add',
-        name: 'enterpriseadd',
+        name: 'businessesadd',
         hidden: true,
-        component: _import('enterprise/add'),
+        component: _import('businesses/add'),
         meta: { title: '新增人员', icon: 'table' }
       },
       {
         path: 'detail',
-        name: 'enterprisedetail',
+        name: 'businessesdetail',
         hidden: true,
-        component: _import('enterprise/detail'),
+        component: _import('businesses/detail'),
         meta: { title: '人员详情', icon: 'table' }
       },
       {
         path: 'audit',
-        name: 'enterpriseaudit',
-        component: _import('enterprise/audit'),
+        name: 'businessesaudit',
+        component: _import('businesses/audit'),
         meta: { title: '企业审核', icon: 'user' }
       },
       {
         path: 'msgsend',
         name: 'msgsend',
-        component: _import('enterprise/msgsend'),
+        component: _import('businesses/msgsend'),
         meta: { title: '信息下发查询', icon: 'user' }
       },
       {
         path: 'auditbusiness',
         name: 'auditbusiness',
-        component: _import('enterprise/auditbusiness'),
+        component: _import('businesses/auditbusiness'),
         meta: { title: '业务审核', icon: 'table' }
       }
     ]

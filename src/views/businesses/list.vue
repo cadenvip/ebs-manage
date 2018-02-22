@@ -5,32 +5,29 @@
       <el-row>
         <el-col :span="10">
           <el-form-item label="企业名称：">
-            <el-input v-model="searchForm.enterpriseName" style="width: 300px;"></el-input>
+            <el-input v-model="searchForm.businessesName" clearable style="width: 300px;"></el-input>
           </el-form-item>  
         </el-col>
         <el-col :span="10">
           <el-form-item label="所属区域：">
-            <el-input v-model="searchForm.locationId" style="width: 300px;"></el-input>
+            <el-input v-model="searchForm.locationname" clearable style="width: 300px;" @focus="handleLocationFocus"></el-input>
           </el-form-item>  
         </el-col>
       </el-row>
       <el-row>
         <el-col :span="10">
           <el-form-item label="录入来源：">
-            <el-select v-model="searchForm.createUserId" clearable placeholder="请选择" style="width: 300px;">
-              <el-option label="基地账户" value="1"></el-option>
-              <el-option label="分公司账户" value="2"></el-option>
-              <el-option label="企业管理" value="3"></el-option>
-              <el-option label="经销商账户" value="4"></el-option>
-              <el-option label="企业申请" value="5"></el-option>
+            <el-select v-model="searchForm.createsource" clearable placeholder="请选择" style="width: 300px;">
+              <el-option label="商家注册" value="1"></el-option>
+              <el-option label="管理员添加" value="2"></el-option>
             </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="10">
-          <!-- auditState审核状态：0-正常 1-暂停 2-企业审核 3-未通过  4- 过期 5-网店待审核 6-待付款 -->
+          <!-- state审核状态：0-正常 1-暂停 2-企业审核 3-未通过  4- 过期 5-网店待审核 6-待付款 -->
           <!-- status审核状态：0-正常 1-暂停 2-企业审核 3-未通过  4- 过期 5-网店待审核 6-待付款 -->
           <el-form-item label="企业状态：">
-            <el-select v-model="searchForm.auditState" clearable placeholder="请选择" style="width: 300px;">
+            <el-select v-model="searchForm.state" clearable placeholder="请选择" style="width: 300px;">
               <el-option label="正常" value="0"></el-option>
               <el-option label="停用" value="1"></el-option>
               <el-option label="企业待审核" value="2"></el-option>
@@ -44,27 +41,34 @@
       </el-row>
       <el-row>
         <el-col :span="2" :offset="16">
-          <el-button type="primary" @click.native.prevent="queryEnterpriseList">查询</el-button>
+          <el-button type="primary" @click.native.prevent="queryBusinessesList">查询</el-button>
         </el-col>
         <el-col :span="2">
           <el-button type="primary" @click="resetForm('searchForm')">重置</el-button>
         </el-col>
         <el-col :span="2">
-          <el-button type="primary" @click.native.prevent="addEnterprise">新增</el-button>
+          <el-button type="primary" @click.native.prevent="addBusinesses">新增</el-button>
         </el-col>
       </el-row>
     </el-form>
+    <el-dialog
+      title="请选择区域"
+      :visible.sync="dialogVisible"
+      width="440px"
+      :before-close="handleClose">
+      <locationselector @locationSelected="getLocationInfo"></locationselector>
+    </el-dialog>
     <h3 style="padding-left: 20px;">企业列表</h3>
     <el-table :data="list" v-loading.body="loading" element-loading-text="Loading" border stripe fit highlight-current-row style="padding-left:10px">
-      <el-table-column label='企业名称' prop="enterpriseName" width="280">
+      <el-table-column label='企业名称' prop="businessesName" width="280">
       </el-table-column>
-      <el-table-column label="区域" prop="locationId" width="110">
+      <el-table-column label="区域" prop="locationCode" width="110">
       </el-table-column>
       <el-table-column label="有效时间" prop="validDateEnd" :formatter="timedateFormat" width="110" align="center">
       </el-table-column>
-      <el-table-column label="企业状态" prop="auditState" :formatter="auditStateFormat" width="80" align="center">
+      <el-table-column label="企业状态" prop="state" :formatter="stateFormat" width="80" align="center">
       </el-table-column>
-      <el-table-column label="录入来源" prop="createUserId" width="100" align="center">
+      <el-table-column label="录入来源" prop="createsource" width="100" align="center">
       </el-table-column>
       <el-table-column align="center" label="操作" width="190">
       <template slot-scope="scope">
@@ -88,47 +92,67 @@
 
 <script>
 
-import { getAllEnterprises, getEnterpriseList } from '@/api/enterprise'
+import { getAllBusinesses, getBusinessesList } from '@/api/businesses'
+import locationselector from '@/components/LocationSelector/index'
 
 export default {
   data() {
     return {
       list: [],
       searchForm: {
-        enterpriseName: '',
-        locationId: '',
-        createUserId: '',
-        auditState: ''
+        businessesName: '',
+        locationCode: '',
+        locationname: '',
+        createsource: '',
+        state: ''
       },
       pagesizes: [10, 20, 30, 50],
       pagesize: 10,
       currentPage: 1,
       total: 0,
+      dialogVisible: false,
       loading: true
     }
   },
+  components: {
+    locationselector
+  },
   created() {
-    this.initEnterpriseList()
+    this.initBusinessesList()
   },
   methods: {
-    queryEnterpriseList() {
+    handleLocationFocus() {
+      this.dialogVisible = true
+      this.searchForm.locationid = ''
+      this.searchForm.locationname = ''
+    },
+    handleClose(done) {
+      // this.$confirm('确认关闭？').then(_ => {
+      done()
+      // }).catch(_ => {})
+    },
+    getLocationInfo: function(data) {
+      this.searchForm.locationCode = data.id
+      this.searchForm.locationname = data.label
+    },
+    queryBusinessesList() {
       console.log(this.searchForm)
       this.loading = true
-      getEnterpriseList(this.searchForm, this.currentPage, this.pagesize).then(response => {
-        this.list = response.list
-        this.total = response.total
+      getBusinessesList(this.searchForm, this.currentPage, this.pagesize).then(response => {
+        this.list = response.data.list
+        this.total = response.data.total
         this.loading = false
       }).catch(error => {
         this.loading = false
         console.log(error)
       })
     },
-    addEnterprise() {
-      this.$router.push({ path: '/enterprise/add' })
+    addBusinesses() {
+      this.$router.push({ path: '/businesses/add' })
     },
-    initEnterpriseList() {
+    initBusinessesList() {
       this.loading = true
-      getAllEnterprises(this.currentPage, this.pagesize).then(response => {
+      getAllBusinesses(this.currentPage, this.pagesize).then(response => {
         this.list = response.list
         this.total = response.total
         this.loading = false
@@ -136,49 +160,58 @@ export default {
         this.loading = false
         console.log(error)
       })
+    },
+    resetForm(formname) {
+      // this.$refs[formname].resetFields()
+      this.searchForm.businessesName = ''
+      this.searchForm.locationCode = ''
+      this.searchForm.locationname = ''
+      this.searchForm.createsource = ''
+      this.searchForm.state = ''
     },
     timedateFormat(row, column, cellValue) {
       // 截取年月日
-      return cellValue.substr(0, 9)
+      return cellValue// .substr(0, 9)
     },
-    auditStateFormat(row, column, cellValue) {
-      var auditState = ''
+    stateFormat(row, column, cellValue) {
+      console.log(cellValue)
+      var state = ''
       switch (cellValue) {
-        case 0:
-          auditState = '正常'
+        case '1':
+          state = '正常'
           break
-        case 1:
-          auditState = '停用'
+        case '2':
+          state = '停用'
           break
-        case 2:
-          auditState = '企业待审核'
+        case '3':
+          state = '企业待审核'
           break
-        case 3:
-          auditState = '驳回'
+        case '4':
+          state = '驳回'
           break
-        case 4:
-          auditState = '过期'
+        case '5':
+          state = '过期'
           break
-        case 5:
-          auditState = '网店待审核'
+        case '6':
+          state = '网店待审核'
           break
-        case 6:
-          auditState = '待付款'
+        case '7':
+          state = '待付款'
           break
         default:
           break
       }
-      return auditState
+      return state
     },
-    detail(enterprise) {
-      this.$router.push({ path: '/enterprise/detail', query: { id: enterprise.id }})
+    detail(businesses) {
+      this.$router.push({ path: '/businesses/detail', query: { id: businesses.id }})
     },
     handleSizeChange(val) {
       this.pagesize = this.pagesize === val ? this.pagesize : val
-      this.queryEnterpriseList()
+      this.queryBusinessesList()
     },
     handleCurrentChange(val) {
-      this.queryEnterpriseList()
+      this.queryBusinessesList()
     }
   }
 }

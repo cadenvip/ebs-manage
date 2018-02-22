@@ -10,6 +10,7 @@
         <el-button type="primary" @click.native.prevent="queryLocationName">查询</el-button>
       </el-col>
     </el-row>
+    <br/>
     <div v-show="showLazyTree" class="Tree">
       <el-tree
         lazy
