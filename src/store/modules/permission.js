@@ -6,7 +6,6 @@ import { asyncRouterMap, constantRouterMap } from '@/router'
  * @param route
  */
 function hasPermission (roles, route) {
-  console.log(route)
   if (route.meta && route.meta.roles) {
     return roles.some(role => route.meta.roles.indexOf(role) >= 0)// js some函数 返回true or false
   } else {
@@ -29,7 +28,6 @@ function filterAsyncRouter (asyncRouterMap, roles) {
     }
     return false
   })
-  console.log(accessedRouters)
   return accessedRouters
 }
 
@@ -48,12 +46,12 @@ const permission = {
     GenerateRoutes ({ commit }, data) {
       return new Promise(resolve => {
         const { roles } = data
-        let accessedRouters
-        if (roles.indexOf('商家管理员') >= 0) {
-          accessedRouters = asyncRouterMap
-        } else {
-          accessedRouters = filterAsyncRouter(asyncRouterMap, roles)
-        }
+        var accessedRouters = filterAsyncRouter(asyncRouterMap, roles)
+        // if (roles.indexOf('商家管理员') >= 0) {
+        //   accessedRouters = asyncRouterMap
+        // } else {
+        //   accessedRouters = filterAsyncRouter(asyncRouterMap, roles)
+        // }
         commit('SET_ROUTERS', accessedRouters)
         resolve()
       })

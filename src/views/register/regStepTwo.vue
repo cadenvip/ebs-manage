@@ -329,7 +329,6 @@
               return
             }
           }
-          debugger
           if ((this.registerForm.goodsListForm[i].name.trim() !== undefined && this.registerForm.goodsListForm[i].name.trim() !== '') ||
             (this.registerForm.goodsListForm[i].unit.trim() !== undefined && this.registerForm.goodsListForm[i].unit.trim() !== '') ||
             (this.registerForm.goodsListForm[i].origin.trim() !== undefined && this.registerForm.goodsListForm[i].origin.trim() !== '') ||
