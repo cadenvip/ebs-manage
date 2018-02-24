@@ -2,7 +2,7 @@ import Cookies from 'js-cookie'
 
 const TokenKey = 'Admin-Token'
 const Userid = 'User-Id'
-const UserInfos = 'User-Infos'
+// const RoleType = 'Role-Type'
 
 export function getToken() {
   return Cookies.get(TokenKey)
@@ -28,14 +28,18 @@ export function removeUserId() {
   return Cookies.remove(Userid)
 }
 
-export function getUserInfos(userinfos) {
-  return Cookies.get(UserInfos)
-}
+// export function getRoleType() {
+//   if (Cookies.get(RoleType) !== undefined) {
+//     return Cookies.get(RoleType).split(',')
+//   } else {
+//     return []
+//   }
+// }
 
-export function setUserInfos(userinfos) {
-  return Cookies.set(UserInfos, userinfos)
-}
+// export function setRoleType(roletype) {
+//   return Cookies.set(RoleType, roletype)
+// }
 
-export function removeUserInfos() {
-  return Cookies.remove(UserInfos)
-}
+// export function removeRoleType() {
+//   return Cookies.remove(RoleType)
+// }

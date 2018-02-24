@@ -1,6 +1,5 @@
 import { login, logout, getInfo } from '@/api/login'
-import { getToken, setToken, removeToken, getUserId, setUserId, removeUserId, setUserInfos, removeUserInfos } from '@/utils/auth'
-
+import { getToken, setToken, removeToken, getUserId, setUserId, removeUserId } from '@/utils/auth'
 
 const user = {
   state: {
@@ -8,8 +7,7 @@ const user = {
     userid: getUserId(),
     name: '',
     avatar: '',
-    roles: [],
-    userinfos: {}
+    roles: []
   },
 
   mutations: {
@@ -27,9 +25,6 @@ const user = {
     },
     SET_ROLES: (state, roles) => {
       state.roles = roles
-    },
-    SET_USERINFOS: (state, userinfos) => {
-      state.userinfos = userinfos
     }
   },
 
@@ -43,41 +38,53 @@ const user = {
           console.log(data)
           setToken(data.password)
           setUserId(data.id)
-          setUserInfos(data)
           commit('SET_TOKEN', data.password)
           commit('SET_USERID', data.id)
           commit('SET_NAME', data.loginname)
           commit('SET_AVATAR', data.avatar)
-          commit('SET_USERINFOS', data)
-          var arrRoleNames = []
+          var roles = []
           data.role.forEach(function(v) {
-            arrRoleNames.push(v.rolename)
+            roles.push(v.roletype)
           })
-          commit('SET_ROLES', arrRoleNames)
+          // setRoleType(roles.join(','))
+          // commit('SET_ROLES', roles)
+          window.sessionStorage.setItem('userInfo', JSON.stringify(data))
           resolve()
         }).catch(error => {
           reject(error)
         })
       })
     },
-
     // 获取用户信息
     GetInfo({ commit, state }) {
       return new Promise((resolve, reject) => {
-        getInfo(state.userid).then(response => {
-          const data = response.data
-          commit('SET_USERID', data.id)
-          commit('SET_ROLES', data.roles)
-          commit('SET_NAME', data.loginname)
-          commit('SET_AVATAR', data.avatar)
-          commit('SET_USERINFOS', data)
-          data.role.forEach(function(v) {
-            this.roles.push(v.rolename)
+        var userInfo = window.sessionStorage.getItem('userInfo')
+        if (userInfo !== undefined && userInfo !== '') {
+          userInfo = JSON.parse(userInfo)
+          var roles = []
+          userInfo.role.forEach(function(v) {
+            roles.push(v.roletype)
           })
-          resolve(response)
-        }).catch(error => {
-          reject(error)
-        })
+          commit('SET_ROLES', roles)
+          resolve(userInfo)
+        } else {
+          getInfo(state.userid).then(response => {
+            const data = response.data
+            commit('SET_USERID', data.id)
+            commit('SET_NAME', data.loginname)
+            commit('SET_AVATAR', data.avatar)
+            var roles = []
+            data.role.forEach(function(v) {
+              roles.push(v.roletype)
+            })
+            // setRoleType(roles.join(','))
+            commit('SET_ROLES', roles)
+            window.sessionStorage.setItem('userInfo', JSON.stringify(data))
+            resolve(response)
+          }).catch(error => {
+            reject(error)
+          })
+        }
       })
     },
 
@@ -87,10 +94,10 @@ const user = {
         logout(state.token).then(() => {
           commit('SET_TOKEN', '')
           commit('SET_ROLES', [])
-          commit('SET_USERINFOS', {})
+          commit('SET_USERID', '')
           removeToken()
           removeUserId()
-          removeUserInfos()
+          window.sessionStorage.removeItem('userInfo')
           resolve()
         }).catch(error => {
           reject(error)
@@ -103,10 +110,10 @@ const user = {
       return new Promise(resolve => {
         commit('SET_TOKEN', '')
         commit('SET_ROLES', [])
-        commit('SET_USERINFOS', {})
+        commit('SET_USERID', '')
         removeToken()
         removeUserId()
-        removeUserInfos()
+        window.sessionStorage.removeItem('userInfo')
         resolve()
       })
     }

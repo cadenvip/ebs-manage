@@ -15,11 +15,12 @@ export default {
   components: { SidebarItem, ScrollBar },
   computed: {
     ...mapGetters([
+      'routes',
       'sidebar'
     ]),
-    routes() {
-      return this.$router.options.routes
-    },
+    // routes() {
+    //   return this.$router.options.routes
+    // },
     isCollapse() {
       return !this.sidebar.opened
     }

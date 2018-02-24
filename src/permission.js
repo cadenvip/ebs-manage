@@ -7,8 +7,9 @@ import { getToken } from '@/utils/auth' // 验权
 
 // permissiom judge function
 function hasPermission(roles, permissionRoles) {
-  if (roles.indexOf('商家管理员') >= 0) return true // admin permission passed directly
-  if (!permissionRoles) return true
+  if (!permissionRoles) {
+    return true
+  }
   return roles.some(role => permissionRoles.indexOf(role) >= 0)
 }
 
@@ -42,25 +43,22 @@ const whiteList = ['/',
 ] // 不重定向白名单
 
 router.beforeEach((to, from, next) => {
-  console.log(getToken())
   NProgress.start()
   if (getToken()) {
     if (to.path === '/login') {
       next({ path: '/' })
     } else {
-      console.log(1, store.getters.roles)
       if (store.getters.roles.length === 0) {
-        console.log(2)
-        store.dispatch('GetInfo').then(res => { // 拉取用户信息
-          const roles = res.data.roles
-          console.log(roles)
+        var roles = []
+        store.dispatch('GetInfo').then(response => { // 拉取用户信息
+          response.role.forEach(function(v) {
+            roles.push(v.roletype)
+          })
           store.dispatch('GenerateRoutes', { roles }).then(() => {
-            console.log(3)
-            router.addRoutes(store.getters.addRoutes)
+            router.addRoutes(store.getters.addRouters)
             next({ ...to, replace: true })
           })
         }).catch(() => {
-          console.log(4)
           store.dispatch('FedLogOut').then(() => {
             Message.error('验证失败,请重新登录')
             next({ path: '/login' })

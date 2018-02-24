@@ -47,7 +47,6 @@
       getAllPermissions() {
         this.loading = true
         return new Promise((resolve, reject) => {
-          // console.log(store.getters.userinfos)
           // 1系统管理 2企业 （roletype: 1----> issystem: 0, roletype: 2---->issystem: 1)
           getAllResources(1).then(response => {
             response.data.forEach(v => {
@@ -71,7 +70,6 @@
 
             // 整理数据
             // 如果有id=-1的根目录，则删除
-            console.log(this.aliveResources[0])
             this.data = this.list2Tree(this.aliveResources, { 'idKey': 'id', 'parentKey': 'parentid', 'childrenKey': 'children' })
             // 设置选中
             this.$refs.tree.setCheckedKeys(this.defaultCheckedKeys)
