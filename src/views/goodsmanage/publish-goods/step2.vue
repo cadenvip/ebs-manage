@@ -43,6 +43,7 @@
             <el-button type="primary" size="mini" @click="confirmLogisticsTemplate">确定</el-button>
           </div>
         </el-popover>
+        {{ruleForm.wuliu}}
         <el-checkbox-group style="display: inline-block;" v-model="ruleForm.wuliu">
           <el-checkbox label="物流"></el-checkbox>
           <el-checkbox label="自提"></el-checkbox>
@@ -272,32 +273,43 @@
 <script>
   import Jieti from '@/components/Jieti/index'
   import { checkPayWay, goodsRelease, getLogisticsTemplate } from '@/api/goodsRelease'
-  import { parseTime } from '@/utils/index'
+  import { parseTime, getUnitsOptions } from '@/utils/index'
   import CollapseTransition from 'element-ui/lib/transitions/collapse-transition'
   import { mapGetters } from 'vuex'
   import axios from 'axios'
   import locationselector from '@/components/LocationSelector/index'
   export default {
     mounted() {
+      // 计量单位
+      this.jiliangdwOptions = getUnitsOptions()
       this.isFromModifyFlag = Number(this.$route.query.isFromModifyFlag)
       if (this.isFromModifyFlag === 1) {
-        console.log(111)
         var url = process.env.BASE_API + 'goods/get/' + this.$route.query.goodsId
         axios.get(url).then(res => {
           if (res.status === 200) {
             this.goodsBean = res.data.data.goodsBean
-            console.log(this.goodsBean.logisticsTypes)
+            console.log(this.goodsBean)
             this.ruleForm.cuxiao =  this.goodsBean.promotionInfo
-            this.ruleForm = this.goodsBean
             this.ruleForm.mingchen =  this.goodsBean.name
             this.ruleForm.pinpai = this.goodsBean.brand
             this.ruleForm.guige = this.goodsBean.orderGoodsSpec1
             this.ruleForm.maidian = this.goodsBean.features
             this.ruleForm.shichangjia = this.goodsBean.marketPrice
             this.ruleForm.zhigongjia = this.goodsBean.price
-
-            // this.goodsBean.logisticsTypes.toString().indexOf('2') > -1 ? this.ruleForm.wuliu.push('物流') : this.ruleForm.wuliu
-            // String(this.goodsBean.logisticsTypes).indexOf('1') > -1 ? this.ruleForm.wuliu.push('自提') : this.ruleForm.wuliu
+            this.goodsBean.logisticsTypes.toString().indexOf('2') > -1 ? this.ruleForm.wuliu.push('物流') : this.ruleForm.wuliu
+            String(this.goodsBean.logisticsTypes).indexOf('1') > -1 ? this.ruleForm.wuliu.push('自提') : this.ruleForm.wuliu
+            // 如果选取了物流
+            if (this.goodsBean.logisticsTypes.toString().indexOf('2') > -1 ? true : false && this.goodsBean.logisticsTemplateCode) {
+              this.ruleForm.wuliuObjt = this.goodsBean.logisticsTemplateCode
+              getLogisticsTemplate().then(res => {
+                var template = res.data
+                for (var i in template) {
+                  if (template[i].templateCode === this.goodsBean.logisticsTemplateCode) {
+                    this.ruleForm.wuliuObjN = template[i].templateName
+                  }
+                }
+              })
+            }
             // this.ruleForm.wuliu = this.goodsBean.logisticsTypes
             // this.ruleForm = this.goodsBean
             // this.ruleForm = this.goodsBean
@@ -368,243 +380,7 @@
           label: '年'
         }],
         jiliangdw: '1',
-        jiliangdwOptions: [{
-          value: '1',
-          label: '吨'
-        },
-        {
-          value: '10',
-          label: '毫升'
-        },
-        {
-          value: '12',
-          label: '立方米'
-        },
-        {
-          value: '13',
-          label: '个'
-        },
-        {
-          value: '14',
-          label: '头'
-        },
-        {
-          value: '15',
-          label: '只'
-        },
-        {
-          value: '16',
-          label: '把'
-        },
-        {
-          value: '17',
-          label: '尾'
-        },
-        {
-          value: '18',
-          label: '条'
-        },
-        {
-          value: '19',
-          label: '束'
-        },
-        {
-          value: '2',
-          label: '公斤'
-        },
-        {
-          value: '20',
-          label: '份'
-        },
-        {
-          value: '21',
-          label: '片'
-        },
-        {
-          value: '22',
-          label: '根'
-        },
-        {
-          value: '23',
-          label: '支'
-        },
-        {
-          value: '24',
-          label: '对'
-        },
-        {
-          value: '25',
-          label: '双'
-        },
-        {
-          value: '26',
-          label: '匹'
-        },
-        {
-          value: '27',
-          label: '担'
-        },
-        {
-          value: '28',
-          label: '捆'
-        },
-        {
-          value: '29',
-          label: '打'
-        },
-        {
-          value: '3',
-          label: '斤'
-        },
-        {
-          value: '30',
-          label: '粒'
-        },
-        {
-          value: '31',
-          label: '颗'
-        },
-        {
-          value: '32',
-          label: '棵'
-        },
-        {
-          value: '33',
-          label: '笼'
-        },
-        {
-          value: '34',
-          label: '盆'
-        },
-        {
-          value: '35',
-          label: '罐'
-        },
-        {
-          value: '36',
-          label: '瓶'
-        },
-        {
-          value: '37',
-          label: '筒'
-        },
-        {
-          value: '38',
-          label: '桶'
-        },
-        {
-          value: '39',
-          label: '坛'
-        },
-        {
-          value: '4',
-          label: '两'
-        },
-        {
-          value: '40',
-          label: '缸'
-        },
-        {
-          value: '41',
-          label: '袋'
-        },
-        {
-          value: '42',
-          label: '箱'
-        },
-        {
-          value: '43',
-          label: '件'
-        },
-        {
-          value: '44',
-          label: '节'
-        },
-        {
-          value: '45',
-          label: '枝'
-        },
-        {
-          value: '46',
-          label: '株'
-        },
-        {
-          value: '47',
-          label: '枚'
-        },
-        {
-          value: '48',
-          label: '本'
-        },
-        {
-          value: '49',
-          label: '块'
-        },
-        {
-          value: '5',
-          label: '钱'
-        },
-        {
-          value: '50',
-          label: '匝'
-        },
-        {
-          value: '51',
-          label: '卷'
-        },
-        {
-          value: '52',
-          label: '架'
-        },
-        {
-          value: '53',
-          label: '段'
-        },
-        {
-          value: '54',
-          label: '包'
-        },
-        {
-          value: '55',
-          label: '台'
-        },
-        {
-          value: '56',
-          label: '辆'
-        },
-        {
-          value: '57',
-          label: '套'
-        },
-        {
-          value: '58',
-          label: '床'
-        },
-        {
-          value: '59',
-          label: '盒'
-        },
-        {
-          value: '6',
-          label: '克'
-        },
-        {
-          value: '60',
-          label: '张'
-        },
-        {
-          value: '8',
-          label: '斗'
-        },
-        {
-          value: '9',
-          label: '升'
-        },
-        {
-          value: '99',
-          label: '其他'
-        }
-        ],
+        jiliangdwOptions: [],
         imageUrl: '',
         ruleForm: {
           cuxiao: '',

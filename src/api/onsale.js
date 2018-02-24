@@ -7,3 +7,19 @@ export function getOnSaleGoods (params) {
     params: params
   })
 }
+
+export function saleOff (params) {  // 下架商品
+  return request({
+    url: '/goods/down',
+    method: 'post',
+    data: params
+  })
+}
+
+export function modifyStock (params) {  // 修改库存
+  return request({
+    url: '/goods/stock',
+    method: 'post',
+    data: params
+  })
+}

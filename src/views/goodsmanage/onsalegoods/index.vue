@@ -88,8 +88,8 @@
     </el-form>
     <div style="padding: 0 2%;">
       <el-tabs v-model="activeTab" type="border-card" @tab-click="handleTabClick">
-        <el-tab-pane align="center" label="销售中商品" name="first">
-          <el-table @selection-change="handleTableSelectionChange" ref="multipleTable" :data="tableData" tooltip-effect="dark" border style="width: 100%" >
+        <el-tab-pane label="销售中商品" name="first">
+          <el-table :row-class-name="tableRowClassName" @selection-change="handleTableSelectionChange" ref="multipleTable" :data="tableData" tooltip-effect="dark" border style="width: 100%" >
             <el-table-column type="selection" width="55">
             </el-table-column>
             <el-table-column prop="goodsCode" align="center" label="商品编码" width="140"></el-table-column>
@@ -99,15 +99,16 @@
             </el-table-column>
             <el-table-column prop="price" align="center" label="价格" show-overflow-tooltip>
             </el-table-column>
-            <el-table-column prop="stock" align="center" label="库存" show-overflow-tooltip>
+            <el-table-column prop="stock" align="center" label="库存">
+              <template slot-scope="scope">{{ scope.row.stock }} <el-button @click="showStockPop(scope.row)" size="mini" v-show="scope.row.auditStatus !== '4'" type="text">修改</el-button></template>
             </el-table-column>
-            <el-table-column prop="upTime" align="center" label="上架时间" show-overflow-tooltip>
+            <el-table-column prop="upTime" align="center" label="上架时间">
             </el-table-column>
             <el-table-column prop="" align="center" label="状态" show-overflow-tooltip>
               <template slot-scope="scope">{{ scope.row.status === '2' ? '上架中' : scope.row.status === '3' ? '缺货中' : '' }}</template>
             </el-table-column>
             <el-table-column align="center" label="审核状态">
-              <template slot-scope="scope">{{ scope.row.auditStatus === '1' ? '上架审批中' : scope.row.auditStatus === '2' ? '上架审批通过' : scope.row.auditStatus === '3' ? '上架审批驳回' : '错误' }}</template>
+              <template slot-scope="scope">{{ scope.row.auditStatus === '2' ? '上架审批通过' : scope.row.auditStatus === '4' ? '下架审批中' : scope.row.auditStatus === '6' ? '下架审批驳回' : '错误' }}</template>
             </el-table-column>
             <el-table-column prop="" align="center" label="修改状态" show-overflow-tooltip>
               <template slot-scope="scope">{{ scope.row.editApproveStatus === '1' ? '修改待审核' : scope.row.editApproveStatus === '2' ? '修改审核通过' : scope.row.editApproveStatus === '3' ? '修改审核驳回' : '' }}</template>
@@ -115,16 +116,15 @@
             <el-table-column align="center" label="操作" width="140">
             <template slot-scope="scope">
               <el-button @click="getGoodsDetail(scope.row)" type="text" size="small">详情</el-button>
-              <el-button @click="saleOff(scope.row)" type="text" size="small">下架</el-button>
-              <el-button @click="modifyGoods(scope.row)" type="text" size="small">修改</el-button>
+              <el-button v-show="scope.row.auditStatus !== '4'" @click="saleOff(scope.row)" type="text" size="small">下架</el-button>
+              <el-button v-show="scope.row.auditStatus !== '4'" @click="modifyGoods(scope.row)" type="text" size="small">修改</el-button>
             </template>
             </el-table-column>
           </el-table>
           <el-row style="margin-top: 20px;">
             <el-col :span="6" style="padding-left: 20px; text-align: left;padding-top: 5px;">
-              <el-button type="text" size="mini">全选</el-button>
-              <el-button type="text" size="mini">批量上架</el-button>
-              <el-button type="text" size="mini">批量删除</el-button>
+              <el-button @click="toggleSelection(tableData)" type="text" size="mini">全选</el-button>
+              <el-button @click="batchOff" type="text" size="mini">批量下架</el-button>
             </el-col>
             <el-col :span="18" style="text-align: right; padding-right: 20px;">
               <el-pagination
@@ -142,13 +142,33 @@
         <el-tab-pane label="缺货的商品" name="second">缺货的商品</el-tab-pane>
       </el-tabs>
     </div>
+    <div>
+      <el-dialog title="库存修改" width="30%" :visible.sync="popupVisible">
+        <el-form :model="stockForm">
+          <el-form-item label="最新库存:" label-width="120px">
+            <el-input size="mini" style="width: 60%;" type="text" v-model="stockForm.nowStock"></el-input> 件
+          </el-form-item>
+          <el-form-item label-width="120px">
+            <el-checkbox :checked="stockForm.stockFlag" v-model="stockForm.stockFlag"></el-checkbox>
+            库存提醒: 低于 <el-input :disabled="!stockForm.stockFlag" size="mini" v-model.trim="stockForm.stockAlarm" style="width: 20%;" type="text">10</el-input>
+            <div>
+              <span style="color: #FF6600;">空或者0表示取消库存提醒</span>
+            </div>
+          </el-form-item>
+        </el-form>
+        <div slot="footer" style="text-align: center;margin-top: -30px;" class="dialog-footer">
+          <el-button @click="popupVisible = false">取 消</el-button>
+          <el-button type="primary" @click="modifyStock">确 定</el-button>
+        </div>
+      </el-dialog>      
+    </div>
   </div>
 </template>
 
 <script>
   import CollapseTransition from 'element-ui/lib/transitions/collapse-transition'
   import { getGoodsTopType } from '@/api/goodsRelease'
-  import { getOnSaleGoods } from '@/api/onsale'
+  import { getOnSaleGoods, saleOff, modifyStock } from '@/api/onsale'
   export default {
     created () {
       this._getGoodsTopType()
@@ -156,6 +176,12 @@
     },
     data() {
       return {
+        popupVisible: false,
+        stockForm: {
+          nowStock: 0, // 最新库存
+          stockAlarm: 10,
+          stockFlag: true
+        },
         loading: false,
         total: 0,
         currentPage: 1,
@@ -250,18 +276,14 @@
         console.log(tab)
       },
       toggleSelection(rows) {
-        alert(2)
-        if (rows) {
-          rows.forEach(row => {
-            this.$refs.multipleTable.toggleRowSelection(row)
-          })
-        } else {
-          this.$refs.multipleTable.clearSelection()
-        }
+        this.selectAll = !this.selectAll
+        rows.forEach(row => {
+          this.$refs.multipleTable.toggleRowSelection(row, this.selectAll)
+        })
       },
       handleTableSelectionChange(val) {
         this.multipleSelection = val
-        console.log(this.multipleSelection)
+        console.log(val)
       },
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
@@ -307,9 +329,100 @@
       },
       handleSizeChange(val) {
         this.pagesize = this.pagesize === val ? this.pagesize : val
+        this.submitForm('formT')
       },
       handleCurrentChange(val) {
-        console.log(val)
+        this.currentPage = val
+        const params = {
+          name: this.formT.shangpmc,
+          downPrice: this.formT.spzdjg,
+          upPrice: this.formT.spzgjg,
+          goodsCode: this.formT.shangpbm,
+          statusCode: this.formT.ssspzt,
+          approvestatusCode: this.formT.ssshzt,
+          typeCode: this.formT.sssplx,
+          editApprovestatusCode: this.formT.ssxgzt,
+          pageSize: this.pagesize,
+          page: this.currentPage
+        }
+        if (params.downPrice !== '' && (typeof params.downPrice !== 'number')) {
+          this.$message.error('最低价不能包含字符！')
+          return false
+        }
+        if (params.upPrice !== '' && (typeof params.upPrice !== 'number')) {
+          this.$message.error('最低价不能包含字符！')
+          return false
+        }
+        this.tableData = []
+        this._getOnSaleGoods(params)
+      },
+      saleOff(row) {
+        const params = { goodsIds: row.goodsId }
+        saleOff(params).then(res => {
+          if (res.status === 200) {
+            this.$message.success(res.msg)
+            this._getOnSaleGoods()
+          } else {
+            this.$message.error(res.msg)
+          }
+        }).catch(err => {
+          this.$message.error(err)
+        })
+      },
+      showStockPop(row) {   // 弹出框显示
+        this.goodsId = row.goodsId
+        this.stockForm.nowStock = row.stock
+        this.popupVisible = true
+      },
+      modifyStock() {   // 修改库存
+        const params = {
+          goodsId: this.goodsId,
+          stockAlarm: this.stockForm.stockAlarm,
+          stock: this.stockForm.nowStock
+        }
+        if (!this.stockForm.stockFlag || this.stockForm.stockAlarm === '') {
+          params.stockAlarm = 0
+        }
+        modifyStock(params).then(res => {
+          if (res.status === 200) {
+            this.popupVisible = false
+            this.$message.success(res.msg)
+          } else {
+            this.popupVisible = false
+            this.$message.error(res.msg)
+          }
+        }).catch(err => {
+          this.$message.error(err)
+        })
+      },
+      batchOff() {  // 批量下架
+        const params = {
+          goodsIds: ''
+        }
+        if (this.multipleSelection.length <= 0) {
+          this.$message.error('所选数据为空！')
+        } else {
+          for (var i in this.multipleSelection) {
+            params.goodsIds += this.multipleSelection[i].goodsId + ','
+          }
+          params.goodsIds = params.goodsIds.substring(0, params.goodsIds.length - 1)
+          console.log(params)
+          saleOff(params).then(res => {
+            if (res.status === 200) {
+              this.$message.success(res.msg)
+              this._getOnSaleGoods()
+            } else {
+              this.$message.error(res.msg)
+            }
+          }).catch(err => {
+            this.$message.error(err)
+          })
+        }
+      },
+      tableRowClassName({ row, rowIndex }) {
+        if (rowIndex === 1) {
+          return 'warning-row'
+        }
       }
     },
     components: {
@@ -321,4 +434,8 @@
 .price .el-input__inner {
   padding: 0 5px !important;
 }
+.el-table .warning-row {
+    background: oldlace;
+  }
+
 </style>
