@@ -3,6 +3,7 @@ import Cookies from 'js-cookie'
 const TokenKey = 'Admin-Token'
 const Userid = 'User-Id'
 // const RoleType = 'Role-Type'
+const JSessionId = 'JSESSIONID'
 
 export function getToken() {
   return Cookies.get(TokenKey)
@@ -43,3 +44,14 @@ export function removeUserId() {
 // export function removeRoleType() {
 //   return Cookies.remove(RoleType)
 // }
+export function getSessionid() {
+  return Cookies.get(JSessionId)
+}
+
+export function setSessionid(sessionid) {
+  return Cookies.set(JSessionId, sessionid)
+}
+
+export function removeSessionid() {
+  return Cookies.remove(JSessionId)
+}

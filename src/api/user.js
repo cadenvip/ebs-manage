@@ -4,8 +4,8 @@ export function getAllUsers(currentpage, pagesize) {
   return request({
     url: '/user/list',
     method: 'post',
-    data: { 'page': currentpage,
-      'limit': pagesize }
+    data: { 'page': `${currentpage}`,
+      'limit': `${pagesize}` }
   })
 }
 
