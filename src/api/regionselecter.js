@@ -4,7 +4,7 @@ export function getAllCountries(params) {
   return request({
     url: '/location/list',
     method: 'post',
-    data: { 'locationLevel': '0', 'parentId': '' }
+    data: JSON.stringify({ 'locationLevel': '0', 'parentId': '' })
   })
 }
 
@@ -12,7 +12,7 @@ export function getAllProvinces(params) {
   return request({
     url: '/location/list',
     method: 'post',
-    data: { 'locationLevel': '1', 'parentId': `${params}` }
+    data: JSON.stringify({ 'locationLevel': '1', 'parentId': `${params}` })
   })
 }
 

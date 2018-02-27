@@ -1,19 +1,28 @@
 import axios from 'axios'
 import { Message } from 'element-ui'
 import store from '../store'
-import { getToken } from '@/utils/auth'
+import { getToken, getSessionid } from '@/utils/auth'
 
 // 创建axios实例
 const service = axios.create({
   baseURL: process.env.BASE_API, // api的base_url
-  timeout: 30000 // 请求超时时间
+  timeout: 60000 // 请求超时时间
 })
 
 // request拦截器
 service.interceptors.request.use(config => {
   if (store.getters.token) {
     // config.headers['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8'
+<<<<<<< HEAD
+=======
+    // config.headers['Content-Type'] = 'application/json;charset=UTF-8'
+>>>>>>> 224bee525bdf8b039b271d0c4d6f2a74e6c0b4c4
     config.headers['X-Token'] = getToken() // 让每个请求携带自定义token 请根据实际情况自行修改
+  }
+  // 登录成功后，将JSESSIONID上传以鉴权
+  if (store.getters.sessionid) {
+    // config['url'] = config.url + `?JSESSIONID=${store.getters.sessionid}`
+    config['url'] = config.url + '?JSESSIONID=' + getSessionid()
   }
   return config
 }, error => {

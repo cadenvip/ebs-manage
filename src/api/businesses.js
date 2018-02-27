@@ -8,9 +8,9 @@ export function getAllBusinesses(currentpage, pagesize) {
       'businessesName': '',
       'state': '',
       'createsource': '',
-      'locationCode': '',
-      'page': `${currentpage}`,
-      'limit': `${pagesize}`
+      'locationCode': '0', // 默认中国
+      'page': currentpage,
+      'limit': pagesize
     }
   })
 }
@@ -22,7 +22,7 @@ export function getBusinessesList(businessesInfo, currentpage, pagesize) {
     data: { 'businessesName': `${businessesInfo.businessesName}`,
       'state': `${businessesInfo.state}`,
       'createsource': `${businessesInfo.createsource}`,
-      'locationCode': `${businessesInfo.locationCode}`,
+      'locationCode': `${businessesInfo.locationCode !== '' ? businessesInfo.locationCode : 0}`,
       'page': `${currentpage}`,
       'limit': `${pagesize}`
     }

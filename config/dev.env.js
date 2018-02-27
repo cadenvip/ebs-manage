@@ -7,4 +7,5 @@ module.exports = merge(prodEnv, {
   BASE_API: '"http://183.230.101.142:58080/ebs/"'
   // BASE_API: '"http://localhost:8080/"'
   // BASE_API: '"http://10.189.13.151:8080/ebs/"'
+  // BASE_API: '"http://10.189.15.190:8080/ebs/"'
 })
