@@ -169,7 +169,6 @@ export const asyncRouterMap = [
   {
     path: '/businesses',
     component: Layout,
-    redirect: 'businesses/list',
     name: 'businesses',
     hidden: false,
     meta: { roles: ['1'], title: '企业管理', icon: 'table' },
@@ -185,18 +184,32 @@ export const asyncRouterMap = [
         name: 'businessesadd',
         hidden: true,
         component: _import('businesses/add'),
-        meta: { roles: ['1'], title: '新增人员', icon: 'table' }
+        meta: { roles: ['1'], title: '新增企业', icon: 'table' }
+      },
+      {
+        path: 'update',
+        name: 'businessesupdate',
+        hidden: true,
+        component: _import('businesses/update'),
+        meta: { roles: ['1'], title: '修改企业', icon: 'table' }
       },
       {
         path: 'detail',
         name: 'businessesdetail',
         hidden: true,
         component: _import('businesses/detail'),
-        meta: { roles: ['1'], title: '人员详情', icon: 'table' }
+        meta: { roles: ['1'], title: '企业详情', icon: 'table' }
+      },
+      {
+        path: 'auditlist',
+        name: 'businessesauditlist',
+        component: _import('businesses/auditlist'),
+        meta: { roles: ['1'], title: '企业审核', icon: 'user' }
       },
       {
         path: 'audit',
         name: 'businessesaudit',
+        hidden: true,
         component: _import('businesses/audit'),
         meta: { roles: ['1'], title: '企业审核', icon: 'user' }
       },

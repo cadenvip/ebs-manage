@@ -37,6 +37,7 @@ const user = {
     Login({ commit }, userInfo) {
       return new Promise((resolve, reject) => {
         login(userInfo).then(response => {
+          debugger
           // 此处将用户加密后的密码作为token
           const data = response.data
           console.log(data)

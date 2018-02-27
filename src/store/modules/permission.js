@@ -49,11 +49,6 @@ const permission = {
       return new Promise(resolve => {
         const { roles } = data
         var accessedRouters = filterAsyncRouter(asyncRouterMap, roles)
-        // if (roles.indexOf('商家管理员') >= 0) {
-        //   accessedRouters = asyncRouterMap
-        // } else {
-        //   accessedRouters = filterAsyncRouter(asyncRouterMap, roles)
-        // }
         commit('SET_ADDROUTERS', accessedRouters)
         commit('SET_ROUTERS', accessedRouters)
         resolve()

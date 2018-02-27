@@ -3,6 +3,7 @@ import store from './store'
 import NProgress from 'nprogress' // Progress 进度条
 import 'nprogress/nprogress.css'// Progress 进度条样式
 import { Message } from 'element-ui'
+// import { MessageBox } from 'element-ui'
 import { getToken } from '@/utils/auth' // 验权
 
 // permissiom judge function
@@ -14,18 +15,18 @@ function hasPermission(roles, permissionRoles) {
 }
 
 const whiteList = ['/',
-  '/login',
-  '/goodsmanage/publishgoods',
-  '/goodsmanage/publishstep1',
-  '/goodsmanage/publishstep2',
-  '/goodsmanage/publishstep3',
-  '/goodsmanage/onsalegoods',
-  '/goodsmanage/noshelfgoods',
-  '/goodsmanage/goodsdetail',
+  '/login'
+  // '/goodsmanage/publishgoods',
+  // '/goodsmanage/publishstep1',
+  // '/goodsmanage/publishstep2',
+  // '/goodsmanage/publishstep3',
+  // '/goodsmanage/onsalegoods',
+  // '/goodsmanage/noshelfgoods',
+  // '/goodsmanage/goodsdetail',
   // 管理员
-  '/goodsmanage/updownaudit',
-  '/goodsmanage/goodssearch',
-  '/goodsmanage/preview',
+  // '/goodsmanage/updownaudit',
+  // '/goodsmanage/goodssearch',
+  // '/goodsmanage/preview',
   // '/account/location',
   // '/account/user/list',
   // '/account/user/add',
@@ -36,17 +37,25 @@ const whiteList = ['/',
   // '/account/role/update',
   // '/account/role/detail',
   // '/account/permissions',
-  '/businesses/list',
-  '/businesses/add',
-  '/businesses/detail',
-  '/businesses/audit'
+  // '/businesses/list',
+  // '/businesses/add',
+  // '/businesses/detail',
+  // '/businesses/audit'
 ] // 不重定向白名单
 
 router.beforeEach((to, from, next) => {
   NProgress.start()
   if (getToken()) {
     if (to.path === '/login') {
-      next({ path: '/' })
+      store.dispatch('LogOut').then(() => {
+        // next()
+        location.reload()
+      }).catch(error => {
+        NProgress.done()
+        Message.error('登出失败！')
+        console.log(error)
+        next({ path: from })
+      })
     } else {
       if (store.getters.roles.length === 0) {
         var roles = []
@@ -55,6 +64,7 @@ router.beforeEach((to, from, next) => {
             roles.push(v.roletype)
           })
           store.dispatch('GenerateRoutes', { roles }).then(() => {
+            debugger
             router.addRoutes(store.getters.addRouters)
             next({ ...to, replace: true })
           })

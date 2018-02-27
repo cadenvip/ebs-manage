@@ -16,12 +16,13 @@ export function getAllBusinesses(currentpage, pagesize) {
 }
 
 export function getBusinessesList(businessesInfo, currentpage, pagesize) {
+  debugger
   return request({
     url: '/businesses/listbusinesses',
     method: 'post',
     data: { 'businessesName': `${businessesInfo.businessesName}`,
       'state': `${businessesInfo.state}`,
-      'createsource': `${businessesInfo.createsource}`,
+      'createsource': `${businessesInfo.createsource !== undefined ? businessesInfo.createsource : ''}`,
       'locationCode': `${businessesInfo.locationCode !== '' ? businessesInfo.locationCode : 0}`,
       'page': `${currentpage}`,
       'limit': `${pagesize}`
@@ -33,28 +34,24 @@ export function addBusinesses(params) {
   return request({
     url: '/businesses/save',
     method: 'post',
-    data: { 'businessesname': `${params.businessesname}`,
-      'businessestype': `${params.businessestype}`,
-      'description': `${params.description}`,
-      'resourceids': params.resourceids,
-      'issystem': '1',
-      'ishidden': '0'
-    }
+    data: {}
   })
 }
 
-export function updateBusinesses(params) {
-  return request({
-    url: '/businesses/updatebusinesses',
-    method: 'post',
-    data: { 'id': `${params.id}`,
-      'businessesname': `${params.businessesname}`,
-      'description': `${params.description}`,
-      'resourceids': params.resourceids,
-      'issystem': '1',
-      'ishidden': '0'
-    }
-  })
+export function updateBusinesses(params, roletype) {
+  if (roletype === 2) {
+    return request({
+      url: '/businesses/updatebusinesses', // 商家自己修改
+      method: 'post',
+      data: {}
+    })
+  } else {
+    return request({
+      url: '/register/BusinessesUpdate', // 管理员修改
+      method: 'post',
+      data: {}
+    })
+  }
 }
 
 export function deleteBusinesses(params) {

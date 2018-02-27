@@ -6,7 +6,7 @@ import { getToken, getSessionid } from '@/utils/auth'
 // 创建axios实例
 const service = axios.create({
   baseURL: process.env.BASE_API, // api的base_url
-  timeout: 60000 // 请求超时时间
+  timeout: 30000 // 请求超时时间
 })
 
 // request拦截器
@@ -19,7 +19,9 @@ service.interceptors.request.use(config => {
   // 登录成功后，将JSESSIONID上传以鉴权
   if (store.getters.sessionid) {
     // config['url'] = config.url + `?JSESSIONID=${store.getters.sessionid}`
-    config['url'] = config.url + '?JSESSIONID=' + getSessionid()
+    if (config.url !== '/login') {
+      config['url'] = config.url + '?JSESSIONID=' + getSessionid()
+    }
   }
   return config
 }, error => {

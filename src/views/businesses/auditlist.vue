@@ -14,31 +14,19 @@
           </el-form-item>  
         </el-col>
       </el-row>
-      <el-row>
-        <el-col :span="10">
-          <el-form-item label="录入来源：">
-            <el-select v-model="searchForm.createsource" clearable placeholder="请选择" style="width: 300px;">
-              <el-option label="商家注册" value="1"></el-option>
-              <el-option label="管理员添加" value="2"></el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="10">
-          <!-- state审核状态：0-正常 1-暂停 2-企业审核 3-未通过  4- 过期 5-网店待审核 6-待付款 -->
-          <!-- status审核状态：0-正常 1-暂停 2-企业审核 3-未通过  4- 过期 5-网店待审核 6-待付款 -->
-          <el-form-item label="企业状态：">
-            <el-select v-model="searchForm.state" clearable placeholder="请选择" style="width: 300px;">
-              <el-option label="待审核" value="0"></el-option>
-              <el-option label="正常" value="1"></el-option>
-              <el-option label="驳回" value="2"></el-option>
-              <!-- <el-option label="停用" value="3"></el-option>
-              <el-option label="过期" value="4"></el-option>
-              <el-option label="网店待审核" value="5"></el-option>
-              <el-option label="待付款" value="6"></el-option> -->
-            </el-select>
-          </el-form-item>
-        </el-col>
-      </el-row>
+        <!-- state审核状态：0-正常 1-暂停 2-企业审核 3-未通过  4- 过期 5-网店待审核 6-待付款 -->
+        <!-- status审核状态：0-正常 1-暂停 2-企业审核 3-未通过  4- 过期 5-网店待审核 6-待付款 -->
+        <el-form-item label="企业状态：">
+          <el-select v-model="searchForm.state" clearable placeholder="请选择" style="width: 300px;">
+            <el-option label="正常" value="0"></el-option>
+            <el-option label="停用" value="1"></el-option>
+            <el-option label="企业待审核" value="2"></el-option>
+            <el-option label="驳回" value="3"></el-option>
+            <el-option label="过期" value="4"></el-option>
+            <el-option label="网店待审核" value="5"></el-option>
+            <el-option label="待付款" value="6"></el-option>
+          </el-select>
+        </el-form-item>
       <el-row>
         <el-col :span="2" :offset="16">
           <el-button type="primary" @click.native.prevent="queryBusinessesList">查询</el-button>
@@ -64,16 +52,16 @@
       </el-table-column>
       <el-table-column label="区域" prop="locationName" width="110">
       </el-table-column>
+      <el-table-column label="经营范围" prop="createsource" :formatter="sourceFormat" width="100" align="center">
+      </el-table-column>
       <el-table-column label="有效时间" prop="validDateEnd" :formatter="timedateFormat" width="110" align="center">
       </el-table-column>
       <el-table-column label="企业状态" prop="state" :formatter="stateFormat" width="80" align="center">
       </el-table-column>
-      <el-table-column label="录入来源" prop="createsource" :formatter="sourceFormat" width="100" align="center">
-      </el-table-column>
       <el-table-column align="center" label="操作" width="190">
         <template slot-scope="scope">
-          <el-button @click="detail(scope.row)" type="text" size="small">详细</el-button>
-          <el-button @click="updateBusinesses(scope.row)" type="text" size="small">修改</el-button>
+          <el-button v-if="scope.row.state !== '2'" @click="adopt(scope.row)" type="text" size="small">通过</el-button>
+          <el-button v-if="scope.row.state !== '2'" @click="audit(scope.row)" type="text" size="small">审核</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -104,7 +92,6 @@ export default {
         businessesName: '',
         locationCode: '',
         locationname: '',
-        createsource: '',
         state: ''
       },
       pagesizes: [10, 20, 30, 50],
@@ -167,7 +154,6 @@ export default {
       this.searchForm.businessesName = ''
       this.searchForm.locationCode = ''
       this.searchForm.locationname = ''
-      this.searchForm.createsource = ''
       this.searchForm.state = ''
     },
     timedateFormat(row, column, cellValue) {
@@ -177,27 +163,27 @@ export default {
     stateFormat(row, column, cellValue) {
       var state = ''
       switch (cellValue) {
-        case '0':
-          state = '企业待审核'
-          break
         case '1':
           state = '正常'
           break
         case '2':
+          state = '停用'
+          break
+        case '3':
+          state = '企业待审核'
+          break
+        case '4':
           state = '驳回'
           break
-        // case '3':
-        //   state = '停用'
-        //   break
-        // case '4':
-        //   state = '过期'
-        //   break
-        // case '5':
-        //   state = '网店待审核'
-        //   break
-        // case '6':
-        //   state = '待付款'
-        //   break
+        case '5':
+          state = '过期'
+          break
+        case '6':
+          state = '网店待审核'
+          break
+        case '7':
+          state = '待付款'
+          break
         default:
           break
       }
@@ -218,11 +204,15 @@ export default {
       }
       return source
     },
-    detail(businesses) {
-      this.$router.push({ path: '/businesses/detail', query: { id: businesses.id }})
+    adopt(businesses) {
+      // this.$router.push({ path: '/businesses/detail', query: { id: businesses.id }})
+      debugger
+      alert('通过！')
     },
-    updateBusinesses(businesses) {
-      this.$router.push({ path: '/businesses/update', query: { id: businesses.id }})
+    audit(businesses) {
+      debugger
+      alert('审核')
+      this.$router.push({ path: '/businesses/audit', query: { id: businesses.id }})
     },
     handleSizeChange(val) {
       this.pagesize = this.pagesize === val ? this.pagesize : val
