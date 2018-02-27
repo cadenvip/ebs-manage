@@ -10,7 +10,7 @@
     </el-header>
     <el-main>
       <div>
-        <span style="padding-right: 20px;font-size:20px;">请选择您的商品类别:</span>
+        <span style="padding-right: 20px;font-size:20px;">请选择您的商品类别:</span>{{goodstype}}
         <el-cascader style="width: 300px;" @change="handleChange" :options="goodsOptions" v-model="goodstype">
         </el-cascader>
       </div>
@@ -60,8 +60,9 @@
           axios.get(url).then(res => {
             if (res.status === 200) {
               this.goodstype = []
-              this.goodstype.push(res.data.data.goodsBean.catalogId)
               this.goodstype.push(res.data.data.goodsBean.typeCode)
+              this.goodsCode = res.data.data.goodsBean.goodsCode
+              this.handleChange(this.goodstype)
             } else {
               this.$message.error(res.message)
             }
@@ -112,7 +113,6 @@
           }
         }
         this.goodstype = value
-        console.log(this.goodstype)
         this.setSelectedOption(value)
         this.setSelectedLabel({
           label: label,
@@ -139,7 +139,7 @@
           if (this.isFromModifyFlag) {
             checkGoStepTwo(params).then(res => {
               if (res.status === 200) {
-                this.$router.push({ name: 'publishstep2', query: { typeCode: this.goodstype[0], typeCodeName: this.goodstype[1], goodsId: this.goodsId, isFromModifyFlag: this.isFromModifyFlag }})
+                this.$router.push({ name: 'publishstep2', query: { typeCode: this.goodstype[1], goodsCode: this.goodsCode, goodsId: this.goodsId, isFromModifyFlag: this.isFromModifyFlag }})
               } else {
                 this.$message.error(res.message)
               }
@@ -149,7 +149,7 @@
           } else {
             checkGoStepTwo(params).then(res => {
               if (res.status === 200) {
-                this.$router.push({ name: 'publishstep2', query: { typeCode: this.goodstype[0], typeCodeName: this.goodstype[1] }})
+                this.$router.push({ name: 'publishstep2', query: { typeCode: this.goodstype[1] }})
               } else {
                 this.$message.error(res.message)
               }

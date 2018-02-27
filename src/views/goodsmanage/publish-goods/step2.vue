@@ -306,22 +306,70 @@
                 for (var i in template) {
                   if (template[i].templateCode === this.goodsBean.logisticsTemplateCode) {
                     this.ruleForm.wuliuObjN = template[i].templateName
+                    return false
                   }
                 }
               })
             }
-            // this.ruleForm.wuliu = this.goodsBean.logisticsTypes
-            // this.ruleForm = this.goodsBean
-            // this.ruleForm = this.goodsBean
-            // this.ruleForm = this.goodsBean
-            // this.ruleForm = this.goodsBean
-            // this.ruleForm = this.goodsBean
-            // this.ruleForm = this.goodsBean
-            // this.ruleForm = this.goodsBean
-            // this.ruleForm = this.goodsBean
-            // this.ruleForm = this.goodsBean
-            // this.ruleForm = this.goodsBean
-            // this.ruleForm = this.goodsBean
+            this.ruleForm.kucun = Number(this.goodsBean.stock)
+            this.ruleForm.kucuntx = this.goodsBean.stockAlarmFlag
+            this.ruleForm.kucuntxNum = this.goodsBean.stockAlarmFlag ? this.goodsBean.stockAlarm : ''
+            if (this.goodsBean.alipay === '0') {
+              this.ruleForm.zhifufs.push('支付宝支付')
+            }
+            if (this.goodsBean.cmpay === '0') {
+              this.ruleForm.zhifufs.push('手机支付')
+            }
+            if (this.goodsBean.unionpay === '0') {
+              this.ruleForm.zhifufs.push('网银支付')
+            }
+            // 阶梯价格
+            if (this.goodsBean.gradientPriceFlag === '1') {
+              this.ruleForm.jietiFlag = true
+            } else {
+              this.ruleForm.jietiFlag = false
+            }
+            this.jietiItem1.num = this.goodsBean.gradientNumber[0]
+            this.jietiItem1.dollar = this.goodsBean.gradientPrice[0]
+            var tempNumArr = this.goodsBean.gradientNumber.slice(1, this.goodsBean.gradientNumber.length)
+            var tempDollarArr = this.goodsBean.gradientPrice.slice(1, this.goodsBean.gradientPrice.length)
+            if (tempNumArr.length === 0 || tempDollarArr.length === 0) {
+              console.log('nothing to do!')
+            } else {
+              for (var i = 0; i < tempNumArr.length; i++) {
+                this.jietiItems.push({ num: tempNumArr[i], dollar: tempDollarArr[i] })
+              }
+            }
+            // 图片上传 先不管
+            this.ruleForm.spzl = Number(this.goodsBean.weight)
+            this.danwei = this.goodsBean.weightUnit
+            this.ruleForm.spgg = this.goodsBean.orderGoodsSpec2
+            this.ruleForm.sccj = this.goodsBean.supplierName
+            this.ruleForm.spcdcode = this.goodsBean.placeofOriginCode
+            this.ruleForm.spcd = this.goodsBean.placeofOriginName
+            this.ruleForm.scrq = this.goodsBean.produceDate
+            this.ruleForm.baozhiqi = this.goodsBean.shelfLife
+            this.baozhiqidw = this.goodsBean.shelfLifeUnit
+            this.jiliangdw = this.goodsBean.quantityUnits
+            // 定时上架
+            if (this.goodsBean.salsCatalogCode === '0') {
+              this.ruleForm.dingssj = true
+            } else {
+              this.ruleForm.dingssj = false
+            }
+            this.ruleForm.zdsjsj = this.goodsBean.onSaleTime
+            this.ruleForm.zdxjsj = this.goodsBean.offSaleTime
+            this.goodsBean.isEmail === '0' ? this.ruleForm.sjtx.push('邮件') : this.ruleForm.sjtx
+            this.goodsBean.isSms === '0' ? this.ruleForm.sjtx.push('短信') : this.ruleForm.sjtx
+            this.goodsBean.website === '0' ? this.ruleForm.fbqd.push('12582网站') : this.ruleForm.fbqd
+            this.goodsBean.hotline === '0' ? this.ruleForm.fbqd.push('12582热线') : this.ruleForm.fbqd
+            this.goodsBean.wapsite === '0' ? this.ruleForm.fbqd.push('WAP') : this.ruleForm.fbqd
+            this.goodsBean.phoneline === '0' ? this.ruleForm.fbqd.push('手机客户端') : this.ruleForm.fbqd
+            this.goodsBean.agriculturalmall === '0' ? this.ruleForm.fbqd.push('农资商城') : this.ruleForm.fbqd
+            this.goodsBean.isPromote === '0' ? this.ruleForm.thh.push('推荐') : this.ruleForm.thh
+            this.goodsBean.isReturn === '0' ? this.ruleForm.thh.push('支持退货') : this.ruleForm.thh
+            this.goodsBean.isExchange === '0' ? this.ruleForm.thh.push('支持换货') : this.ruleForm.thh
+            this.ruleForm.spdz = this.goodsBean.videoUrl
           } else {
             this.$message.error(res.message)
           }
@@ -547,6 +595,10 @@
               smsInfo: '',
               wapInfo: '',
               wapUrl: ''
+            }
+            if (this.isFromModifyFlag === 1) {
+              parmas.goodsId = this.$route.query.goodsId
+              parmas.goodsCode = this.$route.query.goodsCode
             }
             console.log(parmas)
             goodsRelease(parmas).then(res => {
