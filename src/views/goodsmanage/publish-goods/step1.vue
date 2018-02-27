@@ -60,6 +60,7 @@
           axios.get(url).then(res => {
             if (res.status === 200) {
               this.goodstype = []
+              this.goodstype.push(res.data.data.goodsBean.typeCode.substring(0, 4))
               this.goodstype.push(res.data.data.goodsBean.typeCode)
               this.goodsCode = res.data.data.goodsBean.goodsCode
               this.handleChange(this.goodstype)
