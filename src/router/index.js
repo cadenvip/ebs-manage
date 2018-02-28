@@ -158,10 +158,17 @@ export const asyncRouterMap = [
         meta: { roles: ['1'], title: '参数管理', icon: 'table' }
       },
       {
-        path: 'sensitivewordsmanagement',
-        name: 'sensitivewordsmanagement',
-        component: _import('account/sensitivewordsmanagement'),
+        path: 'sensitive/list',
+        name: 'sensitivelist',
+        component: _import('sensitive/list'),
         meta: { roles: ['1'], title: '敏感词管理', icon: 'table' }
+      },
+      {
+        path: 'sensitive/add',
+        name: 'sensitiveadd',
+        hidden: true,
+        component: _import('sensitive/add'),
+        meta: { roles: ['1'], title: '新增敏感词', icon: 'table' }
       }
     ]
   },
