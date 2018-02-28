@@ -175,51 +175,11 @@
           foodotherpicpath: [],
           // },
           goodsListForm: [
-            {
-              num: '示例',
-              name: '鱼香大米',
-              unit: '5KG',
-              origin: '重庆,西永',
-              price: '￥250',
-              description: '多种蛋白质、营养丰富、色泽光亮、颗粒饱满',
-              url: 'http://detail.tmall.com/item.htm?spm=a230r.1.14.172.VhFL'
-            },
-            {
-              num: '01',
-              name: '',
-              unit: '',
-              origin: '',
-              price: '',
-              description: '',
-              url: ''
-            },
-            {
-              num: '02',
-              name: '',
-              unit: '',
-              origin: '',
-              price: '',
-              description: '',
-              url: ''
-            },
-            {
-              num: '03',
-              name: '',
-              unit: '',
-              origin: '',
-              price: '',
-              description: '',
-              url: ''
-            },
-            {
-              num: '04',
-              name: '',
-              unit: '',
-              origin: '',
-              price: '',
-              description: '',
-              url: ''
-            }
+            { num: '示例', name: '鱼香大米', unit: '5KG', origin: '重庆,西永', price: '￥250', description: '多种蛋白质、营养丰富、色泽光亮、颗粒饱满', url: 'http://detail.tmall.com/item.htm?spm=a230r.1.14.172.VhFL' },
+            { num: '01', name: '', unit: '', origin: '', price: '', description: '', url: '' },
+            { num: '02', name: '', unit: '', origin: '', price: '', description: '', url: '' },
+            { num: '03', name: '', unit: '', origin: '', price: '', description: '', url: '' },
+            { num: '04', name: '', unit: '', origin: '', price: '', description: '', url: '' }
           ]
         },
         registerRules: {

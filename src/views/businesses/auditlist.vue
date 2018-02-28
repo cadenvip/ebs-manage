@@ -18,13 +18,13 @@
         <!-- status审核状态：0-正常 1-暂停 2-企业审核 3-未通过  4- 过期 5-网店待审核 6-待付款 -->
         <el-form-item label="企业状态：">
           <el-select v-model="searchForm.state" clearable placeholder="请选择" style="width: 300px;">
-            <el-option label="正常" value="0"></el-option>
-            <el-option label="停用" value="1"></el-option>
-            <el-option label="企业待审核" value="2"></el-option>
-            <el-option label="驳回" value="3"></el-option>
+            <el-option label="待审核" value="0"></el-option>
+            <el-option label="正常" value="1"></el-option>
+            <el-option label="驳回" value="2"></el-option>
+            <!-- <el-option label="停用" value="3"></el-option>
             <el-option label="过期" value="4"></el-option>
             <el-option label="网店待审核" value="5"></el-option>
-            <el-option label="待付款" value="6"></el-option>
+            <el-option label="待付款" value="6"></el-option> -->
           </el-select>
         </el-form-item>
       <el-row>
@@ -56,12 +56,12 @@
       </el-table-column>
       <el-table-column label="有效时间" prop="validDateEnd" :formatter="timedateFormat" width="110" align="center">
       </el-table-column>
-      <el-table-column label="企业状态" prop="state" :formatter="stateFormat" width="80" align="center">
+      <el-table-column label="企业状态" prop="state" :formatter="stateFormat" width="100" align="center">
       </el-table-column>
       <el-table-column align="center" label="操作" width="190">
         <template slot-scope="scope">
-          <el-button v-if="scope.row.state !== '2'" @click="adopt(scope.row)" type="text" size="small">通过</el-button>
-          <el-button v-if="scope.row.state !== '2'" @click="audit(scope.row)" type="text" size="small">审核</el-button>
+          <el-button v-if="scope.row.state === '1'" @click="adopt(scope.row)" type="text" size="small">通过</el-button>
+          <el-button v-if="scope.row.state === '1'" @click="audit(scope.row)" type="text" size="small">审核</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -80,8 +80,7 @@
 </template>
 
 <script>
-
-import { getAllBusinesses, getBusinessesList } from '@/api/businesses'
+import { getAllBusinesses, getBusinessesList, auditBusinesses } from '@/api/businesses'
 import locationselector from '@/components/LocationSelector/index'
 
 export default {
@@ -163,27 +162,27 @@ export default {
     stateFormat(row, column, cellValue) {
       var state = ''
       switch (cellValue) {
+        case '0':
+          state = '企业待审核'
+          break
         case '1':
           state = '正常'
           break
         case '2':
-          state = '停用'
-          break
-        case '3':
-          state = '企业待审核'
-          break
-        case '4':
           state = '驳回'
           break
-        case '5':
-          state = '过期'
-          break
-        case '6':
-          state = '网店待审核'
-          break
-        case '7':
-          state = '待付款'
-          break
+        // case '3':
+        //   state = '停用'
+        //   break
+        // case '4':
+        //   state = '过期'
+        //   break
+        // case '5':
+        //   state = '网店待审核'
+        //   break
+        // case '6':
+        //   state = '待付款'
+        //   break
         default:
           break
       }
@@ -205,13 +204,15 @@ export default {
       return source
     },
     adopt(businesses) {
-      // this.$router.push({ path: '/businesses/detail', query: { id: businesses.id }})
-      debugger
       alert('通过！')
+      auditBusinesses({ 'businessesid': businesses.businessesid, 'state': '1', 'reason': '' }).then(response => {
+        alert('审核成功')
+      }).catch(error => {
+        console.log(error)
+      })
     },
     audit(businesses) {
-      debugger
-      alert('审核')
+      alert('正在审核...')
       this.$router.push({ path: '/businesses/audit', query: { id: businesses.id }})
     },
     handleSizeChange(val) {

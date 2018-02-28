@@ -437,8 +437,8 @@
               </el-col>
             </el-row>
             <hr style="height:1px;border:none;border-top:1px dashed #0066CC;" />
-            <h5>企业经营资质</h5>
-            <el-form-item>
+            <h5>审核信息</h5>
+            <el-form-item label="审核信息：" prop="reason">
               <el-input type="textarea" v-model="reason"></el-input>
             </el-form-item>
           </el-form>
@@ -449,8 +449,8 @@
           <img width="100%" :src="dialogImageUrl" alt="">
         </el-dialog>
         <div style="margin-top: 20px; text-align: center;">
-          <el-button @click="audit(0)" type="primary">通 过</el-button>
-          <el-button @click="audit(3)" type="primary">驳 回</el-button>
+          <el-button @click="audit(1)" type="primary">通 过</el-button>
+          <el-button @click="audit(2)" type="primary">驳 回</el-button>
           <el-button @click="goBack" type="primary">返 回</el-button>
         </div>
       </el-main>
@@ -537,51 +537,11 @@
           foodotherpicpath: [],
           // },
           goodsListForm: [
-            {
-              num: '示例',
-              name: '鱼香大米',
-              unit: '5KG',
-              origin: '重庆,西永',
-              price: '￥250',
-              description: '多种蛋白质、营养丰富、色泽光亮、颗粒饱满',
-              url: 'http://detail.tmall.com/item.htm?spm=a230r.1.14.172.VhFL'
-            },
-            {
-              num: '01',
-              name: '',
-              unit: '',
-              origin: '',
-              price: '',
-              description: '',
-              url: ''
-            },
-            {
-              num: '02',
-              name: '',
-              unit: '',
-              origin: '',
-              price: '',
-              description: '',
-              url: ''
-            },
-            {
-              num: '03',
-              name: '',
-              unit: '',
-              origin: '',
-              price: '',
-              description: '',
-              url: ''
-            },
-            {
-              num: '04',
-              name: '',
-              unit: '',
-              origin: '',
-              price: '',
-              description: '',
-              url: ''
-            }
+            { num: '示例', name: '鱼香大米', unit: '5KG', origin: '重庆,西永', price: '￥250', description: '多种蛋白质、营养丰富、色泽光亮、颗粒饱满', url: 'http://detail.tmall.com/item.htm?spm=a230r.1.14.172.VhFL' },
+            { num: '01', name: '', unit: '', origin: '', price: '', description: '', url: '' },
+            { num: '02', name: '', unit: '', origin: '', price: '', description: '', url: '' },
+            { num: '03', name: '', unit: '', origin: '', price: '', description: '', url: '' },
+            { num: '04', name: '', unit: '', origin: '', price: '', description: '', url: '' }
           ]
         },
         registerRules: {
@@ -616,7 +576,7 @@
     },
     methods: {
       getLocationCode(locationInfo) {
-        this.registerForm.locationCode = locationInfo.id
+        this.registerForm.locationCode = locationInfo.id.toString()
       },
       getAddressInfo(addressInfo) {
         console.log(addressInfo)
@@ -625,7 +585,6 @@
       },
       addSellAddress() {
         alert('增加一项')
-        debugger
         // this.registerForm.sellAddressListForm.push({ 'haha': 'fdasf' })
         this.sellAddressListForm.push({ 'haha': 'fdasf' })
       },
@@ -675,10 +634,11 @@
         this.dialogVisible = true
       },
       goBack() {
-        this.$router.push({ path: '/businesses/list' })
+        this.$router.push({ path: '/businesses/auditlist' })
       },
       audit(type) {
-        if (type === 3) {
+        // 0 待审核，1 正常（通过），3 驳回
+        if (type === 2) {
           if (this.reason === '') {
             alert('请填写审核原因！')
           }

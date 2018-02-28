@@ -66,7 +66,7 @@
       </el-table-column>
       <el-table-column label="有效时间" prop="validDateEnd" :formatter="timedateFormat" width="110" align="center">
       </el-table-column>
-      <el-table-column label="企业状态" prop="state" :formatter="stateFormat" width="80" align="center">
+      <el-table-column label="企业状态" prop="state" :formatter="stateFormat" width="100" align="center">
       </el-table-column>
       <el-table-column label="录入来源" prop="createsource" :formatter="sourceFormat" width="100" align="center">
       </el-table-column>
@@ -219,6 +219,7 @@ export default {
       return source
     },
     detail(businesses) {
+      console.log('businesses: ', businesses)
       this.$router.push({ path: '/businesses/detail', query: { id: businesses.id }})
     },
     updateBusinesses(businesses) {

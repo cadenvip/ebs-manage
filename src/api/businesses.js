@@ -16,7 +16,6 @@ export function getAllBusinesses(currentpage, pagesize) {
 }
 
 export function getBusinessesList(businessesInfo, currentpage, pagesize) {
-  debugger
   return request({
     url: '/businesses/listbusinesses',
     method: 'post',
@@ -27,6 +26,14 @@ export function getBusinessesList(businessesInfo, currentpage, pagesize) {
       'page': `${currentpage}`,
       'limit': `${pagesize}`
     }
+  })
+}
+
+export function adnminAddBusniess(params) {
+  return request({
+    url: '/register/adnminAddBusniess',
+    method: 'post',
+    data: params
   })
 }
 
