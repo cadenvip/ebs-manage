@@ -75,7 +75,7 @@ export default {
       })
     },
     addSensitive() {
-      this.$router.push({ path: '/account/sensitive/add' })
+      this.$router.push({ path: '/system/sensitive/add' })
     },
     initSensitiveList() {
       this.loading = true

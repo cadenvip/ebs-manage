@@ -117,7 +117,7 @@ export default {
       })
     },
     addRole() {
-      this.$router.push({ path: '/account/role/add' })
+      this.$router.push({ path: '/system/role/add' })
     },
     initRoleList() {
       this.loading = true
@@ -131,7 +131,7 @@ export default {
       })
     },
     updateRole(role) {
-      this.$router.push({ path: '/account/role/update', query: { id: role.id }})
+      this.$router.push({ path: '/system/role/update', query: { id: role.id }})
     },
     deleteRole(role) {
       this.$confirm(`您确定删除名称为[${role.rolename}]的角色吗, 是否继续?`, '提示', {
@@ -163,7 +163,7 @@ export default {
       })
     },
     detail(role) {
-      this.$router.push({ path: '/account/role/detail', query: { id: role.id }})
+      this.$router.push({ path: '/system/role/detail', query: { id: role.id }})
     },
     resetForm(formname) {
       // this.$refs[formname].resetFields()

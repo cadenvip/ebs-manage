@@ -120,7 +120,7 @@ export default {
       })
     },
     addUser() {
-      this.$router.push({ path: '/account/user/add' })
+      this.$router.push({ path: '/system/user/add' })
     },
     initUserList() {
       this.loading = true
@@ -144,7 +144,7 @@ export default {
       return arrRoleNames.join()
     },
     updateUser(user) {
-      this.$router.push({ path: '/account/user/update', query: { id: user.id }})
+      this.$router.push({ path: '/system/user/update', query: { id: user.id }})
     },
     resetPassword(user) {
       this.$confirm(`您确定重置[${user.loginname}]的密码吗, 是否继续?`, '提示', {
@@ -160,7 +160,7 @@ export default {
       })
     },
     detail(user) {
-      this.$router.push({ path: '/account/user/detail', query: { id: user.id }})
+      this.$router.push({ path: '/system/user/detail', query: { id: user.id }})
     },
     handleSizeChange(val) {
       this.pagesize = val

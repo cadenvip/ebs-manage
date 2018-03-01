@@ -36,7 +36,7 @@ export default {
         if (valid) {
           return new Promise((resolve, reject) => {
             addSensitive(this.sensitiveForm.word).then(response => {
-              this.$router.push({ path: '/account/sensitive/list' })
+              this.$router.push({ path: '/system/sensitive/list' })
               resolve(response)
             }).catch(error => {
               reject(error)
@@ -52,7 +52,7 @@ export default {
       this.searchForm.word = ''
     },
     onCancel() {
-      this.$router.push({ path: '/account/sensitive/list' })
+      this.$router.push({ path: '/system/sensitive/list' })
     }
   }
 }

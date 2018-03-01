@@ -188,7 +188,7 @@ export default {
       })
     },
     onCancel() {
-      this.$router.push({ path: 'account/role/list' })
+      this.$router.push({ path: 'system/role/list' })
     }
   }
 }
