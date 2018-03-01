@@ -146,10 +146,39 @@ export const asyncRouterMap = [
         meta: { roles: ['1'], title: '权限管理', icon: 'table' }
       },
       {
-        path: 'logmanagement',
-        name: 'logmanagement',
-        component: _import('account/logmanagement'),
-        meta: { roles: ['1'], title: '日志管理', icon: 'table' }
+        path: '/log',
+        name: 'log',
+        component: _import('log/oLogList'),
+        hidden: false,
+        meta: { roles: ['1'], title: '日志管理', icon: 'table' },
+        children: [
+          {
+            path: 'olog/list',
+            name: 'ologlist',
+            component: _import('log/oLogList'),
+            meta: { roles: ['1'], title: '操作日志', icon: 'table' }
+          },
+          {
+            path: 'olog/detail',
+            name: 'ologdetail',
+            hidden: true,
+            component: _import('log/oLogDetail'),
+            meta: { roles: ['1'], title: '操作日志详情', icon: 'table' }
+          },
+          {
+            path: 'ilog/list',
+            name: 'iloglist',
+            component: _import('log/iLogList'),
+            meta: { roles: ['1'], title: '接口日志', icon: 'table' }
+          },
+          {
+            path: 'ilog/detail',
+            name: 'ilogdetail',
+            hidden: true,
+            component: _import('log/iLogDetail'),
+            meta: { roles: ['1'], title: '接口日志详情', icon: 'table' }
+          }
+        ]
       },
       {
         path: 'paramsmanagement',
