@@ -173,9 +173,11 @@ export default {
       this.searchForm.ishidden = ''
     },
     handleSizeChange(val) {
+      this.pagesize = val
       this.queryRoleList()
     },
     handleCurrentChange(val) {
+      this.currentPage = val
       this.queryRoleList()
     },
     transformIsSystem(row, column, cellValue) {

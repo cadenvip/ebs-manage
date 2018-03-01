@@ -106,10 +106,11 @@ export default {
       this.searchForm.keyword = ''
     },
     handleSizeChange(val) {
-      this.pagesize = this.pagesize === val ? this.pagesize : val
+      this.pagesize = val
       this.querySensitiveList()
     },
     handleCurrentChange(val) {
+      this.currentPage = val
       this.querySensitiveList()
     }
   }

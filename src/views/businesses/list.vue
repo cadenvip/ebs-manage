@@ -226,10 +226,11 @@ export default {
       this.$router.push({ path: '/businesses/update', query: { id: businesses.id }})
     },
     handleSizeChange(val) {
-      this.pagesize = this.pagesize === val ? this.pagesize : val
+      this.pagesize = val
       this.queryBusinessesList()
     },
     handleCurrentChange(val) {
+      this.currentPage = val
       this.queryBusinessesList()
     }
   }
