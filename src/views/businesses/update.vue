@@ -17,11 +17,21 @@
                 </el-form-item>                
               </el-col>
             </el-row>
-            <el-form-item label="商家类型：" prop="businessType">
-              <el-select v-model="registerForm.businessType" clearable style="width: 200px;" placeholder="请选择商家类型">
-                <el-option label="合作商家" value="合作商家"></el-option>
-              </el-select>
-            </el-form-item>
+            <el-row :gutter="30">
+              <el-col :span="12">
+                <el-form-item label="商家类型：" prop="businessType">
+                  <el-select v-model="registerForm.businessType" clearable style="width: 200px;" placeholder="请选择商家类型">
+                    <el-option label="合作商家" value="合作商家"></el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
+                <el-form-item label="有效时间：" prop="validdate_str">
+                  <el-date-picker v-model="registerForm.validdate_str" type="date" value-format="yyyy-MM-dd" style="width: 200px;" placeholder="选择日期">
+                  </el-date-picker>
+                </el-form-item>  
+              </el-col>
+            </el-row>
             <el-form-item label="企业地址：" prop="locationCode">
               <RegionSelector v-model="registerForm.locationCode" :grade="4" :showCountry="false" @locationChanged="getLocationCode" :locationId="registerForm.locationCode"></RegionSelector>
             </el-form-item>
@@ -586,7 +596,6 @@
             this.registerForm = response.data.businesses
             this.registerForm.locationCode = response.data.businesses.locationCode.toString()
             this.sellAddressListForm = response.data.sellAddresslist
-            // TODO 处理商品
             var goodsSamplelist = [{ num: '示例', name: '鱼香大米', unit: '5KG', origin: '重庆,西永', price: '￥250', description: '多种蛋白质、营养丰富、色泽光亮、颗粒饱满', url: 'http://detail.tmall.com/item.htm?spm=a230r.1.14.172.VhFL' }]
             switch (response.data.goodsSamplelist.length) {
               case 1:
@@ -655,12 +664,10 @@
         return
       },
       addSellAddress() {
-        alert('增加一项')
         // this.registerForm.sellAddressListForm.push({ 'haha': 'fdasf' })
         this.sellAddressListForm.push({ 'haha': 'fdasf' })
       },
       deleteSellAddress(index) {
-        alert('减少一项')
         this.sellAddressListForm.splice(index, 1)
       },
       beforeAvatarUpload(file) {
@@ -827,8 +834,8 @@
               'unit': `${this.registerForm.goodsListForm[i].unit}`,
               'origin': `${this.registerForm.goodsListForm[i].origin}`,
               'price': `${this.registerForm.goodsListForm[i].price}`,
-              'description': `${this.registerForm.goodsListForm[i].description}`,
-              'url': `${this.registerForm.goodsListForm[i].url}`
+              'description': `${this.registerForm.goodsListForm[i].description !== null ? this.registerForm.goodsListForm[i].description : ''}`,
+              'url': `${this.registerForm.goodsListForm[i].url !== null ? this.registerForm.goodsListForm[i].url : ''}`
             })
           }
         }
@@ -847,57 +854,57 @@
         var params = {
           'businessesBean': {
             'id': `${this.$route.query.id}`,
-            'businessesName': this.registerForm.businessesName,       // 企业名称
+            'businessesName': `${this.registerForm.businessesName}`,       // 企业名称
             'locationCode': `${this.registerForm.locationCode}`,		// 归属区域ID
-            'businesslicenseNum': this.registerForm.businesslicenseNum, // 企业营业执照号码
+            'businesslicenseNum': `${this.registerForm.businesslicenseNum}`, // 企业营业执照号码
             'merchantKind': `${this.registerForm.merchantKind}`,
-            'address': this.registerForm.address,				// 详细地址
-            'relationPerson': this.registerForm.relationPerson,			// 联系人姓名
-            'relationPhone': this.registerForm.relationPhone,		// 联系人电话，用于登陆，初始密码123456
-            'sellPersonName': this.registerForm.sellPersonName,			// 售后联系人
-            'sellPersonMobile': this.registerForm.sellPersonMobile,	// 售后联系人电话
-            'financePersonName': this.registerForm.financePersonName,		// 财务姓名
-            'financePersonMobile': this.registerForm.financePersonMobile, // 财务联系人手机
-            'operatoridnum': this.registerForm.operatoridnum,	// 经办人身份证
+            'address': `${this.registerForm.address}`,				// 详细地址
+            'relationPerson': `${this.registerForm.relationPerson}`,			// 联系人姓名
+            'relationPhone': `${this.registerForm.relationPhone}`,		// 联系人电话，用于登陆，初始密码123456
+            'sellPersonName': `${this.registerForm.sellPersonName}`,			// 售后联系人
+            'sellPersonMobile': `${this.registerForm.sellPersonMobile}`,	// 售后联系人电话
+            'financePersonName': `${this.registerForm.financePersonName}`,		// 财务姓名
+            'financePersonMobile': `${this.registerForm.financePersonMobile}`, // 财务联系人手机
+            'operatoridnum': `${this.registerForm.operatoridnum}`,	// 经办人身份证
             'isInvoice': `${this.registerForm.isInvoice}`,   // 是否可开发票，0:不开，1：可以开发票
             'businessesShortName': `${this.registerForm.businessesShortName}`,  // 企业简称
             'businessType': `${this.registerForm.businessType}`, // 合作商家
             'legalName': `${this.registerForm.legalName}`, // 法人姓名
             'legalPaperType': `${this.registerForm.legalPaperType}`, // 法人证件类型
             'legalPaperNumber': `${this.registerForm.legalPaperNumber}`, // 法人证件号码
-            'relationEmail': `${this.registerForm.relationEmail}`,
-            'financePersonPhone': `${this.registerForm.financePersonPhone}`,
-            'financePersonEmail': `${this.registerForm.financePersonEmail}`,
-            'financePersonAddress': `${this.registerForm.financePersonAddress}`,
-            'registerMoney': `${this.registerForm.registerMoney}`,
-            'margin': `${this.registerForm.margin}`,
-            'liquidatedDamages': `${this.registerForm.liquidatedDamages}`,
-            'taxRegistrationNum': `${this.registerForm.taxRegistrationNum}`,
-            'officePhone': `${this.registerForm.officePhone}`,
-            'operateHours': `${this.registerForm.operateHours}`,
-            'employeesNum': `${this.registerForm.employeesNum}`,
-            'fax': `${this.registerForm.fax}`,
-            'zipCode': `${this.registerForm.zipCode}`,
-            'ownershipType': `${this.registerForm.ownershipType}`,
-            'merchantPayable': `${this.registerForm.merchantPayable}`,
-            'merchantNo': `${this.registerForm.merchantNo}`,
-            'aliPayNoPayable': `${this.registerForm.aliPayNoPayable}`,
-            'aliPayAccount': `${this.registerForm.aliPayAccount}`,
-            'aliPaySignKey': `${this.registerForm.aliPaySignKey}`,
-            'aliPaySellerAccountName': `${this.registerForm.aliPaySellerAccountName}`,
-            'cmPayNoPayable': `${this.registerForm.cmPayNoPayable}1`,
-            'cmPayMerchantId': `${this.registerForm.cmPayMerchantId}`,
-            'cmPaySignKey': `${this.registerForm.cmPaySignKey}`,
-            'umPayNoPayable': `${this.registerForm.umPayNoPayable}`,
-            'umPayMerchantId': `${this.registerForm.umPayMerchantId}`,
-            'umPayBankAccountName': `${this.registerForm.umPayBankAccountName}`,
-            'umPayBankAccountNo': `${this.registerForm.umPayBankAccountNo}`,
-            'wirelesscityno': `${this.registerForm.wirelesscityno}`,
-            'wirelesscityname': `${this.registerForm.wirelesscityname}`,
-            'wirelesscitypayable': `${this.registerForm.wirelesscitypayable}`,
-            'wirelesstpcode': `${this.registerForm.wirelesstpcode}`,
-            'wirelesstpname': `${this.registerForm.wirelesstpname}`,
-            'validdate_str': `2018-01-01` // TODO
+            'relationEmail': `${this.registerForm.relationEmail !== null ? this.registerForm.relationEmail : ''}`,
+            'financePersonPhone': `${this.registerForm.financePersonPhone !== null ? this.registerForm.financePersonPhone : ''}`,
+            'financePersonEmail': `${this.registerForm.financePersonEmail !== null ? this.registerForm.financePersonEmail : ''}`,
+            'financePersonAddress': `${this.registerForm.financePersonAddress !== null ? this.registerForm.financePersonAddress : ''}`,
+            'registerMoney': `${this.registerForm.registerMoney !== null ? this.registerForm.registerMoney : ''}`,
+            'margin': `${this.registerForm.margin !== null ? this.registerForm.margin : ''}`,
+            'liquidatedDamages': `${this.registerForm.liquidatedDamages !== null ? this.registerForm.liquidatedDamages : ''}`,
+            'taxRegistrationNum': `${this.registerForm.taxRegistrationNum !== null ? this.registerForm.taxRegistrationNum : ''}`,
+            'officePhone': `${this.registerForm.officePhone !== null ? this.registerForm.officePhone : ''}`,
+            'operateHours': `${this.registerForm.operateHours !== null ? this.registerForm.operateHours : ''}`,
+            'employeesNum': `${this.registerForm.employeesNum !== null ? this.registerForm.employeesNum : ''}`,
+            'fax': `${this.registerForm.fax !== null ? this.registerForm.fax : ''}`,
+            'zipCode': `${this.registerForm.zipCode !== null ? this.registerForm.zipCode : ''}`,
+            'ownershipType': `${this.registerForm.ownershipType !== null ? this.registerForm.ownershipType : ''}`,
+            'merchantPayable': `${this.registerForm.merchantPayable !== null ? this.registerForm.merchantPayable : ''}`,
+            'merchantNo': `${this.registerForm.merchantNo !== null ? this.registerForm.merchantNo : ''}`,
+            'aliPayNoPayable': `${this.registerForm.aliPayNoPayable !== null ? this.registerForm.aliPayNoPayable : ''}`,
+            'aliPayAccount': `${this.registerForm.aliPayAccount !== null ? this.registerForm.aliPayAccount : ''}`,
+            'aliPaySignKey': `${this.registerForm.aliPaySignKey !== null ? this.registerForm.aliPaySignKey : ''}`,
+            'aliPaySellerAccountName': `${this.registerForm.aliPaySellerAccountName !== null ? this.registerForm.aliPaySellerAccountName : ''}`,
+            'cmPayNoPayable': `${this.registerForm.cmPayNoPayable !== null ? this.registerForm.cmPayNoPayable : ''}`,
+            'cmPayMerchantId': `${this.registerForm.cmPayMerchantId !== null ? this.registerForm.cmPayMerchantId : ''}`,
+            'cmPaySignKey': `${this.registerForm.cmPaySignKey !== null ? this.registerForm.cmPaySignKey : ''}`,
+            'umPayNoPayable': `${this.registerForm.umPayNoPayable !== null ? this.registerForm.umPayNoPayable : ''}`,
+            'umPayMerchantId': `${this.registerForm.umPayMerchantId !== null ? this.registerForm.umPayMerchantId : ''}`,
+            'umPayBankAccountName': `${this.registerForm.umPayBankAccountName !== null ? this.registerForm.umPayBankAccountName : ''}`,
+            'umPayBankAccountNo': `${this.registerForm.umPayBankAccountNo !== null ? this.registerForm.umPayBankAccountNo : ''}`,
+            'wirelesscityno': `${this.registerForm.wirelesscityno !== null ? this.registerForm.wirelesscityno : ''}`,
+            'wirelesscityname': `${this.registerForm.wirelesscityname !== null ? this.registerForm.wirelesscityname : ''}`,
+            'wirelesscitypayable': `${this.registerForm.wirelesscitypayable !== null ? this.registerForm.wirelesscitypayable : ''}`,
+            'wirelesstpcode': `${this.registerForm.wirelesstpcode !== null ? this.registerForm.wirelesstpcode : ''}`,
+            'wirelesstpname': `${this.registerForm.wirelesstpname !== null ? this.registerForm.wirelesstpname : ''}`,
+            'validdate_str': `${this.registerForm.validdate_str !== null ? this.registerForm.validdate_str : ''}`
           },
           'goodsSamplelist': goodsSamplelist,
           'sellAddressList': sellAddressList,
@@ -909,18 +916,18 @@
             'foodsafetypicpath': `http:www.baidu.com`,
             'foodpathpicpath': `http:www.baidu.com`,
             'foodotherpicpath': [
-              'http:www.baidu.com',
-              'http:www.baidu.com',
-              'http:www.baidu.com'
+              `http:www.baidu.com`,
+              `http:www.baidu.com`,
+              `http:www.baidu.com`
             ]
           }
           // 'registerAttachmentBean': {
-          //   'sfzmpicpath': this.registerForm.sfzmpicpath,
-          //   'sffmpicpath': this.registerForm.sffmpicpath,
-          //   'licencepicpath': this.registerForm.licencepicpath,
-          //   'proxytestifypicpath': this.registerForm.proxytestifypicpath,
-          //   'foodsafetypicpath': this.registerForm.foodsafetypicpath,
-          //   'foodpathpicpath': this.registerForm.foodpathpicpath,
+          //   'sfzmpicpath': `${this.registerForm.sfzmpicpath}`,
+          //   'sffmpicpath': `${this.registerForm.sffmpicpath}`,
+          //   'licencepicpath': `${this.registerForm.licencepicpath}`,
+          //   'proxytestifypicpath': `${this.registerForm.proxytestifypicpath}`,
+          //   'foodsafetypicpath': `${this.registerForm.foodsafetypicpath}`,
+          //   'foodpathpicpath': `${this.registerForm.foodpathpicpath}`,
           //   'foodotherpicpath': [
           //     '其他URL1',
           //     '其他URL2',
@@ -929,8 +936,6 @@
           // },
         }
         // TODO 获取登录用户
-        console.log(params)
-        debugger
         updateBusinesses(params, '1').then(response => {
           this.$message('修改企业成功')
           this.$router.push({ path: '/businesses/list' })

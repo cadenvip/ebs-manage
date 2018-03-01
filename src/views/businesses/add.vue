@@ -17,11 +17,21 @@
                 </el-form-item>                
               </el-col>
             </el-row>
-            <el-form-item label="商家类型：" prop="businessType">
-              <el-select v-model="registerForm.businessType" clearable style="width: 200px;" placeholder="请选择商家类型">
-                <el-option label="合作商家" value="合作商家"></el-option>
-              </el-select>
-            </el-form-item>
+            <el-row :gutter="30">
+              <el-col :span="12">
+                <el-form-item label="商家类型：" prop="businessType">
+                  <el-select v-model="registerForm.businessType" clearable style="width: 200px;" placeholder="请选择商家类型">
+                    <el-option label="合作商家" value="合作商家"></el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
+                <el-form-item label="有效时间：" prop="validdate_str">
+                  <el-date-picker v-model="registerForm.validdate_str" type="date" value-format="yyyy-MM-dd" style="width: 200px;" placeholder="选择日期">
+                  </el-date-picker>
+                </el-form-item>  
+              </el-col>
+            </el-row>
             <el-form-item label="企业地址：" prop="locationCode">
               <RegionSelector v-model="registerForm.locationCode" :grade="4" :showCountry="false" @locationChanged="getLocationCode" :locationId="registerForm.locationCode"></RegionSelector>
             </el-form-item>
@@ -468,7 +478,7 @@
           businessesName: '',
           businessesShortName: '',	// 企业简称
           businessType: '',			// 商家类型
-          locationCode: 0,  // 中国
+          locationCode: '0',  // 中国
           businesslicenseNum: '',
           merchantKind: '1',
           legalName: '',
@@ -572,12 +582,9 @@
         return
       },
       addSellAddress() {
-        alert('增加一项')
-        // this.registerForm.sellAddressListForm.push({ 'haha': 'fdasf' })
         this.sellAddressListForm.push({ 'haha': 'fdasf' })
       },
       deleteSellAddress(index) {
-        alert('减少一项')
         this.sellAddressListForm.splice(index, 1)
       },
       beforeAvatarUpload(file) {
@@ -625,7 +632,6 @@
         this.$router.push({ path: '/businesses/list' })
       },
       goNext() {
-        debugger
         // 校验填写有效性
         if (this.registerForm.businessesName === '') {
           this.$message({ type: 'warning', message: '请输入企业名称' })
@@ -814,7 +820,7 @@
             'wirelesscitypayable': `${this.registerForm.wirelesscitypayable}`,
             'wirelesstpcode': `${this.registerForm.wirelesstpcode}`,
             'wirelesstpname': `${this.registerForm.wirelesstpname}`,
-            'validdate_str': `2018-01-01` // TODO
+            'validdate_str': `${this.registerForm.validdate_str}`
           },
           'goodsSamplelist': goodsSamplelist,
           'sellAddressList': sellAddressList,
@@ -845,8 +851,6 @@
           //   ]
           // },
         }
-        debugger
-        console.log(params)
         adnminAddBusniess(params).then(response => {
           this.$message('新增企业成功')
           this.$router.push({ path: '/businesses/list' })

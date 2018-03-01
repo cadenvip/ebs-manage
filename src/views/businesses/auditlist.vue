@@ -48,20 +48,20 @@
     </el-dialog>
     <h3 style="padding-left: 20px;">企业列表</h3>
     <el-table :data="list" v-loading.body="loading" element-loading-text="Loading" border stripe fit highlight-current-row style="padding-left:10px">
-      <el-table-column label='企业名称' prop="businessesName" width="280">
+      <el-table-column label='企业名称' prop="businessesName" width="280" align="center">
       </el-table-column>
-      <el-table-column label="区域" prop="locationName" width="110">
+      <el-table-column label="区域" prop="locationName" width="110" align="center">
       </el-table-column>
       <el-table-column label="经营范围" prop="createsource" :formatter="sourceFormat" width="100" align="center">
       </el-table-column>
-      <el-table-column label="有效时间" prop="validDateEnd" :formatter="timedateFormat" width="110" align="center">
+      <el-table-column label="有效时间" prop="validdate" :formatter="timedateFormat" width="110" align="center">
       </el-table-column>
       <el-table-column label="企业状态" prop="state" :formatter="stateFormat" width="100" align="center">
       </el-table-column>
-      <el-table-column align="center" label="操作" width="190">
+      <el-table-column label="操作" width="190" align="center">
         <template slot-scope="scope">
-          <el-button v-if="scope.row.state === '1'" @click="adopt(scope.row)" type="text" size="small">通过</el-button>
-          <el-button v-if="scope.row.state === '1'" @click="audit(scope.row)" type="text" size="small">审核</el-button>
+          <el-button v-if="scope.row.state === '0'" @click="adopt(scope.row)" type="text" size="small">通过</el-button>
+          <el-button v-if="scope.row.state === '0'" @click="audit(scope.row)" type="text" size="small">审核</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -157,7 +157,11 @@ export default {
     },
     timedateFormat(row, column, cellValue) {
       // 截取年月日
-      return cellValue// .substr(0, 9)
+      if (cellValue !== null) {
+        return cellValue.substr(0, 10)
+      } else {
+        return ''
+      }
     },
     stateFormat(row, column, cellValue) {
       var state = ''

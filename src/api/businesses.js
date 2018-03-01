@@ -50,13 +50,13 @@ export function updateBusinesses(params, roletype) {
     return request({
       url: '/businesses/updatebusinesses', // 商家自己修改
       method: 'post',
-      data: {}
+      data: params
     })
   } else {
     return request({
       url: '/register/BusinessesUpdate', // 管理员修改
       method: 'post',
-      data: {}
+      data: params
     })
   }
 }

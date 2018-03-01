@@ -17,11 +17,21 @@
                 </el-form-item>                
               </el-col>
             </el-row>
-            <el-form-item label="商家类型：" prop="businessType">
-              <el-select v-model="registerForm.businessType" clearable style="width: 200px;" placeholder="请选择商家类型">
-                <el-option label="合作商家" value="合作商家"></el-option>
-              </el-select>
-            </el-form-item>
+            <el-row :gutter="30">
+              <el-col :span="12">
+                <el-form-item label="商家类型：" prop="businessType">
+                  <el-select v-model="registerForm.businessType" clearable style="width: 200px;" placeholder="请选择商家类型">
+                    <el-option label="合作商家" value="合作商家"></el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
+                <el-form-item label="有效时间：" prop="validdate_str">
+                  <el-date-picker v-model="registerForm.validdate_str" type="date" value-format="yyyy-MM-dd" style="width: 200px;" placeholder="选择日期">
+                  </el-date-picker>
+                </el-form-item>  
+              </el-col>
+            </el-row>
             <el-form-item label="企业地址：" prop="locationCode">
               <RegionSelector v-model="registerForm.locationCode" :grade="4" :showCountry="false" @locationChanged="getLocationCode" :locationId="registerForm.locationCode"></RegionSelector>
             </el-form-item>
@@ -583,9 +593,7 @@
             console.log('response.data:', response.data)
             this.registerForm = response.data.businesses
             this.registerForm.locationCode = response.data.businesses.locationCode.toString()
-            console.log(this.registerForm.locationCode)
             this.sellAddressListForm = response.data.sellAddresslist
-            // TODO 处理商品
             var goodsSamplelist = [{ num: '示例', name: '鱼香大米', unit: '5KG', origin: '重庆,西永', price: '￥250', description: '多种蛋白质、营养丰富、色泽光亮、颗粒饱满', url: 'http://detail.tmall.com/item.htm?spm=a230r.1.14.172.VhFL' }]
             switch (response.data.goodsSamplelist.length) {
               case 1:

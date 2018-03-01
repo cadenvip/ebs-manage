@@ -19,9 +19,9 @@
     </el-form>
     <h3 style="padding-left: 20px;">关键词列表</h3>
     <el-table :data="list" v-loading.body="loading" element-loading-text="Loading" border stripe fit highlight-current-row style="padding-left:10px">
-      <el-table-column label='关键词' prop="sensitiveWord" width="600px">
+      <el-table-column label='关键词' prop="sensitiveWord" width="600px" align="center">
       </el-table-column>
-      <el-table-column align="center" label="操作" width="200px">
+      <el-table-column label="操作" width="200px" align="center">
         <template slot-scope="scope">
           <el-button @click="deleteSensitive(scope.row)" type="text" size="small">删除</el-button>
         </template>
