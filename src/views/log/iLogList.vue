@@ -1,26 +1,26 @@
 <template>
   <div>
     <h3 style="padding-left: 20px;">接口日志查询条件</h3>
-    <el-form ref="searchForm" :model="searchForm" label-width="100px" class="demo-ruleForm">
+    <el-form ref="searchForm" :model="searchForm" label-width="130px" class="demo-ruleForm">
       <el-row :gutter="30">
         <el-col :span="7">
-          <el-form-item label="日志时间：" prop="logdate">
-            <el-date-picker v-model="SearchForm.logdate" type="date" value-format="yyyy-MM-dd" style="width: 200px;" placeholder="选择日期">
+          <el-form-item label="日志时间：" prop="month_day">
+            <el-date-picker v-model="searchForm.month_day" type="date" value-format="MMdd" style="width: 180px;" placeholder="选择日期">
             </el-date-picker>
           </el-form-item>   
         </el-col>
         <el-col :span="7">
           <el-form-item label="接口服务名：" prop="reqservice">
-            <el-select v-model="searchForm.reqservice" clearable placeholder="请选择接口服务名" style="width: 200px;">
-              <el-option label="EOrderService" value="1"></el-option>
-              <el-option label="EOrderService3" value="2"></el-option>
+            <el-select v-model="searchForm.reqservice" clearable style="width: 180px;" placeholder="请选择接口服务名">
+              <el-option label="EOrderService" value="EOrderService"></el-option>
+              <el-option label="EOrderService3" value="EOrderService3"></el-option>
             </el-select>
           </el-form-item>  
         </el-col>
         <el-col :span="7">
           <el-form-item label="接口消息标识：" prop="reqaction">
-            <el-select v-model="searchForm.reqaction" clearable placeholder="请选择接口消息标识" style="width: 200px;">
-              <el-option v-for="(item, key) in reqactionList" :key="key" :label="item.locationName" :value="item.id"></el-option>
+            <el-select v-model="searchForm.reqaction" clearable style="width: 180px;" placeholder="请选择接口消息标识">
+              <el-option v-for="(item, key) in reqactionList" :key="key" :label="item.inter_name" :value="item.inter_method"></el-option>
             </el-select>
           </el-form-item>  
         </el-col>
@@ -28,17 +28,17 @@
       <el-row :gutter="30">
         <el-col :span="7">
           <el-form-item label="流水号：" prop="reqseq">
-            <el-input v-model="registerForm.reqseq" clearable style="width: 200px;" placeholder="请输入流水号"></el-input>
+            <el-input v-model="searchForm.reqseq" clearable style="width: 180px;" placeholder="请输入流水号"></el-input>
           </el-form-item>   
         </el-col>
         <el-col :span="7">
           <el-form-item label="发起方编码：" prop="reqcode">
-            <el-input v-model="registerForm.reqcode" clearable style="width: 200px;" placeholder="请输入发起方编码"></el-input>
+            <el-input v-model="searchForm.reqcode" clearable style="width: 180px;" placeholder="请输入发起方编码"></el-input>
           </el-form-item>  
         </el-col>
         <el-col :span="7">
           <el-form-item label="请求报文关键字：" prop="reqmessage">
-            <el-input v-model="registerForm.reqmessage" clearable style="width: 200px;" placeholder="请输入请求报文关键字"></el-input>
+            <el-input v-model="searchForm.reqmessage" clearable style="width: 180px;" placeholder="请输入请求报文关键字"></el-input>
           </el-form-item>  
         </el-col>
       </el-row>
@@ -53,15 +53,15 @@
     </el-form>
     <h3 style="padding-left: 20px;">接口日志列表</h3>
     <el-table :data="list" v-loading.body="loading" element-loading-text="Loading" border stripe fit highlight-current-row style="padding-left:10px">
-      <el-table-column label='流水号' prop="reqseq" width="280" align="center"></el-table-column>
-      <el-table-column label="接口服务名" prop="reqservice" width="110" align="center"></el-table-column>
-      <el-table-column label="接口消息标志" prop="reqaction" width="110" align="center"></el-table-column>
+      <el-table-column label='流水号' prop="reqseq" width="180" align="center"></el-table-column>
+      <el-table-column label="接口服务名" prop="reqservice" width="120" align="center"></el-table-column>
+      <el-table-column label="接口消息标志" prop="reqaction" width="150" align="center"></el-table-column>
       <el-table-column label="发起方编码" prop="reqcode" width="100" align="center"></el-table-column>
-      <el-table-column label="接口协议" prop="createsource" width="100" align="center"></el-table-column>
-      <el-table-column label="耗时（毫秒）" prop="createsource" width="100" align="center"></el-table-column>
-      <el-table-column label="创建时间" prop="createsource" width="100" align="center"></el-table-column>
-      <el-table-column label="结果" prop="createsource" width="100" align="center"></el-table-column>
-      <el-table-column label="操作" width="190" align="center">
+      <el-table-column label="接口协议" prop="protocol" width="80" align="center"></el-table-column>
+      <el-table-column label="耗时（毫秒）" prop="timed" width="110" align="center"></el-table-column>
+      <el-table-column label="创建时间" prop="createtime" width="160" align="center"></el-table-column>
+      <el-table-column label="结果" prop="errormessage" :formatter="resultFormat" width="80" align="center"></el-table-column>
+      <el-table-column label="操作" width="80" align="center">
         <template slot-scope="scope">
           <el-button @click="detail(scope.row)" type="text" size="small">详细</el-button>
         </template>
@@ -91,9 +91,7 @@ export default {
       list: [],
       reqactionList: [],
       searchForm: {
-        logdate: '', 	// 月份日期，字符串
-        month: '',
-        day: '',
+        month_day: '', 	// 月份日期，字符串
         reqservice: '',	// 请求服务名
         reqaction: '',	// 请求消息标志，取值为函数名
         reqseq: '',	// 请求流水（由请求方生成）
@@ -111,7 +109,7 @@ export default {
   created() {
     this.initILogList()
     getReqactionList().then(response => {
-      this.reqactionList = response.data.list
+      this.reqactionList = response.data
     }).catch(error => {
       console.log(error)
     })
@@ -119,6 +117,7 @@ export default {
   methods: {
     queryILogList() {
       this.loading = true
+      console.log(this.searchForm)
       getILogList(this.searchForm, this.currentPage, this.pagesize).then(response => {
         this.list = response.data.list
         this.total = response.data.total
@@ -130,20 +129,17 @@ export default {
     },
     initILogList() {
       this.loading = true
-      debugger
       getAllILogs(this.currentPage, this.pagesize).then(response => {
-        console.log(response.data)
         this.list = response.data.list
         this.total = response.data.total
         this.loading = false
-        debugger
       }).catch(error => {
         this.loading = false
         console.log(error)
       })
     },
     resetForm(formname) {
-      this.searchForm.logdate = ''
+      this.searchForm.month_day = ''
       this.searchForm.reqservice = ''
       this.searchForm.reqaction = ''
       this.searchForm.reqseq = ''
@@ -151,7 +147,14 @@ export default {
       this.searchForm.reqmessage = ''
     },
     detail(ilog) {
-      this.$router.push({ path: '/system/log/ilog/detail', query: { id: ilog.id }})
+      this.$router.push({ path: '/log/ilog/detail', query: { id: ilog.id }})
+    },
+    resultFormat(row, column, cellValue) {
+      if (cellValue === undefined || cellValue === null) {
+        return '成功'
+      } else {
+        return '失败'
+      }
     },
     handleSizeChange(val) {
       this.pagesize = val
