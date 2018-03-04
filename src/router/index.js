@@ -140,6 +140,33 @@ export const asyncRouterMap = [
         meta: { roles: ['1'], title: '权限管理', icon: 'table' }
       },
       {
+        path: 'access/list',
+        name: 'accesslist',
+        component: _import('access/list'),
+        meta: { roles: ['1'], title: '接入方管理', icon: 'table' }
+      },
+      {
+        path: 'access/add',
+        name: 'accessadd',
+        hidden: true,
+        component: _import('access/add'),
+        meta: { roles: ['1'], title: '新增接入方', icon: 'table' }
+      },
+      {
+        path: 'access/update',
+        name: 'accessupdate',
+        hidden: true,
+        component: _import('access/update'),
+        meta: { roles: ['1'], title: '修改接入方', icon: 'table' }
+      },
+      {
+        path: 'access/detail',
+        name: 'accessdetail',
+        hidden: true,
+        component: _import('access/detail'),
+        meta: { roles: ['1'], title: '接入方详情', icon: 'table' }
+      },
+      {
         path: 'sensitive/list',
         name: 'sensitivelist',
         component: _import('sensitive/list'),
