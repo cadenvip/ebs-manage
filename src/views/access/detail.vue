@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <h3 class="title">接入方详情</h3>
-    <div style="color: #606266;font-size:14px;width:960px;height:140px;overflow:auto;border:#E6E6E6 solid 1px;">
+    <div style="color: #606266;font-size:14px;width:960px;height:160px;overflow:auto;border:#E6E6E6 solid 1px;">
       <el-row :gutter="6" style="margin-left:0px;margin-right:0px;margin-top:20px;">
         <el-col :span="4" style="text-align:right">
           <span>
@@ -86,10 +86,22 @@
         </el-col>
         <el-col :span="8">
           <span>
-            {{ accessBean.channel_code }}
+            {{ channel_codeFormat }}
           </span> 
         </el-col>
-      </el-row>                                              
+      </el-row>
+      <el-row :gutter="6" style="margin-left:0px;margin-right:0px;margin-top:12px;">
+        <el-col :span="4" style="text-align:right">
+          <span>
+            系统地址：
+          </span> 
+        </el-col>
+        <el-col :span="20">
+          <span>
+            {{ accessBean.si_url }}
+          </span> 
+        </el-col>
+      </el-row>
     </div>
     <hr style="height:1px;border:none;border-top:1px dashed #0066CC;" />
     <h5>使用的业务</h5>
@@ -159,6 +171,16 @@ export default {
       } else {
         return this.accessBean.si_person
       }
+    },
+    channel_codeFormat: function () {
+      if (this.accessBean.channel_code !== null) {
+        for (var i = 0; i < this.channelList.length; i++) {
+          if (this.channelList[i].channel_code === this.accessBean.channel_code) {
+            return this.channelList[i].channel_name
+          }
+        }
+      }
+      return ''
     }
   },
   created () {

@@ -62,13 +62,13 @@
       <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item label="开始时间：" prop="begin_time">
-            <el-date-picker v-model="accessBean.begin_time" type="datetime" format="yyyy-MM-dd HH:mm:ss" value-format="timestamp" style="width: 300px;" placeholder="请选择开始时间">
+            <el-date-picker v-model="accessBean.begin_time" type="datetime" format="yyyy-MM-dd HH:mm:ss" value-format="yyyy-MM-dd HH:mm:ss" style="width: 300px;" placeholder="请选择开始时间">
             </el-date-picker>
           </el-form-item>        
         </el-col>
         <el-col :span="12">
           <el-form-item label="结束时间：" prop="end_time">
-            <el-date-picker v-model="accessBean.end_time" type="datetime" format="yyyy-MM-dd HH:mm:ss" value-format="timestamp" style="width: 300px;" placeholder="请选择结束时间">
+            <el-date-picker v-model="accessBean.end_time" type="datetime" format="yyyy-MM-dd HH:mm:ss" value-format="yyyy-MM-dd HH:mm:ss" style="width: 300px;" placeholder="请选择结束时间">
             </el-date-picker>
           </el-form-item>          
         </el-col>
@@ -125,8 +125,8 @@
           </el-row>
         </el-form>
         <br/>
-        <el-table :data="operationList" ref="operationTable" tooltip-effect="dark" @selection-change="opSelectionChange">
-          <el-table-column type="selection" width="40"></el-table-column>
+        <el-table :data="operationList" ref="operationTable" :row-key="getOpRowKey" tooltip-effect="dark" @selection-change="opSelectionChange">
+          <el-table-column type="selection" :reserve-selection="true" width="40"></el-table-column>
           <el-table-column label='业务名称' prop="operationname" width="160" align="center"></el-table-column>
           <el-table-column label="业务编号" prop="operationcode" width="140" align="center"></el-table-column>
           <el-table-column label="业务启用时间" prop="startdate" width="190" align="center"></el-table-column>
@@ -156,8 +156,8 @@
           </el-row>
         </el-form>
         <br/>
-        <el-table :data="interfaceList" ref="interfaceTable" tooltip-effect="dark" @selection-change="inSelectionChange">
-          <el-table-column type="selection" width="40"></el-table-column>
+        <el-table :data="interfaceList" ref="interfaceTable" :row-key="getInRowKey" tooltip-effect="dark" @selection-change="inSelectionChange">
+          <el-table-column type="selection" :reserve-selection="true" width="40"></el-table-column>
           <el-table-column label="接口名称" prop="inter_name" width="200" align="center"></el-table-column>
           <el-table-column label="接口方法" prop="inter_method" width="200" align="center"></el-table-column>
           <el-table-column label="版本" prop="inter_version" width="140" align="center"></el-table-column>
@@ -236,6 +236,12 @@ export default {
         password: [{ required: true, validator: validatePass, trigger: 'blur' }],
         repassword: [{ required: true, validator: validateRepass, trigger: 'blur' }],
         si_type: [{ required: true, message: '请选择接入类别', trigger: 'change' }]
+      },
+      getOpRowKey(row) {
+        return row.id
+      },
+      getInRowKey(row) {
+        return row.id
       }
     }
   },
@@ -259,21 +265,58 @@ export default {
   methods: {
     selectOperation() {
       this.operationTableVisible = true
-      // getAllOperationList().then(response => {
-      //   this.operationList = response.data
-      //   // TODO 设置默认选中
-      // }).catch(error => {
-      //   console.log(error)
-      // })
+      getAllOperationList().then(response => {
+        this.operationList = response.data
+        this.opSearchForm.operationname = ''
+        var defaultSelected = []
+        if (this.operationList !== undefined && this.operationList.length > 0) {
+          if (this.selectedOpList !== undefined && this.selectedOpList.length > 0) {
+            this.operationList.forEach(row => {
+              for (var index = 0; index < this.selectedOpList.length; index++) {
+                if (this.selectedOpList[index].id === row.id) {
+                  // this.$refs.operationTable.toggleRowSelection(row, true)
+                  defaultSelected.push(row)
+                  break
+                }
+              }
+            })
+          }
+        }
+        this.$refs.operationTable.clearSelection()
+        defaultSelected.forEach(row => {
+          this.$refs.operationTable.toggleRowSelection(row, true)
+        })
+      }).catch(error => {
+        console.log(error)
+      })
     },
     selectInterface() {
       this.interfaceTableVisible = true
-      // getAllInterfaceList().then(response => {
-      //   this.interfaceList = response.data
-      //   // TODO 设置默认选中
-      // }).catch(error => {
-      //   console.log(error)
-      // })
+      getAllInterfaceList().then(response => {
+        this.interfaceList = response.data
+        this.inSearchForm.inter_name = ''
+        this.inSearchForm.inter_version = ''
+        var defaultSelected = []
+        if (this.interfaceList !== undefined && this.interfaceList.length > 0) {
+          if (this.selectedInList !== undefined && this.selectedInList.length > 0) {
+            this.interfaceList.forEach(row => {
+              for (var index = 0; index < this.selectedInList.length; index++) {
+                if (this.selectedInList[index].id === row.id) {
+                  // this.$refs.interfaceTable.toggleRowSelection(row, true)
+                  defaultSelected.push(row)
+                  break
+                }
+              }
+            })
+          }
+        }
+        this.$refs.interfaceTable.clearSelection()
+        defaultSelected.forEach(row => {
+          this.$refs.interfaceTable.toggleRowSelection(row, true)
+        })
+      }).catch(error => {
+        console.log(error)
+      })
     },
     queryOperation() {
       getOperationList(this.opSearchForm).then(response => {
@@ -284,18 +327,18 @@ export default {
     },
     queryInterface() {
       getInterfaceList(this.inSearchForm).then(response => {
-        this.operationList = response.data
+        this.interfaceList = response.data
       }).catch(error => {
         console.log(error)
       })
     },
     opSelectionChange(val) {
-      console.log(val)
+      // console.log(val)
       // this.selectedOpTmpList = val
       this.selectedOpList = val
     },
     inSelectionChange(val) {
-      console.log(val)
+      // console.log(val)
       // this.selectedInTmpList = val
       this.selectedInList = val
     },
@@ -340,6 +383,7 @@ export default {
             'operationIdList': operationIdList	 // 服务id，通过调用接口operationList 得到，及时没有也要传一个空数组
           }
           delete params.accessBean.repassword
+          // TODO 时间格式转换
 
           console.log(params)
           return new Promise((resolve, reject) => {
