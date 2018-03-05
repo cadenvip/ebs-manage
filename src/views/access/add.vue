@@ -117,7 +117,7 @@
         <el-form ref="opSearchForm" :model="opSearchForm" label-width="100px">
           <el-row :gutter="20">
             <el-col :span="6" :offset="6">
-              <el-input v-model="opSearchForm.operationname" style="width: 180px;" placeholder="请输入业务名称"></el-input>
+              <el-input v-model="opSearchForm.operationname" clearable style="width: 180px;" placeholder="请输入业务名称"></el-input>
             </el-col>
             <el-col :span="6">
               <el-button @click="queryOperation()" type="primary">查询</el-button>
@@ -132,17 +132,17 @@
           <el-table-column label="业务启用时间" prop="startdate" width="190" align="center"></el-table-column>
           <el-table-column label="业务到期时间" prop="enddate" width="190" align="center"></el-table-column>
         </el-table>
-        <br/>
+        <!-- <br/>
         <span slot="footer" class="dialog-footer">
           <el-button @click="operationTableVisible = false">取 消</el-button>
           <el-button type="primary" @click="confirmOpSelected">确 定</el-button>
-        </span>
+        </span> -->
       </el-dialog>
       <el-dialog title="选择接口" :visible.sync="interfaceTableVisible" width="770px">
           <el-form ref="inSearchForm" :model="inSearchForm" label-width="100px">
           <el-row :gutter="20">
             <el-col :span="6" :offset="3">
-              <el-input v-model="inSearchForm.inter_name" style="width: 180px;" placeholder="请输入接口名称"></el-input>
+              <el-input v-model="inSearchForm.inter_name" clearable style="width: 180px;" placeholder="请输入接口名称"></el-input>
             </el-col>
             <el-col :span="6">
               <el-select v-model="inSearchForm.inter_version" clearable style="width: 180px;" placeholder="请选择接口版本">
@@ -163,11 +163,11 @@
           <el-table-column label="版本" prop="inter_version" width="140" align="center"></el-table-column>
           <el-table-column label="类型" prop="inter_type" width="140" align="center"></el-table-column>
         </el-table>
-        <br/>
+        <!-- <br/>
         <span slot="footer" class="dialog-footer">
           <el-button @click="interfaceTableVisible = false">取 消</el-button>
           <el-button type="primary" @click="confirmInSelected">确 定</el-button>
-        </span>
+        </span> -->
       </el-dialog>
     </el-form>
   </div>
@@ -221,8 +221,8 @@ export default {
       interfaceList: [], // （全部）接口id，通过调用接口interfaceList  得到，及时没有也要传一个空数组
       selectedOpList: [],	 // （选中）服务id，通过调用接口operationList 得到，及时没有也要传一个空数组
       selectedInList: [], // （选中）接口id，通过调用接口interfaceList  得到，及时没有也要传一个空数组
-      selectedOpTmpList: [],	 // （临时选中）服务id，通过调用接口operationList 得到，及时没有也要传一个空数组
-      selectedInTmpList: [], // （临时选中）接口id，通过调用接口interfaceList  得到，及时没有也要传一个空数组
+      // selectedOpTmpList: [],	 // （临时选中）服务id，通过调用接口operationList 得到，及时没有也要传一个空数组
+      // selectedInTmpList: [], // （临时选中）接口id，通过调用接口interfaceList  得到，及时没有也要传一个空数组
       opSearchForm: {
         operationname: ''
       },
@@ -276,14 +276,14 @@ export default {
       // })
     },
     queryOperation() {
-      getOperationList().then(response => {
+      getOperationList(this.opSearchForm).then(response => {
         this.operationList = response.data
       }).catch(error => {
         console.log(error)
       })
     },
     queryInterface() {
-      getInterfaceList().then(response => {
+      getInterfaceList(this.inSearchForm).then(response => {
         this.operationList = response.data
       }).catch(error => {
         console.log(error)
@@ -291,20 +291,22 @@ export default {
     },
     opSelectionChange(val) {
       console.log(val)
-      this.selectedOpTmpList = val
+      // this.selectedOpTmpList = val
+      this.selectedOpList = val
     },
     inSelectionChange(val) {
       console.log(val)
-      this.selectedInTmpList = val
+      // this.selectedInTmpList = val
+      this.selectedInList = val
     },
-    confirmOpSelected() {
-      this.selectedOpList = this.selectedOpTmpList
-      this.operationTableVisible = false
-    },
-    confirmInSelected() {
-      this.selectedInList = this.selectedInTmpList
-      this.interfaceTableVisible = false
-    },
+    // confirmOpSelected() {
+    //   this.selectedOpList = this.selectedOpTmpList
+    //   this.operationTableVisible = false
+    // },
+    // confirmInSelected() {
+    //   this.selectedInList = this.selectedInTmpList
+    //   this.interfaceTableVisible = false
+    // },
     deleteOperation(operationInfo) {
       var index = this.selectedOpList.indexOf(operationInfo)
       if (index > -1) {
@@ -320,8 +322,28 @@ export default {
     onSubmit() {
       this.$refs.accessBean.validate(valid => {
         if (valid) {
+          var operationIdList = []
+          if (this.selectedOpList !== undefined && this.selectedOpList.length > 0) {
+            this.selectedOpList.forEach(v => {
+              operationIdList.push(v.id)
+            })
+          }
+          var interfaceIdList = []
+          if (this.selectedInList !== undefined && this.selectedInList.length > 0) {
+            this.selectedInList.forEach(v => {
+              interfaceIdList.push(v.id)
+            })
+          }
+          var params = {
+            'accessBean': this.accessBean,
+            'interfaceIdList': interfaceIdList, // 接口id，通过调用接口interfaceList  得到，及时没有也要传一个空数组
+            'operationIdList': operationIdList	 // 服务id，通过调用接口operationList 得到，及时没有也要传一个空数组
+          }
+          delete params.accessBean.repassword
+
+          console.log(params)
           return new Promise((resolve, reject) => {
-            addAccess(this.accessBean).then(response => {
+            addAccess(params).then(response => {
               resolve(response)
               this.$router.push({ path: '/system/access/list' })
             }).catch(error => {

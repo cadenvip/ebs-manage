@@ -5,12 +5,12 @@
       <el-row>
         <el-col :span="10">
           <el-form-item label="接入码：">
-            <el-input v-model="searchForm.code" style="width: 300px;"></el-input>
+            <el-input v-model="searchForm.code" clearable style="width: 300px;"></el-input>
           </el-form-item>  
         </el-col>
         <el-col :span="10">
           <el-form-item label="接入名称：">
-            <el-input v-model="searchForm.si_name" style="width: 300px;"></el-input>
+            <el-input v-model="searchForm.si_name" clearable style="width: 300px;"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -31,10 +31,10 @@
       <el-table-column label='接入码' prop="code" width="90" align="center"></el-table-column>
       <el-table-column label="接入方名称" prop="si_name" width="150" align="center"></el-table-column>
       <el-table-column label="接入类别" prop="si_type" :formatter="typeFormat" width="90" align="center"></el-table-column>
-      <el-table-column label="开始时间" prop="begin_time" width="220" align="center"></el-table-column>
-      <el-table-column label="到期时间" prop="end_time" width="220" align="center"></el-table-column>
-      <el-table-column label="联系人" prop="si_person" width="150" align="center"></el-table-column>
-      <el-table-column label="联系电话" prop="si_phone" width="150" align="center"></el-table-column>
+      <el-table-column label="开始时间" prop="begin_time" width="200" align="center"></el-table-column>
+      <el-table-column label="到期时间" prop="end_time" width="200" align="center"></el-table-column>
+      <el-table-column label="联系人" prop="si_person" width="100" align="center"></el-table-column>
+      <el-table-column label="联系电话" prop="si_phone" width="120" align="center"></el-table-column>
       <el-table-column label="操作" width="120" align="center">
         <template slot-scope="scope">
           <el-button @click="detail(scope.row)" type="text" size="small">详细</el-button>

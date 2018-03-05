@@ -24,15 +24,9 @@ export function getAccessList(accessinfo, currentpage, pagesize) {
 
 export function addAccess(params) {
   return request({
-    url: '/access/save',
+    url: '/access/add',
     method: 'post',
-    data: { 'accessname': `${params.accessname}`,
-      'accesstype': `${params.accesstype}`,
-      'description': `${params.description}`,
-      'resourceids': params.resourceids,
-      'issystem': '1',
-      'ishidden': '0'
-    }
+    data: params
   })
 }
 
@@ -40,13 +34,7 @@ export function updateAccess(params) {
   return request({
     url: '/access/update',
     method: 'post',
-    data: { 'id': `${params.id}`,
-      'accessname': `${params.accessname}`,
-      'description': `${params.description}`,
-      'resourceids': params.resourceids,
-      'issystem': '1',
-      'ishidden': '0'
-    }
+    data: params
   })
 }
 
@@ -62,7 +50,7 @@ export function getAccessDetail(params) {
   return request({
     url: '/access/detail',
     method: 'post',
-    data: { 'accessid': `${params}` }
+    data: { 'id': `${params}` }
   })
 }
 
@@ -81,6 +69,8 @@ export function getAllOperationList() {
 }
 
 export function getOperationList(params) {
+  console.log(params)
+  debugger
   return request({
     url: '/access/operationList',
     method: 'post',
@@ -96,10 +86,12 @@ export function getAllInterfaceList(params) {
 }
 
 export function getInterfaceList(params) {
+  console.log(params)
+  debugger
   return request({
     url: '/access/interfaceList',
     method: 'post',
-    data: { 'operationname': `${params.inter_name}`,
+    data: { 'inter_name': `${params.inter_name}`,
       'inter_version': `${params.inter_version}`
     }
   })
