@@ -91,10 +91,10 @@
               <div v-for="(item,index) in sellAddressListForm" style="margin-top:10px">
                 <el-row>
                   <el-col :span="20">
-                    <AddressSelector :locationId="item.locationcode" :detailAddress="item.selladdress" @addressChanged="getAddressInfo"></AddressSelector>
+                    <AddressSelector :locationId="item.locationcode" :detailAddress="item.selladdress" :index="index" @addressChanged="getAddressInfo"></AddressSelector>
                   </el-col>
                   <el-col :span="4">
-                    <el-button size="mini" @click="deleteSellAddress(index)">删除</el-button>
+                    <el-button size="mini" @click="deleteSellAddress(index, item)">删除</el-button>
                   </el-col>
                 </el-row>
               </div>
@@ -473,6 +473,7 @@
         dialogImageUrl: '',
         dialogVisible: false,
         sellAddressListForm: [],
+        sellAddressCount: 0,
         registerForm: {
           // businessesForm: {
           businessesName: '',
@@ -661,16 +662,19 @@
         this.registerForm.locationCode = locationInfo.id.toString()
       },
       getAddressInfo(addressInfo) {
-        console.log(addressInfo)
-        console.log(this.sellAddressListForm)
-        return
+        console.log('addressInfo: ', addressInfo)
       },
       addSellAddress() {
-        // this.registerForm.sellAddressListForm.push({ 'haha': 'fdasf' })
-        this.sellAddressListForm.push({ 'haha': 'fdasf' })
+        this.sellAddressListForm.push({ 'index': this.sellAddressCount, 'locationcode': '', 'selladdress': '' })
+        this.sellAddressCount++
+        console.log(this.sellAddressListForm)
       },
-      deleteSellAddress(index) {
+      deleteSellAddress(index, item) {
+        console.log('qian', this.sellAddressListForm)
+        console.log('index: ', index, '  item: ', item)
         this.sellAddressListForm.splice(index, 1)
+        this.sellAddressCount--
+        console.log('hou', this.sellAddressListForm)
       },
       beforeAvatarUpload(file) {
         const isJPG = file.type === 'image/jpeg'

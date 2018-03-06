@@ -20,10 +20,10 @@ import Layout from '../views/layout/Layout'
 **/
 export const constantRouterMap = [
   { path: '/login', component: _import('login/index'), hidden: true },
-  { path: '/register', component: _import('register/register'), hidden: false },
-  { path: '/regStepTwo', component: _import('register/regStepTwo'), hidden: false },
-  { path: '/regStepThree', component: _import('register/regStepThree'), hidden: false },
-  { path: '/regStepFour', component: _import('register/regStepFour'), hidden: false },
+  { path: '/register', component: _import('register/register'), hidden: true },
+  { path: '/regStepTwo', component: _import('register/regStepTwo'), hidden: true },
+  { path: '/regStepThree', component: _import('register/regStepThree'), hidden: true },
+  { path: '/regStepFour', component: _import('register/regStepFour'), hidden: true },
 
   {
     path: '/',
@@ -357,6 +357,21 @@ export const asyncRouterMap = [
         name: '商品分类',
         component: _import('goodstypemanage/index'),
         meta: { roles: ['2'], title: '商品分类管理', icon: 'form' }
+      }
+    ]
+  },
+
+  {
+    path: '/businesses',
+    component: Layout,
+    meta: { roles: ['2'], title: '企业信息管理', icon: 'form' },
+    name: '企业信息管理',
+    children: [
+      {
+        path: 'modify',
+        name: '企业信息修改',
+        component: _import('businesses/modify'),
+        meta: { roles: ['2'], title: '企业信息修改', icon: 'form' }
       }
     ]
   },

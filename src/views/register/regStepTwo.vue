@@ -152,9 +152,9 @@
         registerForm: {
           // businessesForm: {
           businessesName: '',
-          locationCode: 0,
+          locationCode: '0',
           businesslicenseNum: '',
-          merchantKind: '',
+          merchantKind: '1',
           address: '',
           relationPerson: '',
           relationPhone: '',

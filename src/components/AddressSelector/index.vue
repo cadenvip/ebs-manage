@@ -17,7 +17,7 @@
         </el-select>
       </el-col>
       <el-col :span="10">
-        <el-input v-model="detailAddress" clearable placeholder="请输入详细地址"></el-input>
+        <el-input v-model="town_village" clearable placeholder="请输入详细地址" @blur="town_villageChanged"></el-input>
       </el-col>
     </el-row>
   </div>
@@ -44,6 +44,10 @@ export default {
     detailAddress: {
       type: String,
       default: ''
+    },
+    index: {
+      Number,
+      default: -1
     }
   },
   data: function () {
@@ -51,6 +55,7 @@ export default {
       province: '',
       city: '',
       county: '',
+      town_village: this.detailAddress,
       provinces: [],
       cities: [],
       counties: [],
@@ -210,6 +215,7 @@ export default {
     provinceChanged() {
       this.city = ''
       this.county = ''
+      this.town_village = ''
       if (this.province !== '') {
         this.getCities()
       } else {
@@ -220,6 +226,7 @@ export default {
     },
     cityChanged() {
       this.county = ''
+      this.town_village = ''
       if (this.city !== '') {
         this.getCounties()
       } else {
@@ -228,6 +235,10 @@ export default {
       this.getLocationInfo()
     },
     countyChanged() {
+      this.town_village = ''
+      this.getLocationInfo()
+    },
+    town_villageChanged() {
       this.getLocationInfo()
     },
     getLocationInfo () {
@@ -255,7 +266,8 @@ export default {
       } else {
         this.locationInfo = {}
       }
-      this.locationInfo.detailAddress = this.detailAddress
+      this.locationInfo.index = this.index
+      this.locationInfo.town_village = this.town_village
       this.$emit('addressChanged', this.locationInfo)
     }
   }

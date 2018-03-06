@@ -724,7 +724,7 @@
             return
           }
         }
-        auditBusinesses({ 'businessesid': this.$route.query.id, 'state': this.registerForm.state, 'reason': this.reason }).then(response => {
+        auditBusinesses({ 'businessesid': this.$route.query.id, 'state': `${type}`, 'reason': this.reason }).then(response => {
           if (response.status === 200) {
             this.$message.success('审核成功!')
             this.$router.push({ path: '/businesses/auditlist' })
