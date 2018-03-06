@@ -57,6 +57,11 @@ export function formatTime (time, option) {
   }
 }
 
+export function str2Timestamp(strDatetime) {
+  var d = new Date(strDatetime)
+  return Math.round(d.getTime())
+}
+
 export function getUnitsOptions () {
   const Units = JSON.parse(window.localStorage.getItem('units'))
   var unitsOptions = []

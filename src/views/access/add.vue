@@ -176,6 +176,7 @@
 <script>
 
 import { addAccess, getChanelList, getAllOperationList, getOperationList, getAllInterfaceList, getInterfaceList } from '@/api/access'
+import { str2Timestamp } from '@/utils/index'
 
 export default {
   data() {
@@ -384,12 +385,17 @@ export default {
           }
           delete params.accessBean.repassword
           // TODO 时间格式转换
-
+          if (params.accessBean.begin_time !== undefined && params.accessBean.begin_time !== '') {
+            params.accessBean.begin_time = str2Timestamp(params.accessBean.begin_time)
+          }
+          if (params.accessBean.end_time !== undefined && params.accessBean.end_time !== '') {
+            params.accessBean.end_time = str2Timestamp(params.accessBean.end_time)
+          }
           console.log(params)
           return new Promise((resolve, reject) => {
             addAccess(params).then(response => {
               resolve(response)
-              this.$router.push({ path: '/system/access/list' })
+              // this.$router.push({ path: '/system/access/list' })
             }).catch(error => {
               reject(error)
             })
