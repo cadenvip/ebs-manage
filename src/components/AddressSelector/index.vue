@@ -112,48 +112,50 @@ export default {
         getLocationInfoById(locationId).then(response => {
           if (response.status === 200) {
             var resultData = response.data.list[0]
-            switch (resultData.locationLevel) {
-              case 3:
-                this.county = resultData.id
-                getAllCounties(resultData.parentId).then(response => {
-                  if (response.status === 200) {
-                    this.counties = response.data.list
-                    this.getLocationById(resultData.parentId)
-                  } else {
-                    this.$message.error(response.msg)
-                  }
-                }).catch(error => {
-                  console.log(error)
-                })
-                break
-              case 2:
-                this.city = resultData.id
-                getAllCities(resultData.parentId).then(response => {
-                  if (response.status === 200) {
-                    this.cities = response.data.list
-                    this.getLocationById(resultData.parentId)
-                  } else {
-                    this.$message.error(response.msg)
-                  }
-                }).catch(error => {
-                  console.log(error)
-                })
-                break
-              case 1:
-                this.province = resultData.id
-                getAllProvinces(resultData.parentId).then(response => {
-                  if (response.status === 200) {
-                    this.provinces = response.data.list
-                    this.getLocationById(resultData.parentId)
-                  } else {
-                    this.$message.error(response.msg)
-                  }
-                }).catch(error => {
-                  console.log(error)
-                })
-                break
-              default:
-                break
+            if (resultData !== undefined) {
+              switch (resultData.locationLevel) {
+                case 3:
+                  this.county = resultData.id
+                  getAllCounties(resultData.parentId).then(response => {
+                    if (response.status === 200) {
+                      this.counties = response.data.list
+                      this.getLocationById(resultData.parentId)
+                    } else {
+                      this.$message.error(response.msg)
+                    }
+                  }).catch(error => {
+                    console.log(error)
+                  })
+                  break
+                case 2:
+                  this.city = resultData.id
+                  getAllCities(resultData.parentId).then(response => {
+                    if (response.status === 200) {
+                      this.cities = response.data.list
+                      this.getLocationById(resultData.parentId)
+                    } else {
+                      this.$message.error(response.msg)
+                    }
+                  }).catch(error => {
+                    console.log(error)
+                  })
+                  break
+                case 1:
+                  this.province = resultData.id
+                  getAllProvinces(resultData.parentId).then(response => {
+                    if (response.status === 200) {
+                      this.provinces = response.data.list
+                      this.getLocationById(resultData.parentId)
+                    } else {
+                      this.$message.error(response.msg)
+                    }
+                  }).catch(error => {
+                    console.log(error)
+                  })
+                  break
+                default:
+                  break
+              }
             }
           } else {
             this.$message.error(response.msg)

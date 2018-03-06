@@ -424,8 +424,6 @@ export default {
             addAccess(params).then(response => {
               if (response.status === 200) {
                 resolve(response)
-                console.log(this.$message)
-                debugger
                 this.$router.push({ path: '/system/access/list' })
                 this.$message.success('新增接入方成功')
               } else {

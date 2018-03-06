@@ -216,10 +216,9 @@ export default {
       return source
     },
     adopt(businesses) {
-      debugger
-      console.log(businesses.id)
       auditBusinesses({ 'businessesid': businesses.id, 'state': '1', 'reason': '' }).then(response => {
         if (response.status === 200) {
+          businesses.state = '1'
           this.$message.success('审核成功')
         } else {
           this.$message.error(response.msg)

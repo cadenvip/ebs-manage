@@ -395,7 +395,6 @@ export default {
               interfaceIdList.push(v.id)
             })
           }
-          debugger
           var params = {
             'accessBean': this.accessBean,
             'interfaceIdList': interfaceIdList, // 接口id，通过调用接口interfaceList  得到，及时没有也要传一个空数组

@@ -69,8 +69,6 @@ export function getAllOperationList() {
 }
 
 export function getOperationList(params) {
-  console.log(params)
-  debugger
   return request({
     url: '/access/operationList',
     method: 'post',
@@ -86,8 +84,6 @@ export function getAllInterfaceList(params) {
 }
 
 export function getInterfaceList(params) {
-  console.log(params)
-  debugger
   return request({
     url: '/access/interfaceList',
     method: 'post',
