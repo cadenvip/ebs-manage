@@ -342,7 +342,11 @@
         // console.log(params)
 
         EnterpriseRegister(params).then(response => {
-          this.$router.push({ path: '/regStepFour' })
+          if (response.status === 200) {
+            this.$router.push({ path: '/regStepFour' })
+          } else {
+            this.$message.error(response.msg)
+          }
         }).catch(error => {
           console.log(error)
         })

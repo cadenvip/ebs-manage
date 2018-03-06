@@ -142,10 +142,12 @@
       getILogInfo() {
         return new Promise((resolve, reject) => {
           getILogDetail(this.$route.query.id).then(response => {
-            console.log('response.data:', response.data)
-            // TODO
-            this.logDetail = response.data
-            resolve(response)
+            if (response.status === 200) {
+              this.logDetail = response.data
+              resolve(response)
+            } else {
+              this.$message.error(response.msg)
+            }
           }).catch(error => {
             reject(error)
           })

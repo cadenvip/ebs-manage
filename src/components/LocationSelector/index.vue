@@ -96,55 +96,59 @@
         this.arrVillages = []
         this.loading = true
         queryLocationName(this.filterText).then(response => {
-          if (response.data.list.length === 0) {
-            this.loading = false
-            return
-          }
-          response.data.list.forEach(v => {
-            v.label = v.locationName
-            if (v.locationLevel === 1) {
-              this.arrProvinces.push(v)
-            } else if (v.locationLevel === 2) {
-              this.arrCities.push(v)
-            } else if (v.locationLevel === 3) {
-              this.arrCounties.push(v)
-            } else if (v.locationLevel === 4) {
-              this.arrTowns.push(v)
-            } else if (v.locationLevel === 5) {
-              this.arrVillages.push(v)
+          if (response.status === 200) {
+            if (response.data.list.length === 0) {
+              this.loading = false
+              return
             }
-          })
-          this.getTowns().then(() => {
-            this.getCounties().then(() => {
-              this.getCities().then(() => {
-                this.getProvinces().then(() => {
-                  this.arrTowns = this.removeDuplicatedItem(this.arrTowns)
-                  this.arrCounties = this.removeDuplicatedItem(this.arrCounties)
-                  this.arrCities = this.removeDuplicatedItem(this.arrCities)
-                  this.arrProvinces = this.removeDuplicatedItem(this.arrProvinces)
-                  var dataTemp = [{ 'id': 0, 'locationName': '全国', 'locationCode': '100', 'lastLevelCode': '',
-                    'parentId': -1, 'locationLevel': 0, 'description': '中国', 'orderindex': '', 'locationLevelName': '', 'label': '全国' }]
-                  dataTemp.push.apply(dataTemp, this.arrProvinces)
-                  dataTemp.push.apply(dataTemp, this.arrCities)
-                  dataTemp.push.apply(dataTemp, this.arrCounties)
-                  dataTemp.push.apply(dataTemp, this.arrTowns)
-                  dataTemp.push.apply(dataTemp, this.arrVillages)
-                  for (var i = 0; i < dataTemp.length; i++) {
-                    delete dataTemp[i].lastLevelCode
-                    delete dataTemp[i].locationLevelName
-                    delete dataTemp[i].orderindex
-                    // delete dataTemp[i].locationCode
-                    // delete dataTemp[i].locationLevel
-                    delete dataTemp[i].description
-                    delete dataTemp[i].locationName
-                  }
-                  console.log(dataTemp)
-                  this.data = this.list2Tree(dataTemp, { 'idKey': 'id', 'parentKey': 'parentId', 'childrenKey': 'children' })
-                  this.loading = false
+            response.data.list.forEach(v => {
+              v.label = v.locationName
+              if (v.locationLevel === 1) {
+                this.arrProvinces.push(v)
+              } else if (v.locationLevel === 2) {
+                this.arrCities.push(v)
+              } else if (v.locationLevel === 3) {
+                this.arrCounties.push(v)
+              } else if (v.locationLevel === 4) {
+                this.arrTowns.push(v)
+              } else if (v.locationLevel === 5) {
+                this.arrVillages.push(v)
+              }
+            })
+            this.getTowns().then(() => {
+              this.getCounties().then(() => {
+                this.getCities().then(() => {
+                  this.getProvinces().then(() => {
+                    this.arrTowns = this.removeDuplicatedItem(this.arrTowns)
+                    this.arrCounties = this.removeDuplicatedItem(this.arrCounties)
+                    this.arrCities = this.removeDuplicatedItem(this.arrCities)
+                    this.arrProvinces = this.removeDuplicatedItem(this.arrProvinces)
+                    var dataTemp = [{ 'id': 0, 'locationName': '全国', 'locationCode': '100', 'lastLevelCode': '',
+                      'parentId': -1, 'locationLevel': 0, 'description': '中国', 'orderindex': '', 'locationLevelName': '', 'label': '全国' }]
+                    dataTemp.push.apply(dataTemp, this.arrProvinces)
+                    dataTemp.push.apply(dataTemp, this.arrCities)
+                    dataTemp.push.apply(dataTemp, this.arrCounties)
+                    dataTemp.push.apply(dataTemp, this.arrTowns)
+                    dataTemp.push.apply(dataTemp, this.arrVillages)
+                    for (var i = 0; i < dataTemp.length; i++) {
+                      delete dataTemp[i].lastLevelCode
+                      delete dataTemp[i].locationLevelName
+                      delete dataTemp[i].orderindex
+                      // delete dataTemp[i].locationCode
+                      // delete dataTemp[i].locationLevel
+                      delete dataTemp[i].description
+                      delete dataTemp[i].locationName
+                    }
+                    console.log(dataTemp)
+                    this.data = this.list2Tree(dataTemp, { 'idKey': 'id', 'parentKey': 'parentId', 'childrenKey': 'children' })
+                    this.loading = false
+                  })
                 })
               })
             })
-          })
+          } else {
+            this.$message.error(response.msg)
+          }
         }).catch(error => {
           this.loading = false
           console.log(error)
@@ -153,9 +157,13 @@
       getTowns() {
         const villagePromises = this.arrVillages.map(village => {
           return getParentInfo(village.parentId, 4).then(response => {
-            for (var j = 0; j < response.data.list.length; j++) {
-              response.data.list[j].label = response.data.list[j].locationName
-              this.arrTowns.push(response.data.list[j])
+            if (response.status === 200) {
+              for (var j = 0; j < response.data.list.length; j++) {
+                response.data.list[j].label = response.data.list[j].locationName
+                this.arrTowns.push(response.data.list[j])
+              }
+            } else {
+              this.$message.error(response.msg)
             }
           })
         })
@@ -164,9 +172,13 @@
       getCounties() {
         const townPromises = this.arrTowns.map(town => {
           return getParentInfo(town.parentId, 3).then(response => {
-            for (var j = 0; j < response.data.list.length; j++) {
-              response.data.list[j].label = response.data.list[j].locationName
-              this.arrCounties.push(response.data.list[j])
+            if (response.status === 200) {
+              for (var j = 0; j < response.data.list.length; j++) {
+                response.data.list[j].label = response.data.list[j].locationName
+                this.arrCounties.push(response.data.list[j])
+              }
+            } else {
+              this.$message.error(response.msg)
             }
           })
         })
@@ -175,9 +187,13 @@
       getCities() {
         const countyPromises = this.arrCounties.map(county => {
           return getParentInfo(county.parentId, 2).then(response => {
-            for (var j = 0; j < response.data.list.length; j++) {
-              response.data.list[j].label = response.data.list[j].locationName
-              this.arrCities.push(response.data.list[j])
+            if (response.status === 200) {
+              for (var j = 0; j < response.data.list.length; j++) {
+                response.data.list[j].label = response.data.list[j].locationName
+                this.arrCities.push(response.data.list[j])
+              }
+            } else {
+              this.$message.error(response.msg)
             }
           })
         })
@@ -186,9 +202,13 @@
       getProvinces() {
         const cityPromises = this.arrCities.map(city => {
           return getParentInfo(city.parentId, 1).then(response => {
-            for (var j = 0; j < response.data.list.length; j++) {
-              response.data.list[j].label = response.data.list[j].locationName
-              this.arrProvinces.push(response.data.list[j])
+            if (response.status === 200) {
+              for (var j = 0; j < response.data.list.length; j++) {
+                response.data.list[j].label = response.data.list[j].locationName
+                this.arrProvinces.push(response.data.list[j])
+              }
+            } else {
+              this.$message.error(response.msg)
             }
           })
         })
@@ -200,11 +220,15 @@
         }
         // if (node.level === 1) {
         //   getAllCountries('-1').then(response => {
-        //     var arrCountries = []
-        //     response.data.list.forEach(function(v) {
-        //       arrCountries.push({ 'id': v.id, 'label': v.locationName, 'parent': v.parentId })
-        //       return resolve(arrCountries)
-        //     })
+        //     if (response.status === 200) {
+        //       var arrCountries = []
+        //       response.data.list.forEach(function(v) {
+        //         arrCountries.push({ 'id': v.id, 'label': v.locationName, 'parent': v.parentId })
+        //         return resolve(arrCountries)
+        //       })
+        //     } else {
+        //       this.$message.error(response.msg)
+        //     }
         //   }).catch(error => {
         //     console.log(error)
         //   })
@@ -212,11 +236,16 @@
         // }
         if (node.level === 1) {
           getAllProvinces(node.data.id).then(response => {
-            var arrProvinces = []
-            response.data.list.forEach(function(v) {
-              arrProvinces.push({ 'id': v.id, 'label': v.locationName, 'parent': v.parentId, 'locationCode': v.locationCode, 'locationLevel': v.locationLevel })
-              return resolve(arrProvinces)
-            })
+            if (response.status === 200) {
+              var arrProvinces = []
+              response.data.list.forEach(function(v) {
+                arrProvinces.push({ 'id': v.id, 'label': v.locationName, 'parent': v.parentId, 'locationCode': v.locationCode, 'locationLevel': v.locationLevel })
+                return resolve(arrProvinces)
+              })
+            } else {
+              this.$message.error(response.msg)
+              return resolve([])
+            }
           }).catch(error => {
             console.log(error)
           })
@@ -224,11 +253,16 @@
         }
         if (node.level === 2) {
           getAllCities(node.data.id).then(response => {
-            var arrCities = []
-            response.data.list.forEach(function(v) {
-              arrCities.push({ 'id': v.id, 'label': v.locationName, 'parent': v.parentId, 'locationCode': v.locationCode, 'locationLevel': v.locationLevel })
-              return resolve(arrCities)
-            })
+            if (response.status === 200) {
+              var arrCities = []
+              response.data.list.forEach(function(v) {
+                arrCities.push({ 'id': v.id, 'label': v.locationName, 'parent': v.parentId, 'locationCode': v.locationCode, 'locationLevel': v.locationLevel })
+                return resolve(arrCities)
+              })
+            } else {
+              this.$message.error(response.msg)
+              return resolve([])
+            }
           }).catch(error => {
             console.log(error)
           })
@@ -236,11 +270,16 @@
         }
         if (node.level === 3) {
           getAllCounties(node.data.id).then(response => {
-            var arrCounties = []
-            response.data.list.forEach(function(v) {
-              arrCounties.push({ 'id': v.id, 'label': v.locationName, 'parent': v.parentId, 'locationCode': v.locationCode, 'locationLevel': v.locationLevel })
-              return resolve(arrCounties)
-            })
+            if (response.status === 200) {
+              var arrCounties = []
+              response.data.list.forEach(function(v) {
+                arrCounties.push({ 'id': v.id, 'label': v.locationName, 'parent': v.parentId, 'locationCode': v.locationCode, 'locationLevel': v.locationLevel })
+                return resolve(arrCounties)
+              })
+            } else {
+              this.$message.error(response.msg)
+              return resolve([])
+            }
           }).catch(error => {
             console.log(error)
           })
@@ -248,11 +287,16 @@
         }
         if (node.level === 4) {
           getAllTowns(node.data.id).then(response => {
-            var arrTowns = []
-            response.data.list.forEach(function(v) {
-              arrTowns.push({ 'id': v.id, 'label': v.locationName, 'parent': v.parentId, 'locationCode': v.locationCode, 'locationLevel': v.locationLevel })
-              return resolve(arrTowns)
-            })
+            if (response.status === 200) {
+              var arrTowns = []
+              response.data.list.forEach(function(v) {
+                arrTowns.push({ 'id': v.id, 'label': v.locationName, 'parent': v.parentId, 'locationCode': v.locationCode, 'locationLevel': v.locationLevel })
+                return resolve(arrTowns)
+              })
+            } else {
+              this.$message.error(response.msg)
+              return resolve([])
+            }
           }).catch(error => {
             console.log(error)
           })
@@ -260,11 +304,16 @@
         }
         if (node.level === 5) {
           getAllVillages(node.data.id).then(response => {
-            var arrVillages = []
-            response.data.list.forEach(function(v) {
-              arrVillages.push({ 'id': v.id, 'label': v.locationName, 'parent': v.parentId, 'locationCode': v.locationCode, 'locationLevel': v.locationLevel })
+            if (response.status === 200) {
+              var arrVillages = []
+              response.data.list.forEach(function(v) {
+                arrVillages.push({ 'id': v.id, 'label': v.locationName, 'parent': v.parentId, 'locationCode': v.locationCode, 'locationLevel': v.locationLevel })
+                return resolve(arrVillages)
+              })
+            } else {
+              this.$message.error(response.msg)
               return resolve(arrVillages)
-            })
+            }
           }).catch(error => {
             console.log(error)
           })

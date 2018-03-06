@@ -78,6 +78,8 @@ export function getBusinessesDetail(params) {
 }
 
 export function auditBusinesses(params) {
+  console.log(params)
+  debugger
   return request({
     url: '/businesses/businessesaudit',
     method: 'post',

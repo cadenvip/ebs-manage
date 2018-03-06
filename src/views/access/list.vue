@@ -81,8 +81,12 @@ export default {
     queryAccessList() {
       this.loading = true
       getAccessList(this.searchForm, this.currentPage, this.pagesize).then(response => {
-        this.list = response.data.list
-        this.total = response.data.total
+        if (response.status === 200) {
+          this.list = response.data.list
+          this.total = response.data.total
+        } else {
+          this.$message.error(response.msg)
+        }
         this.loading = false
       }).catch(error => {
         this.loading = false
@@ -95,9 +99,12 @@ export default {
     initAccessList() {
       this.loading = true
       getAllAccesss(this.currentPage, this.pagesize).then(response => {
-        console.log(response)
-        this.list = response.data.list
-        this.total = response.data.total
+        if (response.status === 200) {
+          this.list = response.data.list
+          this.total = response.data.total
+        } else {
+          this.$message.error(response.msg)
+        }
         this.loading = false
       }).catch(error => {
         this.loading = false

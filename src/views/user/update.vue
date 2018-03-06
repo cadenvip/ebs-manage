@@ -108,11 +108,13 @@ export default {
     getUserInfo() {
       return new Promise((resolve, reject) => {
         getUserDetail(this.$route.query.id).then(response => {
-          console.log(response.data)
-          this.userForm = response.data
-          this.userForm.repassword = this.userForm.password
-          console.log(this.userForm)
-          resolve(response)
+          if (response.status === 200) {
+            this.userForm = response.data
+            this.userForm.repassword = this.userForm.password
+            resolve(response)
+          } else {
+            this.$message.error(response.msg)
+          }
         }).catch(error => {
           reject(error)
         })
@@ -123,8 +125,12 @@ export default {
         if (valid) {
           return new Promise((resolve, reject) => {
             updateUser(this.userForm).then(response => {
-              this.$router.go(-1)
-              resolve(response)
+              if (response.status === 200) {
+                this.$router.go(-1)
+                resolve(response)
+              } else {
+                this.$message.error(response.msg)
+              }
             }).catch(error => {
               reject(error)
             })

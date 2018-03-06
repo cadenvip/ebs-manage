@@ -148,8 +148,12 @@ export default {
       return new Promise((resolve, reject) => {
         // 角色应该不会超过100个吧！
         getAllRoles('1', '100').then(response => {
-          this.roles = response.data.list
-          resolve(response)
+          if (response.status === 200) {
+            this.roles = response.data.list
+            resolve(response)
+          } else {
+            this.$message.error(response.msg)
+          }
         }).catch(error => {
           reject(error)
         })
@@ -160,8 +164,13 @@ export default {
         if (valid) {
           return new Promise((resolve, reject) => {
             addUser(this.userForm).then(response => {
-              resolve(response)
-              this.$router.push({ path: '/system/user/list' })
+              if (response.status === 200) {
+                resolve(response)
+                this.$message.success('新增人员成功')
+                this.$router.push({ path: '/system/user/list' })
+              } else {
+                this.$message.error(response.msg)
+              }
             }).catch(error => {
               reject(error)
             })
