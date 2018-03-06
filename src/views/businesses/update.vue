@@ -17,11 +17,21 @@
                 </el-form-item>                
               </el-col>
             </el-row>
-            <el-form-item label="商家类型：" prop="businessType">
-              <el-select v-model="registerForm.businessType" clearable style="width: 200px;" placeholder="请选择商家类型">
-                <el-option label="合作商家" value="1"></el-option>
-              </el-select>
-            </el-form-item>
+            <el-row :gutter="30">
+              <el-col :span="12">
+                <el-form-item label="商家类型：" prop="businessType">
+                  <el-select v-model="registerForm.businessType" clearable style="width: 200px;" placeholder="请选择商家类型">
+                    <el-option label="合作商家" value="合作商家"></el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
+                <el-form-item label="有效时间：" prop="validdate_str">
+                  <el-date-picker v-model="registerForm.validdate_str" type="date" value-format="yyyy-MM-dd" style="width: 200px;" placeholder="选择日期">
+                  </el-date-picker>
+                </el-form-item>  
+              </el-col>
+            </el-row>
             <el-form-item label="企业地址：" prop="locationCode">
               <RegionSelector v-model="registerForm.locationCode" :grade="4" :showCountry="false" @locationChanged="getLocationCode" :locationId="registerForm.locationCode"></RegionSelector>
             </el-form-item>
@@ -77,16 +87,8 @@
               </el-col>
             </el-row>
             <el-form-item label="售后处理点：" prop="sellAddressListForm">  
-              <el-row>
-                <el-col :span="20">
-                  <!-- <AddressSelector :locationId="locationcode" :detailAddress="selladdress" @addressChanged="getAddressInfo"></AddressSelector> -->
-                  hahahaha
-                </el-col>
-                <el-col :span="4">
-                  <el-button size="mini" @click="addSellAddress">新增</el-button>                  
-                </el-col>
-              </el-row>
-              <div v-for="(item,index) in sellAddressListForm">
+              <el-button size="mini" @click="addSellAddress">新增</el-button>                  
+              <div v-for="(item,index) in sellAddressListForm" style="margin-top:10px">
                 <el-row>
                   <el-col :span="20">
                     <AddressSelector :locationId="item.locationcode" :detailAddress="item.selladdress" @addressChanged="getAddressInfo"></AddressSelector>
@@ -276,9 +278,9 @@
                 :on-remove="handleRemove"
                 :before-upload="beforeAvatarUpload">
                 <!-- <img v-if="registerForm.licencepicpath" :src="registerForm.licencepicpath" class="avatar"> -->
+                <!-- <i v-else class="el-icon-plus avatar-uploader-icon"></i> -->
                 <el-button size="small" type="primary">点击上传</el-button>
                 <el-button v-if="registerForm.licencepicpath" size="small" type="primary" @click="handlePictureCardPreview(registerForm.licencepicpath)">上传成功，点击预览</el-button>
-                <!-- <i v-else class="el-icon-plus avatar-uploader-icon"></i> -->
               </el-upload>
             </el-form-item>
           <el-form-item label="经办人身份证：" prop="operatoridnum">
@@ -287,75 +289,83 @@
           <el-form-item label="身份证正面：" prop="sfzmpicpath">
               <el-upload
                 action="http://10.189.13.151:8080/ebs/common/upload"
-                list-type="picture-card"
+                list-type="text"
                 :show-file-list="false"
                 :on-success="handleSfzmSuccess"
                 :on-preview="handlePictureCardPreview"
                 :on-remove="handleRemove"
                 :before-upload="beforeAvatarUpload">
-                <img v-if="registerForm.sfzmpicpath" :src="registerForm.sfzmpicpath" class="avatar">
-                <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                <!-- <img v-if="registerForm.sfzmpicpath" :src="registerForm.sfzmpicpath" class="avatar"> -->
+                <!-- <i v-else class="el-icon-plus avatar-uploader-icon"></i> -->
+                <el-button size="small" type="primary">点击上传</el-button>
+                <el-button v-if="registerForm.sfzmpicpath" size="small" type="primary" @click="handlePictureCardPreview(registerForm.sfzmpicpath)">上传成功，点击预览</el-button>
               </el-upload>
             </el-form-item>
             <el-form-item label="身份证反面：" prop="sffmpicpath">
               <el-upload
                 action="http://10.189.13.151:8080/ebs/common/upload"
-                list-type="picture-card"
+                list-type="text"
                 :show-file-list="false"
                 :on-success="handleSffmSuccess"
                 :on-preview="handlePictureCardPreview"
                 :on-remove="handleRemove"
                 :before-upload="beforeAvatarUpload">
-                <img v-if="registerForm.sffmpicpath" :src="registerForm.sffmpicpath" class="avatar">
-                <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                <!-- <img v-if="registerForm.sffmpicpath" :src="registerForm.sffmpicpath" class="avatar">
+                <i v-else class="el-icon-plus avatar-uploader-icon"></i> -->
+                <el-button size="small" type="primary">点击上传</el-button>
+                <el-button v-if="registerForm.sffmpicpath" size="small" type="primary" @click="handlePictureCardPreview(registerForm.sffmpicpath)">上传成功，点击预览</el-button>
               </el-upload>
             </el-form-item>
             <br/>
             <h5>产品经营许可</h5>
             <hr style="height:1px;border:none;border-top:1px dashed #0066CC;" />
             <el-form-item label="请选择企业性质：" prop="merchantKind">
-              <el-radio-group v-model="registerForm.merchantKind">
-                <el-radio :label="1">生产商</el-radio>
-                <el-radio :label="2">经销商</el-radio>
-              </el-radio-group>
+              <el-radio v-model="registerForm.merchantKind" label="1">生产商</el-radio>
+              <el-radio v-model="registerForm.merchantKind" label="2">经销商</el-radio>
             </el-form-item>
-            <el-form-item v-show="registerForm.merchantKind === 2" label="代理授权证明：" prop="proxytestifypicpath">
+            <el-form-item v-show="registerForm.merchantKind === '2'" label="代理授权证明：" prop="proxytestifypicpath">
               <el-upload
                 action="http://10.189.13.151:8080/ebs/common/upload"
-                list-type="picture-card"
+                list-type="text"
                 :show-file-list="false"
                 :on-success="handleProxySuccess"
                 :on-preview="handlePictureCardPreview"
                 :on-remove="handleRemove"
                 :before-upload="beforeAvatarUpload">
-                <img v-if="registerForm.proxytestifypicpath" :src="registerForm.proxytestifypicpath" class="avatar">
-                <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                <!-- <img v-if="registerForm.proxytestifypicpath" :src="registerForm.proxytestifypicpath" class="avatar">
+                <i v-else class="el-icon-plus avatar-uploader-icon"></i> -->
+                <el-button size="small" type="primary">点击上传</el-button>
+                <el-button v-if="registerForm.proxytestifypicpath" size="small" type="primary" @click="handlePictureCardPreview(registerForm.proxytestifypicpath)">上传成功，点击预览</el-button>
               </el-upload>
             </el-form-item>
             <el-form-item label="食品安全认证：">
               <el-upload
                 action="http://10.189.13.151:8080/ebs/common/upload"
-                list-type="picture-card"
+                list-type="text"
                 :show-file-list="false"
                 :on-success="handleFoodSafetySuccess"
                 :on-preview="handlePictureCardPreview"
                 :on-remove="handleRemove"
                 :before-upload="beforeAvatarUpload">
-                <img v-if="registerForm.foodsafetypicpath" :src="registerForm.foodsafetypicpath" class="avatar">
-                <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                <!-- <img v-if="registerForm.foodsafetypicpath" :src="registerForm.foodsafetypicpath" class="avatar">
+                <i v-else class="el-icon-plus avatar-uploader-icon"></i> -->
+                <el-button size="small" type="primary">点击上传</el-button>
+                <el-button v-if="registerForm.foodsafetypicpath" size="small" type="primary" @click="handlePictureCardPreview(registerForm.foodsafetypicpath)">上传成功，点击预览</el-button>                
               </el-upload>
             </el-form-item>
             <el-form-item label="食品流通许可：">
               <el-upload
                 action="http://10.189.13.151:8080/ebs/common/upload"
-                list-type="picture-card"
+                list-type="text"
                 :show-file-list="false"
                 :on-success="handleFoodCirculationSuccess"
                 :on-preview="handlePictureCardPreview"
                 :on-remove="handleRemove"
                 :before-upload="beforeAvatarUpload">
-                <img v-if="registerForm.foodpathpicpath" :src="registerForm.foodpathpicpath" class="avatar">
-                <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                <!-- <img v-if="registerForm.foodpathpicpath" :src="registerForm.foodpathpicpath" class="avatar">
+                <i v-else class="el-icon-plus avatar-uploader-icon"></i> -->
+                <el-button size="small" type="primary">点击上传</el-button>
+                <el-button v-if="registerForm.foodpathpicpath" size="small" type="primary" @click="handlePictureCardPreview(registerForm.foodpathpicpath)">上传成功，点击预览</el-button>                 
               </el-upload>
             </el-form-item>
             <el-form-item label="其他：">
@@ -453,10 +463,9 @@
 </template>
 
 <script>
-  import Regheader from '@/components/Register/regheader'
-  import Regfooter from '@/components/Register/regfooter'
   import RegionSelector from '@/components/RegionSelector/index'
   import AddressSelector from '@/components/AddressSelector/index'
+  import { getBusinessesDetail, updateBusinesses } from '@/api/businesses'
 
   export default {
     data() {
@@ -469,9 +478,9 @@
           businessesName: '',
           businessesShortName: '',	// 企业简称
           businessType: '',			// 商家类型
-          locationCode: 0,  // 中国
+          locationCode: '0',  // 中国
           businesslicenseNum: '',
-          merchantKind: '',
+          merchantKind: '1',
           legalName: '',
           legalPaperType: '',
           legalPaperNumber: '',
@@ -528,51 +537,11 @@
           foodotherpicpath: [],
           // },
           goodsListForm: [
-            {
-              num: '示例',
-              name: '鱼香大米',
-              unit: '5KG',
-              origin: '重庆,西永',
-              price: '￥250',
-              description: '多种蛋白质、营养丰富、色泽光亮、颗粒饱满',
-              url: 'http://detail.tmall.com/item.htm?spm=a230r.1.14.172.VhFL'
-            },
-            {
-              num: '01',
-              name: '',
-              unit: '',
-              origin: '',
-              price: '',
-              description: '',
-              url: ''
-            },
-            {
-              num: '02',
-              name: '',
-              unit: '',
-              origin: '',
-              price: '',
-              description: '',
-              url: ''
-            },
-            {
-              num: '03',
-              name: '',
-              unit: '',
-              origin: '',
-              price: '',
-              description: '',
-              url: ''
-            },
-            {
-              num: '04',
-              name: '',
-              unit: '',
-              origin: '',
-              price: '',
-              description: '',
-              url: ''
-            }
+            { num: '示例', name: '鱼香大米', unit: '5KG', origin: '重庆,西永', price: '￥250', description: '多种蛋白质、营养丰富、色泽光亮、颗粒饱满', url: 'http://detail.tmall.com/item.htm?spm=a230r.1.14.172.VhFL' },
+            { num: '01', name: '', unit: '', origin: '', price: '', description: '', url: '' },
+            { num: '02', name: '', unit: '', origin: '', price: '', description: '', url: '' },
+            { num: '03', name: '', unit: '', origin: '', price: '', description: '', url: '' },
+            { num: '04', name: '', unit: '', origin: '', price: '', description: '', url: '' }
           ]
         },
         registerRules: {
@@ -586,7 +555,7 @@
           relationPhone: [{ required: true, message: '请输入业务联系人手机号码', trigger: 'blur' }],
           sellPersonName: [{ required: true, message: '请输入售后联系人', trigger: 'blur' }],
           sellPersonMobile: [{ required: true, message: '请输入售后电话', trigger: 'blur' }],
-          sellAddressListForm: [{ required: true, message: '请输入售后处理点', trigger: 'change' }],
+          sellAddressListForm: [{ required: false, message: '请输入售后处理点', trigger: 'change' }], // TODO
           financePersonName: [{ required: true, message: '请输入财务联系人', trigger: 'blur' }],
           financePersonMobile: [{ required: true, message: '请输入财务手机', trigger: 'blur' }],
           isInvoice: [{ required: true, message: '请选择能否开具发票', trigger: 'change' }],
@@ -600,14 +569,94 @@
       }
     },
     components: {
-      Regheader,
-      Regfooter,
       RegionSelector,
       AddressSelector
     },
+    created() {
+      this.getBusinessesInfo()
+    },
     methods: {
+      getItem(arr, val) {
+        var result = []
+        for (var i = 0; i < arr.length; i++) {
+          if (arr[i].attachmentname === val) {
+            result.push(arr[i])
+          }
+        }
+        if (result.length === 1) {
+          return result[0]
+        } else {
+          return result
+        }
+      },
+      getBusinessesInfo() {
+        return new Promise((resolve, reject) => {
+          getBusinessesDetail(this.$route.query.id).then(response => {
+            console.log('response.data:', response.data)
+            this.registerForm = response.data.businesses
+            this.registerForm.locationCode = response.data.businesses.locationCode.toString()
+            this.sellAddressListForm = response.data.sellAddresslist
+            var goodsSamplelist = [{ num: '示例', name: '鱼香大米', unit: '5KG', origin: '重庆,西永', price: '￥250', description: '多种蛋白质、营养丰富、色泽光亮、颗粒饱满', url: 'http://detail.tmall.com/item.htm?spm=a230r.1.14.172.VhFL' }]
+            switch (response.data.goodsSamplelist.length) {
+              case 1:
+                goodsSamplelist.push(response.data.goodsSamplelist[0])
+                goodsSamplelist[1].num = '01'
+                goodsSamplelist.push({ num: '02', name: '', unit: '', origin: '', price: '', description: '', url: '' })
+                goodsSamplelist.push({ num: '03', name: '', unit: '', origin: '', price: '', description: '', url: '' })
+                goodsSamplelist.push({ num: '04', name: '', unit: '', origin: '', price: '', description: '', url: '' })
+                break
+              case 2:
+                goodsSamplelist.push(response.data.goodsSamplelist[0])
+                goodsSamplelist[1].num = '01'
+                goodsSamplelist.push(response.data.goodsSamplelist[1])
+                goodsSamplelist[2].num = '02'
+                goodsSamplelist.push({ num: '03', name: '', unit: '', origin: '', price: '', description: '', url: '' })
+                goodsSamplelist.push({ num: '04', name: '', unit: '', origin: '', price: '', description: '', url: '' })
+                break
+              case 3:
+                goodsSamplelist.push(response.data.goodsSamplelist[0])
+                goodsSamplelist[1].num = '01'
+                goodsSamplelist.push(response.data.goodsSamplelist[1])
+                goodsSamplelist[2].num = '02'
+                goodsSamplelist.push(response.data.goodsSamplelist[2])
+                goodsSamplelist[3].num = '03'
+                goodsSamplelist.push({ num: '04', name: '', unit: '', origin: '', price: '', description: '', url: '' })
+                break
+              case 4:
+                goodsSamplelist.push(response.data.goodsSamplelist[0])
+                goodsSamplelist[1].num = '01'
+                goodsSamplelist.push(response.data.goodsSamplelist[1])
+                goodsSamplelist[2].num = '02'
+                goodsSamplelist.push(response.data.goodsSamplelist[2])
+                goodsSamplelist[3].num = '03'
+                goodsSamplelist.push(response.data.goodsSamplelist[3])
+                goodsSamplelist[4].num = '04'
+                break
+              default:break
+            }
+            this.registerForm.goodsListForm = goodsSamplelist // response.data.goodsSamplelist
+
+            // 资质
+            this.registerForm.licencepicpath = this.getItem(response.data.attachmentlist, '营业执照').attachmenturl
+            this.registerForm.sfzmpicpath = this.getItem(response.data.attachmentlist, '经办人身份证号码正面').attachmenturl
+            this.registerForm.sffmpicpath = this.getItem(response.data.attachmentlist, '经办人身份证号码反面').attachmenturl
+            this.registerForm.proxytestifypicpath = this.getItem(response.data.attachmentlist, '代理授权证明').attachmenturl
+            this.registerForm.foodsafetypicpath = this.getItem(response.data.attachmentlist, '食品安全认证').attachmenturl
+            this.registerForm.foodpathpicpath = this.getItem(response.data.attachmentlist, '食品流通许可').attachmenturl
+            const foodothers = this.getItem(response.data.attachmentlist, '其他资质证明')
+            var foodotherpics = []
+            for (var i = 0; i < foodothers.length; i++) {
+              foodotherpics.push(foodothers[i].attachmenturl)
+            }
+            this.registerForm.foodotherpicpath = foodotherpics
+            resolve(response)
+          }).catch(error => {
+            reject(error)
+          })
+        })
+      },
       getLocationCode(locationInfo) {
-        this.registerForm.locationCode = locationInfo.id
+        this.registerForm.locationCode = locationInfo.id.toString()
       },
       getAddressInfo(addressInfo) {
         console.log(addressInfo)
@@ -615,13 +664,10 @@
         return
       },
       addSellAddress() {
-        alert('增加一项')
-        debugger
         // this.registerForm.sellAddressListForm.push({ 'haha': 'fdasf' })
         this.sellAddressListForm.push({ 'haha': 'fdasf' })
       },
       deleteSellAddress(index) {
-        alert('减少一项')
         this.sellAddressListForm.splice(index, 1)
       },
       beforeAvatarUpload(file) {
@@ -753,7 +799,149 @@
             }
           }
         }
-        this.$router.push({ path: '/regStepThree' })
+
+        if (this.registerForm.businesslicenseNum === '') {
+          this.$message({ type: 'warning', message: '请输入营业执照号码' })
+          return
+        }
+        // if (this.registerForm.sfzmpicpath === '') {
+        //   this.$message({ type: 'warning', message: '请上传营业执照' })
+        //   return
+        // }
+        if (this.registerForm.operatoridnum === '') {
+          this.$message({ type: 'warning', message: '请输入经办人身份证号码' })
+          return
+        }
+        // if (this.registerForm.sfzmpicpath === '') {
+        //   this.$message({ type: 'warning', message: '请上传身份证正面' })
+        //   return
+        // }
+        // if (this.registerForm.sffmpicpath === '') {
+        //   this.$message({ type: 'warning', message: '请上传身份证反面' })
+        //   return
+        // }
+        // if (this.registerForm.proxytestifypicpath === '') {
+        //   this.$message({ type: 'warning', message: '请上传代理授权证明' })
+        //   return
+        // }
+  
+        // 提交到后台
+        var goodsSamplelist = []
+        for (let i = 1; i < this.registerForm.goodsListForm.length; i++) {
+          if ((this.registerForm.goodsListForm[i].name.trim() !== undefined && this.registerForm.goodsListForm[i].name.trim() !== '')) {
+            goodsSamplelist.push({
+              'name': `${this.registerForm.goodsListForm[i].name}`,
+              'unit': `${this.registerForm.goodsListForm[i].unit}`,
+              'origin': `${this.registerForm.goodsListForm[i].origin}`,
+              'price': `${this.registerForm.goodsListForm[i].price}`,
+              'description': `${this.registerForm.goodsListForm[i].description !== null ? this.registerForm.goodsListForm[i].description : ''}`,
+              'url': `${this.registerForm.goodsListForm[i].url !== null ? this.registerForm.goodsListForm[i].url : ''}`
+            })
+          }
+        }
+
+        var sellAddressList = [
+          {
+            'locationcode': '2606020000',
+            'selladdress': '地址地址地址地址'
+          },
+          {
+            'locationcode': '2606020000',
+            'selladdress': '地址地址地址地址222'
+          }
+        ]
+
+        var params = {
+          'businessesBean': {
+            'id': `${this.$route.query.id}`,
+            'businessesName': `${this.registerForm.businessesName}`,       // 企业名称
+            'locationCode': `${this.registerForm.locationCode}`,		// 归属区域ID
+            'businesslicenseNum': `${this.registerForm.businesslicenseNum}`, // 企业营业执照号码
+            'merchantKind': `${this.registerForm.merchantKind}`,
+            'address': `${this.registerForm.address}`,				// 详细地址
+            'relationPerson': `${this.registerForm.relationPerson}`,			// 联系人姓名
+            'relationPhone': `${this.registerForm.relationPhone}`,		// 联系人电话，用于登陆，初始密码123456
+            'sellPersonName': `${this.registerForm.sellPersonName}`,			// 售后联系人
+            'sellPersonMobile': `${this.registerForm.sellPersonMobile}`,	// 售后联系人电话
+            'financePersonName': `${this.registerForm.financePersonName}`,		// 财务姓名
+            'financePersonMobile': `${this.registerForm.financePersonMobile}`, // 财务联系人手机
+            'operatoridnum': `${this.registerForm.operatoridnum}`,	// 经办人身份证
+            'isInvoice': `${this.registerForm.isInvoice}`,   // 是否可开发票，0:不开，1：可以开发票
+            'businessesShortName': `${this.registerForm.businessesShortName}`,  // 企业简称
+            'businessType': `${this.registerForm.businessType}`, // 合作商家
+            'legalName': `${this.registerForm.legalName}`, // 法人姓名
+            'legalPaperType': `${this.registerForm.legalPaperType}`, // 法人证件类型
+            'legalPaperNumber': `${this.registerForm.legalPaperNumber}`, // 法人证件号码
+            'relationEmail': `${this.registerForm.relationEmail !== null ? this.registerForm.relationEmail : ''}`,
+            'financePersonPhone': `${this.registerForm.financePersonPhone !== null ? this.registerForm.financePersonPhone : ''}`,
+            'financePersonEmail': `${this.registerForm.financePersonEmail !== null ? this.registerForm.financePersonEmail : ''}`,
+            'financePersonAddress': `${this.registerForm.financePersonAddress !== null ? this.registerForm.financePersonAddress : ''}`,
+            'registerMoney': `${this.registerForm.registerMoney !== null ? this.registerForm.registerMoney : ''}`,
+            'margin': `${this.registerForm.margin !== null ? this.registerForm.margin : ''}`,
+            'liquidatedDamages': `${this.registerForm.liquidatedDamages !== null ? this.registerForm.liquidatedDamages : ''}`,
+            'taxRegistrationNum': `${this.registerForm.taxRegistrationNum !== null ? this.registerForm.taxRegistrationNum : ''}`,
+            'officePhone': `${this.registerForm.officePhone !== null ? this.registerForm.officePhone : ''}`,
+            'operateHours': `${this.registerForm.operateHours !== null ? this.registerForm.operateHours : ''}`,
+            'employeesNum': `${this.registerForm.employeesNum !== null ? this.registerForm.employeesNum : ''}`,
+            'fax': `${this.registerForm.fax !== null ? this.registerForm.fax : ''}`,
+            'zipCode': `${this.registerForm.zipCode !== null ? this.registerForm.zipCode : ''}`,
+            'ownershipType': `${this.registerForm.ownershipType !== null ? this.registerForm.ownershipType : ''}`,
+            'merchantPayable': `${this.registerForm.merchantPayable !== null ? this.registerForm.merchantPayable : ''}`,
+            'merchantNo': `${this.registerForm.merchantNo !== null ? this.registerForm.merchantNo : ''}`,
+            'aliPayNoPayable': `${this.registerForm.aliPayNoPayable !== null ? this.registerForm.aliPayNoPayable : ''}`,
+            'aliPayAccount': `${this.registerForm.aliPayAccount !== null ? this.registerForm.aliPayAccount : ''}`,
+            'aliPaySignKey': `${this.registerForm.aliPaySignKey !== null ? this.registerForm.aliPaySignKey : ''}`,
+            'aliPaySellerAccountName': `${this.registerForm.aliPaySellerAccountName !== null ? this.registerForm.aliPaySellerAccountName : ''}`,
+            'cmPayNoPayable': `${this.registerForm.cmPayNoPayable !== null ? this.registerForm.cmPayNoPayable : ''}`,
+            'cmPayMerchantId': `${this.registerForm.cmPayMerchantId !== null ? this.registerForm.cmPayMerchantId : ''}`,
+            'cmPaySignKey': `${this.registerForm.cmPaySignKey !== null ? this.registerForm.cmPaySignKey : ''}`,
+            'umPayNoPayable': `${this.registerForm.umPayNoPayable !== null ? this.registerForm.umPayNoPayable : ''}`,
+            'umPayMerchantId': `${this.registerForm.umPayMerchantId !== null ? this.registerForm.umPayMerchantId : ''}`,
+            'umPayBankAccountName': `${this.registerForm.umPayBankAccountName !== null ? this.registerForm.umPayBankAccountName : ''}`,
+            'umPayBankAccountNo': `${this.registerForm.umPayBankAccountNo !== null ? this.registerForm.umPayBankAccountNo : ''}`,
+            'wirelesscityno': `${this.registerForm.wirelesscityno !== null ? this.registerForm.wirelesscityno : ''}`,
+            'wirelesscityname': `${this.registerForm.wirelesscityname !== null ? this.registerForm.wirelesscityname : ''}`,
+            'wirelesscitypayable': `${this.registerForm.wirelesscitypayable !== null ? this.registerForm.wirelesscitypayable : ''}`,
+            'wirelesstpcode': `${this.registerForm.wirelesstpcode !== null ? this.registerForm.wirelesstpcode : ''}`,
+            'wirelesstpname': `${this.registerForm.wirelesstpname !== null ? this.registerForm.wirelesstpname : ''}`,
+            'validdate_str': `${this.registerForm.validdate_str !== null ? this.registerForm.validdate_str : ''}`
+          },
+          'goodsSamplelist': goodsSamplelist,
+          'sellAddressList': sellAddressList,
+          'registerAttachmentBean': {
+            'sfzmpicpath': `http:www.baidu.com`,
+            'sffmpicpath': `http:www.baidu.com`,
+            'licencepicpath': `http:www.baidu.com`,
+            'proxytestifypicpath': `http:www.baidu.com`,
+            'foodsafetypicpath': `http:www.baidu.com`,
+            'foodpathpicpath': `http:www.baidu.com`,
+            'foodotherpicpath': [
+              `http:www.baidu.com`,
+              `http:www.baidu.com`,
+              `http:www.baidu.com`
+            ]
+          }
+          // 'registerAttachmentBean': {
+          //   'sfzmpicpath': `${this.registerForm.sfzmpicpath}`,
+          //   'sffmpicpath': `${this.registerForm.sffmpicpath}`,
+          //   'licencepicpath': `${this.registerForm.licencepicpath}`,
+          //   'proxytestifypicpath': `${this.registerForm.proxytestifypicpath}`,
+          //   'foodsafetypicpath': `${this.registerForm.foodsafetypicpath}`,
+          //   'foodpathpicpath': `${this.registerForm.foodpathpicpath}`,
+          //   'foodotherpicpath': [
+          //     '其他URL1',
+          //     '其他URL2',
+          //     '其他URL3'
+          //   ]
+          // },
+        }
+        // TODO 获取登录用户
+        updateBusinesses(params, '1').then(response => {
+          this.$message('修改企业成功')
+          this.$router.push({ path: '/businesses/list' })
+        }).catch(error => {
+          console.log(error)
+        })
       }
     }
   }

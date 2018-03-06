@@ -49,9 +49,9 @@
     </el-form>
     <h3 style="padding-left: 20px;">角色列表</h3>
     <el-table :data="list" v-loading.body="loading" element-loading-text="Loading" border stripe fit highlight-current-row style="padding-left:10px">
-      <el-table-column label='角色名称' prop="rolename" width="110">
+      <el-table-column label='角色名称' prop="rolename" width="110" align="center">
       </el-table-column>
-      <el-table-column label="系统角色" prop="issystem" :formatter="transformIsSystem" width="150">
+      <el-table-column label="系统角色" prop="issystem" :formatter="transformIsSystem" width="150" align="center">
       </el-table-column>
       <el-table-column label="隐藏角色" prop="ishidden" :formatter="transformIsHidden" width="110" align="center">
       </el-table-column>
@@ -59,7 +59,7 @@
       </el-table-column>
       <el-table-column label="角色描述" prop="description" width="200" align="center">
       </el-table-column>
-      <el-table-column align="center" label="操作" width="190">
+      <el-table-column label="操作" width="190" align="center">
       <template slot-scope="scope">
         <el-button @click="detail(scope.row)" type="text" size="small">详细</el-button>
         <el-button @click="updateRole(scope.row)" type="text" size="small">修改</el-button>
@@ -117,7 +117,7 @@ export default {
       })
     },
     addRole() {
-      this.$router.push({ path: '/account/role/add' })
+      this.$router.push({ path: '/system/role/add' })
     },
     initRoleList() {
       this.loading = true
@@ -131,7 +131,7 @@ export default {
       })
     },
     updateRole(role) {
-      this.$router.push({ path: '/account/role/update', query: { id: role.id }})
+      this.$router.push({ path: '/system/role/update', query: { id: role.id }})
     },
     deleteRole(role) {
       this.$confirm(`您确定删除名称为[${role.rolename}]的角色吗, 是否继续?`, '提示', {
@@ -163,7 +163,7 @@ export default {
       })
     },
     detail(role) {
-      this.$router.push({ path: '/account/role/detail', query: { id: role.id }})
+      this.$router.push({ path: '/system/role/detail', query: { id: role.id }})
     },
     resetForm(formname) {
       // this.$refs[formname].resetFields()
@@ -173,9 +173,11 @@ export default {
       this.searchForm.ishidden = ''
     },
     handleSizeChange(val) {
+      this.pagesize = val
       this.queryRoleList()
     },
     handleCurrentChange(val) {
+      this.currentPage = val
       this.queryRoleList()
     },
     transformIsSystem(row, column, cellValue) {

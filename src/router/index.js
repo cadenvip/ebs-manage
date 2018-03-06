@@ -45,7 +45,7 @@ export const constantRouterMap = [
       {
         path: 'index',
         name: 'homepage',
-        component: _import('homepage/index'),
+        component: _import('dashboard/index'),
         meta: { title: '首页', icon: 'form' }
       }
     ]
@@ -66,24 +66,18 @@ export default new Router({
  */
 export const asyncRouterMap = [
   {
-    path: '/account',
+    path: '/system',
     component: Layout,
-    redirect: '/account/location',
-    name: 'account',
+    redirect: '/system/location',
+    name: 'system',
     hidden: false,
-    meta: { roles: ['1'], title: '账户管理', icon: 'table' },
+    meta: { roles: ['1'], title: '系统管理', icon: 'table' },
     children: [
       {
         path: 'location',
         name: 'location',
         component: _import('location/index'),
         meta: { roles: ['1'], title: '区域管理', icon: 'table' }
-      },
-      {
-        path: 'subscriber',
-        name: 'subscriber',
-        component: _import('account/subscriber'),
-        meta: { roles: ['1'], title: '订购用户查询', icon: 'user' }
       },
       {
         path: 'user/list',
@@ -146,22 +140,81 @@ export const asyncRouterMap = [
         meta: { roles: ['1'], title: '权限管理', icon: 'table' }
       },
       {
-        path: 'logmanagement',
-        name: 'logmanagement',
-        component: _import('account/logmanagement'),
-        meta: { roles: ['1'], title: '日志管理', icon: 'table' }
+        path: 'access/list',
+        name: 'accesslist',
+        component: _import('access/list'),
+        meta: { roles: ['1'], title: '接入方管理', icon: 'table' }
       },
       {
-        path: 'paramsmanagement',
-        name: 'paramsmanagement',
-        component: _import('account/paramsmanagement'),
-        meta: { roles: ['1'], title: '参数管理', icon: 'table' }
+        path: 'access/add',
+        name: 'accessadd',
+        hidden: true,
+        component: _import('access/add'),
+        meta: { roles: ['1'], title: '新增接入方', icon: 'table' }
       },
       {
-        path: 'sensitivewordsmanagement',
-        name: 'sensitivewordsmanagement',
-        component: _import('account/sensitivewordsmanagement'),
+        path: 'access/update',
+        name: 'accessupdate',
+        hidden: true,
+        component: _import('access/update'),
+        meta: { roles: ['1'], title: '修改接入方', icon: 'table' }
+      },
+      {
+        path: 'access/detail',
+        name: 'accessdetail',
+        hidden: true,
+        component: _import('access/detail'),
+        meta: { roles: ['1'], title: '接入方详情', icon: 'table' }
+      },
+      {
+        path: 'sensitive/list',
+        name: 'sensitivelist',
+        component: _import('sensitive/list'),
         meta: { roles: ['1'], title: '敏感词管理', icon: 'table' }
+      },
+      {
+        path: 'sensitive/add',
+        name: 'sensitiveadd',
+        hidden: true,
+        component: _import('sensitive/add'),
+        meta: { roles: ['1'], title: '新增敏感词', icon: 'table' }
+      }
+    ]
+  },
+
+  {
+    path: '/log',
+    name: 'log',
+    component: Layout,
+    redirect: '/log/ilog/list',
+    hidden: false,
+    meta: { roles: ['1'], title: '日志管理', icon: 'table' },
+    children: [
+      {
+        path: 'olog/list',
+        name: 'ologlist',
+        component: _import('log/oLogList'),
+        meta: { roles: ['1'], title: '操作日志', icon: 'table' }
+      },
+      {
+        path: 'olog/detail',
+        name: 'ologdetail',
+        hidden: true,
+        component: _import('log/oLogDetail'),
+        meta: { roles: ['1'], title: '操作日志详情', icon: 'table' }
+      },
+      {
+        path: 'ilog/list',
+        name: 'iloglist',
+        component: _import('log/iLogList'),
+        meta: { roles: ['1'], title: '接口日志', icon: 'table' }
+      },
+      {
+        path: 'ilog/detail',
+        name: 'ilogdetail',
+        hidden: true,
+        component: _import('log/iLogDetail'),
+        meta: { roles: ['1'], title: '接口日志详情', icon: 'table' }
       }
     ]
   },
@@ -212,52 +265,6 @@ export const asyncRouterMap = [
         hidden: true,
         component: _import('businesses/audit'),
         meta: { roles: ['1'], title: '企业审核', icon: 'user' }
-      },
-      {
-        path: 'msgsend',
-        name: 'msgsend',
-        component: _import('businesses/msgsend'),
-        meta: { roles: ['1'], title: '信息下发查询', icon: 'user' }
-      },
-      {
-        path: 'auditbusiness',
-        name: 'auditbusiness',
-        component: _import('businesses/auditbusiness'),
-        meta: { roles: ['1'], title: '业务审核', icon: 'table' }
-      }
-    ]
-  },
-
-  {
-    path: '/systemtools',
-    component: Layout,
-    name: 'system',
-    hidden: false,
-    meta: { roles: ['1'], title: '系统工具', icon: 'table' },
-    children: [
-      {
-        path: 'tools',
-        name: 'tools',
-        component: _import('system/tools'),
-        meta: { roles: ['1'], title: '常用工具', icon: 'table' }
-      },
-      {
-        path: 'modifyuserinfo',
-        name: 'modifyuserinfo',
-        component: _import('system/modifyuserinfo'),
-        meta: { roles: ['1'], title: '个人信息修改', icon: 'user' }
-      },
-      {
-        path: 'help',
-        name: 'help',
-        component: _import('system/help'),
-        meta: { roles: ['1'], title: '帮助', icon: 'user' }
-      },
-      {
-        path: 'statistics',
-        name: 'statistics',
-        component: _import('system/statistics'),
-        meta: { roles: ['1'], title: '数据统计', icon: 'table' }
       }
     ]
   },

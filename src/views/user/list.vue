@@ -44,9 +44,9 @@
     </el-dialog>
     <h3 style="padding-left: 20px;">人员列表</h3>
     <el-table :data="list" v-loading.body="loading" element-loading-text="Loading" border stripe fit highlight-current-row style="padding-left:10px">
-      <el-table-column label='账号' prop="loginname" width="110">
+      <el-table-column label='账号' prop="loginname" width="110" align="center">
       </el-table-column>
-      <el-table-column label="姓名" prop="name" width="150">
+      <el-table-column label="姓名" prop="name" width="150" align="center">
       </el-table-column>
       <el-table-column label="手机号码" prop="phoneno" width="110" align="center">
       </el-table-column>
@@ -54,9 +54,9 @@
       </el-table-column>
       <el-table-column label="归属区域" prop="locationname" width="200" align="center">
       </el-table-column>
-      <el-table-column label="所属单位" prop="unitname" align="center" width="200">
+      <el-table-column label="所属单位" prop="unitname" width="200" align="center">
       </el-table-column>
-      <el-table-column align="center" label="操作" width="190">
+      <el-table-column label="操作" width="190" align="center">
       <template slot-scope="scope">
         <el-button @click="updateUser(scope.row)" type="text" size="small">修改</el-button>
         <el-button @click="resetPassword(scope.row)" type="text" size="small">重置密码</el-button>
@@ -120,7 +120,7 @@ export default {
       })
     },
     addUser() {
-      this.$router.push({ path: '/account/user/add' })
+      this.$router.push({ path: '/system/user/add' })
     },
     initUserList() {
       this.loading = true
@@ -144,7 +144,7 @@ export default {
       return arrRoleNames.join()
     },
     updateUser(user) {
-      this.$router.push({ path: '/account/user/update', query: { id: user.id }})
+      this.$router.push({ path: '/system/user/update', query: { id: user.id }})
     },
     resetPassword(user) {
       this.$confirm(`您确定重置[${user.loginname}]的密码吗, 是否继续?`, '提示', {
@@ -160,13 +160,14 @@ export default {
       })
     },
     detail(user) {
-      this.$router.push({ path: '/account/user/detail', query: { id: user.id }})
+      this.$router.push({ path: '/system/user/detail', query: { id: user.id }})
     },
     handleSizeChange(val) {
-      this.pagesize = this.pagesize === val ? this.pagesize : val
+      this.pagesize = val
       this.queryUserList()
     },
     handleCurrentChange(val) {
+      this.currentPage = val
       this.queryUserList()
     },
     getLocationInfo: function(data) {

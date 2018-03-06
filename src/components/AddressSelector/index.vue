@@ -38,8 +38,8 @@ export default {
       default: ''
     },
     locationId: {
-      type: Number,
-      default: 0
+      type: String,
+      default: '0'
     },
     detailAddress: {
       type: String,
@@ -58,9 +58,9 @@ export default {
     }
   },
   created () {
-    if (this.code !== undefined && this.code !== '') {
+    if (this.locationCode !== undefined && this.locationCode !== '') {
       // 根据locationCode获取区域信息
-      this.getLocationByCode(this.code)
+      this.getLocationByCode(this.locationCode)
     } else if (this.locationId !== undefined && this.locationId !== '') {
       // 根据id获取区域信息
       this.getLocationById(this.locationId)
@@ -69,6 +69,20 @@ export default {
   mounted () {
     // 默认中国
     this.getProvinces()
+  },
+  watch: {
+    locationCode: function() {
+      if (this.locationCode !== undefined && this.locationCode !== '') {
+        // 根据locationCode获取区域信息
+        this.getLocationByCode(this.locationCode)
+      }
+    },
+    locationId: function() {
+      if (this.locationId !== undefined && this.locationId !== '') {
+        // 根据id获取区域信息
+        this.getLocationById(this.locationId)
+      }
+    }
   },
   methods: {
     getLocationByCode (locationCode) {

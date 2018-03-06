@@ -161,7 +161,7 @@ export default {
           return new Promise((resolve, reject) => {
             addUser(this.userForm).then(response => {
               resolve(response)
-              this.$router.push({ path: '/account/user/list' })
+              this.$router.push({ path: '/system/user/list' })
             }).catch(error => {
               reject(error)
             })
@@ -173,7 +173,7 @@ export default {
       })
     },
     onCancel() {
-      this.$router.push({ path: '/account/user/list' })
+      this.$router.push({ path: '/system/user/list' })
     }
   }
 }
