@@ -339,6 +339,51 @@ export const asyncRouterMap = [
   },
 
   {
+    path: '/goodstypemanage',
+    component: Layout,
+    meta: { roles: ['2'], title: '商品分类管理', icon: 'form' },
+    name: '商品分类管理',
+    children: [
+      // 管理员
+      {
+        path: 'index',
+        name: '商品分类',
+        component: _import('goodstypemanage/index'),
+        meta: { roles: ['2'], title: '商品分类管理', icon: 'form' }
+      }
+    ]
+  },
+
+  {
+    path: '/goodstype',
+    component: Layout,
+    hidden: true,
+    meta: { roles: ['2'], title: '商品分类管理', icon: 'form' },
+    name: '商品分类管理新增',
+    children: [
+      // 管理员
+      {
+        path: 'add',
+        name: '新增商品分类',
+        component: _import('goodstypemanage/add'),
+        meta: { roles: ['2'], title: '新增商品分类', icon: 'form' }
+      },
+      {
+        path: 'modify',
+        name: '修改商品分类',
+        component: _import('goodstypemanage/modify'),
+        meta: { roles: ['2'], title: '修改商品分类', icon: 'form' }
+      },
+      {
+        path: 'detail',
+        name: '商品分类详情',
+        component: _import('goodstypemanage/detail'),
+        meta: { roles: ['2'], title: '商品分类详情', icon: 'form' }
+      }
+    ]
+  },
+
+  {
     path: '/permission',
     component: Layout,
     name: '权限测试',

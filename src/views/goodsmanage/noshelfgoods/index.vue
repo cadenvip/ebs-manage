@@ -105,7 +105,7 @@
                 <el-button @click="getGoodsDetail(scope.row)" type="text" size="small">详情</el-button>
                 <el-button v-if="scope.row.auditStatus === '3'" @click="_upGoods(scope.row)" type="text" size="small">上架</el-button>
                 <el-button v-if="scope.row.auditStatus === '3'" @click="modifyGoods(scope.row)" type="text" size="small">修改</el-button>
-                <el-button v-if="scope.row.auditStatus === '3'" @click="modifyGoods(scope.row)" type="text" size="small">删除</el-button>
+                <el-button v-if="scope.row.auditStatus === '3'" @click="deleteGoods(scope.row)" type="text" size="small">删除</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -136,6 +136,7 @@
 </template>
 
 <script>
+  import axios from 'axios'
   import CollapseTransition from 'element-ui/lib/transitions/collapse-transition'
   import { getGoodsTopType } from '@/api/goodsRelease'
   import { getNoShelfGoods, upGoods } from '@/api/noshelfgoods'
@@ -292,6 +293,18 @@
       modifyGoods(val) {
         this.$router.push({ name: 'publishstep1', query: { goodsId: val.goodsId }})
       },
+      deleteGoods(val) {
+        var url = process.env.BASE_API + 'goods/delete/' + val.goodsId
+        axios.post(url).then(res => {
+          if (res.status === 200) {
+            console.log(res)
+          } else {
+            this.$message.error(res.msg)
+          }
+        }).catch(err => {
+          console.log(err)
+        })
+      },
       // 单个商品上架
       _upGoods(val) {
         const params = {
@@ -343,6 +356,17 @@
           }
           // 请求批量删除接口
           console.log('请求批量删除接口')
+          console.log(this.DSJseletedData)
+          // var url = process.env.BASE_API + 'goods/delete/' + val.goodsId
+          // axios.post(url).then(res => {
+          //   if (res.status === 200) {
+          //     console.log(res)
+          //   } else {
+          //     this.$message.error(res.msg)
+          //   }
+          // }).catch(err => {
+          //   console.log(err)
+          // })
         }
       },
       handleDSJsizeChange(val) {

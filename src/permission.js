@@ -64,7 +64,6 @@ router.beforeEach((to, from, next) => {
             roles.push(v.roletype)
           })
           store.dispatch('GenerateRoutes', { roles }).then(() => {
-            debugger
             router.addRoutes(store.getters.addRouters)
             next({ ...to, replace: true })
           })
