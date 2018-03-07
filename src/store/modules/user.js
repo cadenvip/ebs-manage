@@ -37,25 +37,28 @@ const user = {
     Login({ commit }, userInfo) {
       return new Promise((resolve, reject) => {
         login(userInfo).then(response => {
-          // 此处将用户加密后的密码作为token
-          const data = response.data
-          console.log(data)
-          setToken(data.password)
-          setSessionid(data.sessionid)
-          setUserId(data.id)
-          commit('SET_TOKEN', data.password)
-          commit('SET_SESSIONID', data.sessionid)
-          commit('SET_USERID', data.id)
-          commit('SET_NAME', data.loginname)
-          commit('SET_AVATAR', data.avatar)
-          var roles = []
-          data.role.forEach(function(v) {
-            roles.push(v.roletype)
-          })
-          // setRoleType(roles.join(','))
-          // commit('SET_ROLES', roles)
-          window.sessionStorage.setItem('userInfo', JSON.stringify(data))
-          resolve()
+          if (response.status === 200) {
+            // 此处将用户加密后的密码作为token
+            const data = response.data
+            setToken(data.password)
+            setSessionid(data.sessionid)
+            setUserId(data.id)
+            commit('SET_TOKEN', data.password)
+            commit('SET_SESSIONID', data.sessionid)
+            commit('SET_USERID', data.id)
+            commit('SET_NAME', data.loginname)
+            commit('SET_AVATAR', data.avatar)
+            var roles = []
+            data.role.forEach(function(v) {
+              roles.push(v.roletype)
+            })
+            // setRoleType(roles.join(','))
+            // commit('SET_ROLES', roles)
+            window.sessionStorage.setItem('userInfo', JSON.stringify(data))
+            resolve()
+          } else {
+            this.$message.error(response.msg)
+          }
         }).catch(error => {
           reject(error)
         })
@@ -75,18 +78,22 @@ const user = {
           resolve(userInfo)
         } else {
           getInfo(state.userid).then(response => {
-            const data = response.data
-            commit('SET_USERID', data.id)
-            commit('SET_NAME', data.loginname)
-            commit('SET_AVATAR', data.avatar)
-            var roles = []
-            data.role.forEach(function(v) {
-              roles.push(v.roletype)
-            })
-            // setRoleType(roles.join(','))
-            commit('SET_ROLES', roles)
-            window.sessionStorage.setItem('userInfo', JSON.stringify(data))
-            resolve(response)
+            if (response.status === 200) {
+              const data = response.data
+              commit('SET_USERID', data.id)
+              commit('SET_NAME', data.loginname)
+              commit('SET_AVATAR', data.avatar)
+              var roles = []
+              data.role.forEach(function(v) {
+                roles.push(v.roletype)
+              })
+              // setRoleType(roles.join(','))
+              commit('SET_ROLES', roles)
+              window.sessionStorage.setItem('userInfo', JSON.stringify(data))
+              resolve(response)
+            } else {
+              this.$message.error(response.msg)
+            }
           }).catch(error => {
             reject(error)
           })
@@ -97,17 +104,20 @@ const user = {
     // 登出
     LogOut({ commit, state }) {
       return new Promise((resolve, reject) => {
-        logout(state.token).then(() => {
-          console.log('登出成功！')
-          commit('SET_TOKEN', '')
-          commit('SET_SESSIONID', '')
-          commit('SET_ROLES', [])
-          commit('SET_USERID', '')
-          removeToken()
-          removeSessionid()
-          removeUserId()
-          window.sessionStorage.removeItem('userInfo')
-          resolve()
+        logout(state.token).then(response => {
+          if (response.status === 200) {
+            commit('SET_TOKEN', '')
+            commit('SET_SESSIONID', '')
+            commit('SET_ROLES', [])
+            commit('SET_USERID', '')
+            removeToken()
+            removeSessionid()
+            removeUserId()
+            window.sessionStorage.removeItem('userInfo')
+            resolve()
+          } else {
+            this.$message.error(response.msg)
+          }
         }).catch(error => {
           reject(error)
         })

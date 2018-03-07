@@ -66,8 +66,12 @@ export default {
       this.loading = true
       console.log(this.searchForm.keyword, this.currentPage, this.pagesize)
       getSensitiveList(this.searchForm.keyword, this.currentPage, this.pagesize).then(response => {
-        this.list = response.data.list
-        this.total = response.data.total
+        if (response.status === 200) {
+          this.list = response.data.list
+          this.total = response.data.total
+        } else {
+          this.$message.error(response.msg)
+        }
         this.loading = false
       }).catch(error => {
         this.loading = false
@@ -80,8 +84,12 @@ export default {
     initSensitiveList() {
       this.loading = true
       getAllSensitives(this.currentPage, this.pagesize).then(response => {
-        this.list = response.data.list
-        this.total = response.data.total
+        if (response.status === 200) {
+          this.list = response.data.list
+          this.total = response.data.total
+        } else {
+          this.$message.error(response.msg)
+        }
         this.loading = false
       }).catch(error => {
         this.loading = false
@@ -95,11 +103,15 @@ export default {
         type: 'warning'
       }).then(() => {
         deleteSensitive(sensitive.id).then(response => {
-          this.$message({ type: 'success', message: '删除成功!' })
-          this.querySensitiveList()
+          if (response.status === 200) {
+            this.$message.success('删除成功!')
+            this.querySensitiveList()
+          } else {
+            this.$message.error(response.msg)
+          }
         })
       }).catch(() => {
-        this.$message({ type: 'info', message: '已取消删除' })
+        this.$message.info('已取消删除')
       })
     },
     resetForm(formname) {

@@ -100,9 +100,13 @@ export default {
     getUserForm() {
       return new Promise((resolve, reject) => {
         getUserDetail(this.$route.query.id).then(response => {
-          this.userForm = response.data
-          this.setRoles(this.userForm.role)
-          resolve(response)
+          if (response.status === 200) {
+            this.userForm = response.data
+            this.setRoles(this.userForm.role)
+            resolve(response)
+          } else {
+            this.$message.error(response.msg)
+          }
         }).catch(error => {
           reject(error)
         })

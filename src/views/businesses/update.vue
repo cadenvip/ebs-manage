@@ -91,10 +91,10 @@
               <div v-for="(item,index) in sellAddressListForm" style="margin-top:10px">
                 <el-row>
                   <el-col :span="20">
-                    <AddressSelector :locationId="item.locationcode" :detailAddress="item.selladdress" @addressChanged="getAddressInfo"></AddressSelector>
+                    <AddressSelector :locationId="item.locationcode" :detailAddress="item.selladdress" :index="index" @addressChanged="getAddressInfo"></AddressSelector>
                   </el-col>
                   <el-col :span="4">
-                    <el-button size="mini" @click="deleteSellAddress(index)">删除</el-button>
+                    <el-button size="mini" @click="deleteSellAddress(index, item)">删除</el-button>
                   </el-col>
                 </el-row>
               </div>
@@ -473,6 +473,7 @@
         dialogImageUrl: '',
         dialogVisible: false,
         sellAddressListForm: [],
+        sellAddressCount: 0,
         registerForm: {
           // businessesForm: {
           businessesName: '',
@@ -592,64 +593,66 @@
       getBusinessesInfo() {
         return new Promise((resolve, reject) => {
           getBusinessesDetail(this.$route.query.id).then(response => {
-            console.log('response.data:', response.data)
-            this.registerForm = response.data.businesses
-            this.registerForm.locationCode = response.data.businesses.locationCode.toString()
-            this.sellAddressListForm = response.data.sellAddresslist
-            var goodsSamplelist = [{ num: '示例', name: '鱼香大米', unit: '5KG', origin: '重庆,西永', price: '￥250', description: '多种蛋白质、营养丰富、色泽光亮、颗粒饱满', url: 'http://detail.tmall.com/item.htm?spm=a230r.1.14.172.VhFL' }]
-            switch (response.data.goodsSamplelist.length) {
-              case 1:
-                goodsSamplelist.push(response.data.goodsSamplelist[0])
-                goodsSamplelist[1].num = '01'
-                goodsSamplelist.push({ num: '02', name: '', unit: '', origin: '', price: '', description: '', url: '' })
-                goodsSamplelist.push({ num: '03', name: '', unit: '', origin: '', price: '', description: '', url: '' })
-                goodsSamplelist.push({ num: '04', name: '', unit: '', origin: '', price: '', description: '', url: '' })
-                break
-              case 2:
-                goodsSamplelist.push(response.data.goodsSamplelist[0])
-                goodsSamplelist[1].num = '01'
-                goodsSamplelist.push(response.data.goodsSamplelist[1])
-                goodsSamplelist[2].num = '02'
-                goodsSamplelist.push({ num: '03', name: '', unit: '', origin: '', price: '', description: '', url: '' })
-                goodsSamplelist.push({ num: '04', name: '', unit: '', origin: '', price: '', description: '', url: '' })
-                break
-              case 3:
-                goodsSamplelist.push(response.data.goodsSamplelist[0])
-                goodsSamplelist[1].num = '01'
-                goodsSamplelist.push(response.data.goodsSamplelist[1])
-                goodsSamplelist[2].num = '02'
-                goodsSamplelist.push(response.data.goodsSamplelist[2])
-                goodsSamplelist[3].num = '03'
-                goodsSamplelist.push({ num: '04', name: '', unit: '', origin: '', price: '', description: '', url: '' })
-                break
-              case 4:
-                goodsSamplelist.push(response.data.goodsSamplelist[0])
-                goodsSamplelist[1].num = '01'
-                goodsSamplelist.push(response.data.goodsSamplelist[1])
-                goodsSamplelist[2].num = '02'
-                goodsSamplelist.push(response.data.goodsSamplelist[2])
-                goodsSamplelist[3].num = '03'
-                goodsSamplelist.push(response.data.goodsSamplelist[3])
-                goodsSamplelist[4].num = '04'
-                break
-              default:break
+            if (response.status === 200) {
+              this.registerForm = response.data.businesses
+              this.registerForm.locationCode = response.data.businesses.locationCode.toString()
+              this.sellAddressListForm = response.data.sellAddresslist
+              var goodsSamplelist = [{ num: '示例', name: '鱼香大米', unit: '5KG', origin: '重庆,西永', price: '￥250', description: '多种蛋白质、营养丰富、色泽光亮、颗粒饱满', url: 'http://detail.tmall.com/item.htm?spm=a230r.1.14.172.VhFL' }]
+              switch (response.data.goodsSamplelist.length) {
+                case 1:
+                  goodsSamplelist.push(response.data.goodsSamplelist[0])
+                  goodsSamplelist[1].num = '01'
+                  goodsSamplelist.push({ num: '02', name: '', unit: '', origin: '', price: '', description: '', url: '' })
+                  goodsSamplelist.push({ num: '03', name: '', unit: '', origin: '', price: '', description: '', url: '' })
+                  goodsSamplelist.push({ num: '04', name: '', unit: '', origin: '', price: '', description: '', url: '' })
+                  break
+                case 2:
+                  goodsSamplelist.push(response.data.goodsSamplelist[0])
+                  goodsSamplelist[1].num = '01'
+                  goodsSamplelist.push(response.data.goodsSamplelist[1])
+                  goodsSamplelist[2].num = '02'
+                  goodsSamplelist.push({ num: '03', name: '', unit: '', origin: '', price: '', description: '', url: '' })
+                  goodsSamplelist.push({ num: '04', name: '', unit: '', origin: '', price: '', description: '', url: '' })
+                  break
+                case 3:
+                  goodsSamplelist.push(response.data.goodsSamplelist[0])
+                  goodsSamplelist[1].num = '01'
+                  goodsSamplelist.push(response.data.goodsSamplelist[1])
+                  goodsSamplelist[2].num = '02'
+                  goodsSamplelist.push(response.data.goodsSamplelist[2])
+                  goodsSamplelist[3].num = '03'
+                  goodsSamplelist.push({ num: '04', name: '', unit: '', origin: '', price: '', description: '', url: '' })
+                  break
+                case 4:
+                  goodsSamplelist.push(response.data.goodsSamplelist[0])
+                  goodsSamplelist[1].num = '01'
+                  goodsSamplelist.push(response.data.goodsSamplelist[1])
+                  goodsSamplelist[2].num = '02'
+                  goodsSamplelist.push(response.data.goodsSamplelist[2])
+                  goodsSamplelist[3].num = '03'
+                  goodsSamplelist.push(response.data.goodsSamplelist[3])
+                  goodsSamplelist[4].num = '04'
+                  break
+                default:break
+              }
+              this.registerForm.goodsListForm = goodsSamplelist // response.data.goodsSamplelist
+              // 资质
+              this.registerForm.licencepicpath = this.getItem(response.data.attachmentlist, '营业执照').attachmenturl
+              this.registerForm.sfzmpicpath = this.getItem(response.data.attachmentlist, '经办人身份证号码正面').attachmenturl
+              this.registerForm.sffmpicpath = this.getItem(response.data.attachmentlist, '经办人身份证号码反面').attachmenturl
+              this.registerForm.proxytestifypicpath = this.getItem(response.data.attachmentlist, '代理授权证明').attachmenturl
+              this.registerForm.foodsafetypicpath = this.getItem(response.data.attachmentlist, '食品安全认证').attachmenturl
+              this.registerForm.foodpathpicpath = this.getItem(response.data.attachmentlist, '食品流通许可').attachmenturl
+              const foodothers = this.getItem(response.data.attachmentlist, '其他资质证明')
+              var foodotherpics = []
+              for (var i = 0; i < foodothers.length; i++) {
+                foodotherpics.push(foodothers[i].attachmenturl)
+              }
+              this.registerForm.foodotherpicpath = foodotherpics
+              resolve(response)
+            } else {
+              this.$message.error(response.msg)
             }
-            this.registerForm.goodsListForm = goodsSamplelist // response.data.goodsSamplelist
-
-            // 资质
-            this.registerForm.licencepicpath = this.getItem(response.data.attachmentlist, '营业执照').attachmenturl
-            this.registerForm.sfzmpicpath = this.getItem(response.data.attachmentlist, '经办人身份证号码正面').attachmenturl
-            this.registerForm.sffmpicpath = this.getItem(response.data.attachmentlist, '经办人身份证号码反面').attachmenturl
-            this.registerForm.proxytestifypicpath = this.getItem(response.data.attachmentlist, '代理授权证明').attachmenturl
-            this.registerForm.foodsafetypicpath = this.getItem(response.data.attachmentlist, '食品安全认证').attachmenturl
-            this.registerForm.foodpathpicpath = this.getItem(response.data.attachmentlist, '食品流通许可').attachmenturl
-            const foodothers = this.getItem(response.data.attachmentlist, '其他资质证明')
-            var foodotherpics = []
-            for (var i = 0; i < foodothers.length; i++) {
-              foodotherpics.push(foodothers[i].attachmenturl)
-            }
-            this.registerForm.foodotherpicpath = foodotherpics
-            resolve(response)
           }).catch(error => {
             reject(error)
           })
@@ -659,16 +662,19 @@
         this.registerForm.locationCode = locationInfo.id.toString()
       },
       getAddressInfo(addressInfo) {
-        console.log(addressInfo)
-        console.log(this.sellAddressListForm)
-        return
+        console.log('addressInfo: ', addressInfo)
       },
       addSellAddress() {
-        // this.registerForm.sellAddressListForm.push({ 'haha': 'fdasf' })
-        this.sellAddressListForm.push({ 'haha': 'fdasf' })
+        this.sellAddressListForm.push({ 'index': this.sellAddressCount, 'locationcode': '', 'selladdress': '' })
+        this.sellAddressCount++
+        console.log(this.sellAddressListForm)
       },
-      deleteSellAddress(index) {
+      deleteSellAddress(index, item) {
+        console.log('qian', this.sellAddressListForm)
+        console.log('index: ', index, '  item: ', item)
         this.sellAddressListForm.splice(index, 1)
+        this.sellAddressCount--
+        console.log('hou', this.sellAddressListForm)
       },
       beforeAvatarUpload(file) {
         const isJPG = file.type === 'image/jpeg'
@@ -937,8 +943,12 @@
         }
         // TODO 获取登录用户
         updateBusinesses(params, '1').then(response => {
-          this.$message('修改企业成功')
-          this.$router.push({ path: '/businesses/list' })
+          if (response.status === 200) {
+            this.$message.success('修改企业成功')
+            this.$router.push({ path: '/businesses/list' })
+          } else {
+            this.$message.error(response.msg)
+          }
         }).catch(error => {
           console.log(error)
         })

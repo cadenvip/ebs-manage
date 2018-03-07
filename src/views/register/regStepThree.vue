@@ -39,27 +39,31 @@
           <el-form-item label="身份证正面：" prop="sfzmpicpath">
               <el-upload
                 action="http://10.189.13.151:8080/ebs/common/upload"
-                list-type="picture-card"
+                list-type="text"
                 :show-file-list="false"
                 :on-success="handleSfzmSuccess"
                 :on-preview="handlePictureCardPreview"
                 :on-remove="handleRemove"
                 :before-upload="beforeAvatarUpload">
-                <img v-if="registerForm.sfzmpicpath" :src="registerForm.sfzmpicpath" class="avatar">
-                <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                <!-- <img v-if="registerForm.sfzmpicpath" :src="registerForm.sfzmpicpath" class="avatar"> -->
+                <!-- <i v-else class="el-icon-plus avatar-uploader-icon"></i> -->
+                <el-button size="small" type="primary">点击上传</el-button>
+                <el-button v-if="registerForm.sfzmpicpath" size="small" type="primary" @click="handlePictureCardPreview(registerForm.sfzmpicpath)">上传成功，点击预览</el-button>
               </el-upload>
             </el-form-item>
             <el-form-item label="身份证反面：" prop="sffmpicpath">
               <el-upload
                 action="http://10.189.13.151:8080/ebs/common/upload"
-                list-type="picture-card"
+                list-type="text"
                 :show-file-list="false"
                 :on-success="handleSffmSuccess"
                 :on-preview="handlePictureCardPreview"
                 :on-remove="handleRemove"
                 :before-upload="beforeAvatarUpload">
-                <img v-if="registerForm.sffmpicpath" :src="registerForm.sffmpicpath" class="avatar">
-                <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                <!-- <img v-if="registerForm.sffmpicpath" :src="registerForm.sffmpicpath" class="avatar">
+                <i v-else class="el-icon-plus avatar-uploader-icon"></i> -->
+                <el-button size="small" type="primary">点击上传</el-button>
+                <el-button v-if="registerForm.sffmpicpath" size="small" type="primary" @click="handlePictureCardPreview(registerForm.sffmpicpath)">上传成功，点击预览</el-button>
               </el-upload>
             </el-form-item>
             <br/>
@@ -71,43 +75,49 @@
                 <el-radio :label="2">经销商</el-radio>
               </el-radio-group>
             </el-form-item>
-            <el-form-item v-show="registerForm.merchantKind === 2" label="代理授权证明：" prop="proxytestifypicpath">
+            <el-form-item v-show="registerForm.merchantKind === '2'" label="代理授权证明：" prop="proxytestifypicpath">
               <el-upload
                 action="http://10.189.13.151:8080/ebs/common/upload"
-                list-type="picture-card"
+                list-type="text"
                 :show-file-list="false"
                 :on-success="handleProxySuccess"
                 :on-preview="handlePictureCardPreview"
                 :on-remove="handleRemove"
                 :before-upload="beforeAvatarUpload">
-                <img v-if="registerForm.proxytestifypicpath" :src="registerForm.proxytestifypicpath" class="avatar">
-                <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                <!-- <img v-if="registerForm.proxytestifypicpath" :src="registerForm.proxytestifypicpath" class="avatar">
+                <i v-else class="el-icon-plus avatar-uploader-icon"></i> -->
+                <el-button size="small" type="primary">点击上传</el-button>
+                <el-button v-if="registerForm.proxytestifypicpath" size="small" type="primary" @click="handlePictureCardPreview(registerForm.proxytestifypicpath)">上传成功，点击预览</el-button>
               </el-upload>
             </el-form-item>
             <el-form-item label="食品安全认证：">
               <el-upload
                 action="http://10.189.13.151:8080/ebs/common/upload"
-                list-type="picture-card"
+                list-type="text"
                 :show-file-list="false"
                 :on-success="handleFoodSafetySuccess"
                 :on-preview="handlePictureCardPreview"
                 :on-remove="handleRemove"
                 :before-upload="beforeAvatarUpload">
-                <img v-if="registerForm.foodsafetypicpath" :src="registerForm.foodsafetypicpath" class="avatar">
-                <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                <!-- <img v-if="registerForm.foodsafetypicpath" :src="registerForm.foodsafetypicpath" class="avatar">
+                <i v-else class="el-icon-plus avatar-uploader-icon"></i> -->
+                <el-button size="small" type="primary">点击上传</el-button>
+                <el-button v-if="registerForm.foodsafetypicpath" size="small" type="primary" @click="handlePictureCardPreview(registerForm.foodsafetypicpath)">上传成功，点击预览</el-button>                
               </el-upload>
             </el-form-item>
             <el-form-item label="食品流通许可：">
               <el-upload
                 action="http://10.189.13.151:8080/ebs/common/upload"
-                list-type="picture-card"
+                list-type="text"
                 :show-file-list="false"
                 :on-success="handleFoodCirculationSuccess"
                 :on-preview="handlePictureCardPreview"
                 :on-remove="handleRemove"
                 :before-upload="beforeAvatarUpload">
-                <img v-if="registerForm.foodpathpicpath" :src="registerForm.foodpathpicpath" class="avatar">
-                <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                <!-- <img v-if="registerForm.foodpathpicpath" :src="registerForm.foodpathpicpath" class="avatar">
+                <i v-else class="el-icon-plus avatar-uploader-icon"></i> -->
+                <el-button size="small" type="primary">点击上传</el-button>
+                <el-button v-if="registerForm.foodpathpicpath" size="small" type="primary" @click="handlePictureCardPreview(registerForm.foodpathpicpath)">上传成功，点击预览</el-button>                 
               </el-upload>
             </el-form-item>
             <el-form-item label="其他：">
@@ -154,7 +164,7 @@
           businessesName: '',
           locationCode: '',
           businesslicenseNum: '',
-          merchantKind: '',
+          merchantKind: '1',
           address: '',
           relationPerson: '',
           relationPhone: '',
@@ -342,7 +352,11 @@
         // console.log(params)
 
         EnterpriseRegister(params).then(response => {
-          this.$router.push({ path: '/regStepFour' })
+          if (response.status === 200) {
+            this.$router.push({ path: '/regStepFour' })
+          } else {
+            this.$message.error(response.msg)
+          }
         }).catch(error => {
           console.log(error)
         })

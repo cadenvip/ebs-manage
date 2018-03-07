@@ -140,8 +140,12 @@ export default {
       console.log(this.searchForm)
       this.loading = true
       getBusinessesList(this.searchForm, this.currentPage, this.pagesize).then(response => {
-        this.list = response.data.list
-        this.total = response.data.total
+        if (response.status === 200) {
+          this.list = response.data.list
+          this.total = response.data.total
+        } else {
+          this.$message.error(response.msg)
+        }
         this.loading = false
       }).catch(error => {
         this.loading = false
@@ -154,8 +158,12 @@ export default {
     initBusinessesList() {
       this.loading = true
       getAllBusinesses(this.currentPage, this.pagesize).then(response => {
-        this.list = response.data.list
-        this.total = response.data.total
+        if (response.status === 200) {
+          this.list = response.data.list
+          this.total = response.data.total
+        } else {
+          this.$message.error(response.msg)
+        }
         this.loading = false
       }).catch(error => {
         this.loading = false

@@ -108,8 +108,12 @@ export default {
     queryRoleList() {
       this.loading = true
       getRoleList(this.searchForm, this.currentPage, this.pagesize).then(response => {
-        this.list = response.data.list
-        this.total = response.data.total
+        if (response.status === 200) {
+          this.list = response.data.list
+          this.total = response.data.total
+        } else {
+          this.$message.error(response.msg)
+        }
         this.loading = false
       }).catch(error => {
         this.loading = false
@@ -122,8 +126,12 @@ export default {
     initRoleList() {
       this.loading = true
       getAllRoles(this.currentPage, this.pagesize).then(response => {
-        this.list = response.data.list
-        this.total = response.data.total
+        if (response.status === 200) {
+          this.list = response.data.list
+          this.total = response.data.total
+        } else {
+          this.$message.error(response.msg)
+        }
         this.loading = false
       }).catch(error => {
         this.loading = false
@@ -140,26 +148,21 @@ export default {
         type: 'warning'
       }).then(() => {
         deleteRole(role.id).then(response => {
+          if (response.status === 200) {
           // 页面删除处理
-          var index = this.list.indexOf(role)
-          if (index > -1) {
-            this.list.splice(index, 1)
+            var index = this.list.indexOf(role)
+            if (index > -1) {
+              this.list.splice(index, 1)
+            }
+            this.$message.success('删除成功!')
+          } else {
+            this.$message.error(response.msg)
           }
-          this.$message({
-            type: 'success',
-            message: '删除成功!'
-          })
         }).catch(() => {
-          this.$message({
-            type: 'warning',
-            message: '删除失败'
-          })
+          this.$message.error('删除失败')
         })
       }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消删除'
-        })
+        this.$message.info('已取消删除')
       })
     },
     detail(role) {

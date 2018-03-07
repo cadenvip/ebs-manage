@@ -598,57 +598,60 @@
       getBusinessesInfo() {
         return new Promise((resolve, reject) => {
           getBusinessesDetail(this.$route.query.id).then(response => {
-            console.log('response.data:', response.data)
-            this.registerForm = response.data.businesses
-            this.registerForm.locationCode = response.data.businesses.locationCode.toString()
-            this.sellAddressListForm = response.data.sellAddresslist
-            var goodsSamplelist = [{ num: '示例', name: '鱼香大米', unit: '5KG', origin: '重庆,西永', price: '￥250', description: '多种蛋白质、营养丰富、色泽光亮、颗粒饱满', url: 'http://detail.tmall.com/item.htm?spm=a230r.1.14.172.VhFL' }]
-            switch (response.data.goodsSamplelist.length) {
-              case 1:
-                goodsSamplelist.push(response.data.goodsSamplelist[0])
-                goodsSamplelist[1].num = '01'
-                break
-              case 2:
-                goodsSamplelist.push(response.data.goodsSamplelist[0])
-                goodsSamplelist[1].num = '01'
-                goodsSamplelist.push(response.data.goodsSamplelist[1])
-                goodsSamplelist[2].num = '02'
-                break
-              case 3:
-                goodsSamplelist.push(response.data.goodsSamplelist[0])
-                goodsSamplelist[1].num = '01'
-                goodsSamplelist.push(response.data.goodsSamplelist[1])
-                goodsSamplelist[2].num = '02'
-                goodsSamplelist.push(response.data.goodsSamplelist[2])
-                goodsSamplelist[3].num = '03'
-                break
-              case 4:
-                goodsSamplelist.push(response.data.goodsSamplelist[0])
-                goodsSamplelist[1].num = '01'
-                goodsSamplelist.push(response.data.goodsSamplelist[1])
-                goodsSamplelist[2].num = '02'
-                goodsSamplelist.push(response.data.goodsSamplelist[2])
-                goodsSamplelist[3].num = '03'
-                goodsSamplelist.push(response.data.goodsSamplelist[3])
-                goodsSamplelist[4].num = '04'
-                break
-              default:break
+            if (response.status === 200) {
+              this.registerForm = response.data.businesses
+              this.registerForm.locationCode = response.data.businesses.locationCode.toString()
+              this.sellAddressListForm = response.data.sellAddresslist
+              var goodsSamplelist = [{ num: '示例', name: '鱼香大米', unit: '5KG', origin: '重庆,西永', price: '￥250', description: '多种蛋白质、营养丰富、色泽光亮、颗粒饱满', url: 'http://detail.tmall.com/item.htm?spm=a230r.1.14.172.VhFL' }]
+              switch (response.data.goodsSamplelist.length) {
+                case 1:
+                  goodsSamplelist.push(response.data.goodsSamplelist[0])
+                  goodsSamplelist[1].num = '01'
+                  break
+                case 2:
+                  goodsSamplelist.push(response.data.goodsSamplelist[0])
+                  goodsSamplelist[1].num = '01'
+                  goodsSamplelist.push(response.data.goodsSamplelist[1])
+                  goodsSamplelist[2].num = '02'
+                  break
+                case 3:
+                  goodsSamplelist.push(response.data.goodsSamplelist[0])
+                  goodsSamplelist[1].num = '01'
+                  goodsSamplelist.push(response.data.goodsSamplelist[1])
+                  goodsSamplelist[2].num = '02'
+                  goodsSamplelist.push(response.data.goodsSamplelist[2])
+                  goodsSamplelist[3].num = '03'
+                  break
+                case 4:
+                  goodsSamplelist.push(response.data.goodsSamplelist[0])
+                  goodsSamplelist[1].num = '01'
+                  goodsSamplelist.push(response.data.goodsSamplelist[1])
+                  goodsSamplelist[2].num = '02'
+                  goodsSamplelist.push(response.data.goodsSamplelist[2])
+                  goodsSamplelist[3].num = '03'
+                  goodsSamplelist.push(response.data.goodsSamplelist[3])
+                  goodsSamplelist[4].num = '04'
+                  break
+                default:break
+              }
+              this.registerForm.goodsListForm = goodsSamplelist // response.data.goodsSamplelist
+              // 资质
+              this.registerForm.licencepicpath = this.getItem(response.data.attachmentlist, '营业执照').attachmenturl
+              this.registerForm.sfzmpicpath = this.getItem(response.data.attachmentlist, '经办人身份证号码正面').attachmenturl
+              this.registerForm.sffmpicpath = this.getItem(response.data.attachmentlist, '经办人身份证号码反面').attachmenturl
+              this.registerForm.proxytestifypicpath = this.getItem(response.data.attachmentlist, '代理授权证明').attachmenturl
+              this.registerForm.foodsafetypicpath = this.getItem(response.data.attachmentlist, '食品安全认证').attachmenturl
+              this.registerForm.foodpathpicpath = this.getItem(response.data.attachmentlist, '食品流通许可').attachmenturl
+              const foodothers = this.getItem(response.data.attachmentlist, '其他资质证明')
+              var foodotherpics = []
+              for (var i = 0; i < foodothers.length; i++) {
+                foodotherpics.push(foodothers[i].attachmenturl)
+              }
+              this.registerForm.foodotherpicpath = foodotherpics
+              resolve(response)
+            } else {
+              this.$message.error(response.msg)
             }
-            this.registerForm.goodsListForm = goodsSamplelist // response.data.goodsSamplelist
-            // 资质
-            this.registerForm.licencepicpath = this.getItem(response.data.attachmentlist, '营业执照').attachmenturl
-            this.registerForm.sfzmpicpath = this.getItem(response.data.attachmentlist, '经办人身份证号码正面').attachmenturl
-            this.registerForm.sffmpicpath = this.getItem(response.data.attachmentlist, '经办人身份证号码反面').attachmenturl
-            this.registerForm.proxytestifypicpath = this.getItem(response.data.attachmentlist, '代理授权证明').attachmenturl
-            this.registerForm.foodsafetypicpath = this.getItem(response.data.attachmentlist, '食品安全认证').attachmenturl
-            this.registerForm.foodpathpicpath = this.getItem(response.data.attachmentlist, '食品流通许可').attachmenturl
-            const foodothers = this.getItem(response.data.attachmentlist, '其他资质证明')
-            var foodotherpics = []
-            for (var i = 0; i < foodothers.length; i++) {
-              foodotherpics.push(foodothers[i].attachmenturl)
-            }
-            this.registerForm.foodotherpicpath = foodotherpics
-            resolve(response)
           }).catch(error => {
             reject(error)
           })
@@ -721,9 +724,13 @@
             return
           }
         }
-        auditBusinesses({ 'businessesid': this.$route.query.id, 'state': this.registerForm.state, 'reason': this.reason }).then(response => {
-          this.$message({ type: 'success', message: '审核成功!' })
-          // this.$router.push({ path: '/businesses/auditlist' })
+        auditBusinesses({ 'businessesid': this.$route.query.id, 'state': `${type}`, 'reason': this.reason }).then(response => {
+          if (response.status === 200) {
+            this.$message.success('审核成功!')
+            this.$router.push({ path: '/businesses/auditlist' })
+          } else {
+            this.$message.error(response.msg)
+          }
         }).catch(error => {
           console.log(error)
         })

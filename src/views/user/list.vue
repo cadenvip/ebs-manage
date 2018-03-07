@@ -111,8 +111,12 @@ export default {
     queryUserList() {
       this.loading = true
       getUserList(this.searchForm, this.currentPage, this.pagesize).then(response => {
-        this.list = response.data.list
-        this.total = response.data.total
+        if (response.status === 200) {
+          this.list = response.data.list
+          this.total = response.data.total
+        } else {
+          this.$message.error(response.msg)
+        }
         this.loading = false
       }).catch(error => {
         this.loading = false
@@ -125,8 +129,12 @@ export default {
     initUserList() {
       this.loading = true
       getAllUsers(this.currentPage, this.pagesize).then(response => {
-        this.list = response.data.list
-        this.total = response.data.total
+        if (response.status === 200) {
+          this.list = response.data.list
+          this.total = response.data.total
+        } else {
+          this.$message.error(response.msg)
+        }
         this.loading = false
       }).catch(error => {
         this.loading = false
@@ -153,10 +161,14 @@ export default {
         type: 'warning'
       }).then(() => {
         resetUserPassword(user).then(response => {
-          this.$message({ type: 'success', message: '重置成功!' })
+          if (response.status === 200) {
+            this.$message.success('重置成功!')
+          } else {
+            this.$message.error(response.msg)
+          }
         })
       }).catch(() => {
-        this.$message({ type: 'info', message: '已取消重置' })
+        this.$message.info('已取消重置')
       })
     },
     detail(user) {

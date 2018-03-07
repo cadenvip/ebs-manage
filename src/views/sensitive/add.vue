@@ -36,8 +36,12 @@ export default {
         if (valid) {
           return new Promise((resolve, reject) => {
             addSensitive(this.sensitiveForm.word).then(response => {
-              this.$router.push({ path: '/system/sensitive/list' })
-              resolve(response)
+              if (response.status === 200) {
+                this.$router.push({ path: '/system/sensitive/list' })
+                resolve(response)
+              } else {
+                this.$message.error(response.msg)
+              }
             }).catch(error => {
               reject(error)
             })

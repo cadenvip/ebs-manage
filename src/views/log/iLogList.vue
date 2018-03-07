@@ -109,7 +109,11 @@ export default {
   created() {
     this.initILogList()
     getReqactionList().then(response => {
-      this.reqactionList = response.data
+      if (response.status === 200) {
+        this.reqactionList = response.data
+      } else {
+        this.$message.error(response.msg)
+      }
     }).catch(error => {
       console.log(error)
     })
@@ -119,8 +123,12 @@ export default {
       this.loading = true
       console.log(this.searchForm)
       getILogList(this.searchForm, this.currentPage, this.pagesize).then(response => {
-        this.list = response.data.list
-        this.total = response.data.total
+        if (response.status === 200) {
+          this.list = response.data.list
+          this.total = response.data.total
+        } else {
+          this.$message.error(response.msg)
+        }
         this.loading = false
       }).catch(error => {
         this.loading = false
@@ -130,8 +138,12 @@ export default {
     initILogList() {
       this.loading = true
       getAllILogs(this.currentPage, this.pagesize).then(response => {
-        this.list = response.data.list
-        this.total = response.data.total
+        if (response.status === 200) {
+          this.list = response.data.list
+          this.total = response.data.total
+        } else {
+          this.$message.error(response.msg)
+        }
         this.loading = false
       }).catch(error => {
         this.loading = false

@@ -852,8 +852,12 @@
           // },
         }
         adnminAddBusniess(params).then(response => {
-          this.$message('新增企业成功')
-          this.$router.push({ path: '/businesses/list' })
+          if (response.status === 200) {
+            this.$message.success('新增企业成功')
+            this.$router.push({ path: '/businesses/list' })
+          } else {
+            this.$message.error(response.msg)
+          }
         }).catch(error => {
           console.log(error)
         })

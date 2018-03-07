@@ -80,51 +80,55 @@ export default {
       this.loading = true
       return new Promise((resolve, reject) => {
         getAllResources(issystem).then(response => {
-          var aliveResources = []
-          response.data.forEach(v => {
-            v.label = v.name
-            delete v.type
-            delete v.url
-            delete v.permission
-            delete v.ordernum
-            delete v.createdate
-            delete v.statusdate
-            delete v.isdisplay
-            delete v.image
-            delete v.typestr
-            delete v.rootNode
-            this.resources.push(v)
-            if (v.status === 0) {
+          if (response.status === 200) {
+            var aliveResources = []
+            response.data.forEach(v => {
+              v.label = v.name
+              delete v.type
+              delete v.url
+              delete v.permission
+              delete v.ordernum
+              delete v.createdate
+              delete v.statusdate
+              delete v.isdisplay
+              delete v.image
+              delete v.typestr
+              delete v.rootNode
+              this.resources.push(v)
+              if (v.status === 0) {
               // status: 0-激活，1-禁用（激活后页面可见，功能可用）
-              aliveResources.push(v)
-            }
-          })
-          // 只要子节点展示，则父节点要展示
-          for (let k = 0; k < aliveResources.length; k++) {
-            let m = 0
-            for (; m < aliveResources.length; m++) {
-              if (aliveResources[k].parentid === aliveResources[m].id) {
-                aliveResources[m].status = 0
-                break
+                aliveResources.push(v)
               }
-            }
-            if (m === aliveResources.length) {
-              let n = 0
-              for (; n < this.resources.length; n++) {
-                if (this.resources[n].id === aliveResources[k].parentid) {
-                  this.resources[n].status = 0
-                  aliveResources.push(this.resources[n])
+            })
+            // 只要子节点展示，则父节点要展示
+            for (let k = 0; k < aliveResources.length; k++) {
+              let m = 0
+              for (; m < aliveResources.length; m++) {
+                if (aliveResources[k].parentid === aliveResources[m].id) {
+                  aliveResources[m].status = 0
                   break
                 }
               }
+              if (m === aliveResources.length) {
+                let n = 0
+                for (; n < this.resources.length; n++) {
+                  if (this.resources[n].id === aliveResources[k].parentid) {
+                    this.resources[n].status = 0
+                    aliveResources.push(this.resources[n])
+                    break
+                  }
+                }
+              }
             }
+            // 排序（id从小到）
+            aliveResources.sort(this.compare('id'))
+            // 整理数据
+            this.data = this.list2Tree(aliveResources, { 'idKey': 'id', 'parentKey': 'parentid', 'childrenKey': 'children' })
+            this.loading = false
+            resolve(response)
+          } else {
+            this.$message.error(response.msg)
           }
-          // 排序（id从小到）
-          aliveResources.sort(this.compare('id'))
-          // 整理数据
-          this.data = this.list2Tree(aliveResources, { 'idKey': 'id', 'parentKey': 'parentid', 'childrenKey': 'children' })
-          this.loading = false
-          resolve(response)
         }).catch(error => {
           this.loading = false
           reject(error)
@@ -175,8 +179,13 @@ export default {
           this.roleForm.resourceids = checkedKeys.join(',')
           return new Promise((resolve, reject) => {
             addRole(this.roleForm).then(response => {
-              resolve(response)
-              this.$router.go(-1)
+              if (response.status === 200) {
+                resolve(response)
+                this.$router.go(-1)
+                this.$message.success('新增角色成功')
+              } else {
+                this.$message.error(response.msg)
+              }
             }).catch(error => {
               reject(error)
             })

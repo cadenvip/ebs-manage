@@ -185,27 +185,40 @@ export default {
   },
   created () {
     getAccessDetail(this.$route.query.id).then(response => {
-      console.log('response.data:', response.data)
-      // TODO
-      this.accessBean = response.data.access
-      this.selectedOpList = response.data.operationList
-      this.selectedInList = response.data.interfaceList
-      response
+      if (response.status === 200) {
+        this.accessBean = response.data.access
+        this.selectedOpList = response.data.operationList
+        this.selectedInList = response.data.interfaceList
+      } else {
+        this.$message.error(response.msg)
+      }
     }).catch(error => {
       console.log(error)
     })
     getChanelList().then(response => {
-      this.channelList = response.data
+      if (response.status === 200) {
+        this.channelList = response.data
+      } else {
+        this.$message.error(response.msg)
+      }
     }).catch(error => {
       console.log(error)
     })
     getAllOperationList().then(response => {
-      this.operationList = response.data
+      if (response.status === 200) {
+        this.operationList = response.data
+      } else {
+        this.$message.error(response.msg)
+      }
     }).catch(error => {
       console.log(error)
     })
     getAllInterfaceList().then(response => {
-      this.interfaceList = response.data
+      if (response.status === 200) {
+        this.interfaceList = response.data
+      } else {
+        this.$message.error(response.msg)
+      }
     }).catch(error => {
       console.log(error)
     })

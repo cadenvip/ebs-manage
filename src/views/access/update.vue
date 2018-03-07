@@ -176,6 +176,7 @@
 <script>
 
 import { getAccessDetail, updateAccess, getChanelList, getAllOperationList, getOperationList, getAllInterfaceList, getInterfaceList } from '@/api/access'
+import { str2Timestamp } from '@/utils/index'// formatTime
 
 export default {
   data() {
@@ -248,7 +249,6 @@ export default {
   created () {
     getAccessDetail(this.$route.query.id).then(response => {
       this.accessBean = response.data.access
-      // TODO 时间格式转换
       this.selectedOpList = response.data.operationList
       var i = this.selectedOpList.indexOf(null)
       while (i !== -1) {
@@ -402,7 +402,40 @@ export default {
           }
           params.accessBean.id = this.$route.query.id
           delete params.accessBean.repassword
-
+          delete params.accessBean.status
+          delete params.accessBean.create_time
+          delete params.accessBean.update_time
+          // TODO 时间格式转换
+          if (params.accessBean.begin_time !== undefined && params.accessBean.begin_time !== '') {
+            params.accessBean.begin_time = str2Timestamp(params.accessBean.begin_time)
+          }
+          if (params.accessBean.begin_time === '0') {
+            params.accessBean.begin_time = ''
+          }
+          if (params.accessBean.end_time !== undefined && params.accessBean.end_time !== '') {
+            params.accessBean.end_time = str2Timestamp(params.accessBean.end_time)
+          }
+          if (params.accessBean.end_time === '0') {
+            params.accessBean.end_time = ''
+          }
+          if (params.accessBean.servicecode === null) {
+            params.accessBean.servicecode = ''
+          }
+          if (params.accessBean.remark === null) {
+            params.accessBean.remark = ''
+          }
+          if (params.accessBean.si_url === null) {
+            params.accessBean.si_url = ''
+          }
+          if (params.accessBean.si_person === null) {
+            params.accessBean.si_person = ''
+          }
+          if (params.accessBean.si_phone === null) {
+            params.accessBean.si_phone = ''
+          }
+          if (params.accessBean.channel_code === null) {
+            params.accessBean.channel_code = ''
+          }
           console.log(params)
           return new Promise((resolve, reject) => {
             updateAccess(params).then(response => {

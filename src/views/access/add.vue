@@ -176,6 +176,7 @@
 <script>
 
 import { addAccess, getChanelList, getAllOperationList, getOperationList, getAllInterfaceList, getInterfaceList } from '@/api/access'
+import { str2Timestamp } from '@/utils/index'
 
 export default {
   data() {
@@ -247,17 +248,29 @@ export default {
   },
   created () {
     getChanelList().then(response => {
-      this.channelList = response.data
+      if (response.status === 200) {
+        this.channelList = response.data
+      } else {
+        this.$message.error(response.msg)
+      }
     }).catch(error => {
       console.log(error)
     })
     getAllOperationList().then(response => {
-      this.operationList = response.data
+      if (response.status === 200) {
+        this.operationList = response.data
+      } else {
+        this.$message.error(response.msg)
+      }
     }).catch(error => {
       console.log(error)
     })
     getAllInterfaceList().then(response => {
-      this.interfaceList = response.data
+      if (response.status === 200) {
+        this.interfaceList = response.data
+      } else {
+        this.$message.error(response.msg)
+      }
     }).catch(error => {
       console.log(error)
     })
@@ -266,26 +279,30 @@ export default {
     selectOperation() {
       this.operationTableVisible = true
       getAllOperationList().then(response => {
-        this.operationList = response.data
-        this.opSearchForm.operationname = ''
-        var defaultSelected = []
-        if (this.operationList !== undefined && this.operationList.length > 0) {
-          if (this.selectedOpList !== undefined && this.selectedOpList.length > 0) {
-            this.operationList.forEach(row => {
-              for (var index = 0; index < this.selectedOpList.length; index++) {
-                if (this.selectedOpList[index].id === row.id) {
+        if (response.status === 200) {
+          this.operationList = response.data
+          this.opSearchForm.operationname = ''
+          var defaultSelected = []
+          if (this.operationList !== undefined && this.operationList.length > 0) {
+            if (this.selectedOpList !== undefined && this.selectedOpList.length > 0) {
+              this.operationList.forEach(row => {
+                for (var index = 0; index < this.selectedOpList.length; index++) {
+                  if (this.selectedOpList[index].id === row.id) {
                   // this.$refs.operationTable.toggleRowSelection(row, true)
-                  defaultSelected.push(row)
-                  break
+                    defaultSelected.push(row)
+                    break
+                  }
                 }
-              }
-            })
+              })
+            }
           }
+          this.$refs.operationTable.clearSelection()
+          defaultSelected.forEach(row => {
+            this.$refs.operationTable.toggleRowSelection(row, true)
+          })
+        } else {
+          this.$message.error(response.msg)
         }
-        this.$refs.operationTable.clearSelection()
-        defaultSelected.forEach(row => {
-          this.$refs.operationTable.toggleRowSelection(row, true)
-        })
       }).catch(error => {
         console.log(error)
       })
@@ -293,41 +310,53 @@ export default {
     selectInterface() {
       this.interfaceTableVisible = true
       getAllInterfaceList().then(response => {
-        this.interfaceList = response.data
-        this.inSearchForm.inter_name = ''
-        this.inSearchForm.inter_version = ''
-        var defaultSelected = []
-        if (this.interfaceList !== undefined && this.interfaceList.length > 0) {
-          if (this.selectedInList !== undefined && this.selectedInList.length > 0) {
-            this.interfaceList.forEach(row => {
-              for (var index = 0; index < this.selectedInList.length; index++) {
-                if (this.selectedInList[index].id === row.id) {
+        if (response.status === 200) {
+          this.interfaceList = response.data
+          this.inSearchForm.inter_name = ''
+          this.inSearchForm.inter_version = ''
+          var defaultSelected = []
+          if (this.interfaceList !== undefined && this.interfaceList.length > 0) {
+            if (this.selectedInList !== undefined && this.selectedInList.length > 0) {
+              this.interfaceList.forEach(row => {
+                for (var index = 0; index < this.selectedInList.length; index++) {
+                  if (this.selectedInList[index].id === row.id) {
                   // this.$refs.interfaceTable.toggleRowSelection(row, true)
-                  defaultSelected.push(row)
-                  break
+                    defaultSelected.push(row)
+                    break
+                  }
                 }
-              }
-            })
+              })
+            }
           }
+          this.$refs.interfaceTable.clearSelection()
+          defaultSelected.forEach(row => {
+            this.$refs.interfaceTable.toggleRowSelection(row, true)
+          })
+        } else {
+          this.$message.error(response.msg)
         }
-        this.$refs.interfaceTable.clearSelection()
-        defaultSelected.forEach(row => {
-          this.$refs.interfaceTable.toggleRowSelection(row, true)
-        })
       }).catch(error => {
         console.log(error)
       })
     },
     queryOperation() {
       getOperationList(this.opSearchForm).then(response => {
-        this.operationList = response.data
+        if (response.status === 200) {
+          this.operationList = response.data
+        } else {
+          this.$message.error(response.msg)
+        }
       }).catch(error => {
         console.log(error)
       })
     },
     queryInterface() {
       getInterfaceList(this.inSearchForm).then(response => {
-        this.interfaceList = response.data
+        if (response.status === 200) {
+          this.interfaceList = response.data
+        } else {
+          this.$message.error(response.msg)
+        }
       }).catch(error => {
         console.log(error)
       })
@@ -384,12 +413,22 @@ export default {
           }
           delete params.accessBean.repassword
           // TODO 时间格式转换
-
+          if (params.accessBean.begin_time !== undefined && params.accessBean.begin_time !== '') {
+            params.accessBean.begin_time = str2Timestamp(params.accessBean.begin_time)
+          }
+          if (params.accessBean.end_time !== undefined && params.accessBean.end_time !== '') {
+            params.accessBean.end_time = str2Timestamp(params.accessBean.end_time)
+          }
           console.log(params)
           return new Promise((resolve, reject) => {
             addAccess(params).then(response => {
-              resolve(response)
-              this.$router.push({ path: '/system/access/list' })
+              if (response.status === 200) {
+                resolve(response)
+                this.$router.push({ path: '/system/access/list' })
+                this.$message.success('新增接入方成功')
+              } else {
+                this.$message.error(response.msg)
+              }
             }).catch(error => {
               reject(error)
             })

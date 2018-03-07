@@ -37,14 +37,6 @@ export function adnminAddBusniess(params) {
   })
 }
 
-export function addBusinesses(params) {
-  return request({
-    url: '/businesses/save',
-    method: 'post',
-    data: {}
-  })
-}
-
 export function updateBusinesses(params, roletype) {
   if (roletype === 2) {
     return request({
