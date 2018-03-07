@@ -73,20 +73,17 @@ export default {
   },
   watch: {
     locationId: function() {
-      debugger
       if (this.locationId === undefined || this.locationId === '' || this.locationId === '0') {
         this.province = ''
         this.city = ''
         this.county = ''
       } else {
-        this.province = ''
-        this.city = ''
-        this.county = ''
-        this.getLocationById(this.locationId)
-        // TODO
-        // if (this.locationInfo !== undefined && this.locationInfo.id !== undefined && this.locationInfo.id.toString() !== this.locationId) {
-        // this.getLocationById(this.locationId)
-        // }
+        if (this.locationInfo === undefined || this.locationInfo.id === undefined || this.locationInfo.id.toString() !== this.locationId) {
+          this.province = ''
+          this.city = ''
+          this.county = ''
+          this.getLocationById(this.locationId)
+        }
       }
     },
     detailAddress: function () {
@@ -195,7 +192,6 @@ export default {
       })
     },
     provinceChanged() {
-      console.log('provinceChanged')
       this.city = ''
       this.county = ''
       this.town_village = ''
@@ -208,7 +204,6 @@ export default {
       this.getLocationInfo()
     },
     cityChanged() {
-      console.log('cityChanged')
       this.county = ''
       this.town_village = ''
       if (this.city !== '') {
@@ -219,7 +214,6 @@ export default {
       this.getLocationInfo()
     },
     countyChanged() {
-      console.log('cityChanged')
       this.town_village = ''
       this.getLocationInfo()
     },

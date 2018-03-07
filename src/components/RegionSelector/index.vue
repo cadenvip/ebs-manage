@@ -97,7 +97,10 @@ export default {
         this.city = ''
         this.county = ''
       } else {
-        if (this.locationInfo !== undefined && this.locationInfo.id !== undefined && this.locationInfo.id.toString() !== this.locationId) {
+        if (this.locationInfo === undefined || this.locationInfo.id === undefined || this.locationInfo.id.toString() !== this.locationId) {
+          this.province = ''
+          this.city = ''
+          this.county = ''
           this.getLocationById(this.locationId)
         }
       }

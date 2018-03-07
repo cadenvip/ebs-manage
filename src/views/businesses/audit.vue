@@ -27,7 +27,7 @@
               </el-col>
               <el-col :span="12">
                 <el-form-item label="有效时间：" prop="validdate_str">
-                  <el-date-picker v-model="registerForm.validdate_str" type="date" value-format="yyyy-MM-dd" style="width: 200px;" placeholder="选择日期">
+                  <el-date-picker v-model="registerForm.validdate_str" type="date" format="yyyy-MM-dd" value-format="yyyy-MM-dd" style="width: 200px;" placeholder="选择日期">
                   </el-date-picker>
                 </el-form-item>  
               </el-col>
@@ -88,14 +88,7 @@
             </el-row>
             <el-form-item label="售后处理点：" prop="sellAddressListForm">  
               <div v-for="(item,index) in sellAddressListForm" style="margin-top:10px">
-                <el-row>
-                  <el-col :span="20">
-                    <AddressSelector :locationId="item.locationcode" :detailAddress="item.selladdress" @addressChanged="getAddressInfo"></AddressSelector>
-                  </el-col>
-                  <el-col :span="4">
-                    <el-button size="mini" @click="deleteSellAddress(index)">删除</el-button>
-                  </el-col>
-                </el-row>
+                <AddressSelector :locationId="item.locationcode" :detailAddress="item.selladdress" @addressChanged="getAddressInfo"></AddressSelector>
               </div>
             </el-form-item>
             <hr style="height:1px;border:none;border-top:1px dashed #0066CC;" />
@@ -531,6 +524,7 @@
           wirelesscitypayable: '1',		// 是否开启无线城市话费支付（0关闭 1开启）
           wirelesstpcode: '',		// 无线城市话费支付渠道编码
           wirelesstpname: '',		// 无线城市话费支付渠道名称
+          validdate_str: '',
           // },
           // sellAddressListForm: [],
           // attachmentForm: {
@@ -561,7 +555,7 @@
           relationPhone: [{ required: true, message: '请输入业务联系人手机号码', trigger: 'blur' }],
           sellPersonName: [{ required: true, message: '请输入售后联系人', trigger: 'blur' }],
           sellPersonMobile: [{ required: true, message: '请输入售后电话', trigger: 'blur' }],
-          sellAddressListForm: [{ required: false, message: '请输入售后处理点', trigger: 'change' }], // TODO
+          sellAddressListForm: [{ required: true, message: '请输入售后处理点', trigger: 'change' }],
           financePersonName: [{ required: true, message: '请输入财务联系人', trigger: 'blur' }],
           financePersonMobile: [{ required: true, message: '请输入财务手机', trigger: 'blur' }],
           isInvoice: [{ required: true, message: '请选择能否开具发票', trigger: 'change' }],
@@ -602,6 +596,7 @@
               this.registerForm = response.data.businesses
               this.registerForm.locationCode = response.data.businesses.locationCode.toString()
               this.sellAddressListForm = response.data.sellAddresslist
+              this.registerForm.validdate_str = (response.data.businesses.validdate !== null ? response.data.businesses.validdate.substr(0, 10) : '')
               var goodsSamplelist = [{ num: '示例', name: '鱼香大米', unit: '5KG', origin: '重庆,西永', price: '￥250', description: '多种蛋白质、营养丰富、色泽光亮、颗粒饱满', url: 'http://detail.tmall.com/item.htm?spm=a230r.1.14.172.VhFL' }]
               switch (response.data.goodsSamplelist.length) {
                 case 1:
@@ -661,16 +656,7 @@
         this.registerForm.locationCode = locationInfo.id.toString()
       },
       getAddressInfo(addressInfo) {
-        console.log(addressInfo)
-        console.log(this.sellAddressListForm)
         return
-      },
-      addSellAddress() {
-        // this.registerForm.sellAddressListForm.push({ 'haha': 'fdasf' })
-        this.sellAddressListForm.push({ 'haha': 'fdasf' })
-      },
-      deleteSellAddress(index) {
-        this.sellAddressListForm.splice(index, 1)
       },
       beforeAvatarUpload(file) {
         const isJPG = file.type === 'image/jpeg'
