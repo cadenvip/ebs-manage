@@ -201,7 +201,7 @@
               })
             }
           } else {
-            this.$message.error(res.message)
+            this.$message.error(res.msg)
           }
         })
       },
@@ -216,7 +216,7 @@
             this.tableData = res.data
             this.total = res.total
           } else {
-            this.$message.error(res.message)
+            this.$message.error(res.msg)
           }
           this.loading = false
         }).catch(err => {

@@ -65,7 +65,7 @@
               this.goodsCode = res.data.data.goodsBean.goodsCode
               this.handleChange(this.goodstype)
             } else {
-              this.$message.error(res.message)
+              this.$message.error(res.msg)
             }
           }).catch(err => {
             this.$message.error(err)
@@ -129,7 +129,11 @@
         })
       },
       goBack() {
-        this.$router.push({ path: '/goodsmanage/publishgoods' })
+        if (this.isFromModifyFlag) {
+          this.$router.push({ path: '/goodsmanage/noshelfgoods' })
+        } else {
+          this.$router.push({ path: '/goodsmanage/publishgoods' })
+        }
       },
       goNext() {
         if (this.goodstype.length > 0) {
@@ -142,7 +146,7 @@
               if (res.status === 200) {
                 this.$router.push({ name: 'publishstep2', query: { typeCode: this.goodstype[1], goodsCode: this.goodsCode, goodsId: this.goodsId, isFromModifyFlag: this.isFromModifyFlag }})
               } else {
-                this.$message.error(res.message)
+                this.$message.error(res.msg)
               }
             }).catch(err => {
               this.$message.error(err)
@@ -152,7 +156,7 @@
               if (res.status === 200) {
                 this.$router.push({ name: 'publishstep2', query: { typeCode: this.goodstype[1] }})
               } else {
-                this.$message.error(res.message)
+                this.$message.error(res.msg)
               }
             }).catch(err => {
               this.$message.error(err)

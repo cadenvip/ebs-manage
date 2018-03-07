@@ -67,3 +67,8 @@ export function validatePass(str) {
   const reg = /(?=^.{8,}$)(?=.*\d)(?=.*\W+)(?=.*[A-Z])(?=.*[a-z])(?!.*\n).*$/
   return reg.test(str)
 }
+
+export function validatePostcode(str) {
+  const reg = /^[1-9][0-9]{5}$/
+  return reg.test(str)
+}

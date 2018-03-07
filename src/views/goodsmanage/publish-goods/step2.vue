@@ -371,7 +371,7 @@
             this.goodsBean.isExchange === '0' ? this.ruleForm.thh.push('支持换货') : this.ruleForm.thh
             this.ruleForm.spdz = this.goodsBean.videoUrl
           } else {
-            this.$message.error(res.message)
+            this.$message.error(res.msg)
           }
         }).catch(err => {
           this.$message.error(err)
@@ -606,7 +606,7 @@
                 // 跳转
                 this.$router.push({ path: '/goodsmanage/publishstep3' })
               } else {
-                this.$message.error(res.message)
+                this.$message.error(res.msg)
               }
             })
           } else {
@@ -707,7 +707,7 @@
             this.ruleForm.wuliuObj = res.data
           } else {
             this.templateLoading = false
-            this.$message.error(res.message)
+            this.$message.error(res.msg)
           }
         }).catch(err => {
           this.templateLoading = false

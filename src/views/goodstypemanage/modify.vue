@@ -41,7 +41,7 @@
           this.$message.error(res.data.msg)
         }
       }).catch(err => {
-        this.$message.err(err)
+        this.$message.error(err)
       })
     },
     data() {
@@ -81,7 +81,11 @@
     },
     computed: {
       getDescLen() {
-        return (60 - this.formData.description.length) < 0 ? 0 : (60 - this.formData.description.length)
+        if (this.formData.description) {
+          return (60 - this.formData.description.length) < 0 ? 0 : (60 - this.formData.description.length)
+        } else {
+          return 60
+        }
       }
     }
   }

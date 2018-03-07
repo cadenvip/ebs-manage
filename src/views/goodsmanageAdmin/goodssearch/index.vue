@@ -201,7 +201,7 @@
             this.format(res.data[0])
             this.format2(res.data[1])
           } else {
-            this.$message.error(res.message)
+            this.$message.error(res.mgs)
           }
         }).catch(err => {
           this.$message.error(err)

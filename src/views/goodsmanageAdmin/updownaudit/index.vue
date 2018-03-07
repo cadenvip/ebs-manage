@@ -277,7 +277,7 @@
             this.format(res.data[0])
             this.format2(res.data[1])
           } else {
-            this.$message.error(res.message)
+            this.$message.error(res.msg)
           }
         }).catch(err => {
           this.$message.error(err)
@@ -362,7 +362,7 @@
             this.total = res.total
             this.loading = false
           } else {
-            this.$message.error(res.message)
+            this.$message.error(res.msg)
             this.loading = false
           }
         }).catch(err => {
