@@ -473,7 +473,7 @@
         dialogImageUrl: '',
         dialogVisible: false,
         sellAddressListForm: [],
-        sellAddressCount: 0,
+        sellAddressListBack: [],
         registerForm: {
           // businessesForm: {
           businessesName: '',
@@ -597,6 +597,7 @@
               this.registerForm = response.data.businesses
               this.registerForm.locationCode = response.data.businesses.locationCode.toString()
               this.sellAddressListForm = response.data.sellAddresslist
+              this.sellAddressListBack = response.data.sellAddresslist
               var goodsSamplelist = [{ num: '示例', name: '鱼香大米', unit: '5KG', origin: '重庆,西永', price: '￥250', description: '多种蛋白质、营养丰富、色泽光亮、颗粒饱满', url: 'http://detail.tmall.com/item.htm?spm=a230r.1.14.172.VhFL' }]
               switch (response.data.goodsSamplelist.length) {
                 case 1:
@@ -662,18 +663,17 @@
         this.registerForm.locationCode = locationInfo.id.toString()
       },
       getAddressInfo(addressInfo) {
-        console.log('addressInfo: ', addressInfo)
+        this.sellAddressListForm[addressInfo.index].locationcode = (addressInfo.id !== undefined ? addressInfo.id.toString() : '')
+        this.sellAddressListForm[addressInfo.index].selladdress = addressInfo.town_village
       },
       addSellAddress() {
-        this.sellAddressListForm.push({ 'index': this.sellAddressCount, 'locationcode': '', 'selladdress': '' })
-        this.sellAddressCount++
-        console.log(this.sellAddressListForm)
+        var sellAddress = { 'id': this.sellAddressListForm.length, 'locationcode': '', 'selladdress': '', 'merchantcode': '' }
+        this.sellAddressListForm.push(sellAddress)
       },
       deleteSellAddress(index, item) {
         console.log('qian', this.sellAddressListForm)
         console.log('index: ', index, '  item: ', item)
         this.sellAddressListForm.splice(index, 1)
-        this.sellAddressCount--
         console.log('hou', this.sellAddressListForm)
       },
       beforeAvatarUpload(file) {

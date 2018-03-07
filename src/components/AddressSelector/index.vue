@@ -25,17 +25,13 @@
 
 <script type="text/ecmascript-6">
 
-import { getAllProvinces, getAllCities, getAllCounties, getLocationInfoById, getLocationInfoByCode } from '@/api/regionselecter'
+import { getAllProvinces, getAllCities, getAllCounties, getLocationInfoById } from '@/api/regionselecter'
 
 export default {
   props: {
     grade: {
       type: Number,
       default: 4
-    },
-    locationCode: {
-      type: String,
-      default: ''
     },
     locationId: {
       type: String,
@@ -63,11 +59,11 @@ export default {
     }
   },
   created () {
-    if (this.locationCode !== undefined && this.locationCode !== '') {
-      // 根据locationCode获取区域信息
-      this.getLocationByCode(this.locationCode)
-    } else if (this.locationId !== undefined && this.locationId !== '') {
-      // 根据id获取区域信息
+    if (this.locationId === undefined || this.locationId === '' || this.locationId === '0') {
+      this.province = ''
+      this.city = ''
+      this.county = ''
+    } else {
       this.getLocationById(this.locationId)
     }
   },
@@ -76,42 +72,28 @@ export default {
     this.getProvinces()
   },
   watch: {
-    locationCode: function() {
-      if (this.locationCode !== undefined && this.locationCode !== '') {
-        // 根据locationCode获取区域信息
-        this.getLocationByCode(this.locationCode)
+    locationId: function() {
+      debugger
+      if (this.locationId === undefined || this.locationId === '' || this.locationId === '0') {
+        this.province = ''
+        this.city = ''
+        this.county = ''
+      } else {
+        this.province = ''
+        this.city = ''
+        this.county = ''
+        this.getLocationById(this.locationId)
+        // TODO
+        // if (this.locationInfo !== undefined && this.locationInfo.id !== undefined && this.locationInfo.id.toString() !== this.locationId) {
+        // this.getLocationById(this.locationId)
+        // }
       }
     },
-    locationId: function() {
-      if (this.locationId !== undefined && this.locationId !== '') {
-        // 根据id获取区域信息
-        this.getLocationById(this.locationId)
-      }
+    detailAddress: function () {
+      this.town_village = this.detailAddress
     }
   },
   methods: {
-    getLocationByCode (locationCode) {
-      return new Promise((resolve, reject) => {
-        getLocationInfoByCode(locationCode).then(response => {
-          if (response.status === 200) {
-            var resultData = response.data.list[0]
-            this.getLocationById(resultData.id).then(response => {
-              if (response.status === 200) {
-                resolve(response)
-              } else {
-                this.$message.error(response.msg)
-              }
-            }).catch(error => {
-              reject(error)
-            })
-          } else {
-            this.$message.error(response.msg)
-          }
-        }).catch(error => {
-          console.log(error)
-        })
-      })
-    },
     getLocationById (locationId) {
       return new Promise((resolve, reject) => {
         getLocationInfoById(locationId).then(response => {
@@ -213,6 +195,7 @@ export default {
       })
     },
     provinceChanged() {
+      console.log('provinceChanged')
       this.city = ''
       this.county = ''
       this.town_village = ''
@@ -225,6 +208,7 @@ export default {
       this.getLocationInfo()
     },
     cityChanged() {
+      console.log('cityChanged')
       this.county = ''
       this.town_village = ''
       if (this.city !== '') {
@@ -235,6 +219,7 @@ export default {
       this.getLocationInfo()
     },
     countyChanged() {
+      console.log('cityChanged')
       this.town_village = ''
       this.getLocationInfo()
     },
@@ -266,8 +251,10 @@ export default {
       } else {
         this.locationInfo = {}
       }
+      if (this.locationInfo !== undefined) {
+        this.locationInfo.town_village = this.town_village
+      }
       this.locationInfo.index = this.index
-      this.locationInfo.town_village = this.town_village
       this.$emit('addressChanged', this.locationInfo)
     }
   }
