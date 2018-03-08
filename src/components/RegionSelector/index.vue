@@ -38,7 +38,7 @@
 <script type="text/ecmascript-6">
 
 import { getAllCountries, getAllProvinces, getAllCities, getAllCounties, getAllTowns,
-  getAllVillages, getLocationInfoById, getLocationInfoByCode } from '@/api/regionselecter'
+  getAllVillages, getLocationInfoById } from '@/api/regionselecter'
 
 export default {
   props: {
@@ -49,10 +49,6 @@ export default {
     showCountry: {
       type: Boolean,
       default: false
-    },
-    locationCode: {
-      type: String,
-      default: ''
     },
     locationId: {
       type: String,
@@ -77,11 +73,11 @@ export default {
     }
   },
   created () {
-    if (this.locationCode !== undefined && this.locationCode !== '') {
-      // 根据locationCode获取区域信息
-      this.getLocationByCode(this.locationCode)
-    } else if (this.locationId !== undefined && this.locationId !== '') {
-      // 根据id获取区域信息
+    if (this.locationId === undefined || this.locationId === '' || this.locationId === '0') {
+      this.province = ''
+      this.city = ''
+      this.county = ''
+    } else {
       this.getLocationById(this.locationId)
     }
   },
@@ -95,38 +91,22 @@ export default {
     }
   },
   watch: {
-    locationCode: function() {
-      if (this.locationCode !== undefined && this.locationCode !== '') {
-        // 根据locationCode获取区域信息
-        this.getLocationByCode(this.locationCode)
-      }
-    },
     locationId: function() {
-      if (this.locationId !== undefined && this.locationId !== '') {
-        // 根据id获取区域信息
-        this.getLocationById(this.locationId)
+      if (this.locationId === undefined || this.locationId === '' || this.locationId === '0') {
+        this.province = ''
+        this.city = ''
+        this.county = ''
+      } else {
+        if (this.locationInfo === undefined || this.locationInfo.id === undefined || this.locationInfo.id.toString() !== this.locationId) {
+          this.province = ''
+          this.city = ''
+          this.county = ''
+          this.getLocationById(this.locationId)
+        }
       }
     }
   },
   methods: {
-    getLocationByCode (locationCode) {
-      return new Promise((resolve, reject) => {
-        getLocationInfoByCode(locationCode).then(response => {
-          if (response.status === 200) {
-            var resultData = response.data.list[0]
-            this.getLocationById(resultData.id).then(response => {
-              resolve(response)
-            }).catch(error => {
-              reject(error)
-            })
-          } else {
-            this.$message.error(response.msg)
-          }
-        }).catch(error => {
-          console.log(error)
-        })
-      })
-    },
     getLocationById (locationId) {
       return new Promise((resolve, reject) => {
         getLocationInfoById(locationId).then(response => {

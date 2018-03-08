@@ -27,7 +27,7 @@
               </el-col>
               <el-col :span="12">
                 <el-form-item label="有效时间：" prop="validdate_str">
-                  <el-date-picker v-model="registerForm.validdate_str" type="date" value-format="yyyy-MM-dd" style="width: 200px;" placeholder="选择日期">
+                  <el-date-picker v-model="registerForm.validdate_str" type="date" format="yyyy-MM-dd" value-format="yyyy-MM-dd" style="width: 200px;" placeholder="选择日期">
                   </el-date-picker>
                 </el-form-item>  
               </el-col>
@@ -86,15 +86,15 @@
                 </el-form-item>                
               </el-col>
             </el-row>
-            <el-form-item label="售后处理点：" prop="sellAddressListForm">  
+            <el-form-item label="售后处理点：" prop="sellAddressListForm">
               <el-button size="mini" @click="addSellAddress">新增</el-button>                  
-              <div v-for="(item,index) in sellAddressListForm" style="margin-top:10px">
+              <div v-for="(item,index) in sellAddressListForm" v-show="item.valid" style="margin-top:10px">
                 <el-row>
                   <el-col :span="20">
                     <AddressSelector :locationId="item.locationcode" :detailAddress="item.selladdress" :index="index" @addressChanged="getAddressInfo"></AddressSelector>
                   </el-col>
                   <el-col :span="4">
-                    <el-button size="mini" @click="deleteSellAddress(index, item)">删除</el-button>
+                    <el-button size="mini" @click="deleteSellAddress(item)">删除</el-button>
                   </el-col>
                 </el-row>
               </div>
@@ -473,7 +473,7 @@
         dialogImageUrl: '',
         dialogVisible: false,
         sellAddressListForm: [],
-        sellAddressCount: 0,
+        sellAddressListBack: [],
         registerForm: {
           // businessesForm: {
           businessesName: '',
@@ -526,6 +526,7 @@
           wirelesscitypayable: '1',		// 是否开启无线城市话费支付（0关闭 1开启）
           wirelesstpcode: '',		// 无线城市话费支付渠道编码
           wirelesstpname: '',		// 无线城市话费支付渠道名称
+          validdate_str: '',
           // },
           // sellAddressListForm: [],
           // attachmentForm: {
@@ -556,7 +557,7 @@
           relationPhone: [{ required: true, message: '请输入业务联系人手机号码', trigger: 'blur' }],
           sellPersonName: [{ required: true, message: '请输入售后联系人', trigger: 'blur' }],
           sellPersonMobile: [{ required: true, message: '请输入售后电话', trigger: 'blur' }],
-          sellAddressListForm: [{ required: false, message: '请输入售后处理点', trigger: 'change' }], // TODO
+          sellAddressListForm: [{ required: true, message: '请输入售后处理点', trigger: 'change' }],
           financePersonName: [{ required: true, message: '请输入财务联系人', trigger: 'blur' }],
           financePersonMobile: [{ required: true, message: '请输入财务手机', trigger: 'blur' }],
           isInvoice: [{ required: true, message: '请选择能否开具发票', trigger: 'change' }],
@@ -596,7 +597,13 @@
             if (response.status === 200) {
               this.registerForm = response.data.businesses
               this.registerForm.locationCode = response.data.businesses.locationCode.toString()
-              this.sellAddressListForm = response.data.sellAddresslist
+              response.data.sellAddresslist
+              response.data.sellAddresslist.forEach(element => {
+                element.valid = true
+                this.sellAddressListForm.push(element)
+              })
+              this.sellAddressListBack = this.sellAddressListForm
+              this.registerForm.validdate_str = (response.data.businesses.validdate !== null ? response.data.businesses.validdate.substr(0, 10) : '')
               var goodsSamplelist = [{ num: '示例', name: '鱼香大米', unit: '5KG', origin: '重庆,西永', price: '￥250', description: '多种蛋白质、营养丰富、色泽光亮、颗粒饱满', url: 'http://detail.tmall.com/item.htm?spm=a230r.1.14.172.VhFL' }]
               switch (response.data.goodsSamplelist.length) {
                 case 1:
@@ -662,19 +669,22 @@
         this.registerForm.locationCode = locationInfo.id.toString()
       },
       getAddressInfo(addressInfo) {
-        console.log('addressInfo: ', addressInfo)
+        this.sellAddressListForm[addressInfo.index].locationcode = (addressInfo.id !== undefined ? addressInfo.id.toString() : '')
+        this.sellAddressListForm[addressInfo.index].selladdress = addressInfo.town_village
       },
       addSellAddress() {
-        this.sellAddressListForm.push({ 'index': this.sellAddressCount, 'locationcode': '', 'selladdress': '' })
-        this.sellAddressCount++
-        console.log(this.sellAddressListForm)
+        for (var i = 0; i < this.sellAddressListForm.length; i++) {
+          if (this.sellAddressListForm[i].locationcode === '' && this.sellAddressListForm[i].valid === true) {
+            this.$message.warning('请先完成售后处理点信息')
+            return
+          }
+        }
+        var sellAddress = { 'id': this.sellAddressListForm.length, 'locationcode': '', 'selladdress': '', 'merchantcode': '', 'valid': true }
+        this.sellAddressListForm.push(sellAddress)
       },
-      deleteSellAddress(index, item) {
-        console.log('qian', this.sellAddressListForm)
-        console.log('index: ', index, '  item: ', item)
-        this.sellAddressListForm.splice(index, 1)
-        this.sellAddressCount--
-        console.log('hou', this.sellAddressListForm)
+      deleteSellAddress(item) {
+        // this.sellAddressListForm.splice(index, 1)
+        item.valid = false
       },
       beforeAvatarUpload(file) {
         const isJPG = file.type === 'image/jpeg'
@@ -766,6 +776,16 @@
           this.$message({ type: 'warning', message: '请输入售后联系电话' })
           return
         }
+        var sellAddressList = []
+        for (let i = 0; i < this.sellAddressListForm.length; i++) {
+          if (this.sellAddressListForm[i].valid === true) {
+            sellAddressList.push({ 'locationcode': `${this.sellAddressListForm[i].locationcode}`, 'selladdress': `${this.sellAddressListForm[i].selladdress}` })
+          }
+        }
+        if (sellAddressList.length <= 0) {
+          this.$message({ type: 'warning', message: '请添加售后处理点' })
+          return
+        }
         if (this.registerForm.financePersonName === '') {
           this.$message({ type: 'warning', message: '请输入财务联系人' })
           return
@@ -780,12 +800,6 @@
         }
         // 校验表格
         for (let i = 1; i < this.registerForm.goodsListForm.length; i++) {
-          // name: '',
-          // unit: '',
-          // origin: '',
-          // price: '',
-          // description: '',
-          // url: ''
           if (i === 1) {
             if (this.registerForm.goodsListForm[i].name.trim() === '') {
               this.$message({ type: 'warning', message: '请输入商品名称' })
@@ -845,18 +859,6 @@
             })
           }
         }
-
-        var sellAddressList = [
-          {
-            'locationcode': '2606020000',
-            'selladdress': '地址地址地址地址'
-          },
-          {
-            'locationcode': '2606020000',
-            'selladdress': '地址地址地址地址222'
-          }
-        ]
-
         var params = {
           'businessesBean': {
             'id': `${this.$route.query.id}`,
@@ -941,10 +943,9 @@
           //   ]
           // },
         }
-        // TODO 获取登录用户
         updateBusinesses(params, '1').then(response => {
           if (response.status === 200) {
-            this.$message.success('修改企业成功')
+            this.$message.success('修改企业信息成功')
             this.$router.push({ path: '/businesses/list' })
           } else {
             this.$message.error(response.msg)
