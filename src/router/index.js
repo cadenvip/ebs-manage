@@ -271,6 +271,7 @@ export const asyncRouterMap = [
 
   {
     path: '/goodsmanage',
+    redirect: '/goodsmanage/publishgoods',
     component: Layout,
     meta: { roles: ['1', '2'], title: '商品管理', icon: 'form' },
     name: '商品管理',
@@ -378,6 +379,7 @@ export const asyncRouterMap = [
 
   {
     path: '/goodstype',
+    redirect: '/goodstypemanage/index',
     component: Layout,
     hidden: true,
     meta: { roles: ['1', '2'], title: '商品分类管理', icon: 'form' },
@@ -408,15 +410,29 @@ export const asyncRouterMap = [
   // 地址管理
   {
     path: '/addrmanage',
+    redirect: '/addrmanage/index',
     component: Layout,
-    meta: { roles: ['2'], title: '', icon: 'form' },
+    name: '管理地址',
+    meta: { roles: ['2'], title: '管理地址', icon: 'form' },
     children: [
-      // 管理员
       {
         path: 'index',
-        name: '管理地址',
+        name: '地址管理',
         component: _import('addrManage/index'),
-        meta: { roles: ['2'], title: '管理地址', icon: 'form' }
+        meta: { roles: ['2'], title: '地址管理', icon: 'form' }
+      },
+      {
+        path: 'freight',
+        name: '运费管理',
+        component: _import('addrManage/freight'),
+        meta: { roles: ['2'], title: '运费管理', icon: 'form' }
+      },
+      {
+        path: 'freighttemp',
+        hidden: true,
+        name: '运费模板',
+        component: _import('addrManage/freighttemplate'),
+        meta: { roles: ['2'], title: '运费模板', icon: 'form' }
       }
     ]
   },

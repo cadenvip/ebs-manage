@@ -66,8 +66,13 @@ service.interceptors.response.use(
   },
   error => {
     console.log('err' + error)// for debug
+    // if (error === 'Network Error') {
+    //   error = '网络错误！'
+    // } else if (error === 'timeout of 30000ms exceeded') {
+    //   error = '请求超时，请检查您的网络！'
+    // }
     Message({
-      message: error.message,
+      message: error,
       type: 'error',
       duration: 5 * 1000
     })
