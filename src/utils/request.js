@@ -37,6 +37,7 @@ service.interceptors.response.use(response => {
 },
 error => {
   // 错误处理
+  console.log('response.status: ', error.response.status)
   if (error.response.status === 401) {
     MessageBox('你已被登出，可以取消继续留在该页面，或者重新登录', '确定登出', {
       confirmButtonText: '重新登录',

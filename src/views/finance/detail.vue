@@ -46,12 +46,12 @@
       <el-row :gutter="20" style="margin-left:0px;margin-right:0px;margin-top:20px;">
         <el-col :span="3" style="text-align:right">
           <span>
-            <el-button @click="checkDetail" type="text">查看结算明细</el-button>
+            <el-button @click="checkDetail" type="text">查看交易明细</el-button>
           </span> 
         </el-col>
         <el-col :span="9">
           <span>
-            <el-button @click="downloadDetail" type="primary">打包下载结算明细</el-button>
+            <el-button @click="downloadDetail" type="primary">打包下载交易明细</el-button>
           </span> 
         </el-col>
         <el-col :span="3" style="text-align:right">
@@ -81,8 +81,7 @@
 </template>
 
 <script>
-
-import { getThisMonthSummary, getHistorySummary } from '@/api/finance'
+import { getThisMonthBill, getThisMonthDetail } from '@/api/finance'
 
 export default {
   data() {
@@ -125,24 +124,25 @@ export default {
     getSumary() {
       this.loading = true
       var params = { 'unitid': `${this.unitId}` }
-      getThisMonthSummary(params).then(response => {
+      getThisMonthBill(params).then(response => {
         if (response.status === 200) {
           this.thisMonthSumery = response.data
+          getThisMonthDetail({ 'billid': `${response.data.id}` }).then(response => {
+            if (response.status === 200) {
+              this.list = response.data.list
+              this.total = response.data.total
+            } else {
+              this.$message.error(response.msg)
+            }
+            this.loading = false
+          }).catch(error => {
+            this.loading = false
+            console.log(error)
+          })
         } else {
+          this.loading = false
           this.$message.error(response.msg)
         }
-      }).catch(error => {
-        this.loading = false
-        console.log(error)
-      })
-      getHistorySummary(params).then(response => {
-        if (response.status === 200) {
-          this.list = response.data.list
-          this.total = response.data.total
-        } else {
-          this.$message.error(response.msg)
-        }
-        this.loading = false
       }).catch(error => {
         this.loading = false
         console.log(error)
@@ -157,10 +157,10 @@ export default {
       }
     },
     checkDetail() {
-      this.$router.push({ path: '/statement/detail' })
+      alert('查看交易明细')
     },
     downloadDetail() {
-      alert('打包下载结算明细')
+      alert('打包下载交易明细')
     },
     checkout() {
       alert('确认结账')
