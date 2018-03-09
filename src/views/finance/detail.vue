@@ -1,24 +1,22 @@
 <template>
   <div style="margin:20px">
-    <el-tabs type="border-card">
-      <el-tab-pane label="本月账单">
-        <el-table :data="thisMonthSumery" v-loading.body="loading" element-loading-text="Loading" border stripe fit highlight-current-row style="padding-left:10px">
-          <el-table-column label="交易日期" prop="dealmonth" width="180" align="center"></el-table-column>
-          <el-table-column label="交易笔数" prop="ordercount" width="180" align="center"></el-table-column>
-          <el-table-column label="交易金额" prop="totalpay" :formatter="unitFormat" width="180" align="center"></el-table-column>
-          <el-table-column label="手续费" prop="transferfee" :formatter="unitFormat" width="180" align="center"></el-table-column>
-          <el-table-column label="总收入款项" prop="turnover" :formatter="unitFormat" width="180" align="center"></el-table-column>
-        </el-table>
-      </el-tab-pane>
-      <el-tab-pane label="历时月账单">
-        <el-table :data="historySumery" v-loading.body="loading" element-loading-text="Loading" border stripe fit highlight-current-row style="padding-left:10px">
-          <el-table-column label="交易日期" prop="dealmonth" width="180" align="center"></el-table-column>
-          <el-table-column label="交易笔数" prop="ordercount" width="180" align="center"></el-table-column>
-          <el-table-column label="交易金额" prop="totalpay" :formatter="unitFormat" width="180" align="center"></el-table-column>
-          <el-table-column label="手续费" prop="transferfee" :formatter="unitFormat" width="180" align="center"></el-table-column>
-          <el-table-column label="总收入款项" prop="turnover" :formatter="unitFormat" width="180" align="center"></el-table-column>
-        </el-table>
-      </el-tab-pane>
+    <div>
+      <h3>本月结算交易明细</h3>
+      <el-table :data="thisMonthDetail.detailListpayed" v-loading.body="loading" element-loading-text="Loading" border stripe fit highlight-current-row tooltip-effect="light" style="padding-left:10px">
+        <el-table-column label="序号" type="index" :index="indexPayed" align="center"></el-table-column>
+        <el-table-column label="订单号" prop="ordercode" align="center"></el-table-column>
+        <el-table-column label="订单下单时间" prop="ordertime" show-overflow-tooltip="true" align="center"></el-table-column>
+        <el-table-column label="订单完成时间" prop="finishtime" show-overflow-tooltip="true" align="center"></el-table-column>
+        <el-table-column label="支付渠道" prop="paytype" align="center"></el-table-column>
+        <el-table-column label="交易金额" prop="totalpay" :formatter="unitFormat" align="center"></el-table-column>
+        <el-table-column label="手续费" prop="transferfee" :formatter="unitFormat" align="center"></el-table-column>
+        <el-table-column label="应结算金额" prop="turnover" :formatter="unitFormat" align="center"></el-table-column>
+        <el-table-column label="是否存在争议" align="center">
+          <template slot-scope="scope">
+            <el-checkbox @change="handleConflict(scope.row)">有误差</el-checkbox>
+          </template>
+        </el-table-column>
+      </el-table>
       <el-row :gutter="6" style="margin-left:0px;margin-right:0px;margin-top:20px;">
         <el-col :span="4" style="text-align:right">
           <span>
@@ -27,7 +25,8 @@
         </el-col>
         <el-col :span="8">
           <span>
-            {{ transferfeeFormat }}
+            <!-- {{ transferfeeFormat }} -->
+            fasdlfkj
           </span> 
         </el-col>
         <el-col :span="4" style="text-align:right">
@@ -37,37 +36,39 @@
         </el-col>
         <el-col :span="8">
           <span>
-            {{ totalpayFormat }}
+            <!-- {{ totalpayFormat }} -->
+            heheh
           </span> 
         </el-col>
       </el-row>
       <br/>
       <hr style="height:1px;border:none;border-top:#b1cce7 solid 1px;" />
+      <el-button @click="downloadDetail" type="primary">打包下载交易明细</el-button>
+    </div>
+    <div>
+      <h3>本月未结算交易明细</h3>
+      <el-table :data="thisMonthDetail.detailListnopayed" v-loading.body="loading" element-loading-text="Loading" border stripe fit highlight-current-row tooltip-effect="light" style="padding-left:10px">
+        <el-table-column label="序号" type="index" :index="indexPayed" align="center"></el-table-column>
+        <el-table-column label="订单号" prop="ordercode" align="center"></el-table-column>
+        <el-table-column label="订单下单时间" prop="ordertime" show-overflow-tooltip="true" align="center"></el-table-column>
+        <el-table-column label="支付渠道" prop="finishtime" align="center"></el-table-column>
+        <el-table-column label="交易金额" prop="totalpay" :formatter="unitFormat" align="center"></el-table-column>
+        <el-table-column label="手续费" prop="transferfee" :formatter="unitFormat" align="center"></el-table-column>
+        <el-table-column label="应结算金额" prop="turnover" :formatter="unitFormat" align="center"></el-table-column>
+      </el-table>      
+    </div>
       <el-row :gutter="20" style="margin-left:0px;margin-right:0px;margin-top:20px;">
-        <el-col :span="3" style="text-align:right">
-          <span>
-            <el-button @click="checkDetail" type="text">查看交易明细</el-button>
-          </span> 
-        </el-col>
-        <el-col :span="9">
-          <span>
-            <el-button @click="downloadDetail" type="primary">打包下载交易明细</el-button>
-          </span> 
-        </el-col>
-        <el-col :span="3" style="text-align:right">
+        <el-col :span="3" :offset="8" style="text-align:right">
           <span>
             <el-button @click="checkout" type="primary">确认结账</el-button>
           </span> 
         </el-col>
-        <el-col :span="9">
+        <el-col :span="3">
           <span>
             <el-button @click="dispute" type="primary">核账争议</el-button>
           </span> 
         </el-col>
       </el-row>
-      <br/>
-      <br/>
-      <br/>
       <br/>
       <div class="fl bill_info">
         <p>统计周期：上一个自然月，例：10月1-31号；</p>
@@ -76,7 +77,6 @@
         <p>转账手续费（仅针对支付宝）：转账费=转账金额*0.001，0.5元起收，10元封顶；</p>
         <p>当期应付款：当期应付款=总交易金额-交易手续费-转账手续费。注：当期应付金额低于500时不给予结算，需累计到500以上进行结算；</p>
       </div>   
-    </el-tabs>
   </div>
 </template>
 
@@ -87,8 +87,13 @@ export default {
   data() {
     return {
       unitId: '',
-      thisMonthSumery: [],
-      historySumery: [],
+      logList: [],
+      thisMonthDetail: {
+        detailListnopayed: [],
+        logList: [],
+        bill: [],
+        detailListpayed: []
+      },
       transferfee: 0,
       totalpay: 0
     }
@@ -104,33 +109,33 @@ export default {
     }
     this.getSumary()
   },
-  computed: {
-    transferfeeFormat: function() {
-      if (this.transferfee !== undefined) {
-        return '￥' + this.transferfee.toFixed(2)
-      } else {
-        return '￥0.00'
-      }
-    },
-    totalpayFormat: function() {
-      if (this.totalpay !== undefined) {
-        return '￥' + this.totalpay.toFixed(2)
-      } else {
-        return '￥0.00'
-      }
-    }
-  },
+  // computed: {
+  //   transferfeeFormat: function() {
+  //     if (this.transferfee !== undefined) {
+  //       return '￥' + this.transferfee.toFixed(2)
+  //     } else {
+  //       return '￥0.00'
+  //     }
+  //   },
+  //   totalpayFormat: function() {
+  //     if (this.totalpay !== undefined) {
+  //       return '￥' + this.totalpay.toFixed(2)
+  //     } else {
+  //       return '￥0.00'
+  //     }
+  //   }
+  // },
   methods: {
     getSumary() {
       this.loading = true
       var params = { 'unitid': `${this.unitId}` }
       getThisMonthBill(params).then(response => {
         if (response.status === 200) {
-          this.thisMonthSumery = response.data
+          this.thisMonthBill = response.data
           getThisMonthDetail({ 'billid': `${response.data.id}` }).then(response => {
             if (response.status === 200) {
-              this.list = response.data.list
-              this.total = response.data.total
+              this.thisMonthDetail = response.data
+              console.log(this.thisMonthDetail)
             } else {
               this.$message.error(response.msg)
             }
@@ -149,15 +154,18 @@ export default {
       })
       this.loading = false
     },
+    indexPayed(index) {
+      return index
+    },
+    indexNopayed(index) {
+      return index
+    },
     unitFormat(row, column, cellValue) {
-      if (cellValue !== null) {
+      if (cellValue !== undefined && cellValue !== null) {
         return '￥' + cellValue.toFixed(2)
       } else {
         return ''
       }
-    },
-    checkDetail() {
-      alert('查看交易明细')
     },
     downloadDetail() {
       alert('打包下载交易明细')
@@ -167,6 +175,9 @@ export default {
     },
     dispute() {
       alert('核账争议')
+    },
+    handleConflict(orderInfo) {
+      console.log(orderInfo)
     }
   }
 }

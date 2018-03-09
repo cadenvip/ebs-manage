@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { MessageBox } from 'element-ui'
+import { Message, MessageBox } from 'element-ui'
 import store from '../store'
 import { getToken, getSessionid } from '@/utils/auth'
 
@@ -17,7 +17,7 @@ service.interceptors.request.use(config => {
     config.headers['X-Token'] = getToken() // 让每个请求携带自定义token 请根据实际情况自行修改
   }
   // 登录成功后，将JSESSIONID上传以鉴权
-  if (store.getters.sessionid) {
+  if (store.getters.sessionid !== undefined && store.getters.sessionid !== '') {
     // config['url'] = config.url + `?JSESSIONID=${store.getters.sessionid}`
     if (config.url !== '/login') {
       config['url'] = config.url + '?JSESSIONID=' + getSessionid()
@@ -32,14 +32,9 @@ service.interceptors.request.use(config => {
 
 // respone拦截器
 service.interceptors.response.use(response => {
-  // TODO 拦截
-  return response.data
-},
-error => {
-  // 错误处理
-  console.log('response.status: ', error.response.status)
-  if (error.response.status === 401) {
-    MessageBox('你已被登出，可以取消继续留在该页面，或者重新登录', '确定登出', {
+  console.log(response, 0)
+  if (response.status === 401) {
+    MessageBox('您已超时或被登出，可以取消继续留在该页面，或者重新登录', '确定登出', {
       confirmButtonText: '重新登录',
       cancelButtonText: '取消',
       type: 'warning'
@@ -49,6 +44,27 @@ error => {
         window.location.reload()
       })
     })
+  }
+  return response.data
+},
+error => {
+  // 错误处理
+  if (error.response !== undefined) {
+    if (error.response.status === 401) {
+      MessageBox('您已超时或被登出，可以取消继续留在该页面，或者重新登录', '确定登出', {
+        confirmButtonText: '重新登录',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        // 前端登出（清除登录数据）
+        store.dispatch('FedLogOut').then(() => {
+          window.location.reload()
+        })
+      })
+    }
+  } else {
+    Message({ message: error.message, type: 'error', duration: 5 * 1000 })
+    console.log(error)
   }
   return Promise.reject(error)
 })

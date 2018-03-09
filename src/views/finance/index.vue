@@ -49,17 +49,17 @@
             <el-button @click="checkDetail" type="text">查看结算明细</el-button>
           </span> 
         </el-col>
-        <el-col :span="9">
+        <el-col :span="3">
           <span>
             <el-button @click="downloadDetail" type="primary">打包下载结算明细</el-button>
           </span> 
         </el-col>
-        <el-col :span="3" style="text-align:right">
+        <el-col :span="3" :offset="10" style="text-align:right">
           <span>
             <el-button @click="checkout" type="primary">确认结账</el-button>
           </span> 
         </el-col>
-        <el-col :span="9">
+        <el-col :span="3">
           <span>
             <el-button @click="dispute" type="primary">核账争议</el-button>
           </span> 
@@ -136,6 +136,7 @@ export default {
         console.log(error)
       })
       getHistorySummary(params).then(response => {
+        debugger
         if (response.status === 200) {
           this.list = response.data.list
           this.total = response.data.total

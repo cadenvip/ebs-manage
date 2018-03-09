@@ -57,11 +57,11 @@
       <el-table-column label="所属单位" prop="unitname" width="200" align="center">
       </el-table-column>
       <el-table-column label="操作" width="190" align="center">
-      <template slot-scope="scope">
-        <el-button @click="updateUser(scope.row)" type="text" size="small">修改</el-button>
-        <el-button @click="resetPassword(scope.row)" type="text" size="small">重置密码</el-button>
-        <el-button @click="detail(scope.row)" type="text" size="small">详细</el-button>
-      </template>
+        <template slot-scope="scope">
+          <el-button @click="updateUser(scope.row)" type="text" size="small">修改</el-button>
+          <el-button @click="resetPassword(scope.row)" type="text" size="small">重置密码</el-button>
+          <el-button @click="detail(scope.row)" type="text" size="small">详细</el-button>
+        </template>
       </el-table-column>
     </el-table>
     <div class="block" align="right" style="padding-right:20px">

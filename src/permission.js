@@ -52,7 +52,6 @@ router.beforeEach((to, from, next) => {
         location.reload()
       }).catch(error => {
         NProgress.done()
-        Message.error('登出失败！')
         console.log(error)
         next({ path: from })
       })

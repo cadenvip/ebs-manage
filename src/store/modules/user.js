@@ -1,5 +1,6 @@
 import { login, logout, getInfo } from '@/api/login'
 import { getToken, setToken, removeToken, getUserId, setUserId, removeUserId, getSessionid, setSessionid, removeSessionid } from '@/utils/auth'
+import { Message } from 'element-ui'
 
 const user = {
   state: {
@@ -57,7 +58,7 @@ const user = {
             window.sessionStorage.setItem('userInfo', JSON.stringify(data))
             resolve()
           } else {
-            this.$message.error(response.msg)
+            Message.error(response.msg)
           }
         }).catch(error => {
           reject(error)
@@ -105,22 +106,32 @@ const user = {
     LogOut({ commit, state }) {
       return new Promise((resolve, reject) => {
         logout(state.token).then(response => {
+          commit('SET_TOKEN', '')
+          commit('SET_SESSIONID', '')
+          commit('SET_ROLES', [])
+          commit('SET_USERID', '')
+          commit('SET_NAME', '')
+          commit('SET_AVATAR', '')
+          removeToken()
+          removeSessionid()
+          removeUserId()
+          window.sessionStorage.removeItem('userInfo')
           if (response.status === 200) {
-            commit('SET_TOKEN', '')
-            commit('SET_SESSIONID', '')
-            commit('SET_ROLES', [])
-            commit('SET_USERID', '')
-            commit('SET_NAME', '')
-            commit('SET_AVATAR', '')
-            removeToken()
-            removeSessionid()
-            removeUserId()
-            window.sessionStorage.removeItem('userInfo')
-            resolve()
+            resolve(response)
           } else {
             this.$message.error(response.msg)
           }
         }).catch(error => {
+          commit('SET_TOKEN', '')
+          commit('SET_SESSIONID', '')
+          commit('SET_ROLES', [])
+          commit('SET_USERID', '')
+          commit('SET_NAME', '')
+          commit('SET_AVATAR', '')
+          removeToken()
+          removeSessionid()
+          removeUserId()
+          window.sessionStorage.removeItem('userInfo')
           reject(error)
         })
       })
