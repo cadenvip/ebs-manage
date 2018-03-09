@@ -463,6 +463,12 @@ export const asyncRouterMap = [
         name: '运费模板',
         component: _import('addrManage/freighttemplate'),
         meta: { roles: ['2'], title: '运费模板', icon: 'form' }
+      },
+      {
+        path: 'getmyself',
+        name: '自提管理',
+        component: _import('addrManage/getmyself'),
+        meta: { roles: ['2'], title: '自提管理', icon: 'form' }
       }
     ]
   },

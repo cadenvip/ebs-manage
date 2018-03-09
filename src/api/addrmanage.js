@@ -58,3 +58,40 @@ export function getTemplateDetail (id) {
     method: 'get'
   })
 }
+// 新增自提
+export function saveGetMyself (params) {
+  return request({
+    url: '/pickup/save',
+    method: 'post',
+    data: params
+  })
+}
+// 获取自提列表
+export function getGetMyselfList () {
+  return request({
+    url: '/pickup/allList',
+    method: 'get'
+  })
+}
+// 自提搜索
+export function getGetMyselfByName (params) {
+  return request({
+    url: '/pickup/allList',
+    method: 'get',
+    params: params
+  })
+}
+// 删除自提
+export function deleteGetMyself (id) {
+  return request({
+    url: '/pickup/delete/' + id,
+    method: 'post'
+  })
+}
+// 自提详情
+export function getGetMyselfListDetail (id) {
+  return request({
+    url: '/pickup/get/' + id,
+    method: 'get'
+  })
+}
