@@ -276,18 +276,17 @@
   import { parseTime, getUnitsOptions } from '@/utils/index'
   import CollapseTransition from 'element-ui/lib/transitions/collapse-transition'
   import { mapGetters } from 'vuex'
-  import axios from 'axios'
+  import { getGoodsDetail } from '@/api/noshelfgoods'
   import locationselector from '@/components/LocationSelector/index'
   export default {
     mounted() {
       // 计量单位
       this.jiliangdwOptions = getUnitsOptions()
       this.isFromModifyFlag = Number(this.$route.query.isFromModifyFlag)
-      if (this.isFromModifyFlag === 1) {
-        var url = process.env.BASE_API + 'goods/get/' + this.$route.query.goodsId
-        axios.get(url).then(res => {
+      if (this.isFromModifyFlag === 1 && this.$route.query.goodsId) {
+        getGoodsDetail(this.$route.query.goodsId).then(res => {
           if (res.status === 200) {
-            this.goodsBean = res.data.data.goodsBean
+            this.goodsBean = res.data.goodsBean
             console.log(this.goodsBean)
             this.ruleForm.cuxiao =  this.goodsBean.promotionInfo
             this.ruleForm.mingchen =  this.goodsBean.name
@@ -329,15 +328,15 @@
             } else {
               this.ruleForm.jietiFlag = false
             }
-            this.jietiItem1.num = this.goodsBean.gradientNumber[0]
-            this.jietiItem1.dollar = this.goodsBean.gradientPrice[0]
-            var tempNumArr = this.goodsBean.gradientNumber.slice(1, this.goodsBean.gradientNumber.length)
-            var tempDollarArr = this.goodsBean.gradientPrice.slice(1, this.goodsBean.gradientPrice.length)
-            if (tempNumArr.length === 0 || tempDollarArr.length === 0) {
-              console.log('nothing to do!')
-            } else {
-              for (var i = 0; i < tempNumArr.length; i++) {
-                this.jietiItems.push({ num: tempNumArr[i], dollar: tempDollarArr[i] })
+            if (this.goodsBean.gradientNumber !== null && this.goodsBean.gradientPrice !== null) {
+              this.jietiItem1.num = this.goodsBean.gradientNumber[0]
+              this.jietiItem1.dollar = this.goodsBean.gradientPrice[0]
+              var tempNumArr = this.goodsBean.gradientNumber.slice(1, this.goodsBean.gradientNumber.length)
+              var tempDollarArr = this.goodsBean.gradientPrice.slice(1, this.goodsBean.gradientPrice.length)
+              if (tempNumArr.length !== 0 || tempDollarArr.length !== 0) {
+                for (var i = 0; i < tempNumArr.length; i++) {
+                  this.jietiItems.push({ num: tempNumArr[i], dollar: tempDollarArr[i] })
+                }
               }
             }
             // 图片上传 先不管
@@ -370,6 +369,7 @@
             this.goodsBean.isReturn === '0' ? this.ruleForm.thh.push('支持退货') : this.ruleForm.thh
             this.goodsBean.isExchange === '0' ? this.ruleForm.thh.push('支持换货') : this.ruleForm.thh
             this.ruleForm.spdz = this.goodsBean.videoUrl
+            console.log(this.ruleForm)
           } else {
             this.$message.error(res.msg)
           }

@@ -136,10 +136,9 @@
 </template>
 
 <script>
-  import axios from 'axios'
   import CollapseTransition from 'element-ui/lib/transitions/collapse-transition'
   import { getGoodsTopType } from '@/api/goodsRelease'
-  import { getNoShelfGoods, upGoods } from '@/api/noshelfgoods'
+  import { getNoShelfGoods, upGoods, deleteGoods, batchDeleteGoods } from '@/api/noshelfgoods'
   export default {
     created () {
       this._getGoodsTopType()
@@ -212,16 +211,17 @@
           pageSize: this.pagesize
         }, obj)
         getNoShelfGoods(params).then(res => {
+          this.loading = false
           if (res.status === 200) {
             this.tableData = res.data
             this.total = res.total
+          } else if (res.status === 400 && res.msg === '没有商品数据') {
+            this.tableData = []
           } else {
             this.$message.error(res.msg)
           }
-          this.loading = false
         }).catch(err => {
           this.$message.error(err)
-          this.loading = false
         })
       },
       handleTabClick(tab, event) {
@@ -291,13 +291,13 @@
       },
       // 修改商品
       modifyGoods(val) {
-        this.$router.push({ name: 'publishstep1', query: { goodsId: val.goodsId }})
+        this.$router.push({ name: 'publishstep1', query: { goodsId: val.goodsId, modifyFlag: 2 }})
       },
       deleteGoods(val) {
-        var url = process.env.BASE_API + 'goods/delete/' + val.goodsId
-        axios.post(url).then(res => {
+        deleteGoods(val.goodsId).then(res => {
           if (res.status === 200) {
-            console.log(res)
+            this.$message.success('删除商品成功')
+            this._getNoShelfGoods()
           } else {
             this.$message.error(res.msg)
           }
@@ -339,7 +339,19 @@
             }
           }
           // 请求批量上架接口
-          console.log('请求批量上架接口')
+          const params = {
+            goodsIds: this.formatGoodsId(this.DSJseletedData)
+          }
+          upGoods(params).then(res => {
+            if (res.status === 200) {
+              this._getNoShelfGoods()
+              this.$message.success(res.msg)
+            } else {
+              this.$message.error(res.msg)
+            }
+          }).catch(err => {
+            this.$message.error(err)
+          })
         }
       },
       batchDelete() {
@@ -355,18 +367,19 @@
             }
           }
           // 请求批量删除接口
-          console.log('请求批量删除接口')
-          console.log(this.DSJseletedData)
-          // var url = process.env.BASE_API + 'goods/delete/' + val.goodsId
-          // axios.post(url).then(res => {
-          //   if (res.status === 200) {
-          //     console.log(res)
-          //   } else {
-          //     this.$message.error(res.msg)
-          //   }
-          // }).catch(err => {
-          //   console.log(err)
-          // })
+          const params = {
+            goodsIds: this.formatGoodsId(this.DSJseletedData)
+          }
+          batchDeleteGoods(params).then(res => {
+            if (res.status === 200) {
+              this.$message.success('删除商品成功')
+              this._getNoShelfGoods()
+            } else {
+              this.$message.error(res.msg)
+            }
+          }).catch(err => {
+            this.$message.error(err)
+          })
         }
       },
       handleDSJsizeChange(val) {
@@ -385,6 +398,14 @@
           }
         }
         return flag
+      },
+      formatGoodsId(obj) {
+        var goodsIds = ''
+        for (var i in obj) {
+          goodsIds += obj[i].goodsId + ','
+        }
+        goodsIds = goodsIds.substring(0, goodsIds.length - 1)
+        return goodsIds
       }
     },
     components: {

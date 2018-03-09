@@ -10,7 +10,7 @@
     </el-header>
     <el-main>
       <div>
-        <span style="padding-right: 20px;font-size:20px;">请选择您的商品类别:</span>{{goodstype}}
+        <span style="padding-right: 20px;font-size:18px;color: #666;">请选择您的商品类别:</span>
         <el-cascader style="width: 300px;" @change="handleChange" :options="goodsOptions" v-model="goodstype">
         </el-cascader>
       </div>
@@ -31,7 +31,7 @@
 <script>
   import { getGoodsType, checkGoStepTwo } from '@/api/goodsRelease'
   import { mapMutations, mapGetters } from 'vuex'
-  import axios from 'axios'
+  import { getGoodsDetail } from '@/api/noshelfgoods'
   export default {
     data() {
       return {
@@ -54,15 +54,19 @@
     methods: {
       isFromModify() {
         this.goodsId = this.$route.query.goodsId
+        this.modifyFlag = this.$route.query.modifyFlag
         if (this.goodsId) {
-          this.isFromModifyFlag = 1
-          var url = process.env.BASE_API + 'goods/get/' + this.goodsId
-          axios.get(url).then(res => {
+          if (this.modifyFlag === 2) {
+            this.isFromModifyFlag = 2
+          } else {
+            this.isFromModifyFlag = 1
+          }
+          getGoodsDetail(this.goodsId).then(res => {
             if (res.status === 200) {
               this.goodstype = []
-              this.goodstype.push(res.data.data.goodsBean.typeCode.substring(0, 4))
-              this.goodstype.push(res.data.data.goodsBean.typeCode)
-              this.goodsCode = res.data.data.goodsBean.goodsCode
+              this.goodstype.push(res.data.goodsBean.typeCode.substring(0, 4))
+              this.goodstype.push(res.data.goodsBean.typeCode)
+              this.goodsCode = res.data.goodsBean.goodsCode
               this.handleChange(this.goodstype)
             } else {
               this.$message.error(res.msg)
@@ -129,8 +133,10 @@
         })
       },
       goBack() {
-        if (this.isFromModifyFlag) {
+        if (this.isFromModifyFlag === 1) {
           this.$router.push({ path: '/goodsmanage/noshelfgoods' })
+        } else if (this.isFromModifyFlag === 2) {
+          this.$router.push({ path: '/goodsmanage/onsalegoods' })
         } else {
           this.$router.push({ path: '/goodsmanage/publishgoods' })
         }
@@ -141,7 +147,17 @@
             typeCode: this.goodstype[1],
             pattern: 0
           }
-          if (this.isFromModifyFlag) {
+          if (this.isFromModifyFlag === 1) {
+            checkGoStepTwo(params).then(res => {
+              if (res.status === 200) {
+                this.$router.push({ name: 'publishstep2', query: { typeCode: this.goodstype[1], goodsCode: this.goodsCode, goodsId: this.goodsId, isFromModifyFlag: this.isFromModifyFlag }})
+              } else {
+                this.$message.error(res.msg)
+              }
+            }).catch(err => {
+              this.$message.error(err)
+            })
+          } else if (this.isFromModifyFlag === 2) {
             checkGoStepTwo(params).then(res => {
               if (res.status === 200) {
                 this.$router.push({ name: 'publishstep2', query: { typeCode: this.goodstype[1], goodsCode: this.goodsCode, goodsId: this.goodsId, isFromModifyFlag: this.isFromModifyFlag }})

@@ -117,7 +117,7 @@
             <template slot-scope="scope">
               <el-button @click="getGoodsDetail(scope.row)" type="text" size="small">详情</el-button>
               <el-button v-show="scope.row.auditStatus !== '4'" @click="saleOff(scope.row)" type="text" size="small">下架</el-button>
-              <el-button v-show="scope.row.auditStatus !== '4'" @click="modifyGoods(scope.row)" type="text" size="small">修改</el-button>
+              <el-button v-show="scope.row.auditStatus !== '4'" @click="modifyGoods(scope.row.goodsId)" type="text" size="small">修改</el-button>
             </template>
             </el-table-column>
           </el-table>
@@ -263,6 +263,8 @@
           if (res.status === 200) {
             this.tableData = res.data
             this.total = res.total
+          } else if (res.status === 400 && res.msg === '没有商品数据') {
+            return
           } else {
             this.$message.error(res.msg)
           }
@@ -423,6 +425,9 @@
         if (rowIndex === 1) {
           return 'warning-row'
         }
+      },
+      modifyGoods(gid) {
+        this.$router.push({ name: 'publishstep1', query: { goodsId: gid, modifyFlag: 2 }})
       }
     },
     components: {

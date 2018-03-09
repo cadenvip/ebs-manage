@@ -61,13 +61,13 @@
 </template>
 
 <script>
-  import axios from 'axios'
+  import { getGoodsDetail } from '@/api/noshelfgoods'
   export default {
     mounted () {
       if (!this.$route.query.goodsId) {
         this.$message.error('未获取到商品id！')
       } else {
-        this.getGoodsDetail()
+        this._getGoodsDetail()
       }
     },
     data() {
@@ -77,20 +77,22 @@
       }
     },
     methods: {
-      getGoodsDetail() {
-        var url = process.env.BASE_API + 'goods/get/' + this.$route.query.goodsId
+      _getGoodsDetail() {
         this.loading = true
-        axios.get(url).then(res => {
-          if (res.status === 200) {
+        if (this.$route.query.goodsId) {
+          getGoodsDetail(this.$route.query.goodsId).then(res => {
             this.loading = false
-            this.goodsBean = res.data.data.goodsBean
-          } else {
-            this.loading = false
-            this.$message.error(res.msg)
-          }
-        }).catch(err => {
-          console.log(err)
-        })
+            if (res.status === 200) {
+              this.goodsBean = res.data.goodsBean
+            } else {
+              this.$message.error(res.msg)
+            }
+          }).catch(err => {
+            console.log(err)
+          })
+        } else {
+          this.$message.error('获取数据出错！')
+        }
       },
       format(val) {
         return val || '暂无信息'

@@ -18,3 +18,25 @@ export function upGoods (params) {
     data: params
   })
 }
+// 删除商品
+export function deleteGoods (id) {
+  return request({
+    url: 'goods/delete/' + id,
+    method: 'post'
+  })
+}
+// 批量删除
+export function batchDeleteGoods (params) {
+  return request({
+    url: '/goods/batchDelete',
+    method: 'post',
+    data: params
+  })
+}
+// 商品详情
+export function getGoodsDetail (id) {
+  return request({
+    url: 'goods/get/' + id,
+    method: 'get'
+  })
+}

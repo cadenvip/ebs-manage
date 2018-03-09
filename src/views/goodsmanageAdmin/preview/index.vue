@@ -96,7 +96,8 @@
 </template>
 
 <script>
-  import axios from 'axios'
+  import { getGoodsDetail } from '@/api/noshelfgoods'
+  import { getTemplate } from '@/api/admin/updownaudit.js'
   import { getUnitsOptions } from '@/utils/index'
   export default {
     mounted () {
@@ -118,34 +119,31 @@
     },
     methods: {
       _getGoodsDetail() {
-        var url = process.env.BASE_API + 'goods/get/' + this.$route.query.goodsId
         this.loading = true
-        axios.get(url).then(res => {
-          if (res.status === 200) {
+        if (this.$route.query.goodsId) {
+          getGoodsDetail(this.$route.query.goodsId).then(res => {
             this.loading = false
-            this.goodsBean = res.data.data.goodsBean
-            console.log(this.goodsBean)
-            if (this.goodsBean.logisticsTemplateCode) {
-              var url2 = process.env.BASE_API + 'logistic/delivery/template/get/' + this.goodsBean.logisticsTemplateCode
-              axios.get(url2).then(res => {
-                if (res.status === 200) {
-                  console.log(222, res.data.data)
-                  this.templateName = res.data.data.template.templateName
-                  this.transportList = res.data.data.transportList[0]
-                } else {
-                  this.$message.error(res.msg)
-                }
-              }).catch(err => {
-                this.$message.error(err)
-              })
+            if (res.status === 200) {
+              this.goodsBean = res.data.goodsBean
+              if (this.goodsBean.logisticsTemplateCode) {
+                getTemplate(this.goodsBean.logisticsTemplateCode).then(res => {
+                  if (res.status === 200) {
+                    this.templateName = res.data.template.templateName
+                    this.transportList = res.data.transportList[0]
+                  } else {
+                    this.$message.error(res.msg)
+                  }
+                }).catch(err => {
+                  this.$message.error(err)
+                })
+              }
+            } else {
+              this.$message.error(res.msg)
             }
-          } else {
-            this.loading = false
-            this.$message.error(res.msg)
-          }
-        }).catch(err => {
-          this.$message.error(err)
-        })
+          }).catch(err => {
+            this.$message.error(err)
+          })
+        }
       },
       format(val) {
         return val || '暂无信息'

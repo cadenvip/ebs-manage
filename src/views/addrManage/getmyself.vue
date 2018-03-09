@@ -164,8 +164,8 @@ export default {
       getGetMyselfByName(params).then(res => {
         if (res.status === 200) {
           this.tableData = res.data
-        } else {
-          this.$message.error(res.msg)
+        } else if (res.status === 400 && res.error === '暂无数据') {
+          this.tableData = []
         }
       }).catch(err => {
         this.$message.error(err)

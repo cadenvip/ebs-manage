@@ -15,3 +15,9 @@ export function upDownAudit (params) {
     data: params
   })
 }
+export function getTemplate (id) {
+  return request({
+    url: 'logistic/delivery/template/get/' + id,
+    method: 'get'
+  })
+}

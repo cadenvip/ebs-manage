@@ -357,17 +357,17 @@
         }, obj)
         this.loading = true
         getSearches(params).then(res => {
+          this.loading = false
           if (res.status === 200) {
             this.tableData = res.data
             this.total = res.total
-            this.loading = false
+          } else if (res.status === 400 && res.msg === '没有商品数据') {
+            this.tableData = []
           } else {
             this.$message.error(res.msg)
-            this.loading = false
           }
         }).catch(err => {
           console.log(err)
-          this.loading = false
         })
       },
       handleSizeChange(val) {
