@@ -4,41 +4,37 @@
     <el-form ref="searchForm" :model="searchForm" label-width="130px" class="demo-ruleForm">
       <el-row :gutter="30">
         <el-col :span="7">
-          <el-form-item label="日志时间：" prop="month_day">
+          <el-form-item label="企业名称：" prop="month_day">
+            <el-input v-model="searchForm.reqseq" clearable style="width: 180px;" placeholder="请输入流水号"></el-input>
+          </el-form-item>   
+        </el-col>
+        <el-col :span="7">
+          <el-form-item label="归属区域：">
+            <el-input v-model="searchForm.locationname" clearable style="width: 300px;" @focus="handleLocationFocus"></el-input>
+          </el-form-item>  
+        </el-col>
+        <el-col :span="7">
+          <el-form-item label="对账状态：" prop="reqservice">
+            <el-select v-model="searchForm.reqservice" clearable style="width: 180px;" placeholder="请选择接口服务名">
+              <!-- // 对账状态(0 待确认 1 已确认 2 待调账 3 已结算 ) -->
+              <el-option label="待确认" value="0"></el-option>
+              <el-option label="已确认" value="1"></el-option>
+              <el-option label="待调账" value="2"></el-option>
+              <el-option label="已结算" value="3"></el-option>
+            </el-select>
+          </el-form-item>   
+        </el-col>
+      </el-row>
+      <el-row :gutter="30">
+        <el-col :span="7">
+          <el-form-item label="到账时间：" prop="reqseq">
             <el-date-picker v-model="searchForm.month_day" type="date" value-format="MMdd" style="width: 180px;" placeholder="选择日期">
             </el-date-picker>
           </el-form-item>   
         </el-col>
         <el-col :span="7">
-          <el-form-item label="接口服务名：" prop="reqservice">
-            <el-select v-model="searchForm.reqservice" clearable style="width: 180px;" placeholder="请选择接口服务名">
-              <el-option label="EOrderService" value="EOrderService"></el-option>
-              <el-option label="EOrderService3" value="EOrderService3"></el-option>
-            </el-select>
-          </el-form-item>  
-        </el-col>
-        <el-col :span="7">
-          <el-form-item label="接口消息标识：" prop="reqaction">
-            <el-select v-model="searchForm.reqaction" clearable style="width: 180px;" placeholder="请选择接口消息标识">
-              <el-option v-for="(item, key) in reqactionList" :key="key" :label="item.inter_name" :value="item.inter_method"></el-option>
-            </el-select>
-          </el-form-item>  
-        </el-col>
-      </el-row>
-      <el-row :gutter="30">
-        <el-col :span="7">
-          <el-form-item label="流水号：" prop="reqseq">
-            <el-input v-model="searchForm.reqseq" clearable style="width: 180px;" placeholder="请输入流水号"></el-input>
-          </el-form-item>   
-        </el-col>
-        <el-col :span="7">
-          <el-form-item label="发起方编码：" prop="reqcode">
-            <el-input v-model="searchForm.reqcode" clearable style="width: 180px;" placeholder="请输入发起方编码"></el-input>
-          </el-form-item>  
-        </el-col>
-        <el-col :span="7">
-          <el-form-item label="请求报文关键字：" prop="reqmessage">
-            <el-input v-model="searchForm.reqmessage" clearable style="width: 180px;" placeholder="请输入请求报文关键字"></el-input>
+          <el-form-item label="显示不足500的：" prop="reqcode">
+            <el-checkbox v-model="checked">显示不足500的</el-checkbox>
           </el-form-item>  
         </el-col>
       </el-row>
@@ -53,17 +49,14 @@
     </el-form>
     <h3 style="padding-left: 20px;">账目列表</h3>
     <el-table :data="list" v-loading.body="loading" element-loading-text="Loading" border stripe fit highlight-current-row style="padding-left:10px">
-      <el-table-column label='流水号' prop="reqseq" width="180" align="center"></el-table-column>
-      <el-table-column label="接口服务名" prop="reqservice" width="120" align="center"></el-table-column>
-      <el-table-column label="接口消息标志" prop="reqaction" width="150" align="center"></el-table-column>
-      <el-table-column label="发起方编码" prop="reqcode" width="100" align="center"></el-table-column>
-      <el-table-column label="接口协议" prop="protocol" width="80" align="center"></el-table-column>
-      <el-table-column label="耗时（毫秒）" prop="timed" width="110" align="center"></el-table-column>
-      <el-table-column label="创建时间" prop="createtime" width="160" align="center"></el-table-column>
-      <el-table-column label="结果" prop="errormessage" :formatter="resultFormat" width="80" align="center"></el-table-column>
+      <el-table-column label='企业名称' prop="reqseq" width="180" align="center"></el-table-column>
+      <el-table-column label="区域" prop="reqservice" width="120" align="center"></el-table-column>
+      <el-table-column label="出账周期" prop="reqaction" width="150" align="center"></el-table-column>
+      <el-table-column label="应结算合计" prop="reqcode" width="100" align="center"></el-table-column>
+      <el-table-column label="对账状态" prop="protocol" :formatter="formatStatus" width="80" align="center"></el-table-column>
       <el-table-column label="操作" width="80" align="center">
         <template slot-scope="scope">
-          <el-button @click="detail(scope.row)" type="text" size="small">详细</el-button>
+          <el-button @click="detail(scope.row)" type="text" size="small">对账明细</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -78,6 +71,26 @@
         :total="total">
       </el-pagination>
     </div>
+    <br/>
+    <el-row :gutter="20" style="margin-left:0px;margin-right:0px;margin-top:20px;">
+      <el-col :span="3" :offset="6" style="text-align:right">
+        <span>
+          <el-button @click="downloadSettlement" type="text">下载结算总结</el-button>
+        </span> 
+      </el-col>
+      <el-col :span="3">
+        <span>
+          <el-button @click="checkHistorySettlement" type="text">更过历史结算总结</el-button>
+        </span> 
+      </el-col>
+    </el-row>
+    <el-dialog
+      title="请选择区域"
+      :visible.sync="dialogVisible"
+      width="440px"
+      :before-close="handleClose">
+      <locationselector @locationSelected="getLocationInfo"></locationselector>
+    </el-dialog>
   </div>
 </template>
 
@@ -96,7 +109,9 @@ export default {
         reqaction: '',	// 请求消息标志，取值为函数名
         reqseq: '',	// 请求流水（由请求方生成）
         reqcode: '',	// 请求方编码
-        reqmessage: ''// 请求消息报文
+        reqmessage: '', // 请求消息报文
+        locationid: '',
+        locationname: ''
       },
       pagesizes: [10, 20, 30, 50],
       pagesize: 10,
@@ -175,6 +190,44 @@ export default {
     handleCurrentChange(val) {
       this.currentPage = val
       this.queryILogList()
+    },
+    handleClose(done) {
+      // this.$confirm('确认关闭？').then(_ => {
+      done()
+      // }).catch(_ => {})
+    },
+    handleLocationFocus() {
+      this.dialogVisible = true
+      this.searchForm.locationid = ''
+      this.searchForm.locationname = ''
+    },
+    formatStatus(row, column, cellValue) {
+      // 对账状态(0 待确认 1 已确认 2 待调账 3 已结算 )
+      var type = ''
+      switch (cellValue) {
+        case 0:
+          type = '待确认'
+          break
+        case 1:
+          type = '已确认'
+          break
+        case 2:
+          type = '待调账'
+          break
+        case 3:
+          type = '已结算'
+          break
+        default:
+          type = ''
+          break
+      }
+      return type
+    },
+    downloadSettlement() {
+      alert('下载结算总结')
+    },
+    checkHistorySettlement() {
+      alert('更多历史结算总结')
     }
   }
 }

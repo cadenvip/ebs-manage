@@ -70,11 +70,6 @@
         <el-table-column label="交易金额" prop="totalpay" :formatter="unitFormat" align="center"></el-table-column>
         <el-table-column label="手续费" prop="transferfee" :formatter="unitFormat" align="center"></el-table-column>
         <el-table-column label="应结算金额" prop="turnover" :formatter="unitFormat" align="center"></el-table-column>
-        <el-table-column label="是否存在争议" align="center">
-          <template slot-scope="scope">
-            <el-checkbox @change="handleConflict(scope.row)">有误差</el-checkbox>
-          </template>
-        </el-table-column>
       </el-table>
       <el-row :gutter="6" style="margin-left:0px;margin-right:0px;margin-top:20px;">
         <el-col :span="4" style="text-align:right">
@@ -102,7 +97,7 @@
       </el-row>
       <br/>
       <hr style="height:1px;border:none;border-top:#b1cce7 solid 1px;" />
-      <el-button @click="downloadDetail" type="primary">打包下载交易明细</el-button>
+      <el-button @click="goback" type="primary">返回</el-button>
     </div>
     <div>
       <h3>本月未结算交易明细</h3>
@@ -121,18 +116,6 @@
         {{formatLogType(item.logtype)}}({{item.createdate}}):{{item.logcontent}}
       </p>
     </div>   
-    <el-row :gutter="20" style="margin-left:0px;margin-right:0px;margin-top:20px;">
-      <el-col :span="3" :offset="8" style="text-align:right">
-        <span>
-          <el-button @click="checkout" type="primary">确认结账</el-button>
-        </span> 
-      </el-col>
-      <el-col :span="3">
-        <span>
-          <el-button @click="dispute" type="primary">核账争议</el-button>
-        </span> 
-      </el-col>
-    </el-row>
     <br/>
   </div>
 </template>
@@ -254,17 +237,14 @@ export default {
       }
       return type
     },
-    downloadDetail() {
-      alert('打包下载交易明细')
+    goback() {
+      this.$router.go(-1)
     },
     checkout() {
       alert('确认结账')
     },
     dispute() {
       alert('核账争议')
-    },
-    handleConflict(orderInfo) {
-      console.log(orderInfo)
     }
   }
 }

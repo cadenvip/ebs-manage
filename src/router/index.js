@@ -281,7 +281,15 @@ export const asyncRouterMap = [
         component: _import('finance/list'),
         name: '财务管理',
         meta: { roles: ['1'], title: '财务管理', icon: 'table' }
-      }]
+      },
+      {
+        path: 'detailed',
+        hidden: true,
+        component: _import('finance/detailed'),
+        name: '对账交易明细',
+        meta: { roles: ['2'], title: '对账交易明细', icon: 'table' }
+      }
+    ]
   },
 
   {
@@ -380,9 +388,9 @@ export const asyncRouterMap = [
   {
     path: '/statement',
     component: Layout,
-    name: '财务对账',
+    name: '财务管理',
     redirect: '/statement/index',
-    meta: { roles: ['2'], title: '财务对账', icon: 'table' },
+    meta: { roles: ['2'], title: '财务管理', icon: 'table' },
     children: [
       {
         path: 'index',
