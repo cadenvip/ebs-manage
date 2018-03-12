@@ -222,6 +222,7 @@ export const asyncRouterMap = [
   {
     path: '/businesses',
     component: Layout,
+    redirect: '/businesses/list',
     name: 'businesses',
     hidden: false,
     meta: { roles: ['1'], title: '企业管理', icon: 'table' },
