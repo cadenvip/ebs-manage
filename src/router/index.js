@@ -404,6 +404,13 @@ export const asyncRouterMap = [
         component: _import('finance/detail'),
         name: '对账交易明细',
         meta: { roles: ['2'], title: '对账交易明细', icon: 'table' }
+      },
+      {
+        path: 'historyDetail',
+        hidden: true,
+        component: _import('finance/historyDetail'),
+        name: '历史对账交易明细',
+        meta: { roles: ['2'], title: '历史对账交易明细', icon: 'table' }
       }
     ]
   },

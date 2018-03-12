@@ -738,7 +738,7 @@
         this.dialogVisible = true
       },
       goBack() {
-        this.$router.push({ path: '/businesses/list' })
+        this.$router.push({ path: '/' })
       },
       goNext() {
         // 校验填写有效性

@@ -32,7 +32,6 @@ service.interceptors.request.use(config => {
 
 // respone拦截器
 service.interceptors.response.use(response => {
-  console.log(response, 0)
   if (response.status === 401) {
     MessageBox('您已超时或被登出，可以取消继续留在该页面，或者重新登录', '确定登出', {
       confirmButtonText: '重新登录',
