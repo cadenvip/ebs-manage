@@ -288,7 +288,7 @@ export const asyncRouterMap = [
         hidden: true,
         component: _import('finance/detailed'),
         name: '对账交易明细',
-        meta: { roles: ['2'], title: '对账交易明细', icon: 'table' }
+        meta: { roles: ['1'], title: '对账交易明细', icon: 'table' }
       }
     ]
   },

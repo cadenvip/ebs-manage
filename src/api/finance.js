@@ -35,6 +35,38 @@
 
 import request from '@/utils/request'
 
+export function getAllBills(currentpage, pagesize) {
+  return request({
+    url: '/statement/totalbillList',
+    method: 'post',
+    data: { 'page': `${currentpage}`,
+      'limit': `${pagesize}` }
+  })
+}
+
+export function getBillList(params, currentpage, pagesize) {
+  return request({
+    url: '/statement/totalbillList',
+    method: 'post',
+    data: {
+      'merchantname': `${params.merchantname}`,
+      'yearmonth': `${params.yearmonth}`,
+      'status': `${params.status}`,
+      'locationcode': `${params.locationcode}`,
+      'greater500': `${params.greater500}`,
+      'page': `${currentpage}`,
+      'limit': `${pagesize}`
+    }
+  })
+}
+
+export function downloadBillList(params) {
+  return request({
+    url: '/statement/exportTotalBill ',
+    method: 'post'
+  })
+}
+
 export function getThisMonthSummary(params) {
   return request({
     url: '/statement/thismonthsummary',
