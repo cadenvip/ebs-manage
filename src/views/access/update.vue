@@ -54,8 +54,8 @@
           </el-form-item>        
         </el-col>
         <el-col :span="12">
-          <el-form-item label="联系电话：" prop="locationid">
-            <el-input v-model="accessBean.si_phone" style="width: 300px;" placeholder="请输入联系电话"></el-input>
+          <el-form-item label="联系电话：" prop="si_phone">
+            <el-input v-model="accessBean.si_phone" style="width: 300px;" :maxlength="13" placeholder="请输入联系电话"></el-input>
           </el-form-item>          
         </el-col>
       </el-row>
@@ -177,6 +177,7 @@
 
 import { getAccessDetail, updateAccess, getChanelList, getAllOperationList, getOperationList, getAllInterfaceList, getInterfaceList } from '@/api/access'
 import { str2Timestamp } from '@/utils/index'// formatTime
+import { validateMobilePhone, validateTelephone, validateURL } from '@/utils/validate'
 
 export default {
   data() {
@@ -196,6 +197,22 @@ export default {
       } else if (value !== this.accessBean.password) {
         callback(new Error('两次输入密码不一致!'))
       } else {
+        callback()
+      }
+    }
+    var validateContact = (rule, value, callback) => {
+      if (value !== '') {
+        if (!validateMobilePhone(value.trim()) && !validateTelephone(value.trim())) {
+          callback(new Error('请输入有效的联系方式'))
+        }
+        callback()
+      }
+    }
+    var validateSi_url = (rule, value, callback) => {
+      if (value !== '') {
+        if (!validateURL(value.trim())) {
+          callback(new Error('请输入有效的Url'))
+        }
         callback()
       }
     }
@@ -236,6 +253,8 @@ export default {
         si_name: [{ required: true, message: '请输入接入名称', trigger: 'blur' }],
         password: [{ required: true, validator: validatePass, trigger: 'blur' }],
         repassword: [{ required: true, validator: validateRepass, trigger: 'blur' }],
+        si_phone: [{ required: false, validator: validateContact, trigger: 'blur' }],
+        si_url: [{ required: false, validator: validateSi_url, trigger: 'blur' }],
         si_type: [{ required: true, message: '请选择接入类别', trigger: 'change' }]
       },
       getOpRowKey(row) {
@@ -248,34 +267,50 @@ export default {
   },
   created () {
     getAccessDetail(this.$route.query.id).then(response => {
-      this.accessBean = response.data.access
-      this.selectedOpList = response.data.operationList
-      var i = this.selectedOpList.indexOf(null)
-      while (i !== -1) {
-        this.selectedOpList.splice(i, 1)
-        i = this.selectedOpList.indexOf(null)
-      }
-      this.selectedInList = response.data.interfaceList
-      i = this.selectedInList.indexOf(null)
-      while (i !== -1) {
-        this.selectedInList.splice(i, 1)
+      if (response.status === 200) {
+        this.accessBean = response.data.access
+        this.selectedOpList = response.data.operationList
+        var i = this.selectedOpList.indexOf(null)
+        while (i !== -1) {
+          this.selectedOpList.splice(i, 1)
+          i = this.selectedOpList.indexOf(null)
+        }
+        this.selectedInList = response.data.interfaceList
         i = this.selectedInList.indexOf(null)
+        while (i !== -1) {
+          this.selectedInList.splice(i, 1)
+          i = this.selectedInList.indexOf(null)
+        }
+      } else {
+        this.$message.error(response.msg)
       }
     }).catch(error => {
       console.log(error)
     })
     getChanelList().then(response => {
-      this.channelList = response.data
+      if (response.status === 200) {
+        this.channelList = response.data
+      } else {
+        this.$message.error(response.msg)
+      }
     }).catch(error => {
       console.log(error)
     })
     getAllOperationList().then(response => {
-      this.operationList = response.data
+      if (response.status === 200) {
+        this.operationList = response.data
+      } else {
+        this.$message.error(response.msg)
+      }
     }).catch(error => {
       console.log(error)
     })
     getAllInterfaceList().then(response => {
-      this.interfaceList = response.data
+      if (response.status === 200) {
+        this.interfaceList = response.data
+      } else {
+        this.$message.error(response.msg)
+      }
     }).catch(error => {
       console.log(error)
     })
@@ -284,26 +319,30 @@ export default {
     selectOperation() {
       this.operationTableVisible = true
       getAllOperationList().then(response => {
-        this.operationList = response.data
-        this.opSearchForm.operationname = ''
-        var defaultSelected = []
-        if (this.operationList !== undefined && this.operationList.length > 0) {
-          if (this.selectedOpList !== undefined && this.selectedOpList.length > 0) {
-            this.operationList.forEach(row => {
-              for (var index = 0; index < this.selectedOpList.length; index++) {
-                if (this.selectedOpList[index].id === row.id) {
+        if (response.status === 200) {
+          this.operationList = response.data
+          this.opSearchForm.operationname = ''
+          var defaultSelected = []
+          if (this.operationList !== undefined && this.operationList.length > 0) {
+            if (this.selectedOpList !== undefined && this.selectedOpList.length > 0) {
+              this.operationList.forEach(row => {
+                for (var index = 0; index < this.selectedOpList.length; index++) {
+                  if (this.selectedOpList[index].id === row.id) {
                   // this.$refs.operationTable.toggleRowSelection(row, true)
-                  defaultSelected.push(row)
-                  break
+                    defaultSelected.push(row)
+                    break
+                  }
                 }
-              }
-            })
+              })
+            }
           }
+          this.$refs.operationTable.clearSelection()
+          defaultSelected.forEach(row => {
+            this.$refs.operationTable.toggleRowSelection(row, true)
+          })
+        } else {
+          this.$message.error(response.msg)
         }
-        this.$refs.operationTable.clearSelection()
-        defaultSelected.forEach(row => {
-          this.$refs.operationTable.toggleRowSelection(row, true)
-        })
       }).catch(error => {
         console.log(error)
       })
@@ -311,41 +350,53 @@ export default {
     selectInterface() {
       this.interfaceTableVisible = true
       getAllInterfaceList().then(response => {
-        this.interfaceList = response.data
-        this.inSearchForm.inter_name = ''
-        this.inSearchForm.inter_version = ''
-        var defaultSelected = []
-        if (this.interfaceList !== undefined && this.interfaceList.length > 0) {
-          if (this.selectedInList !== undefined && this.selectedInList.length > 0) {
-            this.interfaceList.forEach(row => {
-              for (var index = 0; index < this.selectedInList.length; index++) {
-                if (this.selectedInList[index].id === row.id) {
+        if (response.status === 200) {
+          this.interfaceList = response.data
+          this.inSearchForm.inter_name = ''
+          this.inSearchForm.inter_version = ''
+          var defaultSelected = []
+          if (this.interfaceList !== undefined && this.interfaceList.length > 0) {
+            if (this.selectedInList !== undefined && this.selectedInList.length > 0) {
+              this.interfaceList.forEach(row => {
+                for (var index = 0; index < this.selectedInList.length; index++) {
+                  if (this.selectedInList[index].id === row.id) {
                   // this.$refs.interfaceTable.toggleRowSelection(row, true)
-                  defaultSelected.push(row)
-                  break
+                    defaultSelected.push(row)
+                    break
+                  }
                 }
-              }
-            })
+              })
+            }
           }
+          this.$refs.interfaceTable.clearSelection()
+          defaultSelected.forEach(row => {
+            this.$refs.interfaceTable.toggleRowSelection(row, true)
+          })
+        } else {
+          this.$message.error(response.msg)
         }
-        this.$refs.interfaceTable.clearSelection()
-        defaultSelected.forEach(row => {
-          this.$refs.interfaceTable.toggleRowSelection(row, true)
-        })
       }).catch(error => {
         console.log(error)
       })
     },
     queryOperation() {
       getOperationList(this.opSearchForm).then(response => {
-        this.operationList = response.data
+        if (response.status === 200) {
+          this.operationList = response.data
+        } else {
+          this.$message.error(response.msg)
+        }
       }).catch(error => {
         console.log(error)
       })
     },
     queryInterface() {
       getInterfaceList(this.inSearchForm).then(response => {
-        this.interfaceList = response.data
+        if (response.status === 200) {
+          this.interfaceList = response.data
+        } else {
+          this.$message.error(response.msg)
+        }
       }).catch(error => {
         console.log(error)
       })
@@ -436,11 +487,15 @@ export default {
           if (params.accessBean.channel_code === null) {
             params.accessBean.channel_code = ''
           }
-          console.log(params)
           return new Promise((resolve, reject) => {
             updateAccess(params).then(response => {
-              resolve(response)
-              this.$router.push({ path: '/system/access/list' })
+              if (response.status === 200) {
+                resolve(response)
+                this.$router.push({ path: '/system/access/list' })
+                this.$message.success('修改接入方成功')
+              } else {
+                this.$message.error(response.msg)
+              }
             }).catch(error => {
               reject(error)
             })

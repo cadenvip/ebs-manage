@@ -13,6 +13,7 @@
       </el-form-item>
       <el-form-item label="角色描述：" prop="description">
         <el-input type="textarea" v-model="roleForm.description" style="width: 600px;" placeholder="请输入角色描述"></el-input>
+        <p>剩余字数: <span style="color:red;">{{getDescLen}}</span></p>
       </el-form-item>
       <el-form-item label="权限绑定：" prop="resourceids">
         <el-tree
@@ -26,10 +27,17 @@
           ref="tree">
         </el-tree>
       </el-form-item>
-      <el-form-item>
+      <br/>
+      <div style="text-align: center;font-family: 宋体, Arial, sans-serif;font-size: 12px;color: #f30">
+        <span>
+          温馨提示：系统角色由系统初始化生成，管理员只能新增自定义角色
+        </span>
+      </div>
+      <br/>
+      <div style="text-align: center">
         <el-button type="primary" @click="onSubmit">提交</el-button>
         <el-button @click="onCancel">返回</el-button>
-      </el-form-item>
+      </div>
     </el-form>
   </div>
 </template>
@@ -66,6 +74,15 @@ export default {
   },
   mounted () {
     this.getAllPermissions()
+  },
+  computed: {
+    getDescLen() {
+      if (this.roleForm.description) {
+        return (60 - this.roleForm.description.length) < 0 ? 0 : (60 - this.roleForm.description.length)
+      } else {
+        return 60
+      }
+    }
   },
   methods: {
     getAllPermissions() {

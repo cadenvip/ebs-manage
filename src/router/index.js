@@ -280,8 +280,8 @@ export const asyncRouterMap = [
       {
         path: 'list',
         component: _import('finance/list'),
-        name: '财务管理',
-        meta: { roles: ['1'], title: '财务管理', icon: 'table' }
+        name: '财务列表',
+        meta: { roles: ['1'], title: '财务列表', icon: 'table' }
       },
       {
         path: 'detailed',

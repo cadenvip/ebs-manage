@@ -30,7 +30,7 @@
               <el-button v-if="registerForm.licencepicpath" size="small" type="primary" @click="handlePictureCardPreview(registerForm.licencepicpath)">上传成功，点击预览</el-button>
             </el-form-item>
           <el-form-item label="经办人身份证：" prop="operatoridnum">
-            <el-input v-model="registerForm.operatoridnum" clearable style="width: 270px;" placeholder="输入身份证号码"></el-input>
+            <el-input v-model="registerForm.operatoridnum" clearable :maxlength=18 style="width: 270px;" placeholder="输入身份证号码"></el-input>
           </el-form-item>
           <el-form-item label="身份证正面：" prop="sfzmpicpath">
               <el-upload
@@ -129,9 +129,20 @@
   import Regheader from '@/components/Register/regheader'
   import Regfooter from '@/components/Register/regfooter'
   import { EnterpriseRegister } from '@/api/register'
-
+  import { validateID } from '@/utils/validate'
+  
   export default {
     data() {
+      var validateId = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('请输入身份证号码'))
+        } else {
+          if (!validateID(value.trim())) {
+            callback(new Error('请输入有效的身份证号码'))
+          }
+          callback()
+        }
+      }
       return {
         dialogImageUrl: '',
         dialogVisible: false,
@@ -171,7 +182,7 @@
         registerRules: {
           businesslicenseNum: [{ required: true, message: '请输入营业执照号码', trigger: 'blur' }],
           licencepicpath: [{ required: true, message: '请上传营业执照', trigger: 'change' }],
-          operatoridnum: [{ required: true, message: '请输入经办人身份证号码', trigger: 'blur' }],
+          operatoridnum: [{ required: true, trigger: 'blur', validator: validateId }],
           sfzmpicpath: [{ required: true, message: '请上传经办人身份证正面', trigger: 'change' }],
           sffmpicpath: [{ required: true, message: '请上传经办人身份证发面', trigger: 'change' }],
           proxytestifypicpath: [{ required: true, message: '请上传代理授权证明', trigger: 'change' }]

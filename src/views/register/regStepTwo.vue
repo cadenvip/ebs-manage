@@ -14,49 +14,66 @@
         <div style="border:1px solid #000" >
           <el-form ref="registerForm" :model="registerForm" :rules="registerRules" label-width="170px" style="margin:6px">
             <h5>企业基本信息</h5>
-              <el-form-item label="企业名称：" prop="businessesName">
-                <el-input v-model="registerForm.businessesName" clearable style="width: 200px;" placeholder="请输入企业名称"></el-input>
-              </el-form-item>
-            </el-row>
+            <el-form-item label="企业名称：" prop="businessesName">
+              <el-input v-model="registerForm.businessesName" clearable style="width: 220px;" placeholder="请输入企业名称"></el-input>
+            </el-form-item>
             <el-form-item label="企业地址：" prop="locationCode">
               <RegionSelector v-model="registerForm.locationCode" :grade="4" :showCountry="false" @locationChanged="getLocationCode" :locationId="registerForm.locationCode"></RegionSelector>
             </el-form-item>
-            <el-form-item label="" prop="address">
+            <el-form-item label="详细地址：" prop="address">
               <el-input v-model="registerForm.address" clearable style="width: 400px;" placeholder="请输入企业详细地址"></el-input>
             </el-form-item>
-            <el-row :gutter="30">
-              <el-col :span="12">
+            <el-row :gutter="20">
+              <el-col :span="10">
                 <el-form-item label="业务联系人：" prop="relationPerson">
-                  <el-input v-model="registerForm.relationPerson" clearable style="width: 200px;" placeholder="请输入业务联系人"></el-input>
+                  <el-input v-model="registerForm.relationPerson" clearable style="width: 220px;" placeholder="请输入业务联系人"></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="12">
+              <el-col :span="14" style="padding-top:8px">
+                <span style="font-family: 宋体, Arial, sans-serif;font-size: 12px;color: #999;">该联系人用户业务联系，请填写主要平台使用负责人</span>
+              </el-col>
+            </el-row>
+            <el-row :gutter="20">
+              <el-col :span="10">
                 <el-form-item label="业务联系人手机号码：" prop="relationPhone">
-                  <el-input v-model="registerForm.relationPhone" clearable style="width: 200px;" placeholder="请输入业务联系人手机号码"></el-input>
-                </el-form-item>                
+                  <el-input v-model="registerForm.relationPhone" clearable :maxlength=11 style="width: 220px;" placeholder="请输入业务联系人手机号码"></el-input>
+                </el-form-item> 
               </el-col>
+              <el-col :span="14" style="padding-top:8px">
+                <span style="font-family: 宋体, Arial, sans-serif;font-size: 12px;color: #999;">该手机将用于平台登陆帐号，接收发送的关键信息，请填写有效移动手机号码</span>
+              </el-col>               
             </el-row>
-            <el-row :gutter="30">
-              <el-col :span="12">
+            <el-row :gutter="20">
+              <el-col :span="10">
                 <el-form-item label="售后联系人：" prop="sellPersonName">
-                  <el-input v-model="registerForm.sellPersonName" clearable style="width: 200px;" placeholder="请输入售后联系人"></el-input>
+                  <el-input v-model="registerForm.sellPersonName" clearable style="width: 220px;" placeholder="请输入售后联系人"></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="12">
+              <el-col :span="14" style="padding-top:8px">
+                <span style="font-family: 宋体, Arial, sans-serif;font-size: 12px;color: #999;">用于解答用户投诉或商品质量问题</span>
+              </el-col>  
+            </el-row>
+            <el-row :gutter="20">
+              <el-col :span="10">
                 <el-form-item label="售后电话：" prop="sellPersonMobile">
-                  <el-input v-model="registerForm.sellPersonMobile" clearable style="width: 200px;" placeholder="请输入售后电话"></el-input>
+                  <el-input v-model="registerForm.sellPersonMobile" clearable :maxlength=18 style="width: 220px;" placeholder="请输入售后电话"></el-input>
                 </el-form-item>                
               </el-col>
-            </el-row>
-            <el-row :gutter="30">
-              <el-col :span="12">
+            </el-row>            
+            <el-row :gutter="20">
+              <el-col :span="10">
                 <el-form-item label="财务联系人：" prop="financePersonName">
-                  <el-input v-model="registerForm.financePersonName" clearable style="width: 200px;" placeholder="请输入财务联系人"></el-input>
+                  <el-input v-model="registerForm.financePersonName" clearable style="width: 220px;" placeholder="请输入财务联系人"></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="12">
+              <el-col :span="14" style="padding-top:8px">
+                <span style="font-family: 宋体, Arial, sans-serif;font-size: 12px;color: #999;">用于在线支付相关结算对账联系使用</span>
+              </el-col> 
+            </el-row>
+            <el-row :gutter="20">
+              <el-col :span="10">
                 <el-form-item label="财务手机：" prop="financePersonMobile">
-                  <el-input v-model="registerForm.financePersonMobile" clearable style="width: 200px;" placeholder="请输入财务手机"></el-input>
+                  <el-input v-model="registerForm.financePersonMobile" clearable :maxlength=11 style="width: 220px;" placeholder="请输入财务手机"></el-input>
                 </el-form-item>                
               </el-col>
             </el-row>
@@ -128,6 +145,7 @@
 
   export default {
     data() {
+      // 校验手机号
       var validateMobile = (rule, value, callback) => {
         if (value === '') {
           callback(new Error('请输入手机号码'))
@@ -138,12 +156,14 @@
           callback()
         }
       }
-      // var validateTele = (rule, value, callback) => {
+      // // 校验电话号码（包括手机号码、座机号码）
+      // var validateContact = (rule, value, callback) => {
+      //   debugger
       //   if (value === '') {
-      //     callback(new Error('请输入座机号码'))
+      //     callback(new Error('请输入电话号码'))
       //   } else {
-      //     if (!validatTelephone(value.trim())) {
-      //       callback(new Error('请输入有效的座机号码'))
+      //     if (!validateMobilePhone(value.trim()) && !validateTelephone(value.trim())) {
+      //       callback(new Error('请输入有效的电话号码'))
       //     }
       //     callback()
       //   }
