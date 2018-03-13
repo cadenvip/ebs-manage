@@ -5,24 +5,24 @@
       <el-row>
         <el-col :span="10">
           <el-form-item label="账号：">
-            <el-input v-model="searchForm.loginname" clearable style="width: 300px;"></el-input>
+            <el-input v-model="searchForm.loginname" clearable style="width: 300px;" placeholder="请输入账号"></el-input>
           </el-form-item>  
         </el-col>
         <el-col :span="10">
           <el-form-item label="手机号码：">
-            <el-input v-model="searchForm.phoneno" clearable style="width: 300px;"></el-input>
+            <el-input v-model="searchForm.phoneno" clearable style="width: 300px;" placeholder="请输入手机号码"></el-input>
           </el-form-item>  
         </el-col>
       </el-row>
       <el-row>
         <el-col :span="10">
           <el-form-item label="姓名：">
-            <el-input v-model="searchForm.name" clearable style="width: 300px;"></el-input>
+            <el-input v-model="searchForm.name" clearable style="width: 300px;" placeholder="请输入姓名"></el-input>
           </el-form-item>  
         </el-col>
         <el-col :span="10">
           <el-form-item label="归属区域：">
-            <el-input v-model="searchForm.locationname" clearable style="width: 300px;" @focus="handleLocationFocus"></el-input>
+            <el-input v-model="searchForm.locationname" clearable style="width: 300px;" @focus="handleLocationFocus" placeholder="请选择归属区域"></el-input>
           </el-form-item>  
         </el-col>
       </el-row>

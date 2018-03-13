@@ -13,7 +13,7 @@
         <span class="svg-container svg-container_login">
           <svg-icon icon-class="user" />
         </span>
-        <el-select v-model="loginForm.unitid" placeholder="请选择归属单位">
+        <el-select v-model="loginForm.unitid" placeholder="请选择归属单位" v-on:focus="selectUnit">
           <el-option v-for="(item, index) in unitinfos" v-if="item" :key="index" :label="item.businessesName" :value="item.id" selected></el-option>
         </el-select>
       </el-form-item>
@@ -135,17 +135,30 @@ export default {
       }
       return new Promise((resolve, reject) => {
         getUnitInfos(this.loginForm.loginname).then(response => {
-          this.unitinfos = response.data
+          if (response.status === 200) {
+            this.unitinfos = response.data
+          } else {
+            this.$message.error(response.msg)
+          }
           resolve(response)
         }).catch(error => {
           reject(error)
         })
       })
     },
+    selectUnit() {
+      if (this.unitinfos === undefined || this.unitinfos.length <= 0) {
+        this.getUnitids()
+      }
+    },
     getVercode() {
       return new Promise((resolve, reject) => {
         getVercode(this.loginForm.loginname).then(response => {
-          resolve(response)
+          if (response.status === 200) {
+            resolve(response)
+          } else {
+            this.$message.error(response.msg)
+          }
         }).catch(error => {
           reject(error)
         })

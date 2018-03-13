@@ -1,35 +1,56 @@
 <template>
   <div class="app-container">
     <h3 class="title">角色信息详情</h3>
-    <el-form label-width="120px">
-      <el-form-item label="角色名称：" prop="rolename">
-        <el-input v-model="roleForm.rolename" style="width: 600px;" disabled></el-input>
-      </el-form-item>
-      <el-form-item label="角色类型：" prop="roletype">
-        <el-select v-model="roleForm.roletype" clearable placeholder="请选择" style="width: 600px;" disabled >
-          <el-option label="系统管理" value="1"></el-option>
-          <el-option label="企业" value="2"></el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="角色描述：" prop="description">
-        <el-input type="textarea" v-model="roleForm.description" style="width: 600px;" placeholder="请输入角色描述" disabled ></el-input>
-      </el-form-item>
-      <el-form-item label="权限绑定：" prop="resourceids">
-        <el-tree
-          :data="data"
-          show-checkbox
-          node-key="id"
-          :highlight-current="true"
-          :default-expand-all="false"
-          :props="defaultProps"
-          v-loading="loading"
-          ref="tree">
-        </el-tree>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" @click="onCancel">返回</el-button>
-      </el-form-item>
-    </el-form>
+    <div style="color: #606266;font-size:14px;width:960px;overflow:auto;">
+      <el-row :gutter="6" style="margin-left:0px;margin-right:0px;margin-top:20px;">
+        <el-col :span="4" style="text-align:right">
+          <span>
+            角色名称：
+          </span> 
+        </el-col>
+        <el-col :span="8">
+          <span>
+            {{ roleForm.rolename }}
+          </span> 
+        </el-col>
+        <el-col :span="4" style="text-align:right">
+          <span>
+            角色类型：
+          </span> 
+        </el-col>
+        <el-col :span="8">
+          <span>
+            {{ formatRoleType }}
+          </span> 
+        </el-col>
+      </el-row>
+      <el-row :gutter="6" style="margin-left:0px;margin-right:0px;margin-top:12px;">
+        <el-col :span="4" style="text-align:right">
+          <span>
+            角色描述：
+          </span> 
+        </el-col>
+        <el-col :span="8">
+          <span>
+            {{ roleForm.description }}
+          </span> 
+        </el-col>
+      </el-row>
+    </div>
+    <el-tree
+      style="text-align:center;margin-top:20px;margin-left:320px"
+      :data="data"
+      show-checkbox
+      node-key="id"
+      :highlight-current="true"
+      :default-expand-all="false"
+      :props="defaultProps"
+      v-loading="loading"
+      ref="tree">
+    </el-tree>
+    <div style="text-align: center">
+      <el-button type="primary" @click="onCancel">返回</el-button>
+    </div>
   </div>
 </template>
 
@@ -61,6 +82,23 @@ export default {
   },
   created() {
     this.getRoleInfo()
+  },
+  computed: {
+    formatRoleType: function() {
+      var type = ''
+      switch (this.roleForm.roletype) {
+        case '1':
+          type = '系统管理'
+          break
+        case '2':
+          type = '企业'
+          break
+        default:
+          type = ''
+          break
+      }
+      return type
+    }
   },
   methods: {
     getRoleInfo() {

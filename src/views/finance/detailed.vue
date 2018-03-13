@@ -90,8 +90,7 @@
         </el-col>
         <el-col :span="8">
           <span>
-            <!-- {{ totalpayFormat }} -->
-            heheh
+            {{ totalpayFormat }}
           </span> 
         </el-col>
       </el-row>
@@ -212,7 +211,7 @@ export default {
     },
     unitFormat(row, column, cellValue) {
       if (cellValue !== undefined && cellValue !== null) {
-        return '￥' + cellValue.toFixed(2)
+        return '￥' + (cellValue / 100).toFixed(2)
       } else {
         return ''
       }

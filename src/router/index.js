@@ -222,6 +222,7 @@ export const asyncRouterMap = [
   {
     path: '/businesses',
     component: Layout,
+    redirect: '/businesses/list',
     name: 'businesses',
     hidden: false,
     meta: { roles: ['1'], title: '企业管理', icon: 'table' },
@@ -279,8 +280,8 @@ export const asyncRouterMap = [
       {
         path: 'list',
         component: _import('finance/list'),
-        name: '财务管理',
-        meta: { roles: ['1'], title: '财务管理', icon: 'table' }
+        name: '财务列表',
+        meta: { roles: ['1'], title: '财务列表', icon: 'table' }
       },
       {
         path: 'detailed',
@@ -423,6 +424,13 @@ export const asyncRouterMap = [
         component: _import('finance/detail'),
         name: '对账交易明细',
         meta: { roles: ['2'], title: '对账交易明细', icon: 'table' }
+      },
+      {
+        path: 'historyDetail',
+        hidden: true,
+        component: _import('finance/historyDetail'),
+        name: '历史对账交易明细',
+        meta: { roles: ['2'], title: '历史对账交易明细', icon: 'table' }
       }
     ]
   },

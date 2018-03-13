@@ -66,3 +66,10 @@ export function getThisMonthDetail(params) {
     data: params
   })
 }
+
+export function downloadThisMonthDetail(params) {
+  return request({
+    url: '/statement/export?billid=' + `${params}`,
+    method: 'post'
+  })
+}

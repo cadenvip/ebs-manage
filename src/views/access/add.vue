@@ -54,8 +54,8 @@
           </el-form-item>        
         </el-col>
         <el-col :span="12">
-          <el-form-item label="联系电话：" prop="locationid">
-            <el-input v-model="accessBean.si_phone" style="width: 300px;" placeholder="请输入联系电话"></el-input>
+          <el-form-item label="联系电话：" prop="si_phone">
+            <el-input v-model="accessBean.si_phone" style="width: 300px;" :maxlength="13" placeholder="请输入联系电话"></el-input>
           </el-form-item>          
         </el-col>
       </el-row>
@@ -177,6 +177,7 @@
 
 import { addAccess, getChanelList, getAllOperationList, getOperationList, getAllInterfaceList, getInterfaceList } from '@/api/access'
 import { str2Timestamp } from '@/utils/index'
+import { validateMobilePhone, validateTelephone, validateURL } from '@/utils/validate'
 
 export default {
   data() {
@@ -196,6 +197,22 @@ export default {
       } else if (value !== this.accessBean.password) {
         callback(new Error('两次输入密码不一致!'))
       } else {
+        callback()
+      }
+    }
+    var validateContact = (rule, value, callback) => {
+      if (value !== '') {
+        if (!validateMobilePhone(value.trim()) && !validateTelephone(value.trim())) {
+          callback(new Error('请输入有效的联系方式'))
+        }
+        callback()
+      }
+    }
+    var validateSi_url = (rule, value, callback) => {
+      if (value !== '') {
+        if (!validateURL(value.trim())) {
+          callback(new Error('请输入有效的Url'))
+        }
         callback()
       }
     }
@@ -236,6 +253,8 @@ export default {
         si_name: [{ required: true, message: '请输入接入名称', trigger: 'blur' }],
         password: [{ required: true, validator: validatePass, trigger: 'blur' }],
         repassword: [{ required: true, validator: validateRepass, trigger: 'blur' }],
+        si_phone: [{ required: false, validator: validateContact, trigger: 'blur' }],
+        si_url: [{ required: false, validator: validateSi_url, trigger: 'blur' }],
         si_type: [{ required: true, message: '请选择接入类别', trigger: 'change' }]
       },
       getOpRowKey(row) {

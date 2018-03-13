@@ -5,17 +5,17 @@
       <el-row :gutter="30">
         <el-col :span="7">
           <el-form-item label="企业名称：" prop="month_day">
-            <el-input v-model="searchForm.reqseq" clearable style="width: 180px;" placeholder="请输入流水号"></el-input>
+            <el-input v-model="searchForm.reqseq" clearable style="width: 180px;" placeholder="请输入企业名称"></el-input>
           </el-form-item>   
         </el-col>
         <el-col :span="7">
           <el-form-item label="归属区域：">
-            <el-input v-model="searchForm.locationname" clearable style="width: 300px;" @focus="handleLocationFocus"></el-input>
+            <el-input v-model="searchForm.locationname" clearable style="width: 180px;" @focus="handleLocationFocus" placeholder="请选择所属区域"></el-input>
           </el-form-item>  
         </el-col>
         <el-col :span="7">
           <el-form-item label="对账状态：" prop="reqservice">
-            <el-select v-model="searchForm.reqservice" clearable style="width: 180px;" placeholder="请选择接口服务名">
+            <el-select v-model="searchForm.reqservice" clearable style="width: 180px;" placeholder="请选择对账状态">
               <!-- // 对账状态(0 待确认 1 已确认 2 待调账 3 已结算 ) -->
               <el-option label="待确认" value="0"></el-option>
               <el-option label="已确认" value="1"></el-option>
@@ -28,13 +28,13 @@
       <el-row :gutter="30">
         <el-col :span="7">
           <el-form-item label="到账时间：" prop="reqseq">
-            <el-date-picker v-model="searchForm.month_day" type="date" value-format="MMdd" style="width: 180px;" placeholder="选择日期">
+            <el-date-picker v-model="searchForm.month_day" type="date" value-format="MMdd" style="width: 180px;" placeholder="请选择到账时间">
             </el-date-picker>
           </el-form-item>   
         </el-col>
         <el-col :span="7">
-          <el-form-item label="显示不足500的：" prop="reqcode">
-            <el-checkbox v-model="checked">显示不足500的</el-checkbox>
+          <el-form-item label="" prop="less500Check">
+            <el-checkbox v-model="searchForm.less500Check">显示不足500的</el-checkbox>
           </el-form-item>  
         </el-col>
       </el-row>
@@ -80,7 +80,7 @@
       </el-col>
       <el-col :span="3">
         <span>
-          <el-button @click="checkHistorySettlement" type="text">更过历史结算总结</el-button>
+          <el-button @click="checkHistorySettlement" type="text">更多历史结算总结</el-button>
         </span> 
       </el-col>
     </el-row>
@@ -110,6 +110,7 @@ export default {
         reqseq: '',	// 请求流水（由请求方生成）
         reqcode: '',	// 请求方编码
         reqmessage: '', // 请求消息报文
+        less500Check: false,
         locationid: '',
         locationname: ''
       },
@@ -164,6 +165,10 @@ export default {
         this.loading = false
         console.log(error)
       })
+    },
+    getLocationInfo: function(data) {
+      this.searchForm.locationid = data.id
+      this.searchForm.locationname = data.label
     },
     resetForm(formname) {
       this.searchForm.month_day = ''

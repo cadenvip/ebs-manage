@@ -1,15 +1,15 @@
 <template>
   <div>
     <h3 style="padding-left: 20px;">角色查询条件</h3>
-    <el-form ref="searchForm" :model="searchForm" label-width="100px">
+    <el-form ref="searchForm" :model="searchForm" label-width="120px">
       <el-row>
         <el-col :span="10">
           <el-form-item label="角色名称：">
-            <el-input v-model="searchForm.rolename" style="width: 300px;"></el-input>
+            <el-input v-model="searchForm.rolename" style="width: 300px;" placeholder="请输入角色名称"></el-input>
           </el-form-item>  
         </el-col>
         <el-col :span="10">
-          <el-form-item label="系统角色：">
+          <el-form-item label="是否系统角色：">
             <el-select v-model="searchForm.issystem" clearable placeholder="请选择" style="width: 300px;">
               <el-option label="是" value="1"></el-option>
               <el-option label="否" value="0"></el-option>
@@ -20,14 +20,14 @@
       <el-row>
         <el-col :span="10">
           <el-form-item label="角色类型：">
-            <el-select v-model="searchForm.roletype" clearable placeholder="请选择" style="width: 300px;">
+            <el-select v-model="searchForm.roletype" clearable placeholder="请选择角色类型" style="width: 300px;">
               <el-option label="系统管理" value="1"></el-option>
               <el-option label="商家" value="2"></el-option>
             </el-select>
           </el-form-item>  
         </el-col>
         <el-col :span="10">
-          <el-form-item label="隐藏角色：">
+          <el-form-item label="是否隐藏角色：">
             <el-select v-model="searchForm.ishidden" clearable placeholder="请选择" style="width: 300px;">
               <el-option label="是" value="1"></el-option>
               <el-option label="否" value="0"></el-option>
@@ -36,7 +36,7 @@
         </el-col>
       </el-row>
       <el-row>
-        <el-col :span="2" :offset="16">
+        <el-col :span="2" :offset="14">
           <el-button type="primary" @click.native.prevent="queryRoleList">查询</el-button>
         </el-col>
         <el-col :span="2">
