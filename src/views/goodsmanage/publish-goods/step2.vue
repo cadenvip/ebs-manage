@@ -173,37 +173,50 @@
         </el-col>
       </el-row>
       <h2 style="padding-left: 20px;">商品更多信息</h2>
-      <el-form-item>
-        <span style="padding-left:30px;">定时上架:</span>
-        <el-checkbox :checked="ruleForm.dingssj" @change="iszdsj" style="margin-left: 10px;" v-model="ruleForm.dingssj">启用</el-checkbox>
-        <el-form-item label="上架时间：" prop="zdsjsj">
+      <el-col v-if="!belongPublish" style="padding: 20px 30px;">
+        <el-checkbox style="padding-top: 11px;" v-model="immediate">立即生效</el-checkbox>
+        <el-form-item label-width="120px" label="修改生效时间:" class="spcd">
           <el-date-picker
-            :clearable = "false"
-            @blur="checkTimeCorrect"
-            :disabled="ruleForm.iszisj"
-            v-model="ruleForm.zdsjsj"
+            :disabled="immediate"
+            v-model="immediateTime"
             type="datetime"
-            value-format="yyyy-MM-dd HH:mm:ss"
-            placeholder="选择日期">
+            placeholder="选择日期时间">
           </el-date-picker>
         </el-form-item>
-        <el-form-item label="下架时间：">
-          <el-date-picker
-            :default-value = "new Date()"
-            @blur="checkTimeCorrect"
-            v-model="ruleForm.zdxjsj"
-            type="datetime"
-            value-format="yyyy-MM-dd HH:mm:ss"
-            placeholder="选择日期">
-          </el-date-picker>
+      </el-col>
+      <div v-if="belongPublish">
+        <el-form-item>
+          <span style="padding-left:30px;">定时上架:</span>
+          <el-checkbox :checked="ruleForm.dingssj" @change="iszdsj" style="margin-left: 10px;" v-model="ruleForm.dingssj">启用</el-checkbox>
+          <el-form-item label="上架时间：" prop="zdsjsj">
+            <el-date-picker
+              :clearable = "false"
+              @blur="checkTimeCorrect"
+              :disabled="ruleForm.iszisj"
+              v-model="ruleForm.zdsjsj"
+              type="datetime"
+              value-format="yyyy-MM-dd HH:mm:ss"
+              placeholder="选择日期">
+            </el-date-picker>
+          </el-form-item>
+          <el-form-item label="下架时间：">
+            <el-date-picker
+              :default-value = "new Date()"
+              @blur="checkTimeCorrect"
+              v-model="ruleForm.zdxjsj"
+              type="datetime"
+              value-format="yyyy-MM-dd HH:mm:ss"
+              placeholder="选择日期">
+            </el-date-picker>
+          </el-form-item>
         </el-form-item>
-      </el-form-item>
-      <el-form-item style="display: block;" label="上架提醒:">
-        <el-checkbox-group v-model="ruleForm.sjtx">
-          <el-checkbox label="邮件" name="sjtx"></el-checkbox>
-          <el-checkbox label="短信" name="sjtx"></el-checkbox>
-        </el-checkbox-group>
-      </el-form-item>
+        <el-form-item style="display: block;" label="上架提醒:">
+          <el-checkbox-group v-model="ruleForm.sjtx">
+            <el-checkbox label="邮件" name="sjtx"></el-checkbox>
+            <el-checkbox label="短信" name="sjtx"></el-checkbox>
+          </el-checkbox-group>
+        </el-form-item>
+      </div>
       <el-form-item style="display: block;" label="发布渠道:">
         <el-checkbox-group v-model="ruleForm.fbqd">
           <el-checkbox checked label="12582网站" name="fbqd"></el-checkbox>
@@ -253,8 +266,10 @@
       <!-- <h2 style="padding-left: 20px;">商品描述详情</h2>   -->
       <div style="text-align: center;margin-top: 20px;">
         <el-form-item>
-          <el-button type="primary" @click="submitForm('ruleForm')">立即创建</el-button>
-          <el-button @click="resetForm('ruleForm')">重置</el-button>          
+          <el-button @click="goBack">返回上一步</el-button>
+          <el-button type="primary" @click="submitForm('ruleForm')">提 交</el-button>
+          <el-button @click="resetForm('ruleForm')">重 置</el-button> 
+          <el-button v-if="giveUpVisible">放弃修改</el-button>         
         </el-form-item>
       </div>      
     </el-form>   
@@ -283,10 +298,14 @@
       // 计量单位
       this.jiliangdwOptions = getUnitsOptions()
       this.isFromModifyFlag = Number(this.$route.query.isFromModifyFlag)
-      if (this.isFromModifyFlag === 1 && this.$route.query.goodsId) {
+      if (this.isFromModifyFlag === 2) {
+        this.belongPublish = false
+      }
+      if (this.isFromModifyFlag === 1 && this.$route.query.goodsId || this.isFromModifyFlag === 2) {
         getGoodsDetail(this.$route.query.goodsId).then(res => {
           if (res.status === 200) {
-            this.goodsBean = res.data.goodsBean
+            // 状态为驳回是 展示放弃修改
+            this.goodsBean = Object.assign(res.data.goodsBean, res.data.editGoodsBean)
             console.log(this.goodsBean)
             this.ruleForm.cuxiao =  this.goodsBean.promotionInfo
             this.ruleForm.mingchen =  this.goodsBean.name
@@ -369,6 +388,13 @@
             this.goodsBean.isReturn === '0' ? this.ruleForm.thh.push('支持退货') : this.ruleForm.thh
             this.goodsBean.isExchange === '0' ? this.ruleForm.thh.push('支持换货') : this.ruleForm.thh
             this.ruleForm.spdz = this.goodsBean.videoUrl
+            if (this.goodsBean.takeEffectType === '1') {
+              this.immediate = true
+              this.immediateTime = ''
+            } else if (this.goodsBean.takeEffectType === '2') {
+              this.immediate = false
+              this.immediateTime = this.goodsBean.takeEffectTime
+            }
             console.log(this.ruleForm)
           } else {
             this.$message.error(res.msg)
@@ -376,6 +402,8 @@
         }).catch(err => {
           this.$message.error(err)
         })
+      } else {
+        console.log('error')
       }
       this.goodsType.typeCode = this.$route.query.typeCode
       this.goodsType.typeCodeName = this.selectedlabel.label + '/' + this.selectedlabel.subLabel
@@ -387,6 +415,10 @@
     },
     data() {
       return {
+        immediate: true,    // 在售商品修改 立即生效字段
+        immediateTime: '',
+        belongPublish: true,
+        giveUpVisible: false,
         regionVisible: false,  // 地址区域是否显示
         zfbDisable: false,
         sjzfDisable: false,
@@ -596,9 +628,18 @@
               wapInfo: '',
               wapUrl: ''
             }
-            if (this.isFromModifyFlag === 1) {
+            if (this.isFromModifyFlag === 1 || this.isFromModifyFlag === 2) {
               parmas.goodsId = this.$route.query.goodsId
               parmas.goodsCode = this.$route.query.goodsCode
+            }
+            if (this.isFromModifyFlag === 2) {
+              parmas.takeEffectType = this.immediate ? '1' : '2'
+              if (!this.immediate && this.immediateTime === '') {
+                this.$message.error('请输入修改生效时间！')
+                return
+              } else {
+                parmas.takeEffectTime = parseTime(this.immediateTime)
+              }
             }
             console.log(parmas)
             goodsRelease(parmas).then(res => {
@@ -651,6 +692,10 @@
           var index = originArr.indexOf(ele)
           return originArr.splice(index, 1)
         }
+      },
+      goBack() {
+        console.log(this.isFromModifyFlag)
+        this.$router.go(-1)
       },
       _checkPayWay(val, index) {
         const params = { payAccountType: val }

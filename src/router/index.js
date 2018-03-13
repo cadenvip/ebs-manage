@@ -360,6 +360,25 @@ export const asyncRouterMap = [
         meta: { roles: ['1', '2'], title: '商品上下架审核', icon: 'form' }
       },
       {
+        path: 'onsalemodifyaudit',  // 在售商品修改审核
+        name: '在售商品修改审核列表',
+        component: _import('goodsmanageAdmin/onsalemodifyaudit/index'),
+        meta: { roles: ['1', '2'], title: '在售商品修改审核', icon: 'form' }
+      },
+      {
+        path: 'onsalemodifyaudit/auditpreview',  // 在售商品修改审核
+        name: '在售商品修改审核',
+        hidden: true,
+        component: _import('goodsmanageAdmin/onsalemodifyaudit/audit'),
+        meta: { roles: ['1', '2'], title: '在售商品修改审核', icon: 'form' }
+      },
+      {
+        path: 'onsalehistoryaudit',  // 在售商品修改审核
+        name: '在售商品历史审核列表',
+        component: _import('goodsmanageAdmin/onsalehistoryaudit/index'),
+        meta: { roles: ['1', '2'], title: '在售商品历史审核', icon: 'form' }
+      },
+      {
         path: 'preview',  // 预览
         name: 'preview',
         component: _import('goodsmanageAdmin/preview/index'),
