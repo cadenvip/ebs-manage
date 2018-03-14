@@ -11,7 +11,7 @@
           </el-col>
           <el-col :span="8">
             <span>
-              {{ thisMonthBill.merchantname }}
+              {{ thisMonthDetail.bill.merchantname }}
             </span> 
           </el-col>
         </el-row>
@@ -45,7 +45,7 @@
           </el-col>
           <el-col :span="8">
             <span>
-              {{ thisMonthBill.dealusername }}
+              {{ thisMonthDetail.bill.dealusername }}
             </span> 
           </el-col>
           <el-col :span="4" style="text-align:right">
@@ -55,7 +55,7 @@
           </el-col>
           <el-col :span="8">
             <span>
-              {{ thisMonthBill.dealuserphone }}
+              {{ thisMonthDetail.bill.dealuserphone }}
             </span> 
           </el-col>
         </el-row>
@@ -137,14 +137,11 @@
 </template>
 
 <script>
-import { getThisMonthBill, getThisMonthDetail } from '@/api/finance'
+import { getBillDetail } from '@/api/finance'
 
 export default {
   data() {
     return {
-      unitId: '',
-      logList: [],
-      thisMonthBill: {},
       thisMonthDetail: {
         detailListnopayed: [],
         logList: [],
@@ -154,24 +151,16 @@ export default {
     }
   },
   created() {
-    var userInfo = window.sessionStorage.getItem('userInfo')
-    if (userInfo !== undefined && userInfo !== '') {
-      userInfo = JSON.parse(userInfo)
-      this.unitId = userInfo.unitid
-    } else {
-      this.$message.error('请先登录')
-      // this.$router.push({ path: '/login' })
-    }
-    this.getSumary()
+    this.initData()
   },
   computed: {
     period: function() {
-      return this.thisMonthBill.startmonth + '--' + this.thisMonthBill.endmonth
+      return this.thisMonthDetail.bill.startmonth + '--' + this.thisMonthDetail.bill.endmonth
     },
     formatStatus: function() {
       // 对账状态(0 待确认 1 已确认 2 待调账 3 已结算 )
       var type = ''
-      switch (this.thisMonthBill.status) {
+      switch (this.thisMonthDetail.bill.status) {
         case '0':
           type = '待确认'
           break
@@ -189,43 +178,32 @@ export default {
       return type
     },
     formatTransferfee: function() {
-      if (this.thisMonthBill.transferfee !== undefined && this.thisMonthBill.transferfee !== null) {
-        return '￥' + (this.thisMonthBill.transferfee / 100).toFixed(2)
+      if (this.thisMonthDetail.bill.transferfee !== undefined && this.thisMonthDetail.bill.transferfee !== null) {
+        return '￥' + (this.thisMonthDetail.bill.transferfee / 100).toFixed(2)
       } else {
         return ''
       }
     },
     formatTotalpay: function() {
-      if (this.thisMonthBill.totalpay !== undefined && this.thisMonthBill.totalpay !== null) {
-        return '￥' + (this.thisMonthBill.transferfee / 100).toFixed(2)
+      if (this.thisMonthDetail.bill.totalpay !== undefined && this.thisMonthDetail.bill.totalpay !== null) {
+        return '￥' + (this.thisMonthDetail.bill.transferfee / 100).toFixed(2)
       } else {
         return ''
       }
     }
   },
   methods: {
-    getSumary() {
+    initData() {
       this.loading = true
-      var params = { 'unitid': `${this.unitId}` }
-      getThisMonthBill(params).then(response => {
+      var params = { 'billid': `${this.$route.query.id}` }
+      getBillDetail(params).then(response => {
         if (response.status === 200) {
-          this.thisMonthBill = response.data
-          getThisMonthDetail({ 'billid': `${response.data.id}` }).then(response => {
-            if (response.status === 200) {
-              this.thisMonthDetail = response.data
-              console.log(this.thisMonthDetail)
-            } else {
-              this.$message.error(response.msg)
-            }
-            this.loading = false
-          }).catch(error => {
-            this.loading = false
-            console.log(error)
-          })
+          this.thisMonthDetail = response.data
+          console.log(this.thisMonthDetail)
         } else {
-          this.loading = false
           this.$message.error(response.msg)
         }
+        this.loading = false
       }).catch(error => {
         this.loading = false
         console.log(error)

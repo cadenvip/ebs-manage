@@ -97,18 +97,3 @@ export function getHistoryBill(params) {
     data: params
   })
 }
-
-export function getThisMonthDetail(params) {
-  return request({
-    url: '/statement/thismonthdetail',
-    method: 'post',
-    data: params
-  })
-}
-
-export function downloadThisMonthDetail(params) {
-  return request({
-    url: '/statement/export?billid=' + `${params}`,
-    method: 'post'
-  })
-}

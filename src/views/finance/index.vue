@@ -57,13 +57,6 @@
         </el-row>        
       </el-tab-pane>
       <el-tab-pane label="历史月账单">
-        <!-- <el-table :data="historySumery" v-loading.body="loading" element-loading-text="Loading" border stripe fit highlight-current-row style="padding-left:10px">
-          <el-table-column label="交易日期" prop="dealmonth" width="180" align="center"></el-table-column>
-          <el-table-column label="交易笔数" prop="ordercount" width="180" align="center"></el-table-column>
-          <el-table-column label="交易金额" prop="totalpay" :formatter="unitFormat" width="180" align="center"></el-table-column>
-          <el-table-column label="手续费" prop="transferfee" :formatter="unitFormat" width="180" align="center"></el-table-column>
-          <el-table-column label="总收入款项" prop="turnover" :formatter="unitFormat" width="180" align="center"></el-table-column>
-        </el-table> -->
         <div v-for="(item,index) in historySumery" style="margin-top:10px">
           <el-row>
             <el-col :span="20">
@@ -93,7 +86,7 @@
 
 <script>
 
-import { getThisMonthSummary, getHistorySummary, getThisMonthBill, downloadThisMonthDetail } from '@/api/finance'
+import { getThisMonthSummary, getHistorySummary, getThisMonthBill, downloadBill } from '@/api/finance'
 
 export default {
   data() {
@@ -115,7 +108,7 @@ export default {
       this.$message.error('请先登录')
       // this.$router.push({ path: '/login' })
     }
-    this.getSumary()
+    this.initData()
   },
   computed: {
     transferfeeFormat: function() {
@@ -134,7 +127,7 @@ export default {
     }
   },
   methods: {
-    getSumary() {
+    initData() {
       this.loading = true
       var params = { 'unitid': `${this.unitId}` }
       getThisMonthSummary(params).then(response => {
@@ -186,8 +179,7 @@ export default {
       this.$router.push({ path: '/statement/detail', query: { id: item.id }})
     },
     downloadDetail() {
-      alert('打包下载结算明细')
-      downloadThisMonthDetail(this.thisMonthBill.id).then(response => {
+      downloadBill(this.thisMonthBill, 1).then(response => {
         if (response.status === 200) {
           this.$message.success('下载结算明细成功')
         } else {
