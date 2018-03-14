@@ -1,46 +1,28 @@
-// http://localhost:8080/ebs/statement/thismonthsummary //本月账单摘要
-// {
-// 	"unitid":"29"
-// }
-
-// http://localhost:8080/ebs/statement/historysummary //历时月账单摘要
-// {
-// 	"unitid":"29"
-// }
-
-// http://localhost:8080/ebs/statement/thismonthbill  //本月账单
-// {
-// 	"unitid":"29"
-// }
-
-// http://localhost:8080/ebs/statement/thismonthdetail
-// {
-// 	"billid":"2988"  //通过接口thismonthbill 得到
-// }
-
-// http://localhost:8080/ebs/statement/accountingdispute  //添加核账争议，需要先登录，且登录人员所属企业必须和账单对应企业相同
-// {
-// 	"billid":"2988",
-// 	"content":"该账单存在争议"
-// }
-
-
-// http://localhost:8080/ebs/statement/admindealbill //管理员结账，必须先登录，且必须是移动管理员或者是超管
-// {
-// 	"billid":"2988"
-// }
-
-// http://localhost:8080/ebs/statement/export?billid=2988 //导出Excel明细
-
-
 import request from '@/utils/request'
+
+// 管理员
+// 获取本年度所有账单（不分页）
+export function getThisYearAllBill() {
+  return request({
+    url: '/statement/getAllBill',
+    method: 'post'
+  })
+}
+
+// 获取非本年度所有账单（不分页）
+export function getHistoryBillsList() {
+  return request({
+    url: '/statement/morehistorybill',
+    method: 'post'
+  })
+}
 
 export function getAllBills(currentpage, pagesize) {
   return request({
     url: '/statement/totalbillList',
     method: 'post',
-    data: { 'page': `${currentpage}`,
-      'limit': `${pagesize}` }
+    data: { 'page': `${currentpage !== undefined ? currentpage : 1}`,
+      'limit': `${pagesize !== undefined ? pagesize : 10}` }
   })
 }
 
@@ -50,23 +32,40 @@ export function getBillList(params, currentpage, pagesize) {
     method: 'post',
     data: {
       'merchantname': `${params.merchantname}`,
-      'yearmonth': `${params.yearmonth}`,
+      'yearmonth': `${params.yearmonth !== null ? params.yearmonth : ''}`,
       'status': `${params.status}`,
       'locationcode': `${params.locationcode}`,
-      'greater500': `${params.greater500}`,
+      'greater500': `${params.greater500 !== true ? '1' : '0'}`,
       'page': `${currentpage}`,
       'limit': `${pagesize}`
     }
   })
 }
 
+export function getBillDetail(params) {
+  return request({
+    url: '/statement/billdetail',
+    method: 'post',
+    data: params
+  })
+}
+
 export function downloadBillList(params) {
   return request({
-    url: '/statement/exportTotalBill ',
+    url: '/statement/exportTotalBill',
     method: 'post'
   })
 }
 
+export function downloadBill(bill, thisyear) {
+  return request({
+    url: '/statement/export' + `?billid=${bill.id}&thisyear=${thisyear}`,
+    method: 'post'
+  })
+}
+
+// 商家
+// 本月概况
 export function getThisMonthSummary(params) {
   return request({
     url: '/statement/thismonthsummary',
@@ -84,6 +83,14 @@ export function getHistorySummary(params) {
 }
 
 export function getThisMonthBill(params) {
+  return request({
+    url: '/statement/thismonthbill',
+    method: 'post',
+    data: params
+  })
+}
+
+export function getHistoryBill(params) {
   return request({
     url: '/statement/thismonthbill',
     method: 'post',

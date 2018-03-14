@@ -56,7 +56,7 @@
           </el-col>
         </el-row>        
       </el-tab-pane>
-      <el-tab-pane label="历时月账单">
+      <el-tab-pane label="历史月账单">
         <!-- <el-table :data="historySumery" v-loading.body="loading" element-loading-text="Loading" border stripe fit highlight-current-row style="padding-left:10px">
           <el-table-column label="交易日期" prop="dealmonth" width="180" align="center"></el-table-column>
           <el-table-column label="交易笔数" prop="ordercount" width="180" align="center"></el-table-column>
@@ -180,10 +180,10 @@ export default {
       }
     },
     checkDetail() {
-      this.$router.push({ path: '/statement/detail' })
+      this.$router.push({ path: '/statement/thisMonthBillDetail', query: { id: this.thisMonthBill.id }})
     },
     checkHistoryDetail(item) {
-      this.$router.push({ path: '/statement/historyDetail' })
+      this.$router.push({ path: '/statement/detail', query: { id: item.id }})
     },
     downloadDetail() {
       alert('打包下载结算明细')

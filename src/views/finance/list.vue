@@ -28,7 +28,7 @@
       <el-row :gutter="30">
         <el-col :span="7">
           <el-form-item label="到账时间：" prop="yearmonth">
-            <el-date-picker v-model="searchForm.yearmonth" type="date" value-format="yyyyMM" style="width: 180px;" placeholder="请选择到账时间">
+            <el-date-picker v-model="searchForm.yearmonth" type="month" value-format="yyyyMM" style="width: 180px;" placeholder="请选择到账时间">
             </el-date-picker>
           </el-form-item>   
         </el-col>
@@ -49,12 +49,12 @@
     </el-form>
     <h3 style="padding-left: 20px;">账目列表</h3>
     <el-table :data="billlist" v-loading.body="loading" element-loading-text="Loading" border stripe fit highlight-current-row style="padding-left:10px">
-      <el-table-column label='企业名称' prop="merchantname" width="240" align="center"></el-table-column>
-      <el-table-column label="区域" prop="locationname" width="160" align="center"></el-table-column>
+      <el-table-column label='企业名称' prop="merchantname" width="260" align="center"></el-table-column>
+      <el-table-column label="区域" prop="locationname" width="180" align="center"></el-table-column>
       <el-table-column label="出账周期" prop="startmonth" :formatter="formatPeriod" width="180" align="center"></el-table-column>
       <el-table-column label="应结算合计" prop="totalpay" :formatter="formatUnit" width="140" align="center"></el-table-column>
-      <el-table-column label="对账状态" prop="status" :formatter="formatStatus" width="120" align="center"></el-table-column>
-      <el-table-column label="操作" width="120" align="center">
+      <el-table-column label="对账状态" prop="status" :formatter="formatStatus" width="100" align="center"></el-table-column>
+      <el-table-column label="操作" width="100" align="center">
         <template slot-scope="scope">
           <el-button @click="detail(scope.row)" type="text" size="small">对账明细</el-button>
         </template>
@@ -80,7 +80,7 @@
       </el-col>
       <el-col :span="3">
         <span>
-          <el-button @click="checkHistorySettlement" type="text">更多历史结算总结</el-button>
+          <el-button @click="downloadHistorySettlement" type="text">下载更多历史结算总结</el-button>
         </span> 
       </el-col>
     </el-row>
@@ -103,12 +103,11 @@ export default {
   data() {
     return {
       billlist: [],
-      reqactionList: [],
       searchForm: {
         merchantname: '',
         yearmonth: '',
         status: '',
-        greater500: '',
+        greater500: false,
         locationcode: '',
         locationname: ''
       },
@@ -166,12 +165,12 @@ export default {
       this.searchForm.merchantname = ''
       this.searchForm.yearmonth = ''
       this.searchForm.status = ''
-      this.searchForm.greater500 = ''
+      this.searchForm.greater500 = false
       this.searchForm.locationcode = ''
       this.searchForm.locationname = ''
     },
     detail(bill) {
-      this.$router.push({ path: '/finance/detailed', query: { billid: bill.id }})
+      this.$router.push({ path: '/finance/detail', query: { id: bill.id }})
     },
     handleSizeChange(val) {
       this.pagesize = val
@@ -232,8 +231,8 @@ export default {
         }
       })
     },
-    checkHistorySettlement() {
-      alert('更多历史结算总结')
+    downloadHistorySettlement() {
+      this.$router.push({ path: '/finance/moreHistory' })
     }
   }
 }
