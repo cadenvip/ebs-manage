@@ -480,6 +480,21 @@ export const asyncRouterMap = [
     ]
   },
 
+  {
+    path: '/order',
+    component: Layout,
+    name: '订单管理',
+    meta: { roles: ['1', '2'], title: '订单管理', icon: 'form' },
+    children: [
+      {
+        path: 'index',
+        name: '订单首页',
+        component: _import('order/businessorder'),
+        meta: { roles: ['1', '2'], title: '订单管理', icon: 'form' }
+      }
+    ]
+  },
+
   // 地址管理
   {
     path: '/addrmanage',

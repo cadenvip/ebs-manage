@@ -23,3 +23,10 @@ export function modifyStock (params) {  // 修改库存
     data: params
   })
 }
+// 放弃修改
+export function giveUp (id) {
+  return request({
+    url: '/goods/giveup/' + id,
+    method: 'post'
+  })
+}

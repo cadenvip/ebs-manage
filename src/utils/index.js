@@ -14,6 +14,7 @@ export function parseTime (time, cFormat) {
     if (('' + time).length === 10) time = parseInt(time) * 1000
     date = new Date(time)
   }
+  console.log(date.getFullYear(), date.getHours())
   const formatObj = {
     y: date.getFullYear(),
     m: date.getMonth() + 1,
@@ -57,7 +58,7 @@ export function formatTime (time, option) {
   }
 }
 
-export function str2Timestamp(strDatetime) {
+export function str2Timestamp (strDatetime) {
   var d = new Date(strDatetime)
   return Math.round(d.getTime())
 }

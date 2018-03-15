@@ -110,14 +110,15 @@
             <el-table-column align="center" label="审核状态">
               <template slot-scope="scope">{{ scope.row.auditStatus === '2' ? '上架审批通过' : scope.row.auditStatus === '4' ? '下架审批中' : scope.row.auditStatus === '6' ? '下架审批驳回' : '错误' }}</template>
             </el-table-column>
-            <el-table-column prop="" align="center" label="修改状态" show-overflow-tooltip>
+            <el-table-column prop="" align="center" label="修改状态">
               <template slot-scope="scope">{{ scope.row.editApproveStatus === '1' ? '修改待审核' : scope.row.editApproveStatus === '2' ? '修改审核通过' : scope.row.editApproveStatus === '3' ? '修改审核驳回' : '' }}</template>
             </el-table-column>
             <el-table-column align="center" label="操作" width="140">
             <template slot-scope="scope">
               <el-button @click="getGoodsDetail(scope.row)" type="text" size="small">详情</el-button>
               <el-button v-show="scope.row.auditStatus !== '4'" @click="saleOff(scope.row)" type="text" size="small">下架</el-button>
-              <el-button v-show="scope.row.auditStatus !== '4'" @click="modifyGoods(scope.row.goodsId)" type="text" size="small">修改</el-button>
+              <el-button v-show="scope.row.auditStatus !== '4'" @click="modifyGoods(scope.row.goodsId, scope.row.editApproveStatus)" type="text" size="small">修改</el-button>
+              <el-button v-show="scope.row.auditStatus !== '4' && scope.row.editApproveStatus === '3'" @click="giveUp(scope.row.goodsId)" type="text" size="small">放弃</el-button>
             </template>
             </el-table-column>
           </el-table>
@@ -128,7 +129,57 @@
             </el-col>
             <el-col :span="18" style="text-align: right; padding-right: 20px;">
               <el-pagination
-                @size-change="handleSizeChange"
+                @current-change="handleCurrentChange"
+                layout="total, prev, pager, next, jumper"
+                :current-page.sync="currentPage"
+                :page-sizes="pagesizes"
+                :page-size="pagesize"
+                :total="total">
+              </el-pagination>
+            </el-col>
+          </el-row>
+        </el-tab-pane>
+        <el-tab-pane label="缺货的商品" name="second">
+          <el-table :row-class-name="tableRowClassName" @selection-change="handleTableSelectionChange" ref="multipleTable" :data="tableData2" tooltip-effect="dark" border style="width: 100%" >
+            <el-table-column type="selection" width="55">
+            </el-table-column>
+            <el-table-column prop="goodsCode" align="center" label="商品编码" width="140"></el-table-column>
+            <el-table-column prop="goodsName" align="center" label="商品名称" width="120">
+            </el-table-column>
+            <el-table-column prop="categoryName" align="center" label="商品类型" show-overflow-tooltip>
+            </el-table-column>
+            <el-table-column prop="price" align="center" label="价格" show-overflow-tooltip>
+            </el-table-column>
+            <el-table-column prop="stock" align="center" label="库存">
+              <template slot-scope="scope">{{ scope.row.stock }} <el-button @click="showStockPop(scope.row)" size="mini" v-show="scope.row.auditStatus !== '4'" type="text">修改</el-button></template>
+            </el-table-column>
+            <el-table-column prop="upTime" align="center" label="上架时间">
+            </el-table-column>
+            <el-table-column prop="" align="center" label="状态" show-overflow-tooltip>
+              <template slot-scope="scope">{{ scope.row.status === '2' ? '上架中' : scope.row.status === '3' ? '缺货中' : '' }}</template>
+            </el-table-column>
+            <el-table-column align="center" label="审核状态">
+              <template slot-scope="scope">{{ scope.row.auditStatus === '2' ? '上架审批通过' : scope.row.auditStatus === '4' ? '下架审批中' : scope.row.auditStatus === '6' ? '下架审批驳回' : '错误' }}</template>
+            </el-table-column>
+            <el-table-column prop="" align="center" label="修改状态">
+              <template slot-scope="scope">{{ scope.row.editApproveStatus === '1' ? '修改待审核' : scope.row.editApproveStatus === '2' ? '修改审核通过' : scope.row.editApproveStatus === '3' ? '修改审核驳回' : '' }}</template>
+            </el-table-column>
+            <el-table-column align="center" label="操作" width="140">
+            <template slot-scope="scope">
+              <el-button @click="getGoodsDetail(scope.row)" type="text" size="small">详情</el-button>
+              <el-button v-show="scope.row.auditStatus !== '4'" @click="saleOff(scope.row)" type="text" size="small">下架</el-button>
+              <el-button v-show="scope.row.auditStatus !== '4'" @click="modifyGoods(scope.row.goodsId, scope.row.editApproveStatus)" type="text" size="small">修改</el-button>
+              <el-button v-show="scope.row.auditStatus !== '4' && scope.row.editApproveStatus === '3'" @click="giveUp(scope.row.goodsId)" type="text" size="small">放弃</el-button>
+            </template>
+            </el-table-column>
+          </el-table>
+          <el-row style="margin-top: 20px;">
+            <el-col :span="6" style="padding-left: 20px; text-align: left;padding-top: 5px;">
+              <el-button @click="toggleSelection(tableData)" type="text" size="mini">全选</el-button>
+              <el-button @click="batchOff" type="text" size="mini">批量下架</el-button>
+            </el-col>
+            <el-col :span="18" style="text-align: right; padding-right: 20px;">
+              <el-pagination
                 @current-change="handleCurrentChange"
                 layout="total, sizes, prev, pager, next, jumper"
                 :current-page.sync="currentPage"
@@ -139,7 +190,6 @@
             </el-col>
           </el-row>
         </el-tab-pane>
-        <el-tab-pane label="缺货的商品" name="second">缺货的商品</el-tab-pane>
       </el-tabs>
     </div>
     <div>
@@ -168,7 +218,7 @@
 <script>
   import CollapseTransition from 'element-ui/lib/transitions/collapse-transition'
   import { getGoodsTopType } from '@/api/goodsRelease'
-  import { getOnSaleGoods, saleOff, modifyStock } from '@/api/onsale'
+  import { getOnSaleGoods, saleOff, modifyStock, giveUp } from '@/api/onsale'
   export default {
     created () {
       this._getGoodsTopType()
@@ -184,6 +234,7 @@
         },
         loading: false,
         total: 0,
+        currentTab: 1,
         currentPage: 1,
         pagesizes: [10, 20, 30, 50],
         pagesize: 10,
@@ -200,6 +251,7 @@
           ssxgzt: ''
         },
         tableData: [],
+        tableData2: [],
         multipleSelection: [],
         goodsStatusOptions: [{
           value: 2,
@@ -258,10 +310,13 @@
           searchType: 1,
           pageSize: this.pagesize
         }, obj)
-        console.log(params)
         getOnSaleGoods(params).then(res => {
           if (res.status === 200) {
-            this.tableData = res.data
+            if (this.currentTab === 1) {
+              this.tableData = res.data
+            } else {
+              this.this.tableData2 = res.data
+            }
             this.total = res.total
           } else if (res.status === 400 && res.msg === '没有商品数据') {
             return
@@ -275,7 +330,15 @@
         })
       },
       handleTabClick(tab, event) {
-        console.log(tab)
+        if (tab.name === 'second') {
+          this.currentPage = 1
+          this.currentTab = 2
+          this.submitForm('formT')
+        } else {
+          this.currentPage = 1
+          this.currentTab = 1
+          this.submitForm('formT')
+        }
       },
       toggleSelection(rows) {
         this.selectAll = !this.selectAll
@@ -287,10 +350,12 @@
         this.multipleSelection = val
         console.log(val)
       },
+      _getStockOutGoods() {
+
+      },
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            this.currentPage = 1
             // 请求搜索接口
             const params = {
               name: this.formT.shangpmc,
@@ -312,7 +377,14 @@
               return false
             }
             this.tableData = []
-            this._getOnSaleGoods(params)
+            this.tableData2 = []
+            if (this.currentTab === 2) {
+              params.searchType = 3
+              this._getOnSaleGoods(params)
+            } else {
+              params.searchType = 1
+              this._getOnSaleGoods(params)
+            }
           } else {
             this.$message.error('提交有误！,请按正确格式填写！')
             return false
@@ -328,10 +400,6 @@
         } else {
           this.$message.error('商品id不存在！')
         }
-      },
-      handleSizeChange(val) {
-        this.pagesize = this.pagesize === val ? this.pagesize : val
-        this.submitForm('formT')
       },
       handleCurrentChange(val) {
         this.currentPage = val
@@ -385,10 +453,15 @@
         if (!this.stockForm.stockFlag || this.stockForm.stockAlarm === '') {
           params.stockAlarm = 0
         }
+        if (Number(this.stockForm.nowStock) < 0) {
+          this.$message.error('输入有误！')
+          return
+        }
         modifyStock(params).then(res => {
           if (res.status === 200) {
             this.popupVisible = false
             this.$message.success(res.msg)
+            this.submitForm('formT')
           } else {
             this.popupVisible = false
             this.$message.error(res.msg)
@@ -422,12 +495,32 @@
         }
       },
       tableRowClassName({ row, rowIndex }) {
-        if (rowIndex === 1) {
-          return 'warning-row'
+        if (Number(row.stock) <= 10) {
+          var index = this.tableData.indexOf(row)
+          if (rowIndex === index) {
+            return 'warning-row'
+          }
         }
       },
-      modifyGoods(gid) {
-        this.$router.push({ name: 'publishstep1', query: { goodsId: gid, modifyFlag: 2 }})
+      modifyGoods(gid, modifyStatus) {
+        // 修改状态为驳回，应该显示放弃按钮
+        if (modifyStatus === '3') {
+          this.$router.push({ name: 'publishstep1', query: { goodsId: gid, modifyFlag: 2, gFlag: 1 }})
+        } else {
+          this.$router.push({ name: 'publishstep1', query: { goodsId: gid, modifyFlag: 2 }})
+        }
+      },
+      giveUp(id) {
+        giveUp(id).then(res => {
+          if (res.status === 200) {
+            this.$message.success(res.msg)
+            this.submitForm('formT')
+          } else {
+            this.$message.error(res.msg)
+          }
+        }).catch(err => {
+          this.$message.error(err)
+        })
       }
     },
     components: {

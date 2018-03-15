@@ -269,7 +269,7 @@
           <el-button @click="goBack">返回上一步</el-button>
           <el-button type="primary" @click="submitForm('ruleForm')">提 交</el-button>
           <el-button @click="resetForm('ruleForm')">重 置</el-button> 
-          <el-button v-if="giveUpVisible">放弃修改</el-button>         
+          <el-button @click="giveUp" v-if="gFlag">放弃修改</el-button>         
         </el-form-item>
       </div>      
     </el-form>   
@@ -288,6 +288,7 @@
 <script>
   import Jieti from '@/components/Jieti/index'
   import { checkPayWay, goodsRelease, getLogisticsTemplate } from '@/api/goodsRelease'
+  import { giveUp } from '@/api/onsale'
   import { parseTime, getUnitsOptions } from '@/utils/index'
   import CollapseTransition from 'element-ui/lib/transitions/collapse-transition'
   import { mapGetters } from 'vuex'
@@ -298,6 +299,9 @@
       // 计量单位
       this.jiliangdwOptions = getUnitsOptions()
       this.isFromModifyFlag = Number(this.$route.query.isFromModifyFlag)
+      if (this.$route.query.gFlag) {
+        this.gFlag = true
+      }
       if (this.isFromModifyFlag === 2) {
         this.belongPublish = false
       }
@@ -415,10 +419,10 @@
     },
     data() {
       return {
+        gFlag: false,     // 放弃按钮
         immediate: true,    // 在售商品修改 立即生效字段
         immediateTime: '',
         belongPublish: true,
-        giveUpVisible: false,
         regionVisible: false,  // 地址区域是否显示
         zfbDisable: false,
         sjzfDisable: false,
@@ -769,6 +773,18 @@
             }
           }
         }
+      },
+      giveUp() {
+        giveUp(this.$route.query.goodsId).then(res => {
+          if (res.status === 200) {
+            this.$message.success(res.msg)
+            this.$router.push({ path: '/goodsmanage/onsalegoods' })
+          } else {
+            this.$message.error(res.msg)
+          }
+        }).catch(err => {
+          this.$message.error(err)
+        })
       }
     },
     computed: {

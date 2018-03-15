@@ -23,6 +23,14 @@ export function getBusiness (params) {
     data: params
   })
 }
+// 修改审批
+export function audit (params) {
+  return request({
+    url: '/goods/apply/audit',
+    method: 'post',
+    data: params
+  })
+}
 // 商品详情
 export function getGoodsDetail (id) {
   return request({

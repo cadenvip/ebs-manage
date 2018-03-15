@@ -54,9 +54,11 @@
     methods: {
       isFromModify() {
         this.goodsId = this.$route.query.goodsId
-        this.modifyFlag = this.$route.query.modifyFlag
+        this.modifyFlag = String(this.$route.query.modifyFlag)
+        this.gFlag = this.$route.query.gFlag
+        console.log(typeof this.modifyFlag)
         if (this.goodsId) {
-          if (this.modifyFlag === 2) {
+          if (this.modifyFlag === '2') {
             this.isFromModifyFlag = 2
           } else {
             this.isFromModifyFlag = 1
@@ -160,7 +162,11 @@
           } else if (this.isFromModifyFlag === 2) {
             checkGoStepTwo(params).then(res => {
               if (res.status === 200) {
-                this.$router.push({ name: 'publishstep2', query: { typeCode: this.goodstype[1], goodsCode: this.goodsCode, goodsId: this.goodsId, isFromModifyFlag: this.isFromModifyFlag }})
+                if (this.gFlag) {
+                  this.$router.push({ name: 'publishstep2', query: { typeCode: this.goodstype[1], goodsCode: this.goodsCode, goodsId: this.goodsId, isFromModifyFlag: this.isFromModifyFlag, gFlag: this.gFlag }})
+                } else {
+                  this.$router.push({ name: 'publishstep2', query: { typeCode: this.goodstype[1], goodsCode: this.goodsCode, goodsId: this.goodsId, isFromModifyFlag: this.isFromModifyFlag }})
+                }
               } else {
                 this.$message.error(res.msg)
               }

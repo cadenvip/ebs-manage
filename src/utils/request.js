@@ -32,6 +32,11 @@ service.interceptors.request.use(config => {
 
 // respone拦截器
 service.interceptors.response.use(response => {
+  if (response.headers && (response.headers['content-type'] === 'application/x-msdownload' || response.headers['content-type'] === 'application/msexcel;charset=UTF-8' || response.headers['content-type'] === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')) {
+    console.log(response.request.responseURL)
+    downloadUrl(response.request.responseURL)
+    return response
+  }
   if (response.status === 401) {
     MessageBox('您已超时或被登出，可以取消继续留在该页面，或者重新登录', '确定登出', {
       confirmButtonText: '重新登录',
@@ -47,6 +52,7 @@ service.interceptors.response.use(response => {
   return response.data
 },
 error => {
+  console.log(error)
   // 错误处理
   if (error.response !== undefined) {
     if (error.response.status === 401) {
@@ -67,5 +73,14 @@ error => {
   }
   return Promise.reject(error)
 })
+const downloadUrl = url => {
+  const iframe = document.createElement('iframe')
+  iframe.style.display = 'none'
+  iframe.src = url
+  iframe.onload = function () {
+    document.body.removeChild(iframe)
+  }
+  document.body.appendChild(iframe)
+}
 
 export default service

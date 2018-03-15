@@ -80,7 +80,7 @@
       <h5>使用的业务</h5>
       <el-form-item>
         <el-button type="primary" @click="selectOperation">选择业务</el-button>
-        <el-table :data="selectedOpList" border stripe fit highlight-current-row style="padding-left:10px;margin-top:10px">
+        <el-table :data="selectedOpList" border stripe fit highlight-current-row style="padding-left:10px;margin-top:10px;"  align="center">
           <el-table-column label='业务名称' prop="operationname" width="180" align="center"></el-table-column>
           <el-table-column label="业务编号" prop="operationcode" width="140" align="center"></el-table-column>
           <el-table-column label="业务启用时间" prop="startdate" width="200" align="center"></el-table-column>

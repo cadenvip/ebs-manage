@@ -1,0 +1,549 @@
+<template>
+  <div style="padding: 20px;">
+    <el-form :model="searchForm" ref="searchFrom" label-width="0px">
+      <el-row :gutter="20">
+        <el-col :span="6">
+          <el-form-item label="订单编号:" label-width="80px">
+            <el-input v-model.trim="searchForm.orderCode"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-col :span="12">
+            <el-form-item label="下单开始时间:" label-width="100px">
+              <el-date-picker  style="width: 95%;"
+                v-model="searchForm.orderStartTime"
+                type="datetime"
+                placeholder="选择日期时间">
+              </el-date-picker>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="下单结束时间:" label-width="100px">
+              <el-date-picker style="width: 95%;"
+                v-model="searchForm.orderEndTime"
+                type="datetime"
+                placeholder="选择日期时间">
+              </el-date-picker>
+            </el-form-item>
+          </el-col>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item label-width="0" style="text-align: center;">
+            <el-button @click="submitForm" size="small" type="primary">确定</el-button>
+            <el-button @click="resetForm" size="small" type="primary">重置</el-button>
+            <el-button @click="showMore = !showMore" size="small">更多搜索</el-button>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <div>
+        <el-collapse-transition>
+          <div v-show="showMore">
+            <el-row :gutter="20">
+              <el-col :span="6">
+                <el-form-item label="订购人:" label-width="80px">
+                  <el-input v-model.trim="searchForm.userName"></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="6">
+                <el-form-item label="支付方式:" label-width="100px">
+                  <el-select v-model="searchForm.payType" placeholder="请选择">
+                    <el-option
+                      v-for="item in payOptions"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value">
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+              <el-col :span="6">
+                <el-form-item label="订单状态:" label-width="100px">
+                  <el-select v-model="searchForm.orderState" placeholder="请选择">
+                    <el-option
+                      v-for="item in orderOptions"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value">
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+            </el-row>
+          </div>
+        </el-collapse-transition>
+      </div>
+    </el-form>
+      <el-tabs v-model="activeTab" type="border-card" @tab-click="handleClick">
+        <el-tab-pane label="近三个月订单" name="tab1">
+          <el-table :data="tableData" style="width: 100%" border>
+            <el-table-column prop="orderCode" label="订单编号" align="center">
+            </el-table-column>
+            <el-table-column prop="userName" label="订购人姓名" align="center">
+            </el-table-column>
+            <el-table-column prop="userPhone" label="订购人电话" align="center">
+            </el-table-column>
+            <el-table-column prop="totalEccouponMoney" label="电子券金额(元)" align="center">
+            </el-table-column>
+            <el-table-column prop="specialOffer" label="优惠金额(元)" align="center">
+            </el-table-column>
+            <el-table-column prop="plusPrice" label="订单金额(元)" align="center">
+            </el-table-column>
+            <el-table-column prop="orderTime" label="下单日期" align="center">
+            </el-table-column>
+            <el-table-column prop="payTypeName" label="支付方式" align="center">
+            </el-table-column>
+            <el-table-column prop="payStateName" label="支付状态" align="center">
+            </el-table-column>
+            <el-table-column prop="orderStateName" label="订单状态" align="center">
+            </el-table-column>
+            <el-table-column label="操作" align="center">
+              <template slot-scope="scope">
+                <el-button @click="_getDeleveryDetail(scope.row.orderCode)" type="text" size="small">物流详情</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+        </el-tab-pane>
+        <el-tab-pane label="等待付款" name="tab2">
+          <el-table :data="tableData" style="width: 100%" border>
+            <el-table-column prop="orderCode" label="订单编号" align="center">
+            </el-table-column>
+            <el-table-column prop="userName" label="订购人姓名" align="center">
+            </el-table-column>
+            <el-table-column prop="userPhone" label="订购人电话" align="center">
+            </el-table-column>
+            <el-table-column prop="totalEccouponMoney" label="电子券金额(元)" align="center">
+            </el-table-column>
+            <el-table-column prop="specialOffer" label="优惠金额(元)" align="center">
+            </el-table-column>
+            <el-table-column prop="plusPrice" label="订单金额(元)" align="center">
+            </el-table-column>
+            <el-table-column prop="orderTime" label="下单日期" align="center">
+            </el-table-column>
+            <el-table-column prop="payTypeName" label="支付方式" align="center">
+            </el-table-column>
+            <el-table-column prop="payStateName" label="支付状态" align="center">
+            </el-table-column>
+            <el-table-column prop="orderStateName" label="订单状态" align="center">
+            </el-table-column>
+            <el-table-column prop="date" label="操作" align="center">
+              <template slot-scope="scope">
+                <el-button @click="_getDeleveryDetail(scope.row)" type="text" size="small">物流详情</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+        </el-tab-pane>
+        <el-tab-pane label="等待发货" name="tab3">
+          <el-table :data="tableData" style="width: 100%" border>
+            <el-table-column prop="orderCode" label="订单编号" align="center">
+            </el-table-column>
+            <el-table-column prop="userName" label="订购人姓名" align="center">
+            </el-table-column>
+            <el-table-column prop="userPhone" label="订购人电话" align="center">
+            </el-table-column>
+            <el-table-column prop="totalEccouponMoney" label="电子券金额(元)" align="center">
+            </el-table-column>
+            <el-table-column prop="specialOffer" label="优惠金额(元)" align="center">
+            </el-table-column>
+            <el-table-column prop="plusPrice" label="订单金额(元)" align="center">
+            </el-table-column>
+            <el-table-column prop="orderTime" label="下单日期" align="center">
+            </el-table-column>
+            <el-table-column prop="payTypeName" label="支付方式" align="center">
+            </el-table-column>
+            <el-table-column prop="payStateName" label="支付状态" align="center">
+            </el-table-column>
+            <el-table-column prop="orderStateName" label="订单状态" align="center">
+            </el-table-column>
+            <el-table-column prop="date" label="操作" align="center">
+              <template slot-scope="scope">
+                <el-button @click="_getDeleveryDetail(scope.row)" type="text" size="small">订单发货</el-button>
+                <el-button @click="_getDeleveryDetail(scope.row)" type="text" size="small">物流详情</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+        </el-tab-pane>
+        <el-tab-pane label="待用户收货" name="tab4">
+          <el-table :data="tableData" style="width: 100%" border>
+            <el-table-column prop="orderCode" label="订单编号" align="center">
+            </el-table-column>
+            <el-table-column prop="userName" label="订购人姓名" align="center">
+            </el-table-column>
+            <el-table-column prop="userPhone" label="订购人电话" align="center">
+            </el-table-column>
+            <el-table-column prop="totalEccouponMoney" label="电子券金额(元)" align="center">
+            </el-table-column>
+            <el-table-column prop="specialOffer" label="优惠金额(元)" align="center">
+            </el-table-column>
+            <el-table-column prop="plusPrice" label="订单金额(元)" align="center">
+            </el-table-column>
+            <el-table-column prop="orderTime" label="下单日期" align="center">
+            </el-table-column>
+            <el-table-column prop="payTypeName" label="支付方式" align="center">
+            </el-table-column>
+            <el-table-column prop="payStateName" label="支付状态" align="center">
+            </el-table-column>
+            <el-table-column prop="orderStateName" label="订单状态" align="center">
+            </el-table-column>
+            <el-table-column prop="date" label="操作" align="center">
+              <template slot-scope="scope">
+                <el-button @click="_getDeleveryDetail(scope.row)" type="text" size="small">用户拒收</el-button>
+                <el-button @click="_getDeleveryDetail(scope.row)" type="text" size="small">物流详情</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+        </el-tab-pane>
+        <el-tab-pane label="交易完成" name="tab5">
+          <el-table :data="tableData" style="width: 100%" border>
+            <el-table-column prop="orderCode" label="订单编号" align="center">
+            </el-table-column>
+            <el-table-column prop="userName" label="订购人姓名" align="center">
+            </el-table-column>
+            <el-table-column prop="userPhone" label="订购人电话" align="center">
+            </el-table-column>
+            <el-table-column prop="totalEccouponMoney" label="电子券金额(元)" align="center">
+            </el-table-column>
+            <el-table-column prop="specialOffer" label="优惠金额(元)" align="center">
+            </el-table-column>
+            <el-table-column prop="plusPrice" label="订单金额(元)" align="center">
+            </el-table-column>
+            <el-table-column prop="orderTime" label="下单日期" align="center">
+            </el-table-column>
+            <el-table-column prop="payTypeName" label="支付方式" align="center">
+            </el-table-column>
+            <el-table-column prop="payStateName" label="支付状态" align="center">
+            </el-table-column>
+            <el-table-column prop="orderStateName" label="订单状态" align="center">
+            </el-table-column>
+            <el-table-column prop="date" label="操作" align="center">
+              <template slot-scope="scope">
+                <el-button @click="_getDeleveryDetail(scope.row)" type="text" size="small">删除</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+        </el-tab-pane>
+        <el-tab-pane label="交易关闭" name="tab6">
+          <el-table :data="tableData" style="width: 100%" border>
+            <el-table-column prop="orderCode" label="订单编号" align="center">
+            </el-table-column>
+            <el-table-column prop="userName" label="订购人姓名" align="center">
+            </el-table-column>
+            <el-table-column prop="userPhone" label="订购人电话" align="center">
+            </el-table-column>
+            <el-table-column prop="totalEccouponMoney" label="电子券金额(元)" align="center">
+            </el-table-column>
+            <el-table-column prop="specialOffer" label="优惠金额(元)" align="center">
+            </el-table-column>
+            <el-table-column prop="plusPrice" label="订单金额(元)" align="center">
+            </el-table-column>
+            <el-table-column prop="orderTime" label="下单日期" align="center">
+            </el-table-column>
+            <el-table-column prop="payTypeName" label="支付方式" align="center">
+            </el-table-column>
+            <el-table-column prop="payStateName" label="支付状态" align="center">
+            </el-table-column>
+            <el-table-column prop="orderStateName" label="订单状态" align="center">
+            </el-table-column>
+            <el-table-column prop="date" label="操作" align="center">
+              <template slot-scope="scope">
+                <el-button @click="_getDeleveryDetail(scope.row)" type="text" size="small">删除</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+        </el-tab-pane>
+        <el-tab-pane label="退货处理" name="tab7">
+          <el-table :data="tableData" style="width: 100%" border>
+            <el-table-column prop="orderCode" label="订单编号" align="center">
+            </el-table-column>
+            <el-table-column prop="userName" label="订购人姓名" align="center">
+            </el-table-column>
+            <el-table-column prop="userPhone" label="订购人电话" align="center">
+            </el-table-column>
+            <el-table-column prop="totalEccouponMoney" label="电子券金额(元)" align="center">
+            </el-table-column>
+            <el-table-column prop="specialOffer" label="优惠金额(元)" align="center">
+            </el-table-column>
+            <el-table-column prop="plusPrice" label="订单金额(元)" align="center">
+            </el-table-column>
+            <el-table-column prop="orderTime" label="下单日期" align="center">
+            </el-table-column>
+            <el-table-column prop="payTypeName" label="支付方式" align="center">
+            </el-table-column>
+            <el-table-column prop="payStateName" label="支付状态" align="center">
+            </el-table-column>
+            <el-table-column prop="orderStateName" label="订单状态" align="center">
+            </el-table-column>
+            <el-table-column prop="date" label="操作" align="center">
+              <template slot-scope="scope">
+                <el-button @click="_getDeleveryDetail(scope.row)" type="text" size="small">删除</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+        </el-tab-pane>
+        <el-tab-pane label="所有订单" name="tab8">
+          <el-table :data="tableData" style="width: 100%" border>
+            <el-table-column prop="orderCode" label="订单编号" align="center">
+            </el-table-column>
+            <el-table-column prop="userName" label="订购人姓名" align="center">
+            </el-table-column>
+            <el-table-column prop="userPhone" label="订购人电话" align="center">
+            </el-table-column>
+            <el-table-column prop="totalEccouponMoney" label="电子券金额(元)" align="center">
+            </el-table-column>
+            <el-table-column prop="specialOffer" label="优惠金额(元)" align="center">
+            </el-table-column>
+            <el-table-column prop="plusPrice" label="订单金额(元)" align="center">
+            </el-table-column>
+            <el-table-column prop="orderTime" label="下单日期" align="center">
+            </el-table-column>
+            <el-table-column prop="payTypeName" label="支付方式" align="center">
+            </el-table-column>
+            <el-table-column prop="payStateName" label="支付状态" align="center">
+            </el-table-column>
+            <el-table-column prop="orderStateName" label="订单状态" align="center">
+            </el-table-column>
+            <el-table-column prop="date" label="操作" align="center">
+              <template slot-scope="scope">
+                <el-button @click="_getDeleveryDetail(scope.row)" type="text" size="small">删除</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+        </el-tab-pane>
+      </el-tabs>
+      <el-row style="margin-top: 20px;">
+        <el-col :span="12" style="padding-left: 20px;">
+          <el-button @click="orderExport" size="mini">导出订单</el-button>
+        </el-col>
+        <el-col :span="12" style="text-align:right; padding-right: 20px;">
+          <el-pagination
+            @current-change="handleCurrentChange"
+            :current-page="currentPage"
+            :page-size="10"
+            layout="total, prev, pager, next, jumper"
+            :total="total">
+          </el-pagination>
+        </el-col>
+      </el-row>
+  </div>
+</template>
+
+<script>
+  import CollapseTransition from 'element-ui/lib/transitions/collapse-transition'
+  import LocationSelector from '@/components/LocationSelector/index'
+  import { parseTime } from '@/utils/index'
+  import { getOrderList, getDeleveryDetail, orderExport } from '@/api/order/index.js'
+  export default {
+    created () {
+      this._getOrderList()
+    },
+    data() {
+      return {
+        tableData: [],
+        currentPage: 1,
+        currentTab: 'tab8',
+        total: 0,
+        activeTab: 'tab8',
+        showMore: false,  // 是否显示下拉form
+        searchForm: {
+          orderCode: '',
+          orderStartTime: '',
+          orderEndTime: '',
+          userName: '',
+          payType: ''
+        },
+        searchType: '1',
+        payOptions: [{
+          label: '货到付款',
+          value: '11'
+        },
+        {
+          label: '手机支付',
+          value: '22'
+        },
+        {
+          label: '支付宝支付',
+          value: '23'
+        },
+        {
+          label: '网银支付',
+          value: '24'
+        }],
+        orderOptions: [{
+          label: '待支付',
+          value: '0'
+        },
+        {
+          label: '待发货',
+          value: '1'
+        },
+        {
+          label: '已发货',
+          value: '2'
+        },
+        {
+          label: '交易关闭(撤单)',
+          value: '4'
+        },
+        {
+          label: '退货处理中',
+          value: '5'
+        },
+        {
+          label: '交易关闭(退货)',
+          value: '6'
+        },
+        {
+          label: '交易完成(退货失败)',
+          value: '7'
+        },
+        {
+          label: '交易完成',
+          value: '8'
+        },
+        {
+          label: '退货申请中',
+          value: '9'
+        },
+        {
+          label: '交易失败',
+          value: '10'
+        },
+        {
+          label: '退货失败',
+          value: '11'
+        },
+        {
+          label: '待支付定金',
+          value: '12'
+        },
+        {
+          label: '待支付尾款',
+          value: '13'
+        }]
+      }
+    },
+    methods: {
+      _getDeleveryDetail(oid) {
+        if (oid) {
+          getDeleveryDetail({ orderId: oid }).then(res => {
+            console.log(res)
+          }).catch(err => {
+            this.$message.error(err)
+          })
+        }
+      },
+      orderExport() {
+        const defaultParam = {
+          searchType: this.searchType,
+          page: this.currentPage,
+          pageSize: 10
+        }
+        const params = Object.assign(defaultParam, this.searchForm)
+        // var paramStr = ''
+        // for (var i in params) {
+        //   paramStr += i + '=' + params[i] + '&'
+        // }
+        // paramStr = paramStr.substring(0, (paramStr.length - 1))
+        // var url = process.env.BASE_API + 'order/export?JSESSIONID=' + getSessionid() + '&' + paramStr
+        orderExport(params).then(res => {
+          console.log(res)
+          this.$message.success('成功！')
+        }).catch(err => {
+          this.$message.error(err)
+        })
+      },
+      _getOrderList(obj) {
+        const defaultParam = {
+          searchType: this.searchType,
+          page: this.currentPage,
+          pageSize: 10
+        }
+        const params = Object.assign(defaultParam, obj)
+        getOrderList(params).then(res => {
+          if (res.status === 200) {
+            this.tableData = []
+            this.tableData = res.data
+            this.total = res.total
+          } else {
+            this.$message.error(res.msg)
+          }
+        }).catch(err => {
+          this.$message.error(err)
+        })
+      },
+      handleCurrentChange(val) {
+        if (this.currentPage !== val) {
+          this.currentPage = val
+          this.submitForm()
+        }
+      },
+      getParam(tabName) {
+        switch (tabName) {
+          case 'tab1':
+            this.searchType = '2'
+            var time = new Date()
+            this.searchForm.orderStartTime = time.setDate(time.getDate() - 90)
+            break
+          case 'tab2':
+            this.searchType = '3'
+            break
+          case 'tab3':
+            this.searchType = '4'
+            break
+          case 'tab4':
+            this.searchType = '5'
+            break
+          case 'tab5':
+            this.searchType = '6'
+            break
+          case 'tab6':
+            this.searchType = '7'
+            break
+          case 'tab7':
+            this.searchType = '8'
+            break
+          case 'tab8':
+            this.searchType = '1'
+            break
+          default:
+            break
+        }
+      },
+      handleClick(tab) {
+        this.tableData = []
+        this.currentTab = tab.name
+        this.resetForm()
+        this.currentPage = 1
+        this.getParam(tab.name)
+        // 判断 tab
+        this._getOrderList()
+      },
+      resetForm() {
+        this.searchForm = {
+          orderCode: '',
+          orderStartTime: '',
+          orderEndTime: '',
+          userName: '',
+          payType: ''
+        }
+      },
+      submitForm() {
+        if (this.searchForm.orderStartTime) {
+          this.searchForm.orderStartTime = parseTime(this.searchForm.orderStartTime)
+        }
+        if (this.searchForm.orderEndTime) {
+          this.searchForm.orderEndTime = parseTime(this.searchForm.orderEndTime)
+        }
+        this._getOrderList(this.searchForm)
+      }
+    },
+    components: {
+      CollapseTransition,
+      LocationSelector
+    }
+  }
+</script>
+
+<style scoped>
+
+</style>
+
