@@ -57,19 +57,17 @@
         </el-row>        
       </el-tab-pane>
       <el-tab-pane label="历史月账单">
-        <div v-for="(item,index) in historySumery" style="margin-top:10px">
-          <el-row>
-            <el-col :span="20">
-              <el-button @click="checkHistoryDetail(item)" type="text">2018年1月（假的）</el-button>
-            </el-col>
-            <el-col :span="4">
-              <el-button @click="downloadHistoryDetail(item)">下载</el-button>
-            </el-col>
-          </el-row>
+        <div style="margin:20px">
+          <h5>所有财务账单</h5>
+          <div v-for="(item, index) in historyBill" v-if="item !== undefined" style="margin-top:10px">
+            <el-button @click="chechMonthBillDetail(item)" type="text">{{ formatYearMonth(item) }}</el-button>
+            <el-button @click="downloadMonthBill(item)" type="text">下载</el-button>
+          </div>
+          <div v-for="(item, index) in moreHistoryBill" v-if="item !== undefined" style="margin-top:10px">
+            <el-button @click="chechMonthBillDetail(item)" type="text">{{ formatYearMonth(item) }}</el-button>
+            <el-button @click="downloadHistoryMonthBill(item)" type="text">下载</el-button>
+          </div>
         </div>
-        <el-button>
-          <el-button @click="moreHistoryDetail()">下载</el-button>
-        </el-button>
       </el-tab-pane>
     </el-tabs>
     <br/>
@@ -86,7 +84,8 @@
 
 <script>
 
-import { getThisMonthSummary, getHistorySummary, getThisMonthBill, downloadBill } from '@/api/finance'
+import { getThisMonthSummary, getHistorySummary, getThisMonthBill, downloadBill, getHistoryBill } from '@/api/finance'
+// import { getSessionid } from '@/utils/auth'
 
 export default {
   data() {
@@ -94,9 +93,9 @@ export default {
       unitId: '',
       thisMonthSumery: [],
       historySumery: [],
-      thisMonthBill: [],
-      transferfee: 0,
-      totalpay: 0
+      thisMonthBill: {},
+      historyBill: [],
+      moreHistoryBill: []
     }
   },
   created() {
@@ -112,14 +111,14 @@ export default {
   },
   computed: {
     transferfeeFormat: function() {
-      if (this.thisMonthBill.transferfee !== undefined && this.thisMonthBill.transferfee !== null) {
+      if (this.thisMonthBill !== null && this.thisMonthBill.transferfee !== undefined && this.thisMonthBill.transferfee !== null) {
         return '￥' + (this.thisMonthBill.transferfee / 100).toFixed(2)
       } else {
         return '￥0.00'
       }
     },
     totalpayFormat: function() {
-      if (this.thisMonthBill.totalpay !== undefined && this.thisMonthBill.totalpay !== null) {
+      if (this.thisMonthBill !== null && this.thisMonthBill.totalpay !== undefined && this.thisMonthBill.totalpay !== null) {
         return '￥' + (this.thisMonthBill.totalpay / 100).toFixed(2)
       } else {
         return '￥0.00'
@@ -133,7 +132,6 @@ export default {
       getThisMonthSummary(params).then(response => {
         if (response.status === 200) {
           this.thisMonthSumery = response.data
-          console.log('this.thisMonthSumery: ', this.thisMonthSumery)
         } else {
           this.$message.error(response.msg)
         }
@@ -153,12 +151,20 @@ export default {
       })
       getHistorySummary(params).then(response => {
         if (response.status === 200) {
-          this.list = response.data.list
-          this.total = response.data.total
+          this.historySumery = response.data.list
         } else {
           this.$message.error(response.msg)
         }
+      }).catch(error => {
         this.loading = false
+        console.log(error)
+      })
+      getHistoryBill(params).then(response => {
+        if (response.status === 200) {
+          this.historyBill = response.data
+        } else {
+          this.$message.error(response.msg)
+        }
       }).catch(error => {
         this.loading = false
         console.log(error)
@@ -172,14 +178,26 @@ export default {
         return ''
       }
     },
+    formatYearMonth(bill) {
+      const billmonth = bill.billmonth.toString()
+      if (billmonth !== undefined) {
+        return billmonth.substr(0, 4) + '年' + billmonth.substr(4, 2) + '月'
+      } else {
+        return '年' + '月'
+      }
+    },
     checkDetail() {
       this.$router.push({ path: '/statement/thisMonthBillDetail', query: { id: this.thisMonthBill.id }})
     },
-    checkHistoryDetail(item) {
-      this.$router.push({ path: '/statement/detail', query: { id: item.id }})
+    chechMonthBillDetail(bill) {
+      alert(JSON.stringify(bill))
+      this.$router.push({ path: '/statement/detail', query: { id: bill.id }})
     },
     downloadDetail() {
+      // var url = process.env.BASE_API + 'statement/export' + `?JSSESIONID=${getSessionid()}&billid=${this.thisMonthBill.id}&thisyear=1`
+      // window.open(url)
       downloadBill(this.thisMonthBill, 1).then(response => {
+        console.log('200行 response: ', response)
         if (response.status === 200) {
           this.$message.success('下载结算明细成功')
         } else {
@@ -189,11 +207,23 @@ export default {
         console.log(error)
       })
     },
-    downloadHistoryDetail(item) {
-      alert('下载历史结算明细')
+    downloadMonthBill(bill) {
+      downloadBill(bill, 1).then(response => {
+        if (response.status === 200) {
+          this.$message.success('下载成功')
+        } else {
+          this.$message.error(response.msg)
+        }
+      })
     },
-    moreHistoryDetail() {
-      alert('更多历史结算明细')
+    downloadHistoryMonthBill(bill) {
+      downloadBill(bill, 0).then(response => {
+        if (response.status === 200) {
+          this.$message.success('下载成功')
+        } else {
+          this.$message.error(response.msg)
+        }
+      })
     },
     checkout() {
       alert('确认结账')

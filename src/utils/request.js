@@ -30,6 +30,17 @@ service.interceptors.request.use(config => {
   Promise.reject(error)
 })
 
+// 下载
+const downloadUrl = url => {
+  const iframe = document.createElement('iframe')
+  iframe.style.display = 'none'
+  iframe.src = url
+  iframe.onload = function () {
+    document.body.removeChild(iframe)
+  }
+  document.body.appendChild(iframe)
+}
+
 // respone拦截器
 service.interceptors.response.use(response => {
   if (response.headers && (response.headers['content-type'] === 'application/x-msdownload' || response.headers['content-type'] === 'application/msexcel;charset=UTF-8' || response.headers['content-type'] === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')) {
@@ -73,14 +84,5 @@ error => {
   }
   return Promise.reject(error)
 })
-const downloadUrl = url => {
-  const iframe = document.createElement('iframe')
-  iframe.style.display = 'none'
-  iframe.src = url
-  iframe.onload = function () {
-    document.body.removeChild(iframe)
-  }
-  document.body.appendChild(iframe)
-}
 
 export default service

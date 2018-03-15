@@ -108,7 +108,7 @@
         <el-table-column label="序号" type="index" :index="indexPayed" align="center"></el-table-column>
         <el-table-column label="订单号" prop="ordercode" align="center"></el-table-column>
         <el-table-column label="订单下单时间" prop="ordertime" :show-overflow-tooltip="true" align="center"></el-table-column>
-        <el-table-column label="支付渠道" prop="finishtime" align="center"></el-table-column>
+        <el-table-column label="支付渠道" prop="finishtime" :formatter="typeFormat" align="center"></el-table-column>
         <el-table-column label="交易金额" prop="totalamount" :formatter="unitFormat" align="center"></el-table-column>
         <el-table-column label="手续费" prop="feeamount" :formatter="unitFormat" align="center"></el-table-column>
         <el-table-column label="应结算金额" prop="payamount" :formatter="unitFormat" align="center"></el-table-column>
@@ -215,6 +215,45 @@ export default {
     },
     indexNopayed(index) {
       return index
+    },
+    typeFormat(row, column, cellValue) {
+      // 11：货到付款，12：线下汇款，21：银联支付，22：手机支付，23：支付宝支付，
+      // 24：网银支付，25：财付通支付，26：快钱支付，27：银联语音支付，32：话费支付
+      var type = ''
+      switch (cellValue) {
+        case '11':
+          type = '货到付款'
+          break
+        case '12':
+          type = '线下汇款'
+          break
+        case '21':
+          type = '银联支付'
+          break
+        case '22':
+          type = '手机支付'
+          break
+        case '23':
+          type = '支付宝支付'
+          break
+        case '24':
+          type = '网银支付'
+          break
+        case '25':
+          type = '财付通支付'
+          break
+        case '26':
+          type = '快钱支付'
+          break
+        case '27':
+          type = '银联语音支付'
+          break
+        case '32':
+          type = '话费支付'
+          break
+        default:break
+      }
+      return type
     },
     unitFormat(row, column, cellValue) {
       if (cellValue !== undefined && cellValue !== null) {

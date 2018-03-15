@@ -1,7 +1,7 @@
 <template>
   <div>
     <div style="margin:20px">
-      <h3>所有财务账单</h3>
+      <h5>所有财务账单</h5>
       <div v-for="(item, index) in billList" v-if="item !== undefined" style="margin-top:10px">
         <el-button @click="chechMonthBillDetail(item)" type="text">{{ formatYearMonth(item) }}</el-button>
         <el-button @click="downloadMonthBill(item)" type="text">下载</el-button>

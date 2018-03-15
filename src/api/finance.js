@@ -53,14 +53,18 @@ export function getBillDetail(params) {
 export function downloadBillList(params) {
   return request({
     url: '/statement/exportTotalBill',
-    method: 'post'
+    method: 'get'
   })
 }
 
 export function downloadBill(bill, thisyear) {
+  var params = { 'billid': `${bill.id}`,
+    'thisyear': `${thisyear}`
+  }
   return request({
-    url: '/statement/export' + `?billid=${bill.id}&thisyear=${thisyear}`,
-    method: 'post'
+    url: '/statement/export',
+    method: 'get',
+    params: params
   })
 }
 
@@ -92,7 +96,7 @@ export function getThisMonthBill(params) {
 
 export function getHistoryBill(params) {
   return request({
-    url: '/statement/thismonthbill',
+    url: '/statement/historymonthbill',
     method: 'post',
     data: params
   })
