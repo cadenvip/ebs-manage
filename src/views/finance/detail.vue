@@ -11,7 +11,7 @@
           </el-col>
           <el-col :span="8">
             <span>
-              {{ billDetail.bill.merchantname }}
+              {{ (billDetail.bill.merchantname !== null) ? billDetail.bill.merchantname : '空' }}
             </span> 
           </el-col>
         </el-row>
@@ -129,7 +129,7 @@ export default {
       billDetail: {
         detailListnopayed: [],
         logList: [],
-        bill: [],
+        bill: {},
         detailListpayed: []
       }
     }
@@ -139,25 +139,31 @@ export default {
   },
   computed: {
     period: function() {
-      return this.billDetail.bill.startmonth + '--' + this.billDetail.bill.endmonth
+      if (this.billDetail.bill.startmonth !== null && this.billDetail.bill.endmonth !== null) {
+        return this.billDetail.bill.startmonth + '--' + this.billDetail.bill.endmonth
+      } else {
+        return ''
+      }
     },
     formatStatus: function() {
       // 对账状态(0 待确认 1 已确认 2 待调账 3 已结算 )
       var type = ''
-      switch (this.billDetail.bill.status) {
-        case 0:
-          type = '待确认'
-          break
-        case 1:
-          type = '已确认'
-          break
-        case 2:
-          type = '待调账'
-          break
-        case 3:
-          type = '已结算'
-          break
-        default:break
+      if (this.billDetail.bill.status !== null) {
+        switch (this.billDetail.bill.status) {
+          case 0:
+            type = '待确认'
+            break
+          case 1:
+            type = '已确认'
+            break
+          case 2:
+            type = '待调账'
+            break
+          case 3:
+            type = '已结算'
+            break
+          default:break
+        }
       }
       return type
     },
@@ -182,8 +188,11 @@ export default {
       var params = { 'billid': `${this.$route.query.id}` }
       getBillDetail(params).then(response => {
         if (response.status === 200) {
-          this.billDetail = response.data
-          console.log('billDetail', this.billDetail)
+          if (response.data === null) {
+            this.$message.error('订单已经不存在！')
+          } else {
+            this.billDetail = response.data
+          }
         } else {
           this.$message.error(response.msg)
         }

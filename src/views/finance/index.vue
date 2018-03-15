@@ -36,22 +36,22 @@
         <el-row :gutter="20" style="margin-left:0px;margin-right:0px;margin-top:20px;">
           <el-col :span="3" style="text-align:right">
             <span>
-              <el-button @click="checkDetail" type="text">查看结算明细</el-button>
+              <el-button @click="checkDetail" type="text" v-show="thisMonthBill !== null && thisMonthBill.id !== null && thisMonthBill.id !== ''">查看结算明细</el-button>
             </span> 
           </el-col>
           <el-col :span="3">
             <span>
-              <el-button @click="downloadDetail" type="primary">打包下载结算明细</el-button>
+              <el-button @click="downloadDetail" type="primary" v-show="thisMonthBill !== null && thisMonthBill.id !== null && thisMonthBill.id !== ''">打包下载结算明细</el-button>
             </span> 
           </el-col>
           <el-col :span="3" :offset="10" style="text-align:right">
             <span>
-              <el-button @click="checkout" type="primary">确认结账</el-button>
+              <el-button @click="checkout" type="primary" v-show="thisMonthBill !== null && thisMonthBill.id !== null && thisMonthBill.id !== ''">确认结账</el-button>
             </span> 
           </el-col>
           <el-col :span="3">
             <span>
-              <el-button @click="dispute" type="primary">核账争议</el-button>
+              <el-button @click="dispute" type="primary" v-show="thisMonthBill !== null && thisMonthBill.id !== null && thisMonthBill.id !== ''">核账争议</el-button>
             </span> 
           </el-col>
         </el-row>        
@@ -59,14 +59,14 @@
       <el-tab-pane label="历史月账单">
         <div style="margin:20px">
           <h5>所有财务账单</h5>
-          <div v-for="(item, index) in historyBill" v-if="item !== undefined" style="margin-top:10px">
+          <span v-for="(item, index) in historyBill" v-if="item !== undefined" style="margin-top:10px;margin-left:50px">
+            <el-button @click="chechMonthBillDetail(item)" type="text" el-icon-download>{{ formatYearMonth(item) }}</el-button>
+            <el-button @click="downloadMonthBill(item)" type="primary" icon="el-icon-download" size="mini">下载</el-button>
+          </span>
+          <span v-for="(item, index) in moreHistoryBill" v-if="item !== undefined" style="margin-top:10px;margin-left:50px">
             <el-button @click="chechMonthBillDetail(item)" type="text">{{ formatYearMonth(item) }}</el-button>
-            <el-button @click="downloadMonthBill(item)" type="text">下载</el-button>
-          </div>
-          <div v-for="(item, index) in moreHistoryBill" v-if="item !== undefined" style="margin-top:10px">
-            <el-button @click="chechMonthBillDetail(item)" type="text">{{ formatYearMonth(item) }}</el-button>
-            <el-button @click="downloadHistoryMonthBill(item)" type="text">下载</el-button>
-          </div>
+            <el-button @click="downloadHistoryMonthBill(item)" type="primary" icon="el-icon-download" size="mini">下载</el-button>
+          </span>
         </div>
       </el-tab-pane>
     </el-tabs>
@@ -84,7 +84,7 @@
 
 <script>
 
-import { getThisMonthSummary, getHistorySummary, getThisMonthBill, downloadBill, getHistoryBill } from '@/api/finance'
+import { getThisMonthSummary, getHistorySummary, getThisMonthBill, downloadBill, getHistoryBill, getHistoryBillsList } from '@/api/finance'
 // import { getSessionid } from '@/utils/auth'
 
 export default {
@@ -151,7 +151,7 @@ export default {
       })
       getHistorySummary(params).then(response => {
         if (response.status === 200) {
-          this.historySumery = response.data.list
+          this.historySumery = response.data
         } else {
           this.$message.error(response.msg)
         }
@@ -162,6 +162,16 @@ export default {
       getHistoryBill(params).then(response => {
         if (response.status === 200) {
           this.historyBill = response.data
+        } else {
+          this.$message.error(response.msg)
+        }
+      }).catch(error => {
+        this.loading = false
+        console.log(error)
+      })
+      getHistoryBillsList(params).then(response => {
+        if (response.status === 200) {
+          this.moreHistoryBill = response.data
         } else {
           this.$message.error(response.msg)
         }
@@ -190,7 +200,6 @@ export default {
       this.$router.push({ path: '/statement/thisMonthBillDetail', query: { id: this.thisMonthBill.id }})
     },
     chechMonthBillDetail(bill) {
-      alert(JSON.stringify(bill))
       this.$router.push({ path: '/statement/detail', query: { id: bill.id }})
     },
     downloadDetail() {

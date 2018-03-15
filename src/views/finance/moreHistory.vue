@@ -2,14 +2,14 @@
   <div>
     <div style="margin:20px">
       <h5>所有财务账单</h5>
-      <div v-for="(item, index) in billList" v-if="item !== undefined" style="margin-top:10px">
+      <span v-for="(item, index) in billList" v-if="item !== undefined" style="margin-top:10px; margin-left:50px;">
         <el-button @click="chechMonthBillDetail(item)" type="text">{{ formatYearMonth(item) }}</el-button>
-        <el-button @click="downloadMonthBill(item)" type="text">下载</el-button>
-      </div>
-      <div v-for="(item, index) in historyBillList" v-if="item !== undefined" style="margin-top:10px">
+        <el-button @click="downloadMonthBill(item)" type="primary" icon="el-icon-download" size="mini"></el-button>
+      </span>
+      <span v-for="(item, index) in historyBillList" v-if="item !== undefined" style="margin-top:10px;margin-left:50px">
         <el-button @click="chechMonthBillDetail(item)" type="text">{{ formatYearMonth(item) }}</el-button>
-        <el-button @click="downloadHistoryMonthBill(item)" type="text">下载</el-button>
-      </div>
+        <el-button @click="downloadHistoryMonthBill(item)" type="primary" icon="el-icon-download" size="mini"></el-button>
+      </span>
     </div>
     <div style="text-align: center">
       <el-button @click="goback" type="primary" >返回</el-button>        
@@ -36,10 +36,9 @@ export default {
   methods: {
     initBillList() {
       this.loading = true
-      // getAllBills().then(response => {
       getThisYearAllBill().then(response => {
         if (response.status === 200) {
-          this.billList = response.data.list
+          this.billList = response.data
         } else {
           this.$message.error(response.msg)
         }
@@ -48,10 +47,9 @@ export default {
         this.loading = false
         console.log(error)
       })
-
       getHistoryBillsList().then(response => {
         if (response.status === 200) {
-          this.historyBillList = response.data.list
+          this.historyBillList = response.data
         } else {
           this.$message.error(response.msg)
         }

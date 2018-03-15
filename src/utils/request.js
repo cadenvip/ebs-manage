@@ -44,7 +44,7 @@ const downloadUrl = url => {
 // respone拦截器
 service.interceptors.response.use(response => {
   if (response.headers && (response.headers['content-type'] === 'application/x-msdownload' || response.headers['content-type'] === 'application/msexcel;charset=UTF-8' || response.headers['content-type'] === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')) {
-    console.log(response.request.responseURL)
+    console.log(response)
     downloadUrl(response.request.responseURL)
     return response
   }

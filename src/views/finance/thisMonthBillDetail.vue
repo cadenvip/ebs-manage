@@ -145,7 +145,7 @@ export default {
       thisMonthDetail: {
         detailListnopayed: [],
         logList: [],
-        bill: [],
+        bill: {},
         detailListpayed: []
       }
     }

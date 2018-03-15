@@ -10,10 +10,11 @@ export function getThisYearAllBill() {
 }
 
 // 获取非本年度所有账单（不分页）
-export function getHistoryBillsList() {
+export function getHistoryBillsList(params) {
   return request({
     url: '/statement/morehistorybill',
-    method: 'post'
+    method: 'post',
+    data: params
   })
 }
 
