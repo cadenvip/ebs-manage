@@ -4,8 +4,8 @@
     <el-form ref="searchForm" :model="searchForm" label-width="130px" class="demo-ruleForm">
       <el-row :gutter="30">
         <el-col :span="7">
-          <el-form-item label="企业名称：" prop="month_day">
-            <el-input v-model="searchForm.reqseq" clearable style="width: 180px;" placeholder="请输入企业名称"></el-input>
+          <el-form-item label="企业名称：" prop="merchantname">
+            <el-input v-model="searchForm.merchantname" clearable style="width: 180px;" placeholder="请输入企业名称"></el-input>
           </el-form-item>   
         </el-col>
         <el-col :span="7">
@@ -14,8 +14,8 @@
           </el-form-item>  
         </el-col>
         <el-col :span="7">
-          <el-form-item label="对账状态：" prop="reqservice">
-            <el-select v-model="searchForm.reqservice" clearable style="width: 180px;" placeholder="请选择对账状态">
+          <el-form-item label="对账状态：" prop="status">
+            <el-select v-model="searchForm.status" clearable style="width: 180px;" placeholder="请选择对账状态">
               <!-- // 对账状态(0 待确认 1 已确认 2 待调账 3 已结算 ) -->
               <el-option label="待确认" value="0"></el-option>
               <el-option label="已确认" value="1"></el-option>
@@ -27,20 +27,20 @@
       </el-row>
       <el-row :gutter="30">
         <el-col :span="7">
-          <el-form-item label="到账时间：" prop="reqseq">
-            <el-date-picker v-model="searchForm.month_day" type="date" value-format="MMdd" style="width: 180px;" placeholder="请选择到账时间">
+          <el-form-item label="到账时间：" prop="yearmonth">
+            <el-date-picker v-model="searchForm.yearmonth" type="month" value-format="yyyyMM" style="width: 180px;" placeholder="请选择到账时间">
             </el-date-picker>
           </el-form-item>   
         </el-col>
         <el-col :span="7">
-          <el-form-item label="" prop="less500Check">
-            <el-checkbox v-model="searchForm.less500Check">显示不足500的</el-checkbox>
+          <el-form-item label="" prop="greater500">
+            <el-checkbox v-model="searchForm.greater500">显示不足500的</el-checkbox>
           </el-form-item>  
         </el-col>
       </el-row>
       <el-row :gutter="30">
         <el-col :span="3" :offset="8">
-          <el-button type="primary" @click.native.prevent="queryILogList">查询</el-button>
+          <el-button type="primary" @click.native.prevent="queryBillList">查询</el-button>
         </el-col>
         <el-col :span="3">
           <el-button type="primary" @click="resetForm('searchForm')">重置</el-button>
@@ -48,13 +48,13 @@
       </el-row>
     </el-form>
     <h3 style="padding-left: 20px;">账目列表</h3>
-    <el-table :data="list" v-loading.body="loading" element-loading-text="Loading" border stripe fit highlight-current-row style="padding-left:10px">
-      <el-table-column label='企业名称' prop="reqseq" width="180" align="center"></el-table-column>
-      <el-table-column label="区域" prop="reqservice" width="120" align="center"></el-table-column>
-      <el-table-column label="出账周期" prop="reqaction" width="150" align="center"></el-table-column>
-      <el-table-column label="应结算合计" prop="reqcode" width="100" align="center"></el-table-column>
-      <el-table-column label="对账状态" prop="protocol" :formatter="formatStatus" width="80" align="center"></el-table-column>
-      <el-table-column label="操作" width="80" align="center">
+    <el-table :data="billlist" v-loading.body="loading" element-loading-text="Loading" border stripe fit highlight-current-row style="padding-left:10px">
+      <el-table-column label='企业名称' prop="merchantname" width="260" align="center"></el-table-column>
+      <el-table-column label="区域" prop="locationname" width="180" align="center"></el-table-column>
+      <el-table-column label="出账周期" prop="startmonth" :formatter="formatPeriod" width="180" align="center"></el-table-column>
+      <el-table-column label="应结算合计" prop="totalpay" :formatter="formatUnit" width="140" align="center"></el-table-column>
+      <el-table-column label="对账状态" prop="status" :formatter="formatStatus" width="100" align="center"></el-table-column>
+      <el-table-column label="操作" width="100" align="center">
         <template slot-scope="scope">
           <el-button @click="detail(scope.row)" type="text" size="small">对账明细</el-button>
         </template>
@@ -80,7 +80,7 @@
       </el-col>
       <el-col :span="3">
         <span>
-          <el-button @click="checkHistorySettlement" type="text">更多历史结算总结</el-button>
+          <el-button @click="downloadHistorySettlement" type="text">下载更多历史结算总结</el-button>
         </span> 
       </el-col>
     </el-row>
@@ -96,22 +96,19 @@
 
 <script>
 
-import { getAllILogs, getILogList, getReqactionList } from '@/api/log'
+import { getAllBills, getBillList, downloadBillList } from '@/api/finance'
+import locationselector from '@/components/LocationSelector/index'
 
 export default {
   data() {
     return {
-      list: [],
-      reqactionList: [],
+      billlist: [],
       searchForm: {
-        month_day: '', 	// 月份日期，字符串
-        reqservice: '',	// 请求服务名
-        reqaction: '',	// 请求消息标志，取值为函数名
-        reqseq: '',	// 请求流水（由请求方生成）
-        reqcode: '',	// 请求方编码
-        reqmessage: '', // 请求消息报文
-        less500Check: false,
-        locationid: '',
+        merchantname: '',
+        yearmonth: '',
+        status: '',
+        greater500: false,
+        locationcode: '',
         locationname: ''
       },
       pagesizes: [10, 20, 30, 50],
@@ -123,24 +120,18 @@ export default {
     }
   },
   created() {
-    this.initILogList()
-    getReqactionList().then(response => {
-      if (response.status === 200) {
-        this.reqactionList = response.data
-      } else {
-        this.$message.error(response.msg)
-      }
-    }).catch(error => {
-      console.log(error)
-    })
+    this.initBillList()
+  },
+  components: {
+    locationselector
   },
   methods: {
-    queryILogList() {
+    queryBillList() {
       this.loading = true
       console.log(this.searchForm)
-      getILogList(this.searchForm, this.currentPage, this.pagesize).then(response => {
+      getBillList(this.searchForm, this.currentPage, this.pagesize).then(response => {
         if (response.status === 200) {
-          this.list = response.data.list
+          this.billlist = response.data.list
           this.total = response.data.total
         } else {
           this.$message.error(response.msg)
@@ -151,11 +142,11 @@ export default {
         console.log(error)
       })
     },
-    initILogList() {
+    initBillList() {
       this.loading = true
-      getAllILogs(this.currentPage, this.pagesize).then(response => {
+      getAllBills(this.currentPage, this.pagesize).then(response => {
         if (response.status === 200) {
-          this.list = response.data.list
+          this.billlist = response.data.list
           this.total = response.data.total
         } else {
           this.$message.error(response.msg)
@@ -167,34 +158,27 @@ export default {
       })
     },
     getLocationInfo: function(data) {
-      this.searchForm.locationid = data.id
+      this.searchForm.locationcode = data.locationCode
       this.searchForm.locationname = data.label
     },
     resetForm(formname) {
-      this.searchForm.month_day = ''
-      this.searchForm.reqservice = ''
-      this.searchForm.reqaction = ''
-      this.searchForm.reqseq = ''
-      this.searchForm.reqcode = ''
-      this.searchForm.reqmessage = ''
+      this.searchForm.merchantname = ''
+      this.searchForm.yearmonth = ''
+      this.searchForm.status = ''
+      this.searchForm.greater500 = false
+      this.searchForm.locationcode = ''
+      this.searchForm.locationname = ''
     },
-    detail(ilog) {
-      this.$router.push({ path: '/log/ilog/detail', query: { id: ilog.id }})
-    },
-    resultFormat(row, column, cellValue) {
-      if (cellValue === undefined || cellValue === null) {
-        return '成功'
-      } else {
-        return '失败'
-      }
+    detail(bill) {
+      this.$router.push({ path: '/finance/detail', query: { id: bill.id }})
     },
     handleSizeChange(val) {
       this.pagesize = val
-      this.queryILogList()
+      this.queryBillList()
     },
     handleCurrentChange(val) {
       this.currentPage = val
-      this.queryILogList()
+      this.queryBillList()
     },
     handleClose(done) {
       // this.$confirm('确认关闭？').then(_ => {
@@ -206,20 +190,23 @@ export default {
       this.searchForm.locationid = ''
       this.searchForm.locationname = ''
     },
+    formatPeriod(row, column, cellValue) {
+      return row.startmonth + '--' + row.endmonth
+    },
     formatStatus(row, column, cellValue) {
       // 对账状态(0 待确认 1 已确认 2 待调账 3 已结算 )
       var type = ''
       switch (cellValue) {
-        case 0:
+        case '0':
           type = '待确认'
           break
-        case 1:
+        case '1':
           type = '已确认'
           break
-        case 2:
+        case '2':
           type = '待调账'
           break
-        case 3:
+        case '3':
           type = '已结算'
           break
         default:
@@ -228,11 +215,24 @@ export default {
       }
       return type
     },
-    downloadSettlement() {
-      alert('下载结算总结')
+    formatUnit(row, column, cellValue) {
+      if (cellValue !== null) {
+        return '￥' + (cellValue / 100).toFixed(2)
+      } else {
+        return ''
+      }
     },
-    checkHistorySettlement() {
-      alert('更多历史结算总结')
+    downloadSettlement() {
+      downloadBillList().then(response => {
+        if (response.status === 200) {
+          this.$message.success('下载成功')
+        } else {
+          this.$message.error(response.msg)
+        }
+      })
+    },
+    downloadHistorySettlement() {
+      this.$router.push({ path: '/finance/moreHistory' })
     }
   }
 }

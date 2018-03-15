@@ -284,11 +284,18 @@ export const asyncRouterMap = [
         meta: { roles: ['1'], title: '财务列表', icon: 'table' }
       },
       {
-        path: 'detailed',
+        path: 'detail',
         hidden: true,
-        component: _import('finance/detailed'),
-        name: '对账交易明细',
-        meta: { roles: ['2'], title: '对账交易明细', icon: 'table' }
+        component: _import('finance/detail'),
+        name: '对账明细',
+        meta: { roles: ['1'], title: '对账明细', icon: 'table' }
+      },
+      {
+        path: 'moreHistory',
+        hidden: true,
+        component: _import('finance/moreHistory'),
+        name: '更多历史结算明细',
+        meta: { roles: ['1'], title: '更多历史结算明细', icon: 'table' }
       }
     ]
   },
@@ -419,18 +426,11 @@ export const asyncRouterMap = [
         meta: { roles: ['2'], title: '财务对账', icon: 'table' }
       },
       {
-        path: 'detail',
+        path: 'thisMonthBillDetail',
         hidden: true,
-        component: _import('finance/detail'),
+        component: _import('finance/thisMonthBillDetail'),
         name: '对账交易明细',
         meta: { roles: ['2'], title: '对账交易明细', icon: 'table' }
-      },
-      {
-        path: 'historyDetail',
-        hidden: true,
-        component: _import('finance/historyDetail'),
-        name: '历史对账交易明细',
-        meta: { roles: ['2'], title: '历史对账交易明细', icon: 'table' }
       }
     ]
   },
