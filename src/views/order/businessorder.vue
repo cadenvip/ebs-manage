@@ -125,7 +125,7 @@
             </el-table-column>
             <el-table-column prop="orderStateName" label="订单状态" align="center">
             </el-table-column>
-            <el-table-column prop="date" label="操作" align="center">
+            <el-table-column  label="操作" align="center">
               <template slot-scope="scope">
                 <el-button @click="_getDeleveryDetail(scope.row)" type="text" size="small">物流详情</el-button>
               </template>
@@ -154,7 +154,7 @@
             </el-table-column>
             <el-table-column prop="orderStateName" label="订单状态" align="center">
             </el-table-column>
-            <el-table-column prop="date" label="操作" align="center">
+            <el-table-column  label="操作" align="center">
               <template slot-scope="scope">
                 <el-button @click="_getDeleveryDetail(scope.row)" type="text" size="small">订单发货</el-button>
                 <el-button @click="_getDeleveryDetail(scope.row)" type="text" size="small">物流详情</el-button>
@@ -184,7 +184,7 @@
             </el-table-column>
             <el-table-column prop="orderStateName" label="订单状态" align="center">
             </el-table-column>
-            <el-table-column prop="date" label="操作" align="center">
+            <el-table-column  label="操作" align="center">
               <template slot-scope="scope">
                 <el-button @click="_getDeleveryDetail(scope.row)" type="text" size="small">用户拒收</el-button>
                 <el-button @click="_getDeleveryDetail(scope.row)" type="text" size="small">物流详情</el-button>
@@ -214,9 +214,9 @@
             </el-table-column>
             <el-table-column prop="orderStateName" label="订单状态" align="center">
             </el-table-column>
-            <el-table-column prop="date" label="操作" align="center">
+            <el-table-column  label="操作" align="center">
               <template slot-scope="scope">
-                <el-button @click="_getDeleveryDetail(scope.row)" type="text" size="small">删除</el-button>
+                <el-button @click="_getDeleveryDetail(scope.row)" type="text" size="small">物流详情</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -243,9 +243,9 @@
             </el-table-column>
             <el-table-column prop="orderStateName" label="订单状态" align="center">
             </el-table-column>
-            <el-table-column prop="date" label="操作" align="center">
+            <el-table-column  label="操作" align="center">
               <template slot-scope="scope">
-                <el-button @click="_getDeleveryDetail(scope.row)" type="text" size="small">删除</el-button>
+                <el-button @click="_getDeleveryDetail(scope.row)" type="text" size="small">物流详情</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -272,9 +272,9 @@
             </el-table-column>
             <el-table-column prop="orderStateName" label="订单状态" align="center">
             </el-table-column>
-            <el-table-column prop="date" label="操作" align="center">
+            <el-table-column  label="操作" align="center">
               <template slot-scope="scope">
-                <el-button @click="_getDeleveryDetail(scope.row)" type="text" size="small">删除</el-button>
+                <el-button @click="_getDeleveryDetail(scope.row)" type="text" size="small">物流详情</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -301,9 +301,9 @@
             </el-table-column>
             <el-table-column prop="orderStateName" label="订单状态" align="center">
             </el-table-column>
-            <el-table-column prop="date" label="操作" align="center">
+            <el-table-column  label="操作" align="center">
               <template slot-scope="scope">
-                <el-button @click="_getDeleveryDetail(scope.row)" type="text" size="small">删除</el-button>
+                <el-button @click="_getDeleveryDetail(scope.row)" type="text" size="small">物流详情</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -323,6 +323,19 @@
           </el-pagination>
         </el-col>
       </el-row>
+      <el-dialog
+        title="物流信息"
+        :visible.sync="dialogVisible"
+        width="30%"
+        center>
+        <p>物流方式: 快递</p>
+        <p>物流公司: 中通快递</p>
+        <p>运单号码: 121323</p>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="dialogVisible = false">取 消</el-button>
+          <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+        </span>
+      </el-dialog>
   </div>
 </template>
 
@@ -425,7 +438,12 @@
       _getDeleveryDetail(oid) {
         if (oid) {
           getDeleveryDetail({ orderId: oid }).then(res => {
-            console.log(res)
+            if (res.status === 200) {
+              console.log(res.data)
+              this.dialogVisible = true
+            } else {
+              this.$message.error(res.msg)
+            }
           }).catch(err => {
             this.$message.error(err)
           })
@@ -438,15 +456,10 @@
           pageSize: 10
         }
         const params = Object.assign(defaultParam, this.searchForm)
-        // var paramStr = ''
-        // for (var i in params) {
-        //   paramStr += i + '=' + params[i] + '&'
-        // }
-        // paramStr = paramStr.substring(0, (paramStr.length - 1))
-        // var url = process.env.BASE_API + 'order/export?JSESSIONID=' + getSessionid() + '&' + paramStr
         orderExport(params).then(res => {
-          console.log(res)
-          this.$message.success('成功！')
+          if (res.status === 200) {
+            this.$message.success('成功！')
+          }
         }).catch(err => {
           this.$message.error(err)
         })
