@@ -36,22 +36,22 @@
         <el-row :gutter="20" style="margin-left:0px;margin-right:0px;margin-top:20px;">
           <el-col :span="3" style="text-align:right">
             <span>
-              <el-button @click="checkDetail" type="text" v-show="thisMonthBill !== null && thisMonthBill.id !== null && thisMonthBill.id !== ''">查看结算明细</el-button>
+              <el-button @click="checkDetail" type="text" >查看结算明细</el-button>
             </span> 
           </el-col>
           <el-col :span="3">
             <span>
-              <el-button @click="downloadDetail" type="primary" v-show="thisMonthBill !== null && thisMonthBill.id !== null && thisMonthBill.id !== ''">打包下载结算明细</el-button>
+              <el-button @click="downloadDetail" type="primary" >打包下载结算明细</el-button>
             </span> 
           </el-col>
           <el-col :span="3" :offset="10" style="text-align:right">
             <span>
-              <el-button @click="checkout" type="primary" v-show="thisMonthBill !== null && thisMonthBill.id !== null && thisMonthBill.id !== ''">确认结账</el-button>
+              <el-button @click="checkout" type="primary" >确认结账</el-button>
             </span> 
           </el-col>
           <el-col :span="3">
             <span>
-              <el-button @click="dispute" type="primary" v-show="thisMonthBill !== null && thisMonthBill.id !== null && thisMonthBill.id !== ''">核账争议</el-button>
+              <el-button @click="dispute" type="primary" >核账争议</el-button>
             </span> 
           </el-col>
         </el-row>        
@@ -61,11 +61,11 @@
           <h5>所有财务账单</h5>
           <span v-for="(item, index) in historyBill" v-if="item !== undefined" style="margin-top:10px;margin-left:50px">
             <el-button @click="chechMonthBillDetail(item)" type="text" el-icon-download>{{ formatYearMonth(item) }}</el-button>
-            <el-button @click="downloadMonthBill(item)" type="primary" icon="el-icon-download" size="mini">下载</el-button>
+            <el-button @click="downloadMonthBill(item)" type="primary" icon="el-icon-download" size="mini"></el-button>
           </span>
           <span v-for="(item, index) in moreHistoryBill" v-if="item !== undefined" style="margin-top:10px;margin-left:50px">
             <el-button @click="chechMonthBillDetail(item)" type="text">{{ formatYearMonth(item) }}</el-button>
-            <el-button @click="downloadHistoryMonthBill(item)" type="primary" icon="el-icon-download" size="mini">下载</el-button>
+            <el-button @click="downloadHistoryMonthBill(item)" type="primary" icon="el-icon-download" size="mini"></el-button>
           </span>
         </div>
       </el-tab-pane>
@@ -78,13 +78,21 @@
       <p>交易手续费：支付宝交易手续费=交易金额*0.005，手机支付交易手续费=交易金额*0.003，结果采用“进一法”；</p>
       <p>转账手续费（仅针对支付宝）：转账费=转账金额*0.001，0.5元起收，10元封顶；</p>
       <p>当期应付款：当期应付款=总交易金额-交易手续费-转账手续费。注：当期应付金额低于500时不给予结算，需累计到500以上进行结算；</p>
-    </div> 
+    </div>
+    <el-dialog title="核账争议" :visible.sync="dialogFormVisible" style="padding:10px 20px">
+      <el-input v-model="content" type="textarea" :rows=8 placeholder='请输入核账争议内容'></el-input>
+      <p>剩余字数: <span style="color:red;">{{getContentLen}}</span></p>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="confirmDispute">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 
-import { getThisMonthSummary, getHistorySummary, getThisMonthBill, downloadBill, getHistoryBill, getHistoryBillsList } from '@/api/finance'
+import { getThisMonthSummary, getHistorySummary, getThisMonthBill, downloadBill, getHistoryBill, getHistoryBillsList, submitDispute } from '@/api/finance'
 // import { getSessionid } from '@/utils/auth'
 
 export default {
@@ -95,7 +103,9 @@ export default {
       historySumery: [],
       thisMonthBill: {},
       historyBill: [],
-      moreHistoryBill: []
+      moreHistoryBill: [],
+      content: '',
+      dialogFormVisible: false
     }
   },
   created() {
@@ -110,6 +120,13 @@ export default {
     this.initData()
   },
   computed: {
+    getContentLen() {
+      if (this.content) {
+        return (200 - this.content.length) < 0 ? 0 : (200 - this.content.length)
+      } else {
+        return 200
+      }
+    },
     transferfeeFormat: function() {
       if (this.thisMonthBill !== null && this.thisMonthBill.transferfee !== undefined && this.thisMonthBill.transferfee !== null) {
         return '￥' + (this.thisMonthBill.transferfee / 100).toFixed(2)
@@ -197,14 +214,20 @@ export default {
       }
     },
     checkDetail() {
-      this.$router.push({ path: '/statement/thisMonthBillDetail', query: { id: this.thisMonthBill.id }})
+      if (this.thisMonthBill !== null) {
+        this.$router.push({ path: '/statement/thisMonthBillDetail', query: { id: this.thisMonthBill.id }})
+      } else {
+        this.$message.error('暂无数据')
+      }
     },
     chechMonthBillDetail(bill) {
-      this.$router.push({ path: '/statement/detail', query: { id: bill.id }})
+      if (this.thisMonthBill !== null) {
+        this.$router.push({ path: '/statement/detail', query: { id: bill.id }})
+      } else {
+        this.$message.error('暂无数据')
+      }
     },
     downloadDetail() {
-      // var url = process.env.BASE_API + 'statement/export' + `?JSSESIONID=${getSessionid()}&billid=${this.thisMonthBill.id}&thisyear=1`
-      // window.open(url)
       downloadBill(this.thisMonthBill, 1).then(response => {
         console.log('200行 response: ', response)
         if (response.status === 200) {
@@ -223,6 +246,8 @@ export default {
         } else {
           this.$message.error(response.msg)
         }
+      }).catch(error => {
+        console.log(error)
       })
     },
     downloadHistoryMonthBill(bill) {
@@ -232,13 +257,44 @@ export default {
         } else {
           this.$message.error(response.msg)
         }
+      }).catch(error => {
+        console.log(error)
       })
     },
     checkout() {
-      alert('确认结账')
+      if (this.thisMonthBill !== null) {
+        alert('核账争议')
+      } else {
+        this.$message.error('暂无数据')
+      }
     },
     dispute() {
-      alert('核账争议')
+      if (this.thisMonthBill !== null) {
+        this.dialogFormVisible = true
+      } else {
+        this.$message.error('暂无数据')
+      }
+    },
+    confirmDispute() {
+      if (this.content === undefined || this.content === '') {
+        this.$message.error('请填写争议内容')
+        return
+      } else {
+        var params = {
+          'billid': `${this.thisMonthBill.id}`,
+          'content': this.content
+        }
+        submitDispute(params).then(response => {
+          if (response.status === 200) {
+            this.$message.success('提交成功')
+          } else {
+            this.$message.error(response.msg)
+          }
+        }).catch(error => {
+          console.log(error)
+        })
+        this.dialogFormVisible = false
+      }
     }
   }
 }
