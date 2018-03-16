@@ -24,3 +24,10 @@ export function orderExport (params) {
     params: params
   })
 }
+// 订单详情
+export function orderDetail (oid) {
+  return request({
+    url: '/order/getOrder/' + oid,
+    method: 'get'
+  })
+}

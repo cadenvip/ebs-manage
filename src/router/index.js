@@ -498,6 +498,19 @@ export const asyncRouterMap = [
         name: '订单首页',
         component: _import('order/businessorder'),
         meta: { roles: ['1', '2'], title: '订单管理', icon: 'form' }
+      },
+      {
+        path: 'commonquery',
+        name: 'commonquery',
+        component: _import('order/admin/commonorderquery'),
+        meta: { roles: ['1', '2'], title: '普通订单查询', icon: 'form' }
+      },
+      {
+        path: 'orderdetail',
+        name: 'orderdetail',
+        hidden: true,
+        component: _import('order/orderdetail'),
+        meta: { roles: ['1', '2'], title: '订单详情', icon: 'form' }
       }
     ]
   },

@@ -2,7 +2,7 @@
   <div style="padding: 20px;">
     <el-form style="height: 75px;" :model="searchForm" status-icon ref="searchForm" label-width="0">
       <el-col :span="4">
-        <el-form-item prop="pass">
+        <el-form-item>
           <el-input size="medium" style="width: 80%" @focus="openDialog" v-model="searchForm.businessName" placeholder="请选择商家"></el-input>
         </el-form-item>
       </el-col>
@@ -144,10 +144,11 @@
       },
       _getBusiness(obj) {
         var defaultParam = {
+          'businessesName': this.dialogForm.name,
           'limit': '10',
-          'page': '1'
+          'page': this.currentPage2
         }
-        var params = Object.assign(defaultParam, obj)
+        var params = Object.assign(defaultParam)
         this.tableData2 = []
         getBusiness(params).then(res => {
           if (res.status === 200) {
@@ -180,14 +181,17 @@
       },
       handleCurrentChange2(val) {
         this.currentPage2 = val
-        this._getBusiness({ 'page': String(val) })
+        this._getBusiness()
       },
       handleCurrentChange3(val) {
-        this.currentBusiness = val.businessesName
-        this.currentBusinessId = val.id
+        if (val) {
+          this.currentBusiness = val.businessesName
+          this.currentBusinessId = val.id
+        }
       },
       openDialog() {
         this.dialogForm.name = ''
+        this.currentPage2 = 1
         this.dialogVisible = true
         this._getBusiness()
       },
@@ -197,7 +201,8 @@
         this.searchForm.merchantId = this.currentBusinessId
       },
       dialogSearch() {
-        this._getBusiness({ 'businessesName': String(this.dialogForm.name) })
+        this.currentPage2 = 1
+        this._getBusiness()
       },
       audit(row) {
         this.$router.push({ name: '在售商品修改审核', query: { gid: row.goodsId }})
