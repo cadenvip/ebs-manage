@@ -1,6 +1,5 @@
 import request from '@/utils/request'
 
-// 管理员
 // 获取本年度所有账单（不分页）
 export function getThisYearAllBill() {
   return request({
@@ -10,6 +9,8 @@ export function getThisYearAllBill() {
 }
 
 // 获取非本年度所有账单（不分页）
+// 不传参（管理员）
+// 传参（商家unitid）
 export function getHistoryBillsList(params) {
   return request({
     url: '/statement/morehistorybill',
@@ -69,8 +70,6 @@ export function downloadBill(bill, thisyear) {
   })
 }
 
-// 商家
-// 本月概况
 export function getThisMonthSummary(params) {
   return request({
     url: '/statement/thismonthsummary',
@@ -98,6 +97,32 @@ export function getThisMonthBill(params) {
 export function getHistoryBill(params) {
   return request({
     url: '/statement/historymonthbill',
+    method: 'post',
+    data: params
+  })
+}
+
+export function submitDispute(params) {
+  return request({
+    url: '/statement/accountingdispute',
+    method: 'post',
+    data: params
+  })
+}
+
+// 管理员结账
+export function adminDealBill(params) {
+  return request({
+    url: '/statement/admindealbill',
+    method: 'post',
+    data: params
+  })
+}
+
+// 商家结账
+export function businessDealBill(params) {
+  return request({
+    url: '/statement/businessDealBill',
     method: 'post',
     data: params
   })

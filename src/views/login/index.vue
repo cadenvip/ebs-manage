@@ -24,8 +24,8 @@
         <el-input name="password" :type="pwdType" @keyup.enter.native="handleLogin" v-model="loginForm.password" placeholder="请输入密码"></el-input>
           <span class="show-pwd" @click="showPwd"><svg-icon icon-class="eye" /></span>
       </el-form-item>
-      <el-row>
-        <el-col :span="16">
+      <el-row :gutter="14">
+        <el-col :span="15">
           <el-form-item prop="vercode">
             <span class="svg-container svg-container_login">
               <svg-icon icon-class="user" />
@@ -34,7 +34,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-button type="primary" style="margin-top:6px" :loading="loading" @click.native.prevent="getVercode">
+          <el-button type="primary" style="margin-top:6px" @click.native.prevent="getVercode">
             获取验证码
           </el-button>
         </el-col>
@@ -43,7 +43,7 @@
         <el-button type="primary" style="width:47.85%;" :loading="loading" @click.native.prevent="handleLogin">
           登录
         </el-button>
-        <el-button type="primary" style="width:47.85%;" :loading="loading" @click.native.prevent="handleRegist">
+        <el-button type="primary" style="width:47.85%;" @click.native.prevent="handleRegist">
           注册
         </el-button>
       </el-form-item>
@@ -127,6 +127,7 @@ export default {
     getUnitids() {
       this.loginForm.loginname = this.loginForm.loginname.trim()
       if (this.loginForm.loginname === '') {
+        this.$message.error('请输入手机号码')
         return
       } else {
         if (!validateMobilePhone(this.loginForm.loginname.trim())) {
@@ -153,6 +154,15 @@ export default {
     },
     getVercode() {
       return new Promise((resolve, reject) => {
+        this.loginForm.loginname = this.loginForm.loginname.trim()
+        if (this.loginForm.loginname === '') {
+          this.$message.error('请输入手机号码')
+          return
+        } else {
+          if (!validateMobilePhone(this.loginForm.loginname.trim())) {
+            return
+          }
+        }
         getVercode(this.loginForm.loginname).then(response => {
           if (response.status === 200) {
             resolve(response)
