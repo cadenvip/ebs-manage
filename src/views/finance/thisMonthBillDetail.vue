@@ -133,11 +133,19 @@
       </el-col>
     </el-row>
     <br/>
+    <el-dialog title="核账争议" :visible.sync="dialogFormVisible" style="padding:10px 20px">
+      <el-input v-model="content" type="textarea" :rows=8 placeholder='请输入核账争议内容'></el-input>
+      <p>剩余字数: <span style="color:red;">{{getContentLen}}</span></p>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="confirmDispute">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { getBillDetail } from '@/api/finance'
+import { getBillDetail, downloadBill, submitDispute } from '@/api/finance'
 
 export default {
   data() {
@@ -147,7 +155,9 @@ export default {
         logList: [],
         bill: {},
         detailListpayed: []
-      }
+      },
+      content: '',
+      dialogFormVisible: false
     }
   },
   created() {
@@ -199,7 +209,6 @@ export default {
       getBillDetail(params).then(response => {
         if (response.status === 200) {
           this.thisMonthDetail = response.data
-          console.log(this.thisMonthDetail)
         } else {
           this.$message.error(response.msg)
         }
@@ -283,13 +292,42 @@ export default {
       return type
     },
     downloadDetail() {
-      alert('打包下载交易明细')
+      downloadBill(this.thisMonthDetail.bill, 1).then(response => {
+        if (response.status === 200) {
+          this.$message.success('下载结算明细成功')
+        } else {
+          this.$message.error(response.msg)
+        }
+      }).catch(error => {
+        console.log(error)
+      })
     },
     checkout() {
-      alert('确认结账')
+      alert('确认对账')
     },
     dispute() {
-      alert('核账争议')
+      this.$message.error('暂无数据')
+    },
+    confirmDispute() {
+      if (this.content === undefined || this.content === '') {
+        this.$message.error('请填写争议内容')
+        return
+      } else {
+        var params = {
+          'billid': `${this.thisMonthDetail.bill.id}`,
+          'content': this.content
+        }
+        submitDispute(params).then(response => {
+          if (response.status === 200) {
+            this.$message.success('提交成功')
+          } else {
+            this.$message.error(response.msg)
+          }
+        }).catch(error => {
+          console.log(error)
+        })
+        this.dialogFormVisible = false
+      }
     },
     handleConflict(orderInfo) {
       console.log(orderInfo)
