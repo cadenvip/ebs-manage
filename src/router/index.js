@@ -186,7 +186,7 @@ export const asyncRouterMap = [
     path: '/log',
     name: 'log',
     component: Layout,
-    redirect: '/log/ilog/list',
+    redirect: '/log/olog/list',
     hidden: false,
     meta: { roles: ['1'], title: '日志管理', icon: 'table' },
     children: [

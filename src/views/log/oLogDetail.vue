@@ -2,7 +2,7 @@
   <el-container style="width:1000px;margin:0 auto 20px">
     <el-main>
       <h3>基本信息</h3>
-      <div style="color: #606266;font-size:14px;width:960px;height:140px;overflow:auto;border:#E6E6E6 solid 1px;">
+      <div style="color: #606266;font-size:14px;width:960px;overflow:auto;border:#E6E6E6 solid 1px;">
         <el-row :gutter="6" style="margin-left:0px;margin-right:0px;margin-top:20px;">
           <el-col :span="4" style="text-align:right">
             <span>
@@ -11,61 +11,61 @@
           </el-col>
           <el-col :span="8">
             <span>
-              {{ logDetail.reqseq }}
+              {{ logDetail.id }}
             </span> 
           </el-col>
           <el-col :span="4" style="text-align:right">
             <span>
-              接口服务名：
+              操作门户：
             </span> 
           </el-col>
           <el-col :span="8">
             <span>
-              {{ logDetail.reqservice }}
+              {{ systemFormat }}
             </span> 
           </el-col>
         </el-row>
         <el-row :gutter="6" style="margin-left:0px;margin-right:0px;margin-top:12px;">
           <el-col :span="4" style="text-align:right">
             <span>
-              接口消息标志：
+              操作人账号：
             </span> 
           </el-col>
           <el-col :span="8">
             <span>
-              {{ logDetail.reqaction }}
+              {{ logDetail.loginName !== null ? logDetail.loginName : '&nbsp;' }}
             </span> 
           </el-col>
           <el-col :span="4" style="text-align:right">
             <span>
-              发起方编码：
+              操作模块：
             </span> 
           </el-col>
           <el-col :span="8">
             <span>
-              {{ logDetail.reqcode }}
+              {{ logDetail.moduleId !== null ? logDetail.moduleId : '&nbsp;' }}
             </span> 
           </el-col>
         </el-row>
         <el-row :gutter="6" style="margin-left:0px;margin-right:0px;margin-top:12px;">
           <el-col :span="4" style="text-align:right">
             <span>
-              发起方IP地址：
+              操作类型：
             </span> 
           </el-col>
           <el-col :span="8">
             <span>
-              {{ logDetail.clientip }}
+              {{ logDetail.operType !== null ? logDetail.operType : '&nbsp;' }}
             </span> 
           </el-col>
           <el-col :span="4" style="text-align:right">
             <span>
-              接口协议：
+              操作人IP：
             </span> 
           </el-col>
           <el-col :span="8">
             <span>
-              {{ logDetail.protocol }}
+              {{ logDetail.clientIp }}
             </span> 
           </el-col>
         </el-row>
@@ -87,22 +87,22 @@
           </el-col>
           <el-col :span="8">
             <span>
-              {{ logDetail.createtime }}
+              {{ logDetail.createTime }}
             </span> 
           </el-col>
-        </el-row>                                                   
-      </div>
-      <h3>请求报文</h3>
-      <div style="color: #606266;font-size:14px;width:960px;height:200px;overflow-x:hidden;border:#E6E6E6 solid 1px;padding:15px 20px;line-height:30px;word-wrap:break-word;word-break:break-all;">
-        <span>
-          {{ logDetail.reqmessage }}
-        </span>
-      </div>
-      <h3>响应报文</h3>
-      <div style="color: #606266;font-size:14px;width:960px;height:300px;overflow-x:hidden;border:#E6E6E6 solid 1px;padding:15px 20px;line-height:30px;word-wrap:break-word;word-break:break-all;">
-        <span>
-          {{ logDetail.rspmessage }}
-        </span>
+        </el-row>
+        <el-row :gutter="6" style="margin-left:0px;margin-right:0px;margin-top:12px;margin-bottom:20px">
+          <el-col :span="4" style="text-align:right">
+            <span>
+              操作内容：
+            </span> 
+          </el-col>
+          <el-col :span="20">
+            <span>
+              {{ logDetail.operContent }}
+            </span> 
+          </el-col>
+        </el-row>
       </div>
       <div style="margin-top: 20px; text-align: center;">
         <el-button @click="goBack" type="primary">返 回</el-button>
@@ -112,36 +112,45 @@
 </template>
 
 <script>
-  import { getILogDetail } from '@/api/log'
+  import { getOLogDetail } from '@/api/log'
   export default {
     data() {
       return {
-        // TODO
         logDetail: {
-          clientip: '',
-          createtime: '',
-          errormessage: '',
           id: '',
-          month: '',
-          month_day: '',
-          protocol: '',
-          reqaction: '',
-          reqcode: '',
-          reqmessage: '',
-          reqseq: '',
-          reqservice: '',
-          rspmessage: '',
-          timed: ''
+          userId: '',
+          loginName: '',
+          moduleId: '',
+          operType: '',
+          operContent: '',
+          clientIp: '',
+          timed: '',
+          createTime: '',
+          system: ''
         }
       }
     },
     created() {
-      this.getILogInfo()
+      this.getOLogInfo()
+    },
+    computed: {
+      systemFormat: function() {
+        if (this.logDetail.system === undefined || this.logDetail.system === null) {
+          return ''
+        } else {
+          switch (this.logDetail.system) {
+            case '1':
+              return '系统门户'
+            case '2':
+              return '商家门户'
+          }
+        }
+      }
     },
     methods: {
-      getILogInfo() {
+      getOLogInfo() {
         return new Promise((resolve, reject) => {
-          getILogDetail(this.$route.query.id).then(response => {
+          getOLogDetail(this.$route.query.id).then(response => {
             if (response.status === 200) {
               this.logDetail = response.data
               resolve(response)
@@ -154,8 +163,8 @@
         })
       },
       goBack() {
-        this.$router.push({ path: '/log/ilog/list' })
-        // this.$router.go(-1)
+        // this.$router.push({ path: '/log/olog/list' })
+        this.$router.go(-1)
       }
     }
   }

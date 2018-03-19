@@ -66,7 +66,7 @@
         <el-table-column label="订单号" prop="ordercode" align="center"></el-table-column>
         <el-table-column label="订单下单时间" prop="ordertime" :show-overflow-tooltip="true" align="center"></el-table-column>
         <el-table-column label="订单完成时间" prop="finishtime" :show-overflow-tooltip="true" align="center"></el-table-column>
-        <el-table-column label="支付渠道" prop="paytype" align="center"></el-table-column>
+        <el-table-column label="支付渠道" prop="paytype" :formatter="typeFormat" align="center"></el-table-column>
         <el-table-column label="交易金额" prop="totalamount" :formatter="unitFormat" align="center"></el-table-column>
         <el-table-column label="手续费" prop="feeamount" :formatter="unitFormat" align="center"></el-table-column>
         <el-table-column label="应结算金额" prop="payamount" :formatter="unitFormat" align="center"></el-table-column>
@@ -108,7 +108,7 @@
         <el-table-column label="序号" type="index" :index="indexPayed" align="center"></el-table-column>
         <el-table-column label="订单号" prop="ordercode" align="center"></el-table-column>
         <el-table-column label="订单下单时间" prop="ordertime" :show-overflow-tooltip="true" align="center"></el-table-column>
-        <el-table-column label="支付渠道" prop="finishtime" :formatter="typeFormat" align="center"></el-table-column>
+        <el-table-column label="支付渠道" prop="paytype" :formatter="typeFormat" align="center"></el-table-column>
         <el-table-column label="交易金额" prop="totalamount" :formatter="unitFormat" align="center"></el-table-column>
         <el-table-column label="手续费" prop="feeamount" :formatter="unitFormat" align="center"></el-table-column>
         <el-table-column label="应结算金额" prop="payamount" :formatter="unitFormat" align="center"></el-table-column>
@@ -199,6 +199,13 @@ export default {
         return '￥' + (this.thisMonthDetail.bill.transferfee / 100).toFixed(2)
       } else {
         return ''
+      }
+    },
+    getContentLen() {
+      if (this.content) {
+        return (200 - this.content.length) < 0 ? 0 : (200 - this.content.length)
+      } else {
+        return 200
       }
     }
   },
@@ -303,10 +310,10 @@ export default {
       })
     },
     checkout() {
-      alert('确认对账')
+      alert('确认结账')
     },
     dispute() {
-      this.$message.error('暂无数据')
+      this.dialogFormVisible = true
     },
     confirmDispute() {
       if (this.content === undefined || this.content === '') {

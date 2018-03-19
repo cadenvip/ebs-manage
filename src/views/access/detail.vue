@@ -76,7 +76,7 @@
         </el-col>
         <el-col :span="8">
           <span>
-            {{ si_personFormat }}
+            {{ accessBean.si_person !== null ? accessBean.si_person : '&nbsp;' }}
           </span> 
         </el-col>
         <el-col :span="4" style="text-align:right">
@@ -163,13 +163,6 @@ export default {
         return '业务平台'
       } else {
         return '未知'
-      }
-    },
-    si_personFormat: function() {
-      if (this.accessBean.si_person === null) {
-        return '空'
-      } else {
-        return this.accessBean.si_person
       }
     },
     channel_codeFormat: function () {
