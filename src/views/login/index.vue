@@ -112,9 +112,17 @@ export default {
         if (valid) {
           this.loading = true
           // 提供dispatch(action)方法更新state；
-          this.$store.dispatch('Login', this.loginForm).then(() => {
+          this.$store.dispatch('Login', this.loginForm).then(response => {
             this.loading = false
-            this.$router.push({ path: '/' })
+            // 根据角色进入相应的首页
+            console.log(118, response)
+            if (response.data.role[0].roletype === '1') {
+              this.$router.push({ path: '/home/index' })
+            } else if (response.data.role[0].roletype === '2') {
+              this.$router.push({ path: '/home/index' })
+            } else {
+              this.$message.error('登录失败！')
+            }
           }).catch(() => {
             this.loading = false
           })
