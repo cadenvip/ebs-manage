@@ -20,35 +20,23 @@ import Layout from '../views/layout/Layout'
 **/
 export const constantRouterMap = [
   { path: '/login', component: _import('login/index'), hidden: true },
+  { path: '/timeout', component: _import('timeout'), hidden: true },
   { path: '/register', component: _import('register/register'), hidden: true },
   { path: '/regStepTwo', component: _import('register/regStepTwo'), hidden: true },
   { path: '/regStepThree', component: _import('register/regStepThree'), hidden: true },
-  { path: '/regStepFour', component: _import('register/regStepFour'), hidden: true }
+  { path: '/regStepFour', component: _import('register/regStepFour'), hidden: true },
 
-  // {
-  //   path: '/',
-  //   component: Layout,
-  //   redirect: '/dashboard',
-  //   name: 'Dashboard',
-  //   hidden: false,
-  //   children: [{
-  //     path: 'dashboard',
-  //     component: _import('dashboard/index')
-  //   }]
-  // },
-  // {
-  //   path: '/homepage',
-  //   component: Layout,
-  //   hidden: false,
-  //   children: [
-  //     {
-  //       path: 'index',
-  //       name: 'homepage',
-  //       component: _import('dashboard/index'),
-  //       meta: { title: '首页', icon: 'form' }
-  //     }
-  //   ]
-  // }
+  {
+    path: '/',
+    component: Layout,
+    redirect: '/dashboard',
+    name: 'Dashboard',
+    hidden: true,
+    children: [{
+      path: 'dashboard',
+      component: _import('dashboard/index')
+    }]
+  }
 ]
 
 export default new Router({
@@ -67,18 +55,23 @@ export const asyncRouterMap = [
   {
     path: '/home',
     component: Layout,
-    redirect: '/home/index',
-    meta: { roles: ['1'], title: '首页', icon: 'form' },
     name: '首页',
     children: [
       {
-        path: 'index',
+        path: 'ahome',
         name: '管理员首页',
         component: _import('homepage/ahome'),
         meta: { roles: ['1'], title: '管理员首页', icon: 'form' }
+      },
+      {
+        path: 'bhome',
+        name: '商家首页',
+        component: _import('homepage/bhome'),
+        meta: { roles: ['2'], title: '商家首页', icon: 'form' }
       }
     ]
   },
+
   {
     path: '/system',
     component: Layout,
@@ -310,22 +303,6 @@ export const asyncRouterMap = [
         component: _import('finance/moreHistory'),
         name: '更多历史结算明细',
         meta: { roles: ['1'], title: '更多历史结算明细', icon: 'table' }
-      }
-    ]
-  },
-
-  {
-    path: '/home',
-    redirect: '/home/index',
-    component: Layout,
-    meta: { roles: ['2'], title: '首页', icon: 'form' },
-    name: '首页',
-    children: [
-      {
-        path: 'index',
-        name: '商家首页',
-        component: _import('homepage/bhome'),
-        meta: { roles: ['2'], title: '商家首页', icon: 'form' }
       }
     ]
   },

@@ -117,9 +117,11 @@ export default {
             // 根据角色进入相应的首页
             console.log(118, response)
             if (response.data.role[0].roletype === '1') {
-              this.$router.push({ path: '/home/index' })
+              console.log('管理员')
+              this.$router.push({ path: '/home/ahome' })
             } else if (response.data.role[0].roletype === '2') {
-              this.$router.push({ path: '/home/index' })
+              console.log('商家')
+              this.$router.push({ path: '/home/bhome' })
             } else {
               this.$message.error('登录失败！')
             }

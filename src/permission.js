@@ -16,39 +16,13 @@ function hasPermission(roles, permissionRoles) {
 
 const whiteList = ['/',
   '/login'
-  // '/goodsmanage/publishgoods',
-  // '/goodsmanage/publishstep1',
-  // '/goodsmanage/publishstep2',
-  // '/goodsmanage/publishstep3',
-  // '/goodsmanage/onsalegoods',
-  // '/goodsmanage/noshelfgoods',
-  // '/goodsmanage/goodsdetail',
-  // 管理员
-  // '/goodsmanage/updownaudit',
-  // '/goodsmanage/goodssearch',
-  // '/goodsmanage/preview',
-  // '/system/location',
-  // '/system/user/list',
-  // '/system/user/add',
-  // '/system/user/update',
-  // '/system/user/detail',
-  // '/system/role/list',
-  // '/system/role/add',
-  // '/system/role/update',
-  // '/system/role/detail',
-  // '/system/permissions',
-  // '/businesses/list',
-  // '/businesses/add',
-  // '/businesses/detail',
-  // '/businesses/audit'
 ] // 不重定向白名单
 
 router.beforeEach((to, from, next) => {
   NProgress.start()
   if (getToken()) {
     if (to.path === '/login') {
-      store.dispatch('LogOut').then(() => {
-        // next()
+      store.dispatch('FedLogOut').then(() => {
         location.reload()
       }).catch(error => {
         NProgress.done()
