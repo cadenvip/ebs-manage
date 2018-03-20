@@ -18,7 +18,7 @@
         <el-input style="width: 100px;" placeholder="特色卖点" :maxlength=20 v-model="ruleForm.maidian"></el-input>
       </el-form-item>
       <div>
-        <p style="font-size: 14px;color: #606266;margin-left: 30px;margin-top: 0;">商品名称展示效果: <span style="color: #67c23a">{{ruleForm.cuxiao+"&nbsp&nbsp"+ruleForm.pinpai+"&nbsp&nbsp"+ruleForm.mingchen+"&nbsp&nbsp"}}<i v-show="ruleForm.guige">包装: </i>{{ruleForm.guige+"&nbsp&nbsp"+ruleForm.maidian}}</span></p>
+        <p style="font-size: 14px;color: #ccc;margin-left: 30px;margin-top: 0;">商品名称展示效果: <span style="color: #67c23a">{{ruleForm.cuxiao+"&nbsp&nbsp"+ruleForm.pinpai+"&nbsp&nbsp"+ruleForm.mingchen+"&nbsp&nbsp"}}<i v-show="ruleForm.guige">包装: </i>{{ruleForm.guige+"&nbsp&nbsp"+ruleForm.maidian}}</span></p>
       </div>
       <el-form-item style="display: block;" label="市场价:" prop="shichangjia">
         <el-input style="width: 260px;" :maxlength=7 placeholder="输入同类市场价" v-model.number="ruleForm.shichangjia"></el-input>
@@ -43,7 +43,6 @@
             <el-button type="primary" size="mini" @click="confirmLogisticsTemplate">确定</el-button>
           </div>
         </el-popover>
-        {{ruleForm.wuliu}}
         <el-checkbox-group style="display: inline-block;" v-model="ruleForm.wuliu">
           <el-checkbox label="物流"></el-checkbox>
           <el-checkbox label="自提"></el-checkbox>

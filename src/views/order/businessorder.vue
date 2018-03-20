@@ -350,6 +350,7 @@
     },
     data() {
       return {
+        dialogVisible: false,
         tableData: [],
         currentPage: 1,
         currentTab: 'tab8',

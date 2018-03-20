@@ -200,7 +200,7 @@
           if (res.status === 200) {
             this.$router.push({ path: '/goodsmanage/publishstep1' })
           } else {
-            this.$message.error('网络错误')
+            this.$message.error(res.msg)
           }
         })
         setTimeout(() => {

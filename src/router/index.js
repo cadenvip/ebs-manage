@@ -506,11 +506,24 @@ export const asyncRouterMap = [
         meta: { roles: ['1', '2'], title: '普通订单查询', icon: 'form' }
       },
       {
+        path: 'businessorder2',
+        name: 'businessorder2',
+        component: _import('order/businessorder2'),
+        meta: { roles: ['1', '2'], title: '普通订单管理', icon: 'form' }
+      },
+      {
         path: 'orderdetail',
         name: 'orderdetail',
         hidden: true,
         component: _import('order/orderdetail'),
         meta: { roles: ['1', '2'], title: '订单详情', icon: 'form' }
+      },
+      {
+        path: 'shipments',
+        name: 'shipments',
+        hidden: true,
+        component: _import('order/shipments'),
+        meta: { roles: ['1', '2'], title: '订单发货', icon: 'form' }
       }
     ]
   },

@@ -181,7 +181,7 @@
             <el-col :span="18" style="text-align: right; padding-right: 20px;">
               <el-pagination
                 @current-change="handleCurrentChange"
-                layout="total, sizes, prev, pager, next, jumper"
+                layout="total, prev, pager, next, jumper"
                 :current-page.sync="currentPage"
                 :page-sizes="pagesizes"
                 :page-size="pagesize"

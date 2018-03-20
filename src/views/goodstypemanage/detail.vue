@@ -15,12 +15,11 @@
 </template>
 
 <script>
-  import axios from 'axios'
+  import { getCategoryDetail } from '@/api/goodstype'
   export default {
     created() {
       this.csid = this.$route.query.csid
-      var url = process.env.BASE_API + 'category/get/' + this.$route.query.csid
-      axios.get(url).then(res => {
+      getCategoryDetail.get(this.csid).then(res => {
         if (res.data.status === 200) {
           this.detailObj = res.data.data
         } else {

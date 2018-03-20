@@ -8,3 +8,10 @@ export function goodsTypeSave (params) {
     data: params
   })
 }
+
+export function getCategoryDetail (id) {
+  return request({
+    url: '/category/get/' + id,
+    method: 'get'
+  })
+}
