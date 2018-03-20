@@ -66,7 +66,7 @@
         <el-table-column label="订单号" prop="ordercode" align="center"></el-table-column>
         <el-table-column label="订单下单时间" prop="ordertime" :show-overflow-tooltip="true" align="center"></el-table-column>
         <el-table-column label="订单完成时间" prop="finishtime" :show-overflow-tooltip="true" align="center"></el-table-column>
-        <el-table-column label="支付渠道" prop="paytype" align="center"></el-table-column>
+        <el-table-column label="支付渠道" prop="paytype" :formatter="typeFormat" align="center"></el-table-column>
         <el-table-column label="交易金额" prop="totalamount" :formatter="unitFormat" align="center"></el-table-column>
         <el-table-column label="手续费" prop="feeamount" :formatter="unitFormat" align="center"></el-table-column>
         <el-table-column label="应结算金额" prop="payamount" :formatter="unitFormat" align="center"></el-table-column>
@@ -108,7 +108,7 @@
         <el-table-column label="序号" type="index" :index="indexPayed" align="center"></el-table-column>
         <el-table-column label="订单号" prop="ordercode" align="center"></el-table-column>
         <el-table-column label="订单下单时间" prop="ordertime" :show-overflow-tooltip="true" align="center"></el-table-column>
-        <el-table-column label="支付渠道" prop="finishtime" :formatter="typeFormat" align="center"></el-table-column>
+        <el-table-column label="支付渠道" prop="paytype" :formatter="typeFormat" align="center"></el-table-column>
         <el-table-column label="交易金额" prop="totalamount" :formatter="unitFormat" align="center"></el-table-column>
         <el-table-column label="手续费" prop="feeamount" :formatter="unitFormat" align="center"></el-table-column>
         <el-table-column label="应结算金额" prop="payamount" :formatter="unitFormat" align="center"></el-table-column>
@@ -133,11 +133,19 @@
       </el-col>
     </el-row>
     <br/>
+    <el-dialog title="核账争议" :visible.sync="dialogFormVisible" style="padding:10px 20px">
+      <el-input v-model="content" type="textarea" :rows=8 placeholder='请输入核账争议内容'></el-input>
+      <p>剩余字数: <span style="color:red;">{{getContentLen}}</span></p>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="confirmDispute">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { getBillDetail } from '@/api/finance'
+import { getBillDetail, downloadBill, submitDispute } from '@/api/finance'
 
 export default {
   data() {
@@ -147,7 +155,9 @@ export default {
         logList: [],
         bill: {},
         detailListpayed: []
-      }
+      },
+      content: '',
+      dialogFormVisible: false
     }
   },
   created() {
@@ -190,6 +200,13 @@ export default {
       } else {
         return ''
       }
+    },
+    getContentLen() {
+      if (this.content) {
+        return (200 - this.content.length) < 0 ? 0 : (200 - this.content.length)
+      } else {
+        return 200
+      }
     }
   },
   methods: {
@@ -199,7 +216,6 @@ export default {
       getBillDetail(params).then(response => {
         if (response.status === 200) {
           this.thisMonthDetail = response.data
-          console.log(this.thisMonthDetail)
         } else {
           this.$message.error(response.msg)
         }
@@ -283,13 +299,42 @@ export default {
       return type
     },
     downloadDetail() {
-      alert('打包下载交易明细')
+      downloadBill(this.thisMonthDetail.bill, 1).then(response => {
+        if (response.status === 200) {
+          this.$message.success('下载结算明细成功')
+        } else {
+          this.$message.error(response.msg)
+        }
+      }).catch(error => {
+        console.log(error)
+      })
     },
     checkout() {
       alert('确认结账')
     },
     dispute() {
-      alert('核账争议')
+      this.dialogFormVisible = true
+    },
+    confirmDispute() {
+      if (this.content === undefined || this.content === '') {
+        this.$message.error('请填写争议内容')
+        return
+      } else {
+        var params = {
+          'billid': `${this.thisMonthDetail.bill.id}`,
+          'content': this.content
+        }
+        submitDispute(params).then(response => {
+          if (response.status === 200) {
+            this.$message.success('提交成功')
+          } else {
+            this.$message.error(response.msg)
+          }
+        }).catch(error => {
+          console.log(error)
+        })
+        this.dialogFormVisible = false
+      }
     },
     handleConflict(orderInfo) {
       console.log(orderInfo)

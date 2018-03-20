@@ -56,7 +56,7 @@ const user = {
             // setRoleType(roles.join(','))
             // commit('SET_ROLES', roles)
             window.sessionStorage.setItem('userInfo', JSON.stringify(data))
-            resolve()
+            resolve(response)
           } else {
             Message.error(response.msg)
           }

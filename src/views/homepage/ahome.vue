@@ -1,5 +1,5 @@
 <template>
   <div>
-      首页
+    管理员首页
   </div>
 </template>

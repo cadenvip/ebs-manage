@@ -263,7 +263,7 @@ export default {
     },
     checkout() {
       if (this.thisMonthBill !== null) {
-        alert('核账争议')
+        alert('确认对账')
       } else {
         this.$message.error('暂无数据')
       }

@@ -20,6 +20,7 @@ import Layout from '../views/layout/Layout'
 **/
 export const constantRouterMap = [
   { path: '/login', component: _import('login/index'), hidden: true },
+  { path: '/timeout', component: _import('timeout'), hidden: true },
   { path: '/register', component: _import('register/register'), hidden: true },
   { path: '/regStepTwo', component: _import('register/regStepTwo'), hidden: true },
   { path: '/regStepThree', component: _import('register/regStepThree'), hidden: true },
@@ -35,20 +36,6 @@ export const constantRouterMap = [
       path: 'dashboard',
       component: _import('dashboard/index')
     }]
-  },
-
-  {
-    path: '/homepage',
-    component: Layout,
-    hidden: false,
-    children: [
-      {
-        path: 'index',
-        name: 'homepage',
-        component: _import('dashboard/index'),
-        meta: { title: '首页', icon: 'form' }
-      }
-    ]
   }
 ]
 
@@ -65,6 +52,26 @@ export default new Router({
  * role 2: 商家管理员
  */
 export const asyncRouterMap = [
+  {
+    path: '/home',
+    component: Layout,
+    name: '首页',
+    children: [
+      {
+        path: 'ahome',
+        name: '管理员首页',
+        component: _import('homepage/ahome'),
+        meta: { roles: ['1'], title: '管理员首页', icon: 'form' }
+      },
+      {
+        path: 'bhome',
+        name: '商家首页',
+        component: _import('homepage/bhome'),
+        meta: { roles: ['2'], title: '商家首页', icon: 'form' }
+      }
+    ]
+  },
+
   {
     path: '/system',
     component: Layout,
@@ -186,7 +193,7 @@ export const asyncRouterMap = [
     path: '/log',
     name: 'log',
     component: Layout,
-    redirect: '/log/ilog/list',
+    redirect: '/log/olog/list',
     hidden: false,
     meta: { roles: ['1'], title: '日志管理', icon: 'table' },
     children: [

@@ -11,7 +11,7 @@
           </el-col>
           <el-col :span="8">
             <span>
-              {{ (billDetail.bill.merchantname !== null) ? billDetail.bill.merchantname : '空' }}
+              {{ (billDetail.bill.merchantname !== null) ? billDetail.bill.merchantname : '&nbsp;' }}
             </span> 
           </el-col>
         </el-row>
@@ -45,7 +45,7 @@
           </el-col>
           <el-col :span="8">
             <span>
-              {{ billDetail.bill.dealusername !== null ? billDetail.bill.dealusername : '空' }}
+              {{ billDetail.bill.dealusername !== null ? billDetail.bill.dealusername : '&nbsp;' }}
             </span> 
           </el-col>
           <el-col :span="4" style="text-align:right">
@@ -66,7 +66,7 @@
         <el-table-column label="订单号" prop="ordercode" align="center"></el-table-column>
         <el-table-column label="订单下单时间" prop="ordertime" :show-overflow-tooltip="true" align="center"></el-table-column>
         <el-table-column label="订单完成时间" prop="finishtime" :show-overflow-tooltip="true" align="center"></el-table-column>
-        <el-table-column label="支付渠道" prop="paytype" align="center"></el-table-column>
+        <el-table-column label="支付渠道" prop="paytype" :formatter="typeFormat" align="center"></el-table-column>
         <el-table-column label="交易金额" prop="totalamount" :formatter="unitFormat" align="center"></el-table-column>
         <el-table-column label="手续费" prop="feeamount" :formatter="unitFormat" align="center"></el-table-column>
         <el-table-column label="应结算金额" prop="payamount" :formatter="unitFormat" align="center"></el-table-column>
