@@ -346,6 +346,11 @@
   import { getOrderList, getDeleveryDetail, orderExport } from '@/api/order/index.js'
   export default {
     created () {
+      this.tabName = this.$route.query.tab
+      if (this.tabName) {
+        this.tab.name = this.tabName
+        this.handleClick(this.tab)
+      }
       this._getOrderList()
     },
     data() {
