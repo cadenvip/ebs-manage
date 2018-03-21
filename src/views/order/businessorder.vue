@@ -347,8 +347,9 @@
   export default {
     created () {
       this.tabName = this.$route.query.tab
+      console.log(this.tabName)
       if (this.tabName) {
-        this.tab.name = this.tabName
+        this.tab = { 'name': this.tabName }
         this.handleClick(this.tab)
       }
       this._getOrderList()
@@ -528,6 +529,8 @@
         }
       },
       handleClick(tab) {
+        this.activeTab = tab.name
+        console.log(this.activeTab)
         this.tableData = []
         this.currentTab = tab.name
         this.resetForm()

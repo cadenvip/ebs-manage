@@ -21,7 +21,7 @@
           </el-col>
           <el-col :span="8">
             <span class="col_r">
-              <router-link :to="{ path: '/order/index', query: { tab: '5' }}">
+              <router-link :to="{ path: '/order/index', query: { tab: 'tab5' }}">
                 {{ homeInfo.orderNum !== null ? homeInfo.orderNum : '&nbsp;' }}
               </router-link>
             </span> 
@@ -51,7 +51,7 @@
             <span>
               待发货订单：
               <span class="col_r">
-                <router-link :to="{ path: '/order/index', query: { tab: '3' }}">
+                <router-link :to="{ path: '/order/index', query: { tab: 'tab3' }}">
                   {{ homeInfo.deliveredOrder !== null ? homeInfo.deliveredOrder : '&nbsp;' }}
                 </router-link>
               </span>
@@ -64,7 +64,7 @@
           </el-col>
           <el-col :span="8">
             <span class="col_r">
-              <router-link :to="{ path: '/order/index', query: { tab: '7' }}">
+              <router-link :to="{ path: '/order/index', query: { tab: 'tab7' }}">
                 {{ homeInfo.returnOrder !== null ? homeInfo.returnOrder : '&nbsp;' }}                
               </router-link>              
             </span> 
@@ -82,7 +82,7 @@
             <span>
               在售商品：
               <span class="col_r">        
-                <router-link :to="{ path: '/goodsmanage/onsalegoods', query: { tab: '1' }}">
+                <router-link :to="{ path: '/goodsmanage/onsalegoods', query: { tab: 'tab1' }}">
                   {{ homeInfo.sellGoods !== null ? homeInfo.sellGoods : '&nbsp;' }}
                 </router-link>                 
               </span>
@@ -95,7 +95,7 @@
           </el-col>
           <el-col :span="8">
             <span class="col_r">
-              <router-link :to="{ path: '/goodsmanage/onsalegoods', query: { tab: '2' }}">
+              <router-link :to="{ path: '/goodsmanage/onsalegoods', query: { tab: 'tab2' }}">
                 {{ homeInfo.defectGoods !== null ? homeInfo.defectGoods : '&nbsp;' }}                
               </router-link>                
             </span> 
