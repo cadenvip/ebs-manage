@@ -11,7 +11,7 @@
           </el-col>
           <el-col :span="8">
             <span>
-              {{ thisMonthDetail.bill.merchantname }}
+              {{ thisMonthDetail.bill.merchantname !==  null ? thisMonthDetail.bill.merchantname : '&nbsp;' }}
             </span> 
           </el-col>
         </el-row>
@@ -45,7 +45,7 @@
           </el-col>
           <el-col :span="8">
             <span>
-              {{ thisMonthDetail.bill.dealusername }}
+              {{ thisMonthDetail.bill.dealusername !==  null ? thisMonthDetail.bill.dealusername : '&nbsp;' }}
             </span> 
           </el-col>
           <el-col :span="4" style="text-align:right">
@@ -55,7 +55,7 @@
           </el-col>
           <el-col :span="8">
             <span>
-              {{ thisMonthDetail.bill.dealuserphone }}
+              {{ thisMonthDetail.bill.dealuserphone !== null ? thisMonthDetail.bill.dealuserphone : '&nbsp;' }}
             </span> 
           </el-col>
         </el-row>
@@ -145,7 +145,7 @@
 </template>
 
 <script>
-import { getBillDetail, downloadBill, submitDispute } from '@/api/finance'
+import { getBillDetail, downloadBill, businessDealBill, submitDispute } from '@/api/finance'
 
 export default {
   data() {
@@ -310,7 +310,16 @@ export default {
       })
     },
     checkout() {
-      alert('确认结账')
+      var params = { 'billid': `${this.thisMonthDetail.bill.id}` }
+      businessDealBill(params).then(response => {
+        if (response.status === 200) {
+          this.$message.success('确认结账成功，等待管理员处理')
+        } else {
+          this.$message.error(response.msg)
+        }
+      }).catch(error => {
+        console.log(error)
+      })
     },
     dispute() {
       this.dialogFormVisible = true

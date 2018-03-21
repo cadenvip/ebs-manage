@@ -23,7 +23,12 @@ export function getAllBills(currentpage, pagesize) {
   return request({
     url: '/statement/totalbillList',
     method: 'post',
-    data: { 'page': `${currentpage !== undefined ? currentpage : 1}`,
+    data: { 'merchantname': '',
+      'yearmonth': '',
+      'status': '',
+      'locationcode': '',
+      'greater500': '1',
+      'page': `${currentpage !== undefined ? currentpage : 1}`,
       'limit': `${pagesize !== undefined ? pagesize : 10}` }
   })
 }
@@ -119,10 +124,19 @@ export function adminDealBill(params) {
   })
 }
 
+// 管理员调账
+export function adjustBill(params) {
+  return request({
+    url: '/statement/adminchangebill',
+    method: 'post',
+    data: params
+  })
+}
+
 // 商家结账
 export function businessDealBill(params) {
   return request({
-    url: '/statement/businessDealBill',
+    url: '/statement/busdealbill',
     method: 'post',
     data: params
   })

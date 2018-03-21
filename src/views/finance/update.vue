@@ -115,13 +115,14 @@
     </div>
     <br/>
     <div style="text-align: center">
-      <el-button @click="goback" type="primary" >返回</el-button>        
+      <el-button @click="commitBill" type="primary" >提 交</el-button>        
+      <el-button @click="goback" type="primary" >返 回</el-button>        
     </div>
   </div>
 </template>
 
 <script>
-import { getBillDetail } from '@/api/finance'
+import { getBillDetail, adjustBill } from '@/api/finance'
 
 export default {
   data() {
@@ -274,6 +275,25 @@ export default {
         default:break
       }
       return type
+    },
+    commitBill() {
+      alert('确认调账')
+      var params = {
+        'removeOrdercodeList': ['1000049999', '1000050000'],
+        'addOrdercodeList': ['1000049981', '1000049909', '1000050009', '1000049968'],
+        'unitid': '29',
+        'billid': '3983',
+        'content': '调账日志内容，订单1000049981出错！'
+      }
+      adjustBill(params).then(response => {
+        if (response.status === 200) {
+          this.$message.success('提交成功！')
+        } else {
+          this.$message.error(response.msg)
+        }
+      }).catch(error => {
+        console.log(error)
+      })
     },
     goback() {
       this.$router.go(-1)

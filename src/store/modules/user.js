@@ -120,6 +120,7 @@ const user = {
             resolve(response)
           } else {
             this.$message.error(response.msg)
+            resolve(response)
           }
         }).catch(error => {
           commit('SET_TOKEN', '')

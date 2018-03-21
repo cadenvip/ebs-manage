@@ -49,14 +49,16 @@
     </el-form>
     <h3 style="padding-left: 20px;">账目列表</h3>
     <el-table :data="billlist" v-loading.body="loading" element-loading-text="Loading" border stripe fit highlight-current-row style="padding-left:10px">
-      <el-table-column label='企业名称' prop="merchantname" width="260" align="center"></el-table-column>
+      <el-table-column label='企业名称' prop="merchantname" width="240" align="center"></el-table-column>
       <el-table-column label="区域" prop="locationname" width="180" align="center"></el-table-column>
-      <el-table-column label="出账周期" prop="startmonth" :formatter="formatPeriod" width="180" align="center"></el-table-column>
-      <el-table-column label="应结算合计" prop="totalpay" :formatter="formatUnit" width="140" align="center"></el-table-column>
+      <el-table-column label="出账周期" prop="startmonth" :formatter="formatPeriod" width="140" align="center"></el-table-column>
+      <el-table-column label="应结算合计" prop="totalpay" :formatter="formatUnit" width="120" align="center"></el-table-column>
       <el-table-column label="对账状态" prop="status" :formatter="formatStatus" width="100" align="center"></el-table-column>
-      <el-table-column label="操作" width="100" align="center">
+      <el-table-column label="操作" width="180" align="center">
         <template slot-scope="scope">
-          <el-button @click="detail(scope.row)" type="text" size="small">对账明细</el-button>
+          <el-button @click="detail(scope.row)" type="text" size="small">明细</el-button>
+          <el-button @click="confirmBill(scope.row)" v-if="scope.row.status === '1'" type="text" size="small">结账</el-button>
+          <el-button @click="adjustBill(scope.row)" v-if="scope.row.status === '0'" type="text" size="small">调账</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -96,7 +98,7 @@
 
 <script>
 
-import { getAllBills, getBillList, downloadBillList } from '@/api/finance'
+import { getAllBills, getBillList, downloadBillList, adminDealBill } from '@/api/finance'
 import locationselector from '@/components/LocationSelector/index'
 
 export default {
@@ -171,6 +173,21 @@ export default {
     },
     detail(bill) {
       this.$router.push({ path: '/finance/detail', query: { id: bill.id }})
+    },
+    confirmBill(bill) {
+      var params = { 'billid': `${bill.id}` }
+      adminDealBill(params).then(response => {
+        if (response.status === 200) {
+          this.$message.success('确认结账成功！')
+        } else {
+          this.$message.error(response.msg)
+        }
+      }).catch(error => {
+        console.log(error)
+      })
+    },
+    adjustBill(bill) {
+      this.$router.push({ path: '/finance/update', query: { id: bill.id }})
     },
     handleSizeChange(val) {
       this.pagesize = val

@@ -42,7 +42,10 @@ export default {
       this.$store.dispatch('ToggleSideBar')
     },
     logout() {
-      this.$store.dispatch('LogOut').then(() => {
+      this.$store.dispatch('LogOut').then(response => {
+        location.reload() // 为了重新实例化vue-router对象 避免bug
+      }).catch(error => {
+        console.log(error)
         location.reload() // 为了重新实例化vue-router对象 避免bug
       })
     }
