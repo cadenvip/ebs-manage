@@ -40,7 +40,7 @@
         </el-col>
       </el-row>
       <el-form-item style="text-align: center;">
-        <el-button type="primary" style="width:47.85%;" :loading="loading" @click.native.prevent="handleLogin">
+        <el-button type="primary" style="width:47.85%;" @click.native.prevent="handleLogin">
           登录
         </el-button>
         <el-button type="primary" style="width:47.85%;" @click.native.prevent="handleRegist">
@@ -82,7 +82,6 @@ export default {
         unitid: [{ required: true, trigger: 'change', message: '请选择归属单位' }],
         vercode: [{ required: true, trigger: 'blur', message: '请输入验证码' }]
       },
-      loading: false,
       pwdType: 'password'
     }
   },
@@ -98,10 +97,8 @@ export default {
       // validate element-ui的一个方法
       this.$refs.loginForm.validate(valid => {
         if (valid) {
-          this.loading = true
           // 提供dispatch(action)方法更新state；
           this.$store.dispatch('Login', this.loginForm).then(response => {
-            this.loading = false
             // 根据角色进入相应的首页
             if (response.data.role[0].roletype === '1') {
               this.$router.push({ path: '/home/ahome' })
@@ -120,8 +117,8 @@ export default {
             }).catch(err => {
               this.$message.error(err)
             })
-          }).catch(() => {
-            this.loading = false
+          }).catch(errpr => {
+            this.$message.error(errpr)
           })
         } else {
           console.log('error submit!!')

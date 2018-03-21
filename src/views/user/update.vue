@@ -115,8 +115,7 @@ export default {
       }
     }
     var validateMail = (rule, value, callback) => {
-      debugger
-      if (value !== '') {
+      if (value !== null && value !== '') {
         if (!validateEmail(value.trim())) {
           callback(new Error('请输入有效的邮箱地址'))
         }
