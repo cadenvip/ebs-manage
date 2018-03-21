@@ -21,7 +21,7 @@
           </el-col>
           <el-col :span="8">
             <span class="col_r">
-              <router-link to="/">
+              <router-link :to="{ path: '/order/index', query: { tab: '5' }}">
                 {{ homeInfo.orderNum !== null ? homeInfo.orderNum : '&nbsp;' }}
               </router-link>
             </span> 
@@ -51,7 +51,7 @@
             <span>
               待发货订单：
               <span class="col_r">
-                <router-link to="/">
+                <router-link :to="{ path: '/order/index', query: { tab: '3' }}">
                   {{ homeInfo.deliveredOrder !== null ? homeInfo.deliveredOrder : '&nbsp;' }}
                 </router-link>
               </span>
@@ -64,7 +64,7 @@
           </el-col>
           <el-col :span="8">
             <span class="col_r">
-              <router-link to="/">
+              <router-link :to="{ path: '/order/index', query: { tab: '7' }}">
                 {{ homeInfo.returnOrder !== null ? homeInfo.returnOrder : '&nbsp;' }}                
               </router-link>              
             </span> 
@@ -81,8 +81,8 @@
           <el-col :span="8">
             <span>
               在售商品：
-              <span class="col_r">                
-                <router-link to="/">
+              <span class="col_r">        
+                <router-link :to="{ path: '/goodsmanage/onsalegoods', query: { tab: '1' }}">
                   {{ homeInfo.sellGoods !== null ? homeInfo.sellGoods : '&nbsp;' }}
                 </router-link>                 
               </span>
@@ -95,7 +95,7 @@
           </el-col>
           <el-col :span="8">
             <span class="col_r">
-              <router-link to="/">
+              <router-link :to="{ path: '/goodsmanage/onsalegoods', query: { tab: '2' }}">
                 {{ homeInfo.defectGoods !== null ? homeInfo.defectGoods : '&nbsp;' }}                
               </router-link>                
             </span> 
@@ -113,12 +113,12 @@
       return {
         deadTime: new Date().toLocaleString(),
         homeInfo: {
-          orderNum: '1325',
-          totalPrice: '10011292.94',
-          deliveredOrder: '124',
-          returnOrder: '1',
-          sellGoods: '27',
-          defectGoods: '1'
+          orderNum: '',
+          totalPrice: '',
+          deliveredOrder: '',
+          returnOrder: '',
+          sellGoods: '',
+          defectGoods: ''
         }
       }
     },

@@ -57,18 +57,6 @@ import { getVercode, getUnitInfos, getUnits } from '@/api/login'
 import { validateMobilePhone } from '@/utils/validate'
 
 export default {
-  created() {
-    getUnits().then(res => {
-      if (res.status === 200) {
-        this.units = res.data
-        window.localStorage.setItem('units', JSON.stringify(this.units))
-      } else {
-        this.$message.error(res.msg)
-      }
-    }).catch(err => {
-      this.$message.error(err)
-    })
-  },
   data() {
     var validateLoginname = (rule, value, callback) => {
       if (value === '') {
@@ -115,7 +103,6 @@ export default {
           this.$store.dispatch('Login', this.loginForm).then(response => {
             this.loading = false
             // 根据角色进入相应的首页
-            console.log(118, response)
             if (response.data.role[0].roletype === '1') {
               this.$router.push({ path: '/home/ahome' })
             } else if (response.data.role[0].roletype === '2') {
@@ -123,6 +110,16 @@ export default {
             } else {
               this.$message.error('登录失败！')
             }
+            getUnits().then(res => {
+              if (res.status === 200) {
+                this.units = res.data
+                window.localStorage.setItem('units', JSON.stringify(this.units))
+              } else {
+                this.$message.error(res.msg)
+              }
+            }).catch(err => {
+              this.$message.error(err)
+            })
           }).catch(() => {
             this.loading = false
           })
