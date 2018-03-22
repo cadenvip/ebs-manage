@@ -57,8 +57,9 @@
       <el-table-column label="操作" width="180" align="center">
         <template slot-scope="scope">
           <el-button @click="detail(scope.row)" type="text" size="small">明细</el-button>
-          <el-button @click="confirmBill(scope.row)" v-if="scope.row.status === '1'" type="text" size="small">结账</el-button>
+          <el-button @click="confirmBill(scope.row)" v-if="scope.row.status === '0'" type="text" size="small">结账</el-button>
           <el-button @click="adjustBill(scope.row)" v-if="scope.row.status === '0'" type="text" size="small">调账</el-button>
+          <el-button @click="clearBill(scope.row)" v-if="scope.row.status === '0'" type="text" size="small">清账</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -98,7 +99,7 @@
 
 <script>
 
-import { getAllBills, getBillList, downloadBillList, adminDealBill } from '@/api/finance'
+import { getAllBills, getBillList, downloadBillList, adminDealBill, adminClearBill } from '@/api/finance'
 import locationselector from '@/components/LocationSelector/index'
 
 export default {
@@ -188,6 +189,19 @@ export default {
     },
     adjustBill(bill) {
       this.$router.push({ path: '/finance/update', query: { id: bill.id }})
+    },
+    clearBill(bill) {
+      alert('清账')
+      var params = { 'billid': `${bill.id}` }
+      adminClearBill(params).then(response => {
+        if (response.status === 200) {
+          this.$message.success('清账成功！')
+        } else {
+          this.$message.error(response.msg)
+        }
+      }).catch(error => {
+        console.log(error)
+      })
     },
     handleSizeChange(val) {
       this.pagesize = val

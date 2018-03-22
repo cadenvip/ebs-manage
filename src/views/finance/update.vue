@@ -60,78 +60,138 @@
           </el-col>
         </el-row>
       </div>
-      <h3>结算交易明细</h3>
-      <el-table :data="billDetail.detailListpayed" v-loading.body="loading" element-loading-text="Loading" border stripe fit highlight-current-row tooltip-effect="light" style="padding-left:10px">
-        <el-table-column label="序号" type="index" :index="indexPayed" align="center"></el-table-column>
-        <el-table-column label="订单号" prop="ordercode" align="center"></el-table-column>
-        <el-table-column label="订单下单时间" prop="ordertime" :show-overflow-tooltip="true" align="center"></el-table-column>
-        <el-table-column label="订单完成时间" prop="finishtime" :show-overflow-tooltip="true" align="center"></el-table-column>
-        <el-table-column label="支付渠道" prop="paytype" :formatter="typeFormat" align="center"></el-table-column>
-        <el-table-column label="交易金额" prop="totalamount" :formatter="unitFormat" align="center"></el-table-column>
-        <el-table-column label="手续费" prop="feeamount" :formatter="unitFormat" align="center"></el-table-column>
-        <el-table-column label="应结算金额" prop="payamount" :formatter="unitFormat" align="center"></el-table-column>
+      <h3>交易明细</h3>
+      <div style="text-align: right;margin-bottom:12px">
+        <el-button @click="addOrder" type="primary" >新增</el-button>        
+        <el-button @click="deleteOrderList" type="primary" >批量移除</el-button>        
+      </div>
+      <el-table 
+        :data="detailList" 
+        v-loading.body="loading" 
+        element-loading-text="Loading"
+        border stripe fit highlight-current-row 
+        tooltip-effect="light" 
+        style="padding-left:10px"
+        @selection-change="orderSelectionChange">
+        <el-table-column type="selection" width="40"></el-table-column>
+        <el-table-column label="序号" type="index" :index="indexList" width="50" align="center"></el-table-column>
+        <el-table-column label="订单号" prop="ordercode" width="110" align="center"></el-table-column>
+        <el-table-column label="订单下单时间" prop="ordertime" :show-overflow-tooltip="true" width="180" align="center"></el-table-column>
+        <el-table-column label="订单完成时间" prop="finishtime" :show-overflow-tooltip="true" width="180" align="center"></el-table-column>
+        <el-table-column label="支付渠道" prop="paytype" :formatter="typeFormat" width="100" align="center"></el-table-column>
+        <el-table-column label="交易金额" prop="totalamount" :formatter="unitFormat" width="100" align="center"></el-table-column>
+        <el-table-column label="手续费" prop="feeamount" :formatter="unitFormat" width="100" align="center"></el-table-column>
+        <el-table-column label="应结算金额" prop="payamount" :formatter="unitFormat" width="100" align="center"></el-table-column>
+        <el-table-column label="操作" width="80" align="center">
+          <template slot-scope="scope">
+            <el-button @click="deleteOrder(scope.row)" type="text" size="small">移除</el-button>
+          </template>
+        </el-table-column>
       </el-table>
-      <el-row :gutter="6" style="margin-left:0px;margin-right:0px;margin-top:20px;">
-        <el-col :span="4" style="text-align:right">
-          <span>
-            转账手续费：
-          </span> 
-        </el-col>
-        <el-col :span="8">
-          <span>
-            {{ formatTransferfee }}
-          </span> 
-        </el-col>
-        <el-col :span="4" style="text-align:right">
-          <span>
-            应结算合计：
-          </span> 
-        </el-col>
-        <el-col :span="8">
-          <span>
-            {{ formatTotalpay }}
-          </span> 
-        </el-col>
-      </el-row>
-      <br/>
-    </div>
-    <div>
-      <h3>未结算交易明细</h3>
-      <el-table :data="billDetail.detailListnopayed" v-loading.body="loading" element-loading-text="Loading" border stripe fit highlight-current-row tooltip-effect="light" style="padding-left:10px">
-        <el-table-column label="序号" type="index" :index="indexPayed" align="center"></el-table-column>
-        <el-table-column label="订单号" prop="ordercode" align="center"></el-table-column>
-        <el-table-column label="订单下单时间" prop="ordertime" :show-overflow-tooltip="true" align="center"></el-table-column>
-        <el-table-column label="支付渠道" prop="paytype" :formatter="typeFormat" align="center"></el-table-column>
-        <el-table-column label="交易金额" prop="totalamount" :formatter="unitFormat" align="center"></el-table-column>
-        <el-table-column label="手续费" prop="feeamount" :formatter="unitFormat" align="center"></el-table-column>
-        <el-table-column label="应结算金额" prop="payamount" :formatter="unitFormat" align="center"></el-table-column>
-      </el-table>      
-    </div>
-    <br/>
-    <div class="fl bill_info">
-      <p v-for="(item, index) in billDetail.logList">
-        {{formatLogType(item.logtype)}}({{item.createdate}}): {{item.logcontent}}
-      </p>
     </div>
     <br/>
     <div style="text-align: center">
       <el-button @click="commitBill" type="primary" >提 交</el-button>        
       <el-button @click="goback" type="primary" >返 回</el-button>        
     </div>
+    <el-dialog title="选择订单" :visible.sync="orderTableVisible" width="770px">
+      <el-form ref="orderSearchForm" :model="orderSearchForm" label-width="100px">
+        <el-row :gutter="20">
+          <el-col :span="6">
+            <el-input v-model="orderSearchForm.orderCode" clearable style="width: 180px;" placeholder="请输入订单编号"></el-input>
+          </el-col>
+          <el-col :span="6">
+            <!-- 农产品直供[0：待支付，1：待发货，2：已发货，4：交易关闭（撤单），
+            5：退货处理中，6：交易关闭（退货），7：交易完成（退货失败），
+            8：交易完成，9：退货申请中，10：交易失败，11：退货失败，12：待支付定金，13：待支付尾款]； -->
+            <el-select v-model="orderSearchForm.orderState" clearable style="width: 180px;" placeholder="请选择订单状态">
+              <el-option label="待支付" value="0"></el-option>
+              <el-option label="待发货" value="1"></el-option>
+              <el-option label="已发货" value="2"></el-option>
+              <!-- <el-option label="退款中" value="3"></el-option> -->
+              <el-option label="交易关闭（撤单）" value="4"></el-option>
+              <el-option label="退货处理中" value="5"></el-option>
+              <el-option label="交易关闭（退货）" value="6"></el-option>
+              <el-option label="交易完成（退货失败）" value="7"></el-option>
+              <el-option label="交易完成" value="8"></el-option>
+              <el-option label="退货申请中" value="9"></el-option>              
+              <el-option label="交易失败" value="10"></el-option>
+              <el-option label="退货失败" value="11"></el-option>
+              <el-option label="待支付定金" value="12"></el-option>
+              <el-option label="待支付尾款" value="13"></el-option>              
+            </el-select>
+          </el-col>
+          <el-col :span="6">
+            <!-- 支付状态，0：已支付，1：未支付，2：支付失败，3：退款中，
+            4：已退款，5：待支付定金，6：待支付尾款，7：定金支付失败 -->
+            <el-select v-model="orderSearchForm.payState" clearable style="width: 180px;" placeholder="请选择支付状态">
+              <el-option label="已支付" value="0"></el-option>
+              <el-option label="未支付" value="1"></el-option>
+              <el-option label="支付失败" value="2"></el-option>
+              <el-option label="退款中" value="3"></el-option>
+              <el-option label="已退款" value="4"></el-option>
+              <el-option label="待支付定金" value="5"></el-option>
+              <el-option label="待支付尾款" value="6"></el-option>
+              <el-option label="定金支付失败" value="7"></el-option>
+            </el-select>
+          </el-col>
+          <el-col :span="6">
+            <el-button @click="queryOrder()" type="primary">查询</el-button>
+          </el-col>
+        </el-row>
+      </el-form>
+      <br/>
+      <el-table :data="allOrderList" ref="allOrderTable" tooltip-effect="dark" @selection-change="allOrderSelectionChange">
+        <el-table-column type="selection" :reserve-selection="true" width="40"></el-table-column>
+        <el-table-column label='订单编号' prop="orderCode" width="120" align="center"></el-table-column>
+        <el-table-column label='订购人电话' prop="userPhone" width="120" align="center"></el-table-column>
+        <el-table-column label="订单状态" prop="orderStateName" width="140" align="center"></el-table-column>
+        <el-table-column label="支付状态" prop="payStateName" width="120" align="center"></el-table-column>
+        <el-table-column label="订单时间" prop="orderTime" width="180" align="center"></el-table-column>
+      </el-table>
+      <div class="block" align="right" style="padding-right:20px">
+        <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          layout="total, sizes, prev, pager, next, jumper"
+          :current-page="currentPage"
+          :page-sizes="pagesizes"
+          :page-size="pagesize"
+          :total="total">
+        </el-pagination>
+      </div>
+      <br/>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="orderTableVisible = false">取 消</el-button>
+        <el-button type="primary" @click="confirmSelected">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { getBillDetail, adjustBill } from '@/api/finance'
+import { getBillDetail, adjustBill, queryOrderList } from '@/api/finance'
 
 export default {
   data() {
     return {
+      detailList: [],
       billDetail: {
         detailListnopayed: [],
         logList: [],
         bill: {},
         detailListpayed: []
+      },
+      orderTableVisible: false,
+      allOrderList: [],
+      pagesizes: [10, 20, 30, 50],
+      pagesize: 10,
+      currentPage: 1,
+      total: 0,
+      orderSearchForm: {
+        orderCode: '',
+        orderState: '',
+        payState: ''
       }
     }
   },
@@ -167,20 +227,6 @@ export default {
         }
       }
       return type
-    },
-    formatTransferfee: function() {
-      if (this.billDetail.bill.transferfee !== undefined && this.billDetail.bill.transferfee !== null) {
-        return '￥' + (this.billDetail.bill.transferfee / 100).toFixed(2)
-      } else {
-        return ''
-      }
-    },
-    formatTotalpay: function() {
-      if (this.billDetail.bill.totalpay !== undefined && this.billDetail.bill.totalpay !== null) {
-        return '￥' + (this.billDetail.bill.transferfee / 100).toFixed(2)
-      } else {
-        return ''
-      }
     }
   },
   methods: {
@@ -193,6 +239,8 @@ export default {
             this.$message.error('订单已经不存在！')
           } else {
             this.billDetail = response.data
+            this.detailList = this.billDetail.detailListnopayed.concat(this.billDetail.detailListpayed)
+            this.listAllOrder()
           }
         } else {
           this.$message.error(response.msg)
@@ -204,10 +252,7 @@ export default {
       })
       this.loading = false
     },
-    indexPayed(index) {
-      return index
-    },
-    indexNopayed(index) {
+    indexList(index) {
       return index
     },
     typeFormat(row, column, cellValue) {
@@ -256,25 +301,68 @@ export default {
         return ''
       }
     },
-    formatLogType(logType) {
-      // 日志类型(1 争议日志 2 调账日志 3 清账日志 4 结算日志)
-      var type = ''
-      switch (logType) {
-        case 1:
-          type = '争议日志'
-          break
-        case 2:
-          type = '调账日志'
-          break
-        case 3:
-          type = '清账日志'
-          break
-        case 4:
-          type = '结算日志'
-          break
-        default:break
+    deleteOrder() {
+      alert('移除一行')
+    },
+    deleteOrderList() {
+      alert('批量移除')
+    },
+    addOrder() {
+      alert('增加订单')
+      this.orderTableVisible = true
+    },
+    listAllOrder() {
+      var params = { merchantId: `${this.billDetail.bill.merchantcode}` }
+      queryOrderList(params).then(response => {
+        if (response.status === 200) {
+          this.allOrderList = response.data
+          this.total = response.total
+        } else {
+          this.$message.error(response.msg)
+        }
+      }).catch(error => {
+        this.$message.error(error)
+      })
+    },
+    queryOrder() {
+      var params = {
+        'merchantId': `${this.billDetail.bill.merchantcode}`,
+        'orderCode': `${this.orderSearchForm.orderCode}`,
+        'orderState': `${this.orderSearchForm.orderState}`,
+        'payState': `${this.orderSearchForm.payState}`,
+        'page': `${this.currentPage}`,
+        'pageSize': `${this.pagesize}`,
+        'sort': 'orderStartTime',
+        'order': 'desc'
       }
-      return type
+      queryOrderList(params).then(response => {
+        if (response.status === 200) {
+          this.allOrderList = response.data
+          this.total = response.total
+        } else {
+          this.$message.error(response.msg)
+        }
+      }).catch(error => {
+        this.$message.error(error)
+      })
+    },
+    handleSizeChange(val) {
+      this.pagesize = val
+      this.queryOrder()
+    },
+    handleCurrentChange(val) {
+      this.currentPage = val
+      this.queryOrder()
+    },
+    orderSelectionChange(val) {
+      alert('选择变化')
+    },
+    allOrderSelectionChange(val) {
+      alert('选择变化')
+    },
+    confirmSelected() {
+      alert('选择订单')
+      this.orderTableVisible = false
     },
     commitBill() {
       alert('确认调账')

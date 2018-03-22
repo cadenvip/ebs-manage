@@ -124,6 +124,15 @@ export function adminDealBill(params) {
   })
 }
 
+// 管理员清账
+export function adminClearBill(params) {
+  return request({
+    url: '/statement/adminclaerbill',
+    method: 'post',
+    data: params
+  })
+}
+
 // 管理员调账
 export function adjustBill(params) {
   return request({
@@ -139,5 +148,14 @@ export function businessDealBill(params) {
     url: '/statement/busdealbill',
     method: 'post',
     data: params
+  })
+}
+
+// http://183.230.101.142:58080/ebs/order/page?merchantId=29
+export function queryOrderList(params) {
+  return request({
+    url: '/order/page',
+    method: 'get',
+    params: params
   })
 }
