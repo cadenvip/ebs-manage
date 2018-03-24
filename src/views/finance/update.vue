@@ -142,7 +142,8 @@
       </el-form>
       <br/>
       <el-table :data="allOrderList" ref="allOrderTable" tooltip-effect="dark" @selection-change="allOrderSelectionChange">
-        <el-table-column type="selection" :reserve-selection="true" width="40"></el-table-column>
+        <el-table-column type="selection" width="40"></el-table-column>
+        <!-- <el-table-column type="selection" :reserve-selection="true" width="40"></el-table-column> -->
         <el-table-column label='订单编号' prop="orderCode" width="120" align="center"></el-table-column>
         <el-table-column label='订购人电话' prop="userPhone" width="120" align="center"></el-table-column>
         <el-table-column label="订单状态" prop="orderStateName" width="140" align="center"></el-table-column>
@@ -166,11 +167,19 @@
         <el-button type="primary" @click="confirmSelected">确 定</el-button>
       </span>
     </el-dialog>
+    <el-dialog title="调账日志" :visible.sync="dialogContentVisible" style="padding:10px 20px">
+      <el-input v-model="content" type="textarea" :rows=8 placeholder='请输入调账日志内容'></el-input>
+      <p>剩余字数: <span style="color:red;">{{getContentLen}}</span></p>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogContentVisible = false">取 消</el-button>
+        <el-button type="primary" @click="confirmCommitBill">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { getBillDetail, adjustBill, queryOrderList } from '@/api/finance'
+import { getBillDetail, adjustBill, queryOrderList, getDetailList } from '@/api/finance'
 
 export default {
   data() {
@@ -188,6 +197,8 @@ export default {
       allOrderList: [],
       allOrderListBack: [],
       addedOrderList: [],
+      content: '',
+      dialogContentVisible: false,
       pagesizes: [10, 20, 30, 50],
       pagesize: 10,
       currentPage: 1,
@@ -231,6 +242,13 @@ export default {
         }
       }
       return type
+    },
+    getContentLen() {
+      if (this.content) {
+        return (200 - this.content.length) < 0 ? 0 : (200 - this.content.length)
+      } else {
+        return 200
+      }
     }
   },
   methods: {
@@ -244,7 +262,7 @@ export default {
           } else {
             this.billDetail = response.data
             this.detailList = this.billDetail.detailListnopayed.concat(this.billDetail.detailListpayed)
-            this.detailListBack = this.detailList
+            this.detailListBack = this.billDetail.detailListnopayed.concat(this.billDetail.detailListpayed)
             this.listAllOrder()
           }
         } else {
@@ -258,7 +276,7 @@ export default {
       this.loading = false
     },
     indexList(index) {
-      return index
+      return index + 1
     },
     typeFormat(row, column, cellValue) {
       // 11：货到付款，12：线下汇款，21：银联支付，22：手机支付，23：支付宝支付，
@@ -307,7 +325,6 @@ export default {
       }
     },
     deleteOrder(bill) {
-      alert('移除一行')
       var index = this.detailList.indexOf(bill)
       if (index >= 0) {
         this.detailList.splice(index, 1)
@@ -315,7 +332,6 @@ export default {
       // TODO 在备选中添加相应订单
     },
     deleteOrderList() {
-      alert('批量移除')
       for (var i = 0; i < this.deleteList.length; i++) {
         var index = this.detailList.indexOf(this.deleteList[i])
         if (index >= 0) {
@@ -331,31 +347,31 @@ export default {
       var params = { merchantId: `${this.billDetail.bill.merchantcode}` }
       queryOrderList(params).then(response => {
         if (response.status === 200) {
-          // TODO 排除已选择
-          this.allOrderList = []
-          this.allOrderListBack = response.data // 备份所有订单
-          var allOrderListTmp = response.data
-          if (allOrderListTmp !== undefined && allOrderListTmp !== null && allOrderListTmp.length > 0) {
-            if (this.detailList !== undefined && this.detailList !== null  && this.detailList.length > 0) {
-              allOrderListTmp.forEach(item => {
-                var i = 0
-                for (; i < this.detailList.length; i++) {
-                  if (item.orderCode === this.detailList[i].ordercode) {
-                    break
-                  }
-                }
-                if (i === this.detailList.length) {
-                  this.allOrderList.push(item)
-                }
-              })
-              this.total = this.allOrderList.length
-            } else {
-              this.allOrderList = allOrderListTmp
-              this.total = response.total
-            }
-          }
-          // this.allOrderList = response.data
-          // this.total = response.total
+          // // TODO 排除已选择
+          // this.allOrderList = []
+          // this.allOrderListBack = response.data // 备份所有订单
+          // var allOrderListTmp = response.data
+          // if (allOrderListTmp !== undefined && allOrderListTmp !== null && allOrderListTmp.length > 0) {
+          //   if (this.detailList !== undefined && this.detailList !== null  && this.detailList.length > 0) {
+          //     allOrderListTmp.forEach(item => {
+          //       var i = 0
+          //       for (; i < this.detailList.length; i++) {
+          //         if (item.orderCode === this.detailList[i].ordercode) {
+          //           break
+          //         }
+          //       }
+          //       if (i === this.detailList.length) {
+          //         this.allOrderList.push(item)
+          //       }
+          //     })
+          //     this.total = this.allOrderList.length
+          //   } else {
+          //     this.allOrderList = allOrderListTmp
+          //     this.total = response.total
+          //   }
+          // }
+          this.allOrderList = response.data
+          this.total = response.total
         } else {
           this.$message.error(response.msg)
         }
@@ -374,30 +390,30 @@ export default {
       }
       queryOrderList(params).then(response => {
         if (response.status === 200) {
-          // TODO 排除已选择
-          this.allOrderList = []
-          var allOrderListTmp = response.data
-          if (allOrderListTmp !== undefined && allOrderListTmp !== null && allOrderListTmp.length > 0) {
-            if (this.detailList !== undefined && this.detailList !== null  && this.detailList.length > 0) {
-              allOrderListTmp.forEach(item => {
-                var i = 0
-                for (; i < this.detailList.length; i++) {
-                  if (item.orderCode === this.detailList[i].ordercode) {
-                    break
-                  }
-                }
-                if (i === this.detailList.length) {
-                  this.allOrderList.push(item)
-                }
-              })
-              this.total = this.allOrderList.length
-            } else {
-              this.allOrderList = allOrderListTmp
-              this.total = response.total
-            }
-          }
-          // this.allOrderList = response.data
-          // this.total = response.total
+          // // TODO 排除已选择
+          // this.allOrderList = []
+          // var allOrderListTmp = response.data
+          // if (allOrderListTmp !== undefined && allOrderListTmp !== null && allOrderListTmp.length > 0) {
+          //   if (this.detailList !== undefined && this.detailList !== null  && this.detailList.length > 0) {
+          //     allOrderListTmp.forEach(item => {
+          //       var i = 0
+          //       for (; i < this.detailList.length; i++) {
+          //         if (item.orderCode === this.detailList[i].ordercode) {
+          //           break
+          //         }
+          //       }
+          //       if (i === this.detailList.length) {
+          //         this.allOrderList.push(item)
+          //       }
+          //     })
+          //     this.total = this.allOrderList.length
+          //   } else {
+          //     this.allOrderList = allOrderListTmp
+          //     this.total = response.total
+          //   }
+          // }
+          this.allOrderList = response.data
+          this.total = response.total
         } else {
           this.$message.error(response.msg)
         }
@@ -421,28 +437,90 @@ export default {
       this.addedOrderList = val
     },
     confirmSelected() {
-      alert('选择订单')
-      // TODO 调用接口，返回计算后的订单信息
+      if (this.addedOrderList !== undefined && this.addedOrderList !== null && this.addedOrderList.length > 0) {
+        var addedOrderCodeList = []
+        this.addedOrderList.forEach(item => {
+          addedOrderCodeList.push(item.orderCode)
+        })
+        var params = { 'ordercodeList': addedOrderCodeList }
+        getDetailList(params).then(response => {
+          if (response.status === 200) {
+            if (response.data.length > 0) {
+              response.data.forEach(v => {
+                var i = 0
+                for (; i < this.detailList.length; i++) {
+                  if (this.detailList[i].ordercode === v.ordercode) {
+                    break
+                  }
+                }
+                if (i === this.detailList.length) {
+                  this.detailList.push(v)
+                }
+              })
+            }
+            // this.detailList = this.detailList.concat(response.data)
+          } else {
+            this.$message.error(response.msg)
+          }
+        }).catch(error => {
+          this.$message.error(error)
+        })
+      }
       this.orderTableVisible = false
     },
     commitBill() {
-      // TODO 对比，找出删除的订单，新增的订单
-      var params = {
-        'removeOrdercodeList': ['1000049999', '1000050000'],
-        'addOrdercodeList': ['1000049981', '1000049909', '1000050009', '1000049968'],
-        'unitid': '29',
-        'billid': '3983',
-        'content': '调账日志内容，订单1000049981出错！'
-      }
-      adjustBill(params).then(response => {
-        if (response.status === 200) {
-          this.$message.success('提交成功！')
-        } else {
-          this.$message.error(response.msg)
+      this.dialogContentVisible = true
+    },
+    confirmCommitBill() {
+      if (this.content === undefined || this.content === '') {
+        this.$message.error('请填写调账日志内容')
+        return
+      } else {
+        // TODO 对比，找出移除的订单，新增的订单
+        debugger
+        var confirmAddedOrder = []
+        var confirmRemovedOrder = []
+        for (let i = 0; i < this.detailListBack.length; i++) {
+          let j = 0
+          for (; j < this.detailList.length; j++) {
+            if (this.detailListBack[i].ordercode === this.detailList[j].ordercode) {
+              break
+            }
+          }
+          if (j === this.detailList.length) {
+            // 移除的
+            confirmRemovedOrder.push(this.detailListBack[i].ordercode)
+          }
         }
-      }).catch(error => {
-        console.log(error)
-      })
+        for (let i = 0; i < this.detailList.length; i++) {
+          let j = 0
+          for (; j < this.detailListBack.length; j++) {
+            if (this.detailList[i].ordercode === this.detailListBack[j].ordercode) {
+              break
+            }
+          }
+          if (j === this.detailListBack.length) {
+            // 新增的
+            confirmAddedOrder.push(this.detailList[i].ordercode)
+          }
+        }
+        var params = {
+          'removeOrdercodeList': confirmRemovedOrder,
+          'addOrdercodeList': confirmAddedOrder,
+          'unitid': `${this.billDetail.bill.merchantcode}`,
+          'billid': `${this.$route.query.id}`,
+          'content': this.content
+        }
+        adjustBill(params).then(response => {
+          if (response.status === 200) {
+            this.$message.success('提交成功！')
+          } else {
+            this.$message.error(response.msg)
+          }
+        }).catch(error => {
+          console.log(error)
+        })
+      }
     },
     goback() {
       this.$router.go(-1)

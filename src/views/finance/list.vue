@@ -57,9 +57,9 @@
       <el-table-column label="操作" width="180" align="center">
         <template slot-scope="scope">
           <el-button @click="detail(scope.row)" type="text" size="small">明细</el-button>
-          <el-button @click="confirmBill(scope.row)" v-if="scope.row.status === '0'" type="text" size="small">结账</el-button>
-          <el-button @click="adjustBill(scope.row)" v-if="scope.row.status === '0'" type="text" size="small">调账</el-button>
-          <el-button @click="clearBill(scope.row)" v-if="scope.row.status === '0'" type="text" size="small">清账</el-button>
+          <el-button @click="confirmBill(scope.row)" v-if="scope.row.status === '1'" type="text" size="small">结账</el-button>
+          <el-button @click="adjustBill(scope.row)" v-if="scope.row.status === '2'" type="text" size="small">调账</el-button>
+          <el-button @click="clearBill(scope.row)" v-if="scope.row.payable === '1'" type="text" size="small">清账</el-button>
         </template>
       </el-table-column>
     </el-table>

@@ -159,3 +159,15 @@ export function queryOrderList(params) {
     params: params
   })
 }
+
+// http://localhost:8080/ebs/statement/getdetaillist //通过订单列表获取详情
+// {
+//   "ordercodeList": ["1000049981","1000049909","1000050009","1000049968"]
+// }
+export function getDetailList(params) {
+  return request({
+    url: '/statement/getdetaillist',
+    method: 'post',
+    data: params
+  })
+}
