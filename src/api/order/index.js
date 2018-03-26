@@ -31,3 +31,11 @@ export function orderDetail (oid) {
     method: 'get'
   })
 }
+// 快递公司
+export function getCompanies (params) {
+  return request({
+    url: '/logistic/company',
+    method: 'get',
+    params: params
+  })
+}

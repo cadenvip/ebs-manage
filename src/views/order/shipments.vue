@@ -12,8 +12,8 @@
         </el-select>
       </el-form-item>
       <el-form-item label="快递公司名称：" prop="kdgsmc">
-        <el-select size="mini" v-model="ruleForm.kdgsmc" placeholder="请选择快递方式">
-          <el-option v-for="item in KDoptions" :key="item.value" :label="item.label" :value="item.value">
+        <el-select @focus="getCompanies" size="mini" v-model="ruleForm.kdgsmc" placeholder="请选择快递公司">
+          <el-option v-for="item in KDGSoptions" :key="item.value" :label="item.label" :value="item.value">
           </el-option>
         </el-select>
       </el-form-item>
@@ -37,7 +37,11 @@
 
 <script>
   import { validateMobilePhone } from '@/utils/validate'
+  import { getCompanies } from '@/api/order/index'
   export default {
+    created() {
+      this.ruleForm.orderId = this.$route.query.oid
+    },
     data() {
       var validateMobile = (rule, value, callback) => {
         if (value === '') {
@@ -51,7 +55,7 @@
       }
       return {
         ruleForm: {
-          orderId: '1000050018',
+          orderId: '',
           kdfs: '',
           kdgsmc: '',
           kddh: '',
@@ -65,6 +69,7 @@
           label: '大件物流快递',
           value: '1'
         }],
+        KDGSoptions: [],
         rules: {
           kdfs: [
             { required: true, message: '请选择快递方式', trigger: 'blur' }
@@ -91,6 +96,36 @@
       },
       resetForm(formName) {
         this.$refs[formName].resetFields()
+        this.ruleForm.ydh = ''
+        this.ruleForm.bz = ''
+      },
+      getCompanies() {
+        if (this.ruleForm.kdfs === '') {
+          this.$message.error('请先选择快递方式！')
+          return
+        } else {
+          const param = {
+            type: this.ruleForm.kdfs
+          }
+          getCompanies(param).then(res => {
+            if (res.status === 200) {
+              this.options = res.data
+              if (this.options.length > 0) {
+                this.KDGSoptions = []
+                for (var i in this.options) {
+                  this.KDGSoptions.push({
+                    label: this.options[i].companyName,
+                    value: this.options[i].companyCode
+                  })
+                }
+              }
+            } else {
+              this.$message.error(res.msg)
+            }
+          }).catch(err => {
+            this.$message.error(err)
+          })
+        }
       },
       goBack() {
         this.$router.go(-1)

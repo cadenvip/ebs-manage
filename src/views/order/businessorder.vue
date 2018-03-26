@@ -282,7 +282,10 @@
         </el-tab-pane>
         <el-tab-pane label="所有订单" name="tab8">
           <el-table :data="tableData" style="width: 100%" border>
-            <el-table-column prop="orderCode" label="订单编号" align="center">
+            <el-table-column label="订单编号" align="center">
+              <template slot-scope="scope">
+                <el-button @click="_getOrderDetail(scope.row)" type="text" size="small">{{scope.row.orderCode}}</el-button>
+              </template>
             </el-table-column>
             <el-table-column prop="userName" label="订购人姓名" align="center">
             </el-table-column>
@@ -305,12 +308,10 @@
             <el-table-column  label="操作" align="center">
               <template slot-scope="scope">
                 <div v-if="scope.row.orderCode !== ''">
-                  <div v-if="scope.row.payType === '11'">
-                    <el-button v-if="scope.row.orderState==='1'" @click="_shipments(scope.row)" type="text" size="small">订单发货</el-button>
-                    <el-button v-else-if="scope.row.orderState==='2'" @click="_userReject(scope.row)" type="text" size="small">用户拒收</el-button>
-                    <el-button v-else-if="scope.row.verifyState==='1' && scope.row.orderState==='9'" @click="_returnAudit(scope.row)" type="text" size="small">退货审核</el-button>
-                    <el-button v-else-if="scope.row.verifyState==='2' && scope.row.orderState==='5'" @click="_returnSigned(scope.row)" type="text" size="small">退货签收</el-button>
-                  </div>
+                  <el-button v-if="scope.row.orderState==='1'" @click="_shipments(scope.row)" type="text" size="small">订单发货</el-button>
+                  <el-button v-else-if="scope.row.orderState==='2'&&scope.row.payType==='11'" @click="_userReject(scope.row)" type="text" size="small">用户拒收</el-button>
+                  <el-button v-else-if="scope.row.verifyState==='1' && scope.row.orderState==='9'" @click="_returnAudit(scope.row)" type="text" size="small">退货审核</el-button>
+                  <el-button v-else-if="scope.row.verifyState==='2' && scope.row.orderState==='5'" @click="_returnSigned(scope.row)" type="text" size="small">退货签收</el-button>
                 </div>
                 <div><el-button title="查看订单物流信息" @click="_getDeleveryDetail(scope.row)" type="text" size="small">物流查询</el-button></div>
                 <div><el-button title="查看订单详情" @click="_getOrderDetail(scope.row)" type="text" size="small">订单详情</el-button></div>

@@ -78,7 +78,7 @@ export const asyncRouterMap = [
     redirect: '/system/location',
     name: 'system',
     hidden: false,
-    meta: { roles: ['1'], title: '系统管理', icon: 'table' },
+    meta: { roles: ['1'], title: '系统管理', icon: 'sysManage' },
     children: [
       {
         path: 'location',
@@ -195,7 +195,7 @@ export const asyncRouterMap = [
     component: Layout,
     redirect: '/log/olog/list',
     hidden: false,
-    meta: { roles: ['1'], title: '日志管理', icon: 'table' },
+    meta: { roles: ['1'], title: '日志管理', icon: 'logManage' },
     children: [
       {
         path: 'olog/list',
@@ -232,7 +232,7 @@ export const asyncRouterMap = [
     redirect: '/businesses/list',
     name: 'businesses',
     hidden: false,
-    meta: { roles: ['1'], title: '企业管理', icon: 'table' },
+    meta: { roles: ['1'], title: '企业管理', icon: 'enterpriseManage' },
     children: [
       {
         path: 'list',
@@ -282,7 +282,7 @@ export const asyncRouterMap = [
     component: Layout,
     name: '财务管理',
     redirect: '/finance/list',
-    meta: { roles: ['1'], title: '财务管理', icon: 'table' },
+    meta: { roles: ['1'], title: '财务管理', icon: 'finance' },
     children: [
       {
         path: 'list',
@@ -318,7 +318,7 @@ export const asyncRouterMap = [
     path: '/goodsmanage',
     redirect: '/goodsmanage/publishgoods',
     component: Layout,
-    meta: { roles: ['1', '2'], title: '商品管理', icon: 'form' },
+    meta: { roles: ['1', '2'], title: '商品管理', icon: 'goodsManage' },
     name: '商品管理',
     children: [
       // 商家
@@ -505,7 +505,7 @@ export const asyncRouterMap = [
     path: '/order',
     component: Layout,
     name: '订单管理',
-    meta: { roles: ['1', '2'], title: '订单管理', icon: 'form' },
+    meta: { roles: ['1', '2'], title: '订单管理', icon: 'order' },
     children: [
       {
         path: 'index',
