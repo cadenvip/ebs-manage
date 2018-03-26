@@ -49,9 +49,9 @@
         </el-col>
         <el-col :span="8">
           <h1>发票详情</h1>
-          <p>发票抬头：<span>1000050062</span></p>
-          <p>发票类型： <span></span></p>
-          <p>发票内容：<span></span></p>
+          <p>发票抬头：<span v-if="orderObj.orderInvoiceBean">{{getVal(orderObj.orderInvoiceBean.invoiceSubject)}}</span><span v-else>暂无</span></p>
+          <p>发票类型：<span v-if="orderObj.orderInvoiceBean">{{orderObj.orderInvoiceBean.invoiceType==='2'?'单位':orderObj.orderInvoiceBean.invoiceType==='1'?'个人':'暂无'}}</span><span v-else>暂无</span></p>
+          <p>发票内容：<span v-if="orderObj.orderInvoiceBean">{{getVal(orderObj.orderInvoiceBean.invoiceInfo)}}</span><span v-else>暂无</span></p>
         </el-col>
       </el-row>
     </div>
@@ -107,7 +107,8 @@ export default {
         orderPayBean: {},
         orderRejectedBean: {
           orderRejectedImgBeanList: []
-        }
+        },
+        orderInvoiceBean: {}
       },
       payWay: [],
       payState: '',

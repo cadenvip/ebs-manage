@@ -163,7 +163,35 @@
           </el-table-column>
           <el-table-column  label="操作" align="center">
             <template slot-scope="scope">
-              <el-button @click="_getOrderDetail(scope.row.orderCode)" type="text" size="small">订单详情</el-button>
+              <div v-if="scope.row.taskId !== undefined || scope.row.taskId === ''">
+                <div v-if="scope.row.payType === '11'">
+                  <el-button v-if="scope.row.orderState==='1'" @click="_shipments(scope.row)" type="text" size="small">订单发货</el-button>
+                  <el-button v-else-if="scope.row.orderState==='2'" @click="_userReject(scope.row)" type="text" size="small">用户拒收</el-button>
+                  <el-button v-else-if="scope.row.orderState==='9'" @click="_returnAudit(scope.row)" type="text" size="small">退货审核</el-button>
+                  <el-button v-else-if="scope.row.orderState==='5'" @click="_returnSigned(scope.row)" type="text" size="small">退货签收</el-button>
+                  <el-button v-else @click="_getOrderDetail(scope.row.orderCode)" type="text" size="small">订单详情</el-button>
+                </div>
+                <div v-else-if="scope.row.payType === '22'||scope.row.payType === '23'||scope.row.payType === '24'">
+                  <el-button v-if="scope.row.orderState==='1'&&scope.row.payState==='0'" @click="_shipments(scope.row)" type="text" size="small">订单发货</el-button>
+                  <el-button v-else-if="scope.row.orderState==='9'&&scope.row.payState==='0'" @click="_returnAudit(scope.row)" type="text" size="small">退货审核</el-button>
+                  <el-button v-else-if="scope.row.orderState==='5'&&scope.row.payState==='3'" @click="_returnSigned(scope.row)" type="text" size="small">退货签收</el-button>
+                  <el-button v-else @click="_getOrderDetail(scope.row.orderCode)" type="text" size="small">订单详情</el-button>
+                </div>
+                <div v-else-if="scope.row.payType === '32'">
+                  <el-button v-if="scope.row.orderState==='1'&&scope.row.payState==='0'" @click="_shipments(scope.row)" type="text" size="small">订单发货</el-button>
+                  <el-button v-else-if="scope.row.orderState==='9'&&scope.row.payState==='0'" @click="_returnAudit(scope.row)" type="text" size="small">退货审核</el-button>
+                  <el-button v-else-if="scope.row.orderState==='5'&&scope.row.payState==='3'" @click="_returnSigned(scope.row)" type="text" size="small">退货签收</el-button>
+                  <el-button v-else @click="_getOrderDetail(scope.row.orderCode)" type="text" size="small">订单详情</el-button>
+                </div>
+                <div v-else>
+                  <el-button v-if="scope.row.orderState==='1'" @click="_shipments(scope.row)" type="text" size="small">订单发货</el-button>
+                  <el-button v-else-if="scope.row.orderState==='9'" @click="_returnAudit(scope.row)" type="text" size="small">退货审核</el-button>
+                  <el-button v-else @click="_getOrderDetail(scope.row.orderCode)" type="text" size="small">订单详情</el-button>
+                </div>
+              </div>
+              <div v-else>
+                <el-button @click="_getOrderDetail(scope.row.orderCode)" type="text" size="small">订单详情</el-button>
+              </div>
             </template>
           </el-table-column>
         </el-table>
@@ -369,6 +397,9 @@ export default {
         this.$message.error(err)
       })
     },
+    _shipments(row) {
+      this.$router.push({ name: 'shipments', query: { oid: row.orderCode }})
+    },
     submitForm() {
       this.currentPage = 1
       if (this.searchForm.orderStartTime) {
@@ -406,7 +437,6 @@ export default {
       }
     },
     handleCurrentChange(val) {
-      console.log(val + '111')
       this.currentPage = val
       this._getOrderList(this.searchForm)
     }

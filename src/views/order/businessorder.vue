@@ -125,7 +125,7 @@
             </el-table-column>
             <el-table-column prop="orderStateName" label="订单状态" align="center">
             </el-table-column>
-            <el-table-column  label="操作" align="center">
+            <el-table-column label="操作" align="center">
               <template slot-scope="scope">
                 <el-button @click="_getDeleveryDetail(scope.row)" type="text" size="small">物流查询</el-button>
                 <el-button @click="_getOrderDetail(scope.row)" type="text" size="small">订单详情</el-button>
@@ -305,10 +305,12 @@
             <el-table-column  label="操作" align="center">
               <template slot-scope="scope">
                 <div v-if="scope.row.orderCode !== ''">
-                  <el-button v-if="scope.row.orderState==='1'" @click="_shipments(scope.row)" type="text" size="small">订单发货</el-button>
-                  <el-button v-else-if="scope.row.payType==='11' && scope.row.orderState==='2'" @click="_userReject(scope.row)" type="text" size="small">用户拒收</el-button>
-                  <el-button v-else-if="scope.row.verifyState==='1' && scope.row.orderState==='9'" @click="_returnAudit(scope.row)" type="text" size="small">退货审核</el-button>
-                  <el-button v-else-if="scope.row.verifyState==='2' && scope.row.orderState==='5'" @click="_returnSigned(scope.row)" type="text" size="small">退货签收</el-button>
+                  <div v-if="scope.row.payType === '11'">
+                    <el-button v-if="scope.row.orderState==='1'" @click="_shipments(scope.row)" type="text" size="small">订单发货</el-button>
+                    <el-button v-else-if="scope.row.orderState==='2'" @click="_userReject(scope.row)" type="text" size="small">用户拒收</el-button>
+                    <el-button v-else-if="scope.row.verifyState==='1' && scope.row.orderState==='9'" @click="_returnAudit(scope.row)" type="text" size="small">退货审核</el-button>
+                    <el-button v-else-if="scope.row.verifyState==='2' && scope.row.orderState==='5'" @click="_returnSigned(scope.row)" type="text" size="small">退货签收</el-button>
+                  </div>
                 </div>
                 <div><el-button title="查看订单物流信息" @click="_getDeleveryDetail(scope.row)" type="text" size="small">物流查询</el-button></div>
                 <div><el-button title="查看订单详情" @click="_getOrderDetail(scope.row)" type="text" size="small">订单详情</el-button></div>
@@ -355,7 +357,6 @@
   export default {
     created () {
       this.tabName = this.$route.query.tab
-      console.log(this.tabName)
       if (this.tabName) {
         this.tab = { 'name': this.tabName }
         this.handleClick(this.tab)
@@ -450,9 +451,10 @@
       }
     },
     methods: {
-      _getDeleveryDetail(oid) {
-        if (oid) {
-          getDeleveryDetail({ orderId: oid }).then(res => {
+      _getDeleveryDetail(row) {
+        console.log(row)
+        if (row) {
+          getDeleveryDetail({ orderId: row.orderCode }).then(res => {
             if (res.status === 200) {
               console.log(res.data)
               this.dialogVisible = true
@@ -504,6 +506,8 @@
             this.tableData = res.data
             this.total = res.total
           } else {
+            this.tableData = []
+            this.total = res.total
             this.$message.error(res.msg)
           }
         }).catch(err => {
