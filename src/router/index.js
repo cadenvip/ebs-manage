@@ -531,6 +531,13 @@ export const asyncRouterMap = [
         hidden: true,
         component: _import('order/shipments'),
         meta: { roles: ['1', '2'], title: '订单发货', icon: 'form' }
+      },
+      {
+        path: 'orderdetailB',
+        name: 'orderdetailB',
+        hidden: true,
+        component: _import('order/orderdetailB'),
+        meta: { roles: ['1', '2'], title: '订单详情', icon: 'form' }
       }
     ]
   },

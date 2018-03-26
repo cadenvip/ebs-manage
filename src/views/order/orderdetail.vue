@@ -323,7 +323,7 @@
             <el-row style="overflow: hidden;">
               <div class="block" v-if="orderObj.orderRejectedBean">
                 <span style="font-size: 12px;color:#787878;font-weight: bold; padding-left: 10px;">退货图片：</span>
-                <el-carousel v-if="orderObj.orderRejectedBean.orderRejectedImgBeanList.length>0" trigger="click" height="120px" indicator-position="none">
+                <el-carousel v-if="orderObj.orderRejectedBean.orderRejectedImgBeanList && orderObj.orderRejectedBean.orderRejectedImgBeanList.length>0" trigger="click" height="120px" indicator-position="none">
                   <el-carousel-item v-for="item in orderObj.orderRejectedBean.orderRejectedImgBeanList" :key="item">
                     <img :src="item" alt="">
                   </el-carousel-item>
@@ -358,14 +358,37 @@
         <el-table-column prop="remark" label="备注" align="center"></el-table-column>
       </el-table>
     </div>
+    <div class="part"  v-if="operateFlag === '1'">
+      <h1>处理意见</h1>
+      <div style="width: 770px;">
+        <el-input v-model.trim="suggestion" :maxlength="100" type="textarea"></el-input>
+        <p style="font-size: 12px;">剩余字符：<span style="color: red;">{{getResidualLen}}</span></p>
+      </div>
+    </div>
     <div style="margin-top: 20px;width:770px;text-align:center;padding-bottom:200px;">
+      <el-button  v-if="operateFlag === '1'" @click="shipments" size="mini">发货</el-button>
       <el-button @click="goBack" size="mini">返回</el-button>
     </div>
     <el-dialog title="物流信息" :visible.sync="dialogVisible" center>
-      <p>物流方式：<span>{{dialogTransport}}</span></p>
-      <p>物流公司：<span>{{dialogForm.logisticName}}</span></p>
-      <p>运单号码：<span>{{dialogForm.logisticNo}}</span></p>
-      <p>查询电话：<span>{{dialogForm.sendExpTel}}</span></p>
+      <div v-if="dialogForm.orderDeliveryBean.logisticName">
+        <p>物流方式：<span>{{dialogTransport}}</span></p>
+        <p>物流公司：<span>{{dialogForm.orderDeliveryBean.logisticName}}</span></p>
+        <p>运单号码：<span>{{dialogForm.orderDeliveryBean.logisticNo}}</span></p>
+        <p v-if="dialogForm.orderDeliveryBean.sendCompanyCode === 'privateLogistics'">查询电话：<span>{{dialogForm.orderDeliveryBean.sendExpTel}}</span></p>
+        <p v-else>
+          <p v-if="dialogForm.logisticCompanyBean">查询电话：<span>{{dialogForm.logisticCompanyBean.serviceCall}}</span></p>
+        </p>
+        <p v-if="dialogForm.orderDeliveryBean.sendRemark">备注：<span>{{dialogForm.orderDeliveryBean.sendRemark}}</span></p>
+        <div v-if="dialogForm.expResultDataBeanList && dialogForm.expResultDataBeanList.length>0">
+          <p>物流跟踪：以下跟踪信息由<a style="color: #6AA6FA;" href="http://www.kuaidi100.com/" target="_blank">快递100</a>提供，如有疑问请到物流公司官网查询</p>
+          <p style="color: #4791D0;font-size: 12px;padding-left: 70px;" v-for="item in dialogForm.expResultDataBeanList">
+            {{item.time}} {{item.context}}
+          </p>
+        </div>
+      </div>
+      <div v-else>
+        <p>对不起，暂时没有任何物流信息！</p>
+      </div>
       <div style="text-align: center;">
         <el-button size="mini" @click="dialogVisible = false">取 消</el-button>
       </div>
@@ -378,14 +401,25 @@ import { orderDetail, getDeleveryDetail } from '@/api/order/index.js'
 export default {
   created() {
     this.oid = this.$route.query.oid
+    this.operateFlag = this.$route.query.operateFlag
+    if (this.openDialog === '1') {
+      // 来至发货
+    }
     if (this.oid) {
       this._getOrderDetail(this.oid)
     }
   },
   data() {
     return {
+      suggestion: '', // 处理意见
+      operateFlag: '',
       dialogVisible: false,
-      dialogForm: {},
+      dialogForm: {
+        expQueryResultBean: {},
+        orderDeliveryBean: {},
+        logisticCompanyBean: {},
+        expResultDataBeanList: []
+      },
       orderObj: {
         expQueryResultBean: {},
         orderDeliveryBean: {},
@@ -414,7 +448,9 @@ export default {
         getDeleveryDetail({ orderId: oid }).then(res => {
           if (res.status === 200) {
             this.dialogForm = res.data
-            this.getTransportType(this.dialogForm.transportType)
+            if (this.dialogForm.orderDeliveryBean.logisticName) {
+              this.getTransportType(this.dialogForm.orderDeliveryBean.transportType)
+            }
             this.dialogVisible = true
           } else {
             this.$message.error(res.msg)
@@ -481,6 +517,12 @@ export default {
                 case '11':
                   this.payWay.push('货到付款')
                   break
+                case '12':
+                  this.payWay.push('线下汇款')
+                  break
+                case '21':
+                  this.payWay.push('银联支付')
+                  break
                 case '23':
                   this.payWay.push('支付宝支付')
                   break
@@ -489,6 +531,15 @@ export default {
                   break
                 case '24':
                   this.payWay.push('网银支付')
+                  break
+                case '25':
+                  this.payWay.push('财付通支付')
+                  break
+                case '26':
+                  this.payWay.push('快钱支付')
+                  break
+                case '27':
+                  this.payWay.push('银联语音支付')
                   break
                 case '32':
                   this.payWay.push('话费支付')
@@ -502,6 +553,12 @@ export default {
         }
       } else {
         return '暂无'
+      }
+    },
+    shipments() {
+      if (this.suggestion === '') {
+        this.$message.error('处理意见不能为空！')
+        return
       }
     },
     getPayState(val) {
@@ -587,8 +644,8 @@ export default {
             this.dialogTransport = 'FAX'
             break
           case '99':
-            this.transportType = ('其他快递')
-            this.dialogTransport = '其他快递'
+            this.transportType = ('快递')
+            this.dialogTransport = '快递'
             break
           default:break
         }
@@ -631,6 +688,11 @@ export default {
           default:break
         }
       }
+    }
+  },
+  computed: {
+    getResidualLen() {
+      return (100 - this.suggestion.length) < 0 ? 0 : (100 - this.suggestion.length)
     }
   }
 }

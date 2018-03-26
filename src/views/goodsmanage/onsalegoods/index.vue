@@ -88,7 +88,7 @@
     </el-form>
     <div style="padding: 0 2%;">
       <el-tabs v-model="activeTab" type="border-card" @tab-click="handleTabClick">
-        <el-tab-pane label="销售中商品" name="first">
+        <el-tab-pane label="销售中商品" name="tab1">
           <el-table :row-class-name="tableRowClassName" @selection-change="handleTableSelectionChange" ref="multipleTable" :data="tableData" tooltip-effect="dark" border style="width: 100%" >
             <el-table-column type="selection" width="55">
             </el-table-column>
@@ -139,7 +139,7 @@
             </el-col>
           </el-row>
         </el-tab-pane>
-        <el-tab-pane label="缺货的商品" name="second">
+        <el-tab-pane label="缺货的商品" name="tab2">
           <el-table :row-class-name="tableRowClassName" @selection-change="handleTableSelectionChange" ref="multipleTable" :data="tableData2" tooltip-effect="dark" border style="width: 100%" >
             <el-table-column type="selection" width="55">
             </el-table-column>
@@ -239,7 +239,7 @@
         pagesizes: [10, 20, 30, 50],
         pagesize: 10,
         show: false,  // 下拉搜索内容是否展示
-        activeTab: 'first', // 选择的tab
+        activeTab: 'tab1', // 选择的tab
         formT: {
           shangpmc: '',
           spzdjg: '',
@@ -330,7 +330,7 @@
         })
       },
       handleTabClick(tab, event) {
-        if (tab.name === 'second') {
+        if (tab.name === 'tab2') {
           this.currentPage = 1
           this.currentTab = 2
           this.submitForm('formT')

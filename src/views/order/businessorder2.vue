@@ -115,54 +115,69 @@
               </el-col>
             </el-row>
           </div>
-        </el-collapse-transition>   
-        <div style="border-top: 1px dotted #e5e5e5; padding-top: 20px;">
-          <div class="table-list-title">
-            订单列表
-          </div>
-          <div>
-            <el-table :data="tableData" style="width: 100%" border>
-              <el-table-column prop="orderCode" label="订单编号" align="center">
-              </el-table-column>
-              <el-table-column prop="userName" label="订购人姓名" align="center">
-              </el-table-column>
-              <el-table-column prop="userPhone" label="订购人电话" align="center">
-              </el-table-column>
-              <el-table-column prop="totalEccouponMoney" label="电子券金额(元)" align="center">
-              </el-table-column>
-              <el-table-column prop="specialOffer" label="优惠金额(元)" align="center">
-              </el-table-column>
-              <el-table-column prop="plusPrice" label="订单金额(元)" align="center">
-              </el-table-column>
-              <el-table-column prop="orderTime" label="下单日期" align="center">
-              </el-table-column>
-              <el-table-column prop="businessesName" label="商家名称" align="center">
-              </el-table-column>
-              <el-table-column prop="payTypeName" label="支付方式" align="center">
-              </el-table-column>
-              <el-table-column prop="payStateName" label="支付状态" align="center">
-              </el-table-column>
-              <el-table-column prop="orderStateName" label="订单状态" align="center">
-              </el-table-column>
-              <el-table-column  label="操作" align="center">
-                <template slot-scope="scope">
-                  <el-button @click="_getOrderDetail(scope.row.orderCode)" type="text" size="small">订单详情</el-button>
-                </template>
-              </el-table-column>
-            </el-table>
-            <div class="block" style="text-align: right;margin-top: 10px;">
-              <el-pagination
-                @current-change="handleCurrentChange"
-                :current-page="currentPage"
-                :page-size="pageSize"
-                layout="total, prev, pager, next, jumper"
-                :total="total">
-              </el-pagination>
-            </div>
-          </div>
-        </div>     
+        </el-collapse-transition>      
       </div>
     </el-form>    
+    <div style="border-top: 1px dotted #e5e5e5; padding-top: 20px;">
+      <div class="table-list-title">
+        订单列表
+      </div>
+      <div>
+        <el-table :data="tableData" style="width: 100%" border>
+          <el-table-column label="订单编号" align="center">
+            <template slot-scope="scope">
+              <a @click="_getOrderDetail(scope.row.orderCode)" style="color: #239cdf;">{{ scope.row.orderCode }}</a>
+            </template>
+          </el-table-column>
+          <el-table-column prop="userName" label="订购人姓名" align="center">
+          </el-table-column>
+          <el-table-column prop="userPhone" label="订购人电话" align="center">
+          </el-table-column>
+          <el-table-column label="电子券金额(元)" align="center">
+            <template slot-scope="scope">
+              <span style="color: #E48E55;font-weight: bold;">￥{{ scope.row.totalEccouponMoney }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="优惠金额(元)" align="center">
+            <template slot-scope="scope">
+              <span style="color: #E48E55;font-weight: bold;">￥{{ scope.row.specialOffer }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="订单金额(元)" align="center">
+            <template slot-scope="scope">
+              <span style="color: #E48E55;font-weight: bold;">￥{{ scope.row.plusPrice }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column prop="orderTime" label="下单日期" align="center">
+          </el-table-column>
+          <el-table-column prop="businessesName" label="商家名称" align="center">
+          </el-table-column>
+          <el-table-column prop="payTypeName" label="支付方式" align="center">
+          </el-table-column>
+          <el-table-column prop="payStateName" label="支付状态" align="center">
+          </el-table-column>
+          <el-table-column label="订单状态" align="center">
+            <template slot-scope="scope">
+              <span style="color: #B1B9C7;">{{ scope.row.orderStateName }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column  label="操作" align="center">
+            <template slot-scope="scope">
+              <el-button @click="_getOrderDetail(scope.row.orderCode)" type="text" size="small">订单详情</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+        <div class="block" style="text-align: right;margin-top: 10px;">
+          <el-pagination
+            @current-change="handleCurrentChange"
+            :current-page="currentPage"
+            :page-size="pageSize"
+            layout="total, prev, pager, next, jumper"
+            :total="total">
+          </el-pagination>
+        </div>
+      </div>
+    </div> 
   </div>
 </template>
 

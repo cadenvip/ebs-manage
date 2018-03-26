@@ -127,7 +127,8 @@
             </el-table-column>
             <el-table-column  label="操作" align="center">
               <template slot-scope="scope">
-                <el-button @click="_getDeleveryDetail(scope.row)" type="text" size="small">物流详情</el-button>
+                <el-button @click="_getDeleveryDetail(scope.row)" type="text" size="small">物流查询</el-button>
+                <el-button @click="_getOrderDetail(scope.row)" type="text" size="small">订单详情</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -303,7 +304,14 @@
             </el-table-column>
             <el-table-column  label="操作" align="center">
               <template slot-scope="scope">
-                <el-button @click="_getDeleveryDetail(scope.row)" type="text" size="small">物流详情</el-button>
+                <div v-if="scope.row.orderCode !== ''">
+                  <el-button v-if="scope.row.orderState==='1'" @click="_shipments(scope.row)" type="text" size="small">订单发货</el-button>
+                  <el-button v-else-if="scope.row.payType==='11' && scope.row.orderState==='2'" @click="_userReject(scope.row)" type="text" size="small">用户拒收</el-button>
+                  <el-button v-else-if="scope.row.verifyState==='1' && scope.row.orderState==='9'" @click="_returnAudit(scope.row)" type="text" size="small">退货审核</el-button>
+                  <el-button v-else-if="scope.row.verifyState==='2' && scope.row.orderState==='5'" @click="_returnSigned(scope.row)" type="text" size="small">退货签收</el-button>
+                </div>
+                <div><el-button title="查看订单物流信息" @click="_getDeleveryDetail(scope.row)" type="text" size="small">物流查询</el-button></div>
+                <div><el-button title="查看订单详情" @click="_getOrderDetail(scope.row)" type="text" size="small">订单详情</el-button></div>
               </template>
             </el-table-column>
           </el-table>
@@ -455,6 +463,18 @@
             this.$message.error(err)
           })
         }
+      },
+      _getOrderDetail(row) {
+        this.$router.push({ name: 'orderdetailB', query: { oid: row.orderCode, timeType: '1' }})
+      },
+      _shipments(row) {
+        this.$router.push({ name: 'shipments', query: { oid: row.orderCode }})
+      },
+      _returnAudit() {
+
+      },
+      _returnSigned() {
+
       },
       orderExport() {
         const defaultParam = {
