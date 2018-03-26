@@ -119,7 +119,7 @@ export default {
         this.$message.error(response.msg)
       }
     }).catch(error => {
-      console.log(error)
+      this.$message.error(error)
     })
     getOperTypeList().then(response => {
       if (response.status === 200) {
@@ -130,7 +130,7 @@ export default {
         this.$message.error(response.msg)
       }
     }).catch(error => {
-      console.log(error)
+      this.$message.error(error)
     })
   },
   methods: {
@@ -142,7 +142,6 @@ export default {
       // 按操作时间降序排序
       params['sort'] = 'createTime'
       params['order'] = 'desc'
-      console.log('params: ', params)
       getOLogList(params).then(response => {
         if (response.status === 200) {
           this.list = response.data
@@ -153,7 +152,7 @@ export default {
         this.loading = false
       }).catch(error => {
         this.loading = false
-        console.log(error)
+        this.$message.error(error)
       })
     },
     initOLogList() {
@@ -174,11 +173,10 @@ export default {
         this.loading = false
       }).catch(error => {
         this.loading = false
-        console.log(error)
+        this.$message.error(error)
       })
     },
     systemChanged() {
-      console.log('systemChanged')
       var params = { 'system': this.searchForm.system }
       getModuleList(params).then(response => {
         if (response.status === 200) {
@@ -190,7 +188,7 @@ export default {
           this.$message.error(response.msg)
         }
       }).catch(error => {
-        console.log(error)
+        this.$message.error(error)
       })
       getOperTypeList(params).then(response => {
         if (response.status === 200) {
@@ -202,7 +200,7 @@ export default {
           this.$message.error(response.msg)
         }
       }).catch(error => {
-        console.log(error)
+        this.$message.error(error)
       })
     },
     resetForm(formname) {
@@ -228,38 +226,6 @@ export default {
         }
       }
     },
-    // moduleFormat(row, column, cellValue) {
-    //   console.log(cellValue)
-    //   if (cellValue !== null && this.moduleList !== undefined && this.moduleList !== null) {
-    //     var i = 0
-    //     for (; i < this.moduleList.length; i++) {
-    //       if (cellValue === this.moduleList[i].value) {
-    //         return this.moduleList[i].label
-    //       }
-    //     }
-    //     if (i === this.moduleList.length) {
-    //       return ''
-    //     }
-    //   } else {
-    //     return ''
-    //   }
-    // },
-    // operTypeFormat(row, column, cellValue) {
-    //   console.log(cellValue)
-    //   if (cellValue !== null && this.operTypeList !== undefined && this.operTypeList !== null) {
-    //     var i = 0
-    //     for (; i < this.operTypeList.length; i++) {
-    //       if (cellValue === this.operTypeList[i].value) {
-    //         return this.operTypeList[i].label
-    //       }
-    //     }
-    //     if (i === this.operTypeList.length) {
-    //       return ''
-    //     }
-    //   } else {
-    //     return ''
-    //   }
-    // },
     handleSizeChange(val) {
       this.pagesize = val
       this.queryOLogList()

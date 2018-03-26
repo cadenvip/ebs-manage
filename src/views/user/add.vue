@@ -137,7 +137,6 @@ export default {
           this.$refs.userForm.validateField('repassword')
           callback()
         }
-        callback()
       }
     }
     var validateRepass = (rule, value, callback) => {
@@ -150,12 +149,15 @@ export default {
       }
     }
     var validateMail = (rule, value, callback) => {
-      if (value !== '') {
+      if (value !== null && value !== '') {
         if (!validateEmail(value.trim())) {
           callback(new Error('请输入有效的邮箱地址'))
+        } else {
+          callback()
         }
+      } else {
+        callback()
       }
-      callback()
     }
     return {
       roles: [],

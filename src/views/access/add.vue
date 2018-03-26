@@ -19,6 +19,7 @@
         <el-col :span="12">
           <el-form-item label="密码：" prop="password">
             <el-input type="password" v-model="accessBean.password" style="width: 300px;" placeholder="请输入密码"></el-input>
+            <PasswordStrength :password="accessBean.password" @pwdInfo="getPwdInfo"></PasswordStrength>
           </el-form-item>          
         </el-col>
         <el-col :span="12">
@@ -178,6 +179,7 @@
 import { addAccess, getChanelList, getAllOperationList, getOperationList, getAllInterfaceList, getInterfaceList } from '@/api/access'
 import { str2Timestamp } from '@/utils/index'
 import { validateMobilePhone, validateTelephone, validateURL } from '@/utils/validate'
+import PasswordStrength from '@/components/PasswordStrength/index'
 
 export default {
   data() {
@@ -185,10 +187,14 @@ export default {
       if (value === '') {
         callback(new Error('请输入密码'))
       } else {
-        if (this.accessBean.repassword !== '') {
+        if (this.accessBean.password.length < 8) {
+          callback(new Error('请密码长度不足8位'))
+        } else if (this.pwdInfo.score < 4) {
+          callback(new Error('请密码强度不够'))
+        } else if (this.accessBean.repassword !== '') {
           this.$refs.accessBean.validateField('repassword')
+          callback()
         }
-        callback()
       }
     }
     var validateRepass = (rule, value, callback) => {
@@ -204,7 +210,10 @@ export default {
       if (value !== '') {
         if (!validateMobilePhone(value.trim()) && !validateTelephone(value.trim())) {
           callback(new Error('请输入有效的联系方式'))
+        } else {
+          callback()
         }
+      } else {
         callback()
       }
     }
@@ -212,7 +221,10 @@ export default {
       if (value !== '') {
         if (!validateURL(value.trim())) {
           callback(new Error('请输入有效的Url'))
+        } else {
+          callback()
         }
+      } else {
         callback()
       }
     }
@@ -257,6 +269,7 @@ export default {
         si_url: [{ required: false, validator: validateSi_url, trigger: 'blur' }],
         si_type: [{ required: true, message: '请选择接入类别', trigger: 'change' }]
       },
+      pwdInfo: {},
       getOpRowKey(row) {
         return row.id
       },
@@ -264,6 +277,9 @@ export default {
         return row.id
       }
     }
+  },
+  components: {
+    PasswordStrength
   },
   created () {
     getChanelList().then(response => {
@@ -295,6 +311,9 @@ export default {
     })
   },
   methods: {
+    getPwdInfo(data) {
+      this.pwdInfo = data
+    },
     selectOperation() {
       this.operationTableVisible = true
       getAllOperationList().then(response => {
@@ -307,7 +326,7 @@ export default {
               this.operationList.forEach(row => {
                 for (var index = 0; index < this.selectedOpList.length; index++) {
                   if (this.selectedOpList[index].id === row.id) {
-                  // this.$refs.operationTable.toggleRowSelection(row, true)
+                    // this.$refs.operationTable.toggleRowSelection(row, true)
                     defaultSelected.push(row)
                     break
                   }

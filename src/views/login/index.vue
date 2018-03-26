@@ -99,6 +99,7 @@ export default {
         if (valid) {
           // 提供dispatch(action)方法更新state；
           this.$store.dispatch('Login', this.loginForm).then(response => {
+            debugger
             // 根据角色进入相应的首页
             if (response.data.role[0].roletype === '1') {
               this.$router.push({ path: '/home/ahome' })
