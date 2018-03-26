@@ -16,10 +16,8 @@ export function validateURL(textval) {
 
 /* 小写数字*/
 export function validateDigit(str) {
-  debugger
   const reg = /^[0-9]+$/
-  var result = reg.test(str)
-  return result
+  return reg.test(str)
 }
 
 /* 小写字母*/

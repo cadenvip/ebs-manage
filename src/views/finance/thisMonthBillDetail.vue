@@ -222,7 +222,7 @@ export default {
         this.loading = false
       }).catch(error => {
         this.loading = false
-        console.log(error)
+        this.$message.error(error)
       })
       this.loading = false
     },
@@ -306,7 +306,7 @@ export default {
           this.$message.error(response.msg)
         }
       }).catch(error => {
-        console.log(error)
+        this.$message.error(error)
       })
     },
     checkout() {
@@ -318,7 +318,7 @@ export default {
           this.$message.error(response.msg)
         }
       }).catch(error => {
-        console.log(error)
+        this.$message.error(error)
       })
     },
     dispute() {
@@ -340,7 +340,7 @@ export default {
             this.$message.error(response.msg)
           }
         }).catch(error => {
-          console.log(error)
+          this.$message.error(error)
         })
         this.dialogFormVisible = false
       }

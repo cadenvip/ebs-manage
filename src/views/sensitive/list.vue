@@ -64,7 +64,6 @@ export default {
   methods: {
     querySensitiveList() {
       this.loading = true
-      console.log(this.searchForm.keyword, this.currentPage, this.pagesize)
       getSensitiveList(this.searchForm.keyword, this.currentPage, this.pagesize).then(response => {
         if (response.status === 200) {
           this.list = response.data.list
@@ -75,7 +74,7 @@ export default {
         this.loading = false
       }).catch(error => {
         this.loading = false
-        console.log(error)
+        this.$message.error(error)
       })
     },
     addSensitive() {
@@ -93,7 +92,7 @@ export default {
         this.loading = false
       }).catch(error => {
         this.loading = false
-        console.log(error)
+        this.$message.error(error)
       })
     },
     deleteSensitive(sensitive) {

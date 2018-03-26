@@ -76,7 +76,7 @@
         </el-col>
         <el-col :span="8">
           <span>
-            {{ userForm.address }}
+            {{ userForm.address ? userForm.address : '&nbsp;' }}
           </span> 
         </el-col>
         <el-col :span="4" style="text-align:right">
@@ -138,18 +138,15 @@ export default {
       this.rolenames = arrRoleNames.join()
     },
     getUserForm() {
-      return new Promise((resolve, reject) => {
-        getUserDetail(this.$route.query.id).then(response => {
-          if (response.status === 200) {
-            this.userForm = response.data
-            this.setRoles(this.userForm.role)
-            resolve(response)
-          } else {
-            this.$message.error(response.msg)
-          }
-        }).catch(error => {
-          reject(error)
-        })
+      getUserDetail(this.$route.query.id).then(response => {
+        if (response.status === 200) {
+          this.userForm = response.data
+          this.setRoles(this.userForm.role)
+        } else {
+          this.$message.error(response.msg)
+        }
+      }).catch(error => {
+        this.$message.error(error)
       })
     },
     onCancel() {

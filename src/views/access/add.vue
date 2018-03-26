@@ -273,7 +273,7 @@ export default {
         this.$message.error(response.msg)
       }
     }).catch(error => {
-      console.log(error)
+      this.$message.error(error)
     })
     getAllOperationList().then(response => {
       if (response.status === 200) {
@@ -282,7 +282,7 @@ export default {
         this.$message.error(response.msg)
       }
     }).catch(error => {
-      console.log(error)
+      this.$message.error(error)
     })
     getAllInterfaceList().then(response => {
       if (response.status === 200) {
@@ -291,7 +291,7 @@ export default {
         this.$message.error(response.msg)
       }
     }).catch(error => {
-      console.log(error)
+      this.$message.error(error)
     })
   },
   methods: {
@@ -323,7 +323,7 @@ export default {
           this.$message.error(response.msg)
         }
       }).catch(error => {
-        console.log(error)
+        this.$message.error(error)
       })
     },
     selectInterface() {
@@ -355,7 +355,7 @@ export default {
           this.$message.error(response.msg)
         }
       }).catch(error => {
-        console.log(error)
+        this.$message.error(error)
       })
     },
     queryOperation() {
@@ -366,7 +366,7 @@ export default {
           this.$message.error(response.msg)
         }
       }).catch(error => {
-        console.log(error)
+        this.$message.error(error)
       })
     },
     queryInterface() {
@@ -377,7 +377,7 @@ export default {
           this.$message.error(response.msg)
         }
       }).catch(error => {
-        console.log(error)
+        this.$message.error(error)
       })
     },
     opSelectionChange(val) {
@@ -438,22 +438,18 @@ export default {
           if (params.accessBean.end_time !== undefined && params.accessBean.end_time !== '') {
             params.accessBean.end_time = str2Timestamp(params.accessBean.end_time)
           }
-          console.log(params)
-          return new Promise((resolve, reject) => {
-            addAccess(params).then(response => {
-              if (response.status === 200) {
-                resolve(response)
-                this.$router.push({ path: '/system/access/list' })
-                this.$message.success('新增接入方成功')
-              } else {
-                this.$message.error(response.msg)
-              }
-            }).catch(error => {
-              reject(error)
-            })
+          addAccess(params).then(response => {
+            if (response.status === 200) {
+              this.$router.push({ path: '/system/access/list' })
+              this.$message.success('新增接入方成功')
+            } else {
+              this.$message.error(response.msg)
+            }
+          }).catch(error => {
+            this.$message.error(error)
           })
         } else {
-          console.log('error submit!!')
+          this.$message.error('error submit!!')
           return false
         }
       })

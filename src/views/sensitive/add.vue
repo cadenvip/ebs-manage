@@ -34,21 +34,18 @@ export default {
     onSubmit() {
       this.$refs.sensitiveForm.validate(valid => {
         if (valid) {
-          return new Promise((resolve, reject) => {
-            addSensitive(this.sensitiveForm.word).then(response => {
-              if (response.status === 200) {
-                this.$router.push({ path: '/system/sensitive/list' })
-                resolve(response)
-              } else {
-                this.$message.error(response.msg)
-              }
-            }).catch(error => {
-              reject(error)
-            })
+          addSensitive(this.sensitiveForm.word).then(response => {
+            if (response.status === 200) {
+              this.$router.push({ path: '/system/sensitive/list' })
+              this.$message.success('新增敏感词成功！')
+            } else {
+              this.$message.error(response.msg)
+            }
+          }).catch(error => {
+            this.$message.error(error)
           })
         } else {
-          console.log('error submit!!')
-          return false
+          this.$message.error('error submit!!')
         }
       })
     },

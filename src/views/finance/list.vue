@@ -131,7 +131,6 @@ export default {
   methods: {
     queryBillList() {
       this.loading = true
-      console.log(this.searchForm)
       getBillList(this.searchForm, this.currentPage, this.pagesize).then(response => {
         if (response.status === 200) {
           this.billlist = response.data.list
@@ -142,7 +141,7 @@ export default {
         this.loading = false
       }).catch(error => {
         this.loading = false
-        console.log(error)
+        this.$message.error(error)
       })
     },
     initBillList() {
@@ -157,7 +156,7 @@ export default {
         this.loading = false
       }).catch(error => {
         this.loading = false
-        console.log(error)
+        this.$message.error(error)
       })
     },
     getLocationInfo: function(data) {
@@ -184,7 +183,7 @@ export default {
           this.$message.error(response.msg)
         }
       }).catch(error => {
-        console.log(error)
+        this.$message.error(error)
       })
     },
     adjustBill(bill) {
@@ -200,7 +199,7 @@ export default {
           this.$message.error(response.msg)
         }
       }).catch(error => {
-        console.log(error)
+        this.$message.error(error)
       })
     },
     handleSizeChange(val) {

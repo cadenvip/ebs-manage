@@ -140,17 +140,14 @@
     },
     methods: {
       getILogInfo() {
-        return new Promise((resolve, reject) => {
-          getILogDetail(this.$route.query.id).then(response => {
-            if (response.status === 200) {
-              this.logDetail = response.data
-              resolve(response)
-            } else {
-              this.$message.error(response.msg)
-            }
-          }).catch(error => {
-            reject(error)
-          })
+        getILogDetail(this.$route.query.id).then(response => {
+          if (response.status === 200) {
+            this.logDetail = response.data
+          } else {
+            this.$message.error(response.msg)
+          }
+        }).catch(error => {
+          this.$message.error(error)
         })
       },
       goBack() {

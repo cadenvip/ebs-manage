@@ -651,10 +651,6 @@
       },
       handleFoodOtherSuccess(res, file) {
         this.registerForm.foodotherpicpath.push(URL.createObjectURL(file.raw))
-        console.log(this.registerForm.foodotherpicpath)
-      },
-      handleRemove(file, fileList) {
-        console.log(file, fileList)
       },
       handlePictureCardPreview(file) {
         this.dialogImageUrl = file
@@ -883,7 +879,7 @@
             this.$message.error(response.msg)
           }
         }).catch(error => {
-          console.log(error)
+          this.$message.error(error)
         })
       }
     }

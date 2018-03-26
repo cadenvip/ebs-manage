@@ -2,7 +2,6 @@ import request from '@/utils/request'
 
 // test branch ss
 export function login(params) {
-  console.log(params)
   return request({
     url: '/login',
     method: 'post',

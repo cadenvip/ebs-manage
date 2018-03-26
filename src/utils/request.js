@@ -44,7 +44,6 @@ const downloadUrl = url => {
 // respone拦截器
 service.interceptors.response.use(response => {
   if (response.headers && (response.headers['content-type'] === 'application/x-msdownload' || response.headers['content-type'] === 'application/msexcel;charset=UTF-8' || response.headers['content-type'] === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')) {
-    console.log(response)
     downloadUrl(response.request.responseURL)
     return response
   }
@@ -63,7 +62,6 @@ service.interceptors.response.use(response => {
   return response.data
 },
 error => {
-  console.log(error)
   // 错误处理
   if (error.response !== undefined) {
     if (error.response.status === 401) {
@@ -80,7 +78,6 @@ error => {
     }
   } else {
     Message({ message: error.message, type: 'error', duration: 5 * 1000 })
-    console.log(error)
   }
   return Promise.reject(error)
 })

@@ -16,6 +16,7 @@
         <el-col :span="8">
           <el-form-item label="密码：" prop="password">
             <el-input type="password" v-model="userForm.password" :minlength=8 style="width: 220px;" placeholder="请输入密码"></el-input>
+            <PasswordStrength :password="userForm.password" @pwdInfo="getPwdInfo"></PasswordStrength>
           </el-form-item>          
         </el-col>
         <el-col :span="16" style="padding-top:8px">
@@ -44,7 +45,7 @@
       </el-row>
       <el-row :gutter="20">
         <el-col :span="8">
-          <el-form-item label="归属区域：" prop="locationid">
+          <el-form-item label="归属区域：" prop="locationname">
             <el-input v-model="userForm.locationname" style="width: 220px;" placeholder="请选择地址" @focus="dialogVisible = true" :disabled="true"></el-input>
           </el-form-item>          
         </el-col>
@@ -92,6 +93,7 @@
 
 import { getUserDetail, updateUser } from '@/api/user'
 import { validateEmail } from '@/utils/validate'
+import PasswordStrength from '@/components/PasswordStrength/index'
 
 export default {
   data() {
@@ -99,10 +101,14 @@ export default {
       if (value === '') {
         callback(new Error('请输入密码'))
       } else {
-        if (this.userForm.repassword !== '') {
+        if (this.userForm.password.length < 8) {
+          callback(new Error('请密码长度不足8位'))
+        } else if (this.pwdInfo.score < 4) {
+          callback(new Error('请密码强度不够'))
+        } else if (this.userForm.repassword !== '') {
           this.$refs.userForm.validateField('repassword')
+          callback()
         }
-        callback()
       }
     }
     var validateRepass = (rule, value, callback) => {
@@ -118,7 +124,10 @@ export default {
       if (value !== null && value !== '') {
         if (!validateEmail(value.trim())) {
           callback(new Error('请输入有效的邮箱地址'))
+        } else {
+          callback()
         }
+      } else {
         callback()
       }
     }
@@ -142,46 +151,58 @@ export default {
         unitname: [{ required: true, message: '请选输入单位', trigger: 'blur' }],
         email: [{ required: false, validator: validateMail, trigger: 'blur' }],
         address: [{ required: false, message: '请输入地址', trigger: 'blur' }]
-      }
+      },
+      pwdInfo: {},
+      pwdBack: ''
     }
+  },
+  components: {
+    PasswordStrength
   },
   created() {
     this.getUserInfo()
   },
   methods: {
     getUserInfo() {
-      return new Promise((resolve, reject) => {
-        getUserDetail(this.$route.query.id).then(response => {
-          if (response.status === 200) {
-            this.userForm = response.data
-            this.userForm.repassword = this.userForm.password
-            resolve(response)
-          } else {
-            this.$message.error(response.msg)
-          }
-        }).catch(error => {
-          reject(error)
-        })
+      getUserDetail(this.$route.query.id).then(response => {
+        if (response.status === 200) {
+          this.userForm = response.data
+          this.userForm.repassword = this.userForm.password
+          this.pwdBack = response.data.password
+        } else {
+          this.$message.error(response.msg)
+        }
+      }).catch(error => {
+        this.$message.error(error)
       })
+    },
+    getPwdInfo(data) {
+      this.pwdInfo = data
     },
     onSubmit() {
       this.$refs.userForm.validate(valid => {
         if (valid) {
-          return new Promise((resolve, reject) => {
-            updateUser(this.userForm).then(response => {
-              if (response.status === 200) {
-                this.$router.go(-1)
-                resolve(response)
-              } else {
-                this.$message.error(response.msg)
-              }
-            }).catch(error => {
-              reject(error)
-            })
+          var params = { 'id': `${this.userForm.id}`,
+            'password': `${this.userForm.password}`,
+            'name': `${this.userForm.name}`,
+            'email': `${this.userForm.email !== null ? this.userForm.email : ''}`,
+            'address': `${this.userForm.address !== null ? this.userForm.address : ''}`,
+            'locationid': `${this.userForm.locationid}`,
+            'loginname': `${this.userForm.loginname}`,
+            'phoneno': `${this.userForm.phoneno}`
+          }
+          updateUser(params).then(response => {
+            if (response.status === 200) {
+              this.$message.success('修改人员成功！')
+              this.$router.push({ path: '/system/user/list' })
+            } else {
+              this.$message.error(response.msg)
+            }
+          }).catch(error => {
+            this.$message.error(error)
           })
         } else {
-          console.log('error submit!!')
-          return false
+          this.$message.error('error submit!!')
         }
       })
     },

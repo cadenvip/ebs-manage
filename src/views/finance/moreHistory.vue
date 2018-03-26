@@ -45,7 +45,7 @@ export default {
         this.loading = false
       }).catch(error => {
         this.loading = false
-        console.log(error)
+        this.$message.error(error)
       })
       getHistoryBillsList().then(response => {
         if (response.status === 200) {
@@ -56,7 +56,7 @@ export default {
         this.loading = false
       }).catch(error => {
         this.loading = false
-        console.log(error)
+        this.$message.error(error)
       })
     },
     formatYearMonth(bill) {
