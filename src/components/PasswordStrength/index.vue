@@ -38,7 +38,15 @@
         this.containSymbol = containSymbol(this.password) ? 1 : 0
         this.lengthLarger8 = this.password.length >= 8 ? 1 : 0
         this.score = this.containDigit + this.containLowerCase + this.containUpperCase + this.containSymbol + this.lengthLarger8
-        this.$emit('scoreChanged', this.score)
+        var params = {
+          score: this.score,
+          containDigit: this.containDigit,
+          containLowerCase: this.containLowerCase,
+          containUpperCase: this.containUpperCase,
+          containSymbol: this.containSymbol,
+          lengthLarger8: this.lengthLarger8
+        }
+        this.$emit('pwdInfo', params)
       }
     }
   }

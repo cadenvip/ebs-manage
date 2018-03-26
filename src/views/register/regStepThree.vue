@@ -236,7 +236,6 @@
       },
       handleFoodOtherSuccess(res, file) {
         this.registerForm.foodotherpicpath.push(URL.createObjectURL(file.raw))
-        console.log(this.registerForm.foodotherpicpath)
       },
       handleRemove(file, fileList) {
         console.log(file, fileList)
@@ -335,9 +334,6 @@
           // },
           'goodsSamplelist': goodsSamplelist
         }
-
-        // console.log(params)
-
         EnterpriseRegister(params).then(response => {
           if (response.status === 200) {
             this.$router.push({ path: '/regStepFour' })
@@ -345,7 +341,7 @@
             this.$message.error(response.msg)
           }
         }).catch(error => {
-          console.log(error)
+          this.$message.error(error)
         })
       }
     }

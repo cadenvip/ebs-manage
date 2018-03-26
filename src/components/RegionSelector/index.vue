@@ -108,181 +108,161 @@ export default {
   },
   methods: {
     getLocationById (locationId) {
-      return new Promise((resolve, reject) => {
-        getLocationInfoById(locationId).then(response => {
-          if (response.status === 200) {
-            var resultData = response.data.list[0]
-            switch (resultData.locationLevel) {
-              case 5:
-                this.village = resultData.id
-                getAllVillages(resultData.parentId).then(response => {
-                  if (response.status === 200) {
-                    this.villages = response.data.list
-                    this.getLocationById(resultData.parentId)
-                  } else {
-                    this.$message.error(response.msg)
-                  }
-                }).catch(error => {
-                  console.log(error)
-                })
-                break
-              case 4:
-                this.town = resultData.id
-                getAllTowns(resultData.parentId).then(response => {
-                  if (response.status === 200) {
-                    this.towns = response.data.list
-                    this.getLocationById(resultData.parentId)
-                  } else {
-                    this.$message.error(response.msg)
-                  }
-                }).catch(error => {
-                  console.log(error)
-                })
-                break
-              case 3:
-                this.county = resultData.id
-                getAllCounties(resultData.parentId).then(response => {
-                  if (response.status === 200) {
-                    this.counties = response.data.list
-                    this.getLocationById(resultData.parentId)
-                  } else {
-                    this.$message.error(response.msg)
-                  }
-                }).catch(error => {
-                  console.log(error)
-                })
-                break
-              case 2:
-                this.city = resultData.id
-                getAllCities(resultData.parentId).then(response => {
-                  if (response.status === 200) {
-                    this.cities = response.data.list
-                    this.getLocationById(resultData.parentId)
-                  } else {
-                    this.$message.error(response.msg)
-                  }
-                }).catch(error => {
-                  console.log(error)
-                })
-                break
-              case 1:
-                this.province = resultData.id
-                getAllProvinces(resultData.parentId).then(response => {
-                  if (response.status === 200) {
-                    this.provinces = response.data.list
-                    this.getLocationById(resultData.parentId)
-                  } else {
-                    this.$message.error(response.msg)
-                  }
-                }).catch(error => {
-                  console.log(error)
-                })
-                break
-              case 0:
-                this.country = resultData.id
-                getAllCountries(resultData.parentId).then(response => {
-                  if (response.status === 200) {
-                    this.countries = response.data.list
-                  } else {
-                    this.$message.error(response.msg)
-                  }
-                }).catch(error => {
-                  console.log(error)
-                })
-                break
-              default:
-                break
-            }
-          } else {
-            this.$message.error(response.msg)
+      getLocationInfoById(locationId).then(response => {
+        if (response.status === 200) {
+          var resultData = response.data.list[0]
+          switch (resultData.locationLevel) {
+            case 5:
+              this.village = resultData.id
+              getAllVillages(resultData.parentId).then(response => {
+                if (response.status === 200) {
+                  this.villages = response.data.list
+                  this.getLocationById(resultData.parentId)
+                } else {
+                  this.$message.error(response.msg)
+                }
+              }).catch(error => {
+                this.$message.error(error)
+              })
+              break
+            case 4:
+              this.town = resultData.id
+              getAllTowns(resultData.parentId).then(response => {
+                if (response.status === 200) {
+                  this.towns = response.data.list
+                  this.getLocationById(resultData.parentId)
+                } else {
+                  this.$message.error(response.msg)
+                }
+              }).catch(error => {
+                this.$message.error(error)
+              })
+              break
+            case 3:
+              this.county = resultData.id
+              getAllCounties(resultData.parentId).then(response => {
+                if (response.status === 200) {
+                  this.counties = response.data.list
+                  this.getLocationById(resultData.parentId)
+                } else {
+                  this.$message.error(response.msg)
+                }
+              }).catch(error => {
+                this.$message.error(error)
+              })
+              break
+            case 2:
+              this.city = resultData.id
+              getAllCities(resultData.parentId).then(response => {
+                if (response.status === 200) {
+                  this.cities = response.data.list
+                  this.getLocationById(resultData.parentId)
+                } else {
+                  this.$message.error(response.msg)
+                }
+              }).catch(error => {
+                this.$message.error(error)
+              })
+              break
+            case 1:
+              this.province = resultData.id
+              getAllProvinces(resultData.parentId).then(response => {
+                if (response.status === 200) {
+                  this.provinces = response.data.list
+                  this.getLocationById(resultData.parentId)
+                } else {
+                  this.$message.error(response.msg)
+                }
+              }).catch(error => {
+                this.$message.error(error)
+              })
+              break
+            case 0:
+              this.country = resultData.id
+              getAllCountries(resultData.parentId).then(response => {
+                if (response.status === 200) {
+                  this.countries = response.data.list
+                } else {
+                  this.$message.error(response.msg)
+                }
+              }).catch(error => {
+                this.$message.error(error)
+              })
+              break
+            default:
+              break
           }
-        }).catch(error => {
-          reject(error)
-        })
+        } else {
+          this.$message.error(response.msg)
+        }
+      }).catch(error => {
+        this.$message.error(error)
       })
     },
     getCountries() {
-      return new Promise((resolve, reject) => {
-        getAllCountries('-1').then(response => {
-          if (response.status === 200) {
-            this.countries = response.data.list
-            resolve(response)
-          } else {
-            this.$message.error(response.msg)
-          }
-        }).catch(error => {
-          reject(error)
-        })
+      getAllCountries('-1').then(response => {
+        if (response.status === 200) {
+          this.countries = response.data.list
+        } else {
+          this.$message.error(response.msg)
+        }
+      }).catch(error => {
+        this.$message.error(error)
       })
     },
     getProvinces() {
-      return new Promise((resolve, reject) => {
-        getAllProvinces(this.country).then(response => {
-          if (response.status === 200) {
-            this.provinces = response.data.list
-            resolve(response)
-          } else {
-            this.$message.error(response.msg)
-          }
-        }).catch(error => {
-          reject(error)
-        })
+      getAllProvinces(this.country).then(response => {
+        if (response.status === 200) {
+          this.provinces = response.data.list
+        } else {
+          this.$message.error(response.msg)
+        }
+      }).catch(error => {
+        this.$message.error(error)
       })
     },
     getCities() {
-      return new Promise((resolve, reject) => {
-        getAllCities(this.province).then(response => {
-          if (response.status === 200) {
-            this.cities = response.data.list
-            resolve(response)
-          } else {
-            this.$message.error(response.msg)
-          }
-        }).catch(error => {
-          reject(error)
-        })
+      getAllCities(this.province).then(response => {
+        if (response.status === 200) {
+          this.cities = response.data.list
+        } else {
+          this.$message.error(response.msg)
+        }
+      }).catch(error => {
+        this.$message.error(error)
       })
     },
     getCounties() {
-      return new Promise((resolve, reject) => {
-        getAllCounties(this.city).then(response => {
-          if (response.status === 200) {
-            this.counties = response.data.list
-            resolve(response)
-          } else {
-            this.$message.error(response.msg)
-          }
-        }).catch(error => {
-          reject(error)
-        })
+      getAllCounties(this.city).then(response => {
+        if (response.status === 200) {
+          this.counties = response.data.list
+        } else {
+          this.$message.error(response.msg)
+        }
+      }).catch(error => {
+        this.$message.error(error)
       })
     },
     getTowns() {
-      return new Promise((resolve, reject) => {
-        getAllTowns(this.county).then(response => {
-          if (response.status === 200) {
-            this.towns = response.data.list
-            resolve(response)
-          } else {
-            this.$message.error(response.msg)
-          }
-        }).catch(error => {
-          reject(error)
-        })
+      getAllTowns(this.county).then(response => {
+        if (response.status === 200) {
+          this.towns = response.data.list
+        } else {
+          this.$message.error(response.msg)
+        }
+      }).catch(error => {
+        this.$message.error(error)
       })
     },
     getVillages() {
-      return new Promise((resolve, reject) => {
-        getAllVillages(this.town).then(response => {
-          if (response.status === 200) {
-            this.villages = response.data.list
-            resolve(response)
-          } else {
-            this.$message.error(response.msg)
-          }
-        }).catch(error => {
-          reject(error)
-        })
+      getAllVillages(this.town).then(response => {
+        if (response.status === 200) {
+          this.villages = response.data.list
+        } else {
+          this.$message.error(response.msg)
+        }
+      }).catch(error => {
+        this.$message.error(error)
       })
     },
     countryChanged() {

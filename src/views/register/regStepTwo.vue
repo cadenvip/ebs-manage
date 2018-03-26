@@ -236,10 +236,6 @@
       getLocationCode(locationInfo) {
         this.registerForm.locationCode = locationInfo.id.toString()
       },
-      getAddressInfo(addressInfo) {
-        console.log(addressInfo)
-        return
-      },
       goBack() {
         this.$router.push({ path: '/register' })
       },

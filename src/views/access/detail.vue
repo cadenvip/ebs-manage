@@ -186,7 +186,7 @@ export default {
         this.$message.error(response.msg)
       }
     }).catch(error => {
-      console.log(error)
+      this.$message.error(error)
     })
     getChanelList().then(response => {
       if (response.status === 200) {
@@ -195,7 +195,7 @@ export default {
         this.$message.error(response.msg)
       }
     }).catch(error => {
-      console.log(error)
+      this.$message.error(error)
     })
     getAllOperationList().then(response => {
       if (response.status === 200) {
@@ -204,7 +204,7 @@ export default {
         this.$message.error(response.msg)
       }
     }).catch(error => {
-      console.log(error)
+      this.$message.error(error)
     })
     getAllInterfaceList().then(response => {
       if (response.status === 200) {
@@ -213,7 +213,7 @@ export default {
         this.$message.error(response.msg)
       }
     }).catch(error => {
-      console.log(error)
+      this.$message.error(error)
     })
   },
   methods: {

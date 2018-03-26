@@ -48,6 +48,7 @@
       v-loading="loading"
       ref="tree">
     </el-tree>
+    <br/>
     <div style="text-align: center">
       <el-button type="primary" @click="onCancel">返回</el-button>
     </div>
@@ -102,21 +103,18 @@ export default {
   },
   methods: {
     getRoleInfo() {
-      return new Promise((resolve, reject) => {
-        getRoleDetail(this.$route.query.id).then(response => {
-          if (response.status === 200) {
-            this.roleForm.rolename = response.data.rolename
-            this.roleForm.roletype = response.data.roletype
-            this.roleForm.description = response.data.description
-            this.roleForm.resourceids = response.data.resourceids.split(',')
-            this.getAllPermissions()
-            resolve(response)
-          } else {
-            this.$message.error(response.msg)
-          }
-        }).catch(error => {
-          reject(error)
-        })
+      getRoleDetail(this.$route.query.id).then(response => {
+        if (response.status === 200) {
+          this.roleForm.rolename = response.data.rolename
+          this.roleForm.roletype = response.data.roletype
+          this.roleForm.description = response.data.description
+          this.roleForm.resourceids = response.data.resourceids.split(',')
+          this.getAllPermissions()
+        } else {
+          this.$message.error(response.msg)
+        }
+      }).catch(error => {
+        this.$message.error(error)
       })
     },
     getAllPermissions() {
@@ -129,42 +127,39 @@ export default {
         issystem = 1
       }
       this.loading = true
-      return new Promise((resolve, reject) => {
-        getAllResources(issystem).then(response => {
-          if (response.status === 200) {
-            this.allResources = response.data
-            var aliveResources = []
-            response.data.forEach(v => {
+      getAllResources(issystem).then(response => {
+        if (response.status === 200) {
+          this.allResources = response.data
+          var aliveResources = []
+          response.data.forEach(v => {
             // 所有节点禁用
-              v.label = v.name
-              v.disabled = true
-              delete v.type
-              delete v.url
-              delete v.permission
-              delete v.ordernum
-              delete v.createdate
-              delete v.statusdate
-              delete v.image
-              delete v.typestr
-              delete v.rootNode
-              if (v.status === 0) {
+            v.label = v.name
+            v.disabled = true
+            delete v.type
+            delete v.url
+            delete v.permission
+            delete v.ordernum
+            delete v.createdate
+            delete v.statusdate
+            delete v.image
+            delete v.typestr
+            delete v.rootNode
+            if (v.status === 0) {
               // status: 0-激活，1-禁用（激活后页面可见，功能可用）
-                aliveResources.push(v)
-              }
-            })
-            // 整理数据
-            this.data = this.list2Tree(aliveResources, { 'idKey': 'id', 'parentKey': 'parentid', 'childrenKey': 'children' })
-            // 设置选中
-            this.$refs.tree.setCheckedKeys(this.roleForm.resourceids)
-            this.loading = false
-            resolve(response)
-          } else {
-            this.$message.error(response.msg)
-          }
-        }).catch(error => {
+              aliveResources.push(v)
+            }
+          })
+          // 整理数据
+          this.data = this.list2Tree(aliveResources, { 'idKey': 'id', 'parentKey': 'parentid', 'childrenKey': 'children' })
+          // 设置选中
+          this.$refs.tree.setCheckedKeys(this.roleForm.resourceids)
           this.loading = false
-          reject(error)
-        })
+        } else {
+          this.$message.error(response.msg)
+        }
+      }).catch(error => {
+        this.loading = false
+        this.$message.error(error)
       })
     },
     list2Tree(arr, options) {

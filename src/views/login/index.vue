@@ -121,7 +121,7 @@ export default {
             this.$message.error(errpr)
           })
         } else {
-          console.log('error submit!!')
+          this.$message.error('error submit!!')
           return false
         }
       })
@@ -136,17 +136,14 @@ export default {
           return
         }
       }
-      return new Promise((resolve, reject) => {
-        getUnitInfos(this.loginForm.loginname).then(response => {
-          if (response.status === 200) {
-            this.unitinfos = response.data
-          } else {
-            this.$message.error(response.msg)
-          }
-          resolve(response)
-        }).catch(error => {
-          reject(error)
-        })
+      getUnitInfos(this.loginForm.loginname).then(response => {
+        if (response.status === 200) {
+          this.unitinfos = response.data
+        } else {
+          this.$message.error(response.msg)
+        }
+      }).catch(error => {
+        this.$message.error(error)
       })
     },
     selectUnit() {
@@ -155,25 +152,24 @@ export default {
       }
     },
     getVercode() {
-      return new Promise((resolve, reject) => {
-        this.loginForm.loginname = this.loginForm.loginname.trim()
-        if (this.loginForm.loginname === '') {
-          this.$message.error('请输入手机号码')
+      this.loginForm.loginname = this.loginForm.loginname.trim()
+      if (this.loginForm.loginname === '') {
+        this.$message.error('请输入手机号码')
+        return
+      } else {
+        if (!validateMobilePhone(this.loginForm.loginname.trim())) {
           return
-        } else {
-          if (!validateMobilePhone(this.loginForm.loginname.trim())) {
-            return
-          }
         }
-        getVercode(this.loginForm.loginname).then(response => {
-          if (response.status === 200) {
-            resolve(response)
-          } else {
-            this.$message.error(response.msg)
-          }
-        }).catch(error => {
-          reject(error)
-        })
+      }
+      getVercode(this.loginForm.loginname).then(response => {
+        if (response.status === 200) {
+          // TODO
+          this.$message.success('获取验证码成功！')
+        } else {
+          this.$message.error(response.msg)
+        }
+      }).catch(error => {
+        this.$message.error(error)
       })
     },
     handleRegist() {

@@ -35,7 +35,6 @@ export function getUserList(userinfo, currentpage, pagesize) {
 }
 */
 export function addUser(params) {
-  console.log(params)
   return request({
     url: '/user/save',
     method: 'post',
@@ -55,12 +54,7 @@ export function updateUser(params) {
   return request({
     url: '/user/update',
     method: 'post',
-    data: { 'id': `${params.id}`,
-      'password': `${params.password}`,
-      'name': `${params.name}`,
-      'email': `${params.email}`,
-      'address': `${params.address}`
-    }
+    data: params
   })
 }
 

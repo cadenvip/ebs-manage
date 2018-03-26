@@ -137,7 +137,6 @@ export default {
       this.searchForm.locationname = data.label
     },
     queryBusinessesList() {
-      console.log(this.searchForm)
       this.loading = true
       getBusinessesList(this.searchForm, this.currentPage, this.pagesize).then(response => {
         if (response.status === 200) {
@@ -149,7 +148,7 @@ export default {
         this.loading = false
       }).catch(error => {
         this.loading = false
-        console.log(error)
+        this.$message.error(error)
       })
     },
     addBusinesses() {
@@ -167,7 +166,7 @@ export default {
         this.loading = false
       }).catch(error => {
         this.loading = false
-        console.log(error)
+        this.$message.error(error)
       })
     },
     resetForm(formname) {
@@ -231,7 +230,6 @@ export default {
       return source
     },
     detail(businesses) {
-      console.log('businesses: ', businesses)
       this.$router.push({ path: '/businesses/detail', query: { id: businesses.id }})
     },
     updateBusinesses(businesses) {

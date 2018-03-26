@@ -32,7 +32,7 @@
         <el-col :span="8">
           <el-form-item label="密码：" prop="password">
             <el-input type="password" v-model="userForm.password" :minlength=8 style="width: 220px;" placeholder="请输入密码"></el-input>
-            <PasswordStrength :password="userForm.password"></PasswordStrength>
+            <PasswordStrength :password="userForm.password" @pwdInfo="getPwdInfo"></PasswordStrength>
           </el-form-item>          
         </el-col>
         <el-col :span="16" style="padding-top:8px">
@@ -61,7 +61,7 @@
       </el-row>
       <el-row :gutter="20">
         <el-col :span="8">
-          <el-form-item label="归属区域：" prop="locationid">
+          <el-form-item label="归属区域：" prop="locationname">
             <el-input v-model="userForm.locationname" style="width: 220px;" placeholder="请输入地址" @focus="dialogVisible = true"></el-input>
           </el-form-item>          
         </el-col>
@@ -129,8 +129,13 @@ export default {
       if (value === '') {
         callback(new Error('请输入密码'))
       } else {
-        if (this.userForm.repassword !== '') {
+        if (this.userForm.password.length < 8) {
+          callback(new Error('请密码长度不足8位'))
+        } else if (this.pwdInfo.score < 4) {
+          callback(new Error('请密码强度不够'))
+        } else if (this.userForm.repassword !== '') {
           this.$refs.userForm.validateField('repassword')
+          callback()
         }
         callback()
       }
@@ -149,8 +154,8 @@ export default {
         if (!validateEmail(value.trim())) {
           callback(new Error('请输入有效的邮箱地址'))
         }
-        callback()
       }
+      callback()
     }
     return {
       roles: [],
@@ -177,7 +182,8 @@ export default {
         email: [{ required: false, validator: validateMail, trigger: 'blur' }],
         address: [{ required: false, message: '请输入地址', trigger: 'blur' }]
       },
-      dialogVisible: false
+      dialogVisible: false,
+      pwdInfo: {}
     }
   },
   components: {
@@ -193,44 +199,40 @@ export default {
       done()
       // }).catch(_ => {})
     },
-    getLocationInfo: function(data) {
+    getLocationInfo(data) {
       this.userForm.locationid = data.id
       this.userForm.locationname = data.label
     },
+    getPwdInfo(data) {
+      this.pwdInfo = data
+    },
     getRoleList() {
-      return new Promise((resolve, reject) => {
-        // 角色应该不会超过100个吧！
-        getAllRoles('1', '100').then(response => {
-          if (response.status === 200) {
-            this.roles = response.data.list
-            resolve(response)
-          } else {
-            this.$message.error(response.msg)
-          }
-        }).catch(error => {
-          reject(error)
-        })
+      // 角色应该不会超过100个吧！
+      getAllRoles('1', '100').then(response => {
+        if (response.status === 200) {
+          this.roles = response.data.list
+        } else {
+          this.$message.error(response.msg)
+        }
+      }).catch(error => {
+        this.$message.error(error)
       })
     },
     onSubmit() {
       this.$refs.userForm.validate(valid => {
         if (valid) {
-          return new Promise((resolve, reject) => {
-            addUser(this.userForm).then(response => {
-              if (response.status === 200) {
-                resolve(response)
-                this.$message.success('新增人员成功')
-                this.$router.push({ path: '/system/user/list' })
-              } else {
-                this.$message.error(response.msg)
-              }
-            }).catch(error => {
-              reject(error)
-            })
+          addUser(this.userForm).then(response => {
+            if (response.status === 200) {
+              this.$message.success('新增人员成功')
+              this.$router.push({ path: '/system/user/list' })
+            } else {
+              this.$message.error(response.msg)
+            }
+          }).catch(error => {
+            this.$message.error(error)
           })
         } else {
-          console.log('error submit!!')
-          return false
+          this.$message.error('error submit!!')
         }
       })
     },

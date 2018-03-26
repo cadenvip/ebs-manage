@@ -74,7 +74,6 @@
     methods: {
       handleNodeClick(data) {
         this.$emit('locationSelected', data)
-        console.log(data)
       },
       queryLocationName() {
         // 切换树
@@ -139,7 +138,6 @@
                       delete dataTemp[i].description
                       delete dataTemp[i].locationName
                     }
-                    console.log(dataTemp)
                     this.data = this.list2Tree(dataTemp, { 'idKey': 'id', 'parentKey': 'parentId', 'childrenKey': 'children' })
                     this.loading = false
                   })
@@ -151,7 +149,7 @@
           }
         }).catch(error => {
           this.loading = false
-          console.log(error)
+          this.$message.error(error)
         })
       },
       getTowns() {
@@ -230,7 +228,7 @@
         //       this.$message.error(response.msg)
         //     }
         //   }).catch(error => {
-        //     console.log(error)
+        //     this.$message.error(error)
         //   })
         //   return resolve([])
         // }
@@ -247,7 +245,7 @@
               return resolve([])
             }
           }).catch(error => {
-            console.log(error)
+            this.$message.error(error)
           })
           return resolve([])
         }
@@ -264,7 +262,7 @@
               return resolve([])
             }
           }).catch(error => {
-            console.log(error)
+            this.$message.error(error)
           })
           return resolve([])
         }
@@ -281,7 +279,7 @@
               return resolve([])
             }
           }).catch(error => {
-            console.log(error)
+            this.$message.error(error)
           })
           return resolve([])
         }
@@ -298,7 +296,7 @@
               return resolve([])
             }
           }).catch(error => {
-            console.log(error)
+            this.$message.error(error)
           })
           return resolve([])
         }
@@ -315,7 +313,7 @@
               return resolve(arrVillages)
             }
           }).catch(error => {
-            console.log(error)
+            this.$message.error(error)
           })
           return resolve([])
         }

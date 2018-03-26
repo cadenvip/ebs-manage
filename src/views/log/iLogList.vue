@@ -115,13 +115,12 @@ export default {
         this.$message.error(response.msg)
       }
     }).catch(error => {
-      console.log(error)
+      this.$message.error(error)
     })
   },
   methods: {
     queryILogList() {
       this.loading = true
-      console.log(this.searchForm)
       getILogList(this.searchForm, this.currentPage, this.pagesize).then(response => {
         if (response.status === 200) {
           this.list = response.data.list
@@ -132,7 +131,7 @@ export default {
         this.loading = false
       }).catch(error => {
         this.loading = false
-        console.log(error)
+        this.$message.error(error)
       })
     },
     initILogList() {
@@ -147,7 +146,7 @@ export default {
         this.loading = false
       }).catch(error => {
         this.loading = false
-        console.log(error)
+        this.$message.error(error)
       })
     },
     resetForm(formname) {
