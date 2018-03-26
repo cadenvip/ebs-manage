@@ -105,7 +105,12 @@ export default {
     locationselector
   },
   created() {
-    this.initBusinessesList()
+    if (this.$route.query.state !== undefined && this.$route.query.state !== null && this.$route.query.state !== '') {
+      this.searchForm.state = this.$route.query.state
+      this.queryBusinessesList()
+    } else {
+      this.initBusinessesList()
+    }
   },
   methods: {
     handleLocationFocus() {
@@ -123,7 +128,6 @@ export default {
       this.searchForm.locationname = data.label
     },
     queryBusinessesList() {
-      console.log(this.searchForm)
       this.loading = true
       getBusinessesList(this.searchForm, this.currentPage, this.pagesize).then(response => {
         if (response.status === 200) {

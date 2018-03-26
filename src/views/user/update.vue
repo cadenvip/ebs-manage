@@ -72,7 +72,7 @@
             <el-input v-model="userForm.address" style="width: 220px;" placeholder="请输入地址"></el-input>
           </el-form-item>          
         </el-col>
-      </el-row>     
+      </el-row>
       <br/>
       <div style="text-align: center;font-family: 宋体, Arial, sans-serif;font-size: 12px;color: #f30">
         <span>
@@ -115,7 +115,7 @@ export default {
       }
     }
     var validateMail = (rule, value, callback) => {
-      if (value !== '') {
+      if (value !== null && value !== '') {
         if (!validateEmail(value.trim())) {
           callback(new Error('请输入有效的邮箱地址'))
         }

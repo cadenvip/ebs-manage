@@ -79,3 +79,12 @@ export function getUserDetail(params) {
     data: { 'userid': `${params}` }
   })
 }
+
+// 修改密码
+export function modifyPassword(params) {
+  return request({
+    url: '/user/modifyPassword',
+    method: 'post',
+    data: params
+  })
+}

@@ -92,8 +92,8 @@
 
 <script>
 
-import { getThisMonthSummary, getHistorySummary, getThisMonthBill, downloadBill, getHistoryBill, getHistoryBillsList, submitDispute } from '@/api/finance'
-// import { getSessionid } from '@/utils/auth'
+import { getThisMonthSummary, getHistorySummary, getThisMonthBill, downloadBill,
+  getHistoryBill, getHistoryBillsList, businessDealBill, submitDispute } from '@/api/finance'
 
 export default {
   data() {
@@ -263,7 +263,16 @@ export default {
     },
     checkout() {
       if (this.thisMonthBill !== null) {
-        alert('确认对账')
+        var params = { 'billid': `${this.thisMonthBill.id}` }
+        businessDealBill(params).then(response => {
+          if (response.status === 200) {
+            this.$message.success('确认结账成功，等待管理员处理')
+          } else {
+            this.$message.error(response.msg)
+          }
+        }).catch(error => {
+          console.log(error)
+        })
       } else {
         this.$message.error('暂无数据')
       }

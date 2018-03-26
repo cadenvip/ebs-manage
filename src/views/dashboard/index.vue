@@ -1,32 +1,210 @@
 <template>
-  <div class="dashboard-container">
-    <div class="dashboard-text">name:{{name}}</div>
-    <div class="dashboard-text">roles:<span v-for='role in roles' :key='role'>{{role}}</span></div>
+  <div class="app-container">
+    <h3 class="title">修改个人信息</h3>
+    <el-form ref="userForm" :model="userForm" :rules="userRules" label-width="120px">
+      <el-row :gutter="20">
+        <el-col :span="8">
+          <el-form-item label="账号：" prop="loginname">
+            <el-input v-model="userForm.loginname" :maxlength=11 style="width: 220px;" placeholder="请输入账号" :disabled="true"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="16" style="padding-top:8px">
+          <span style="font-family: 宋体, Arial, sans-serif;font-size: 12px;color: #999;">账号必须为11位中国移动手机号码</span>
+        </el-col>
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="8">
+          <el-form-item label="姓名：" prop="name">
+            <el-input v-model="userForm.name" style="width: 220px;" placeholder="请输入姓名"></el-input>
+          </el-form-item>        
+        </el-col>
+        <el-col :span="16" style="padding-top:8px">
+          <span style="font-family: 宋体, Arial, sans-serif;font-size: 12px;color: #999;">姓名必须为4-20位，可以是字母或中文</span>
+        </el-col>
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="8">
+          <el-form-item label="归属区域：" prop="locationid">
+            <el-input v-model="userForm.locationname" style="width: 220px;" placeholder="请选择地址" @focus="dialogVisible = true" :disabled="true"></el-input>
+          </el-form-item>          
+        </el-col>
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="8">
+          <el-form-item label="单位：" prop="unitname">
+            <el-input v-model="userForm.unitname" style="width: 220px;" :disabled="true"></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="8">
+          <el-form-item label="邮件：" prop="email">
+            <el-input v-model="userForm.email" style="width: 220px;" placeholder="请输入邮件"></el-input>
+          </el-form-item>        
+        </el-col>
+        <el-col :span="16" style="padding-top:8px">
+          <span style="font-family: 宋体, Arial, sans-serif;font-size: 12px;color: #999;">请输入有效电子邮箱地址，如：linux@139.com</span>
+        </el-col>
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="8">
+          <el-form-item label="地址：" prop="address">
+            <el-input v-model="userForm.address" style="width: 220px;" placeholder="请输入地址"></el-input>
+          </el-form-item>          
+        </el-col>
+      </el-row>
+      <br/>
+      <br/>
+      <div style="text-align: center">
+        <el-button type="primary" @click="onSubmit">提交修改</el-button>
+        <el-button type="primary" @click="modifyPwd">修改密码</el-button>
+        <el-button type="primary" @click="onCancel">返  回</el-button>
+      </div>
+    </el-form>
+    <el-dialog title="修改密码" :visible.sync="dialogVisible">
+      <el-form ref="modifyPwdForm" :model="modifyPwdForm" :rules="modifyPwdRules" label-width="120px">
+        <el-form-item label="原密码：" prop="opassword">
+          <el-input type="password" v-model="modifyPwdForm.opassword" :minlength=8 style="width: 220px;" placeholder="请输入原密码"></el-input>
+        </el-form-item>
+        <el-form-item label="新密码：" prop="password">
+          <el-input type="password" v-model="modifyPwdForm.password" :minlength=8 style="width: 220px;" placeholder="请输入新密码"></el-input>
+        </el-form-item>          
+        <el-form-item label="确认新密码：" prop="repassword">
+          <el-input type="password" v-model="modifyPwdForm.repassword" :minlength=8 style="width: 220px;" placeholder="请再次输入新密码"></el-input>
+        </el-form-item>
+      </el-form>
+      <div style="text-align: center;font-family: 宋体, Arial, sans-serif;font-size: 12px;color: #f30">
+        <span>
+          请输入8-20位由英文大写、英文小写、数字、特殊字符中任意至少三种类型构成的密码信息
+        </span>
+      </div>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="confirmModify">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { updateUser, modifyPassword } from '@/api/user'
+import { validateEmail } from '@/utils/validate'
 
 export default {
-  name: 'dashboard',
-  computed: {
-    ...mapGetters([
-      'name',
-      'roles'
-    ])
+  data() {
+    var validatePass = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请输入密码'))
+      } else {
+        if (this.modifyPwdForm.repassword !== '') {
+          this.$refs.modifyPwdForm.validateField('repassword')
+        }
+        callback()
+      }
+    }
+    var validateRepass = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请再次输入密码'))
+      } else if (value !== this.modifyPwdForm.password) {
+        callback(new Error('两次输入密码不一致!'))
+      } else {
+        callback()
+      }
+    }
+    var validateMail = (rule, value, callback) => {
+      if (value !== null && value !== '') {
+        if (!validateEmail(value.trim())) {
+          callback(new Error('请输入有效的邮箱地址'))
+        }
+        callback()
+      }
+    }
+    return {
+      userForm: {
+        id: '',
+        loginname: '',
+        name: '',
+        locationname: '',
+        unitname: '',
+        email: '',
+        address: ''
+      },
+      modifyPwdForm: {
+        opassword: '',
+        password: '',
+        repassword: ''
+      },
+      dialogVisible: false,
+      userRules: {
+        loginname: [{ required: true, message: '请输入账号', trigger: 'blur' }],
+        name: [{ required: true, message: '请输入名称', trigger: 'blur' }],
+        locationname: [{ required: true, message: '请选择归属区域', trigger: 'blur' }],
+        unitname: [{ required: true, message: '请选输入单位', trigger: 'blur' }],
+        email: [{ required: false, validator: validateMail, trigger: 'blur' }],
+        address: [{ required: false, message: '请输入地址', trigger: 'blur' }]
+      },
+      modifyPwdRules: {
+        opassword: [{ required: true, message: '请输入原密码', trigger: 'blur' }],
+        password: [{ required: true, validator: validatePass, trigger: 'blur' }],
+        repassword: [{ required: true, validator: validateRepass, trigger: 'blur' }]
+      }
+    }
+  },
+  created() {
+    var userInfo = window.sessionStorage.getItem('userInfo')
+    if (userInfo !== undefined && userInfo !== '') {
+      userInfo = JSON.parse(userInfo)
+      this.userForm = userInfo
+    }
+  },
+  methods: {
+    onSubmit() {
+      if (this.userForm.name === undefined || this.userForm.name === null || this.userForm.name === '') {
+        this.$message.error('请输入姓名！')
+        return
+      }
+      updateUser(this.userForm).then(response => {
+        if (response.status === 200) {
+          this.$message.success('修改个人信息成功！')
+        } else {
+          this.$message.error(response.msg)
+        }
+      }).catch(error => {
+        this.$message.error(error)
+      })
+    },
+    modifyPwd() {
+      this.dialogVisible = true
+      this.modifyPwdForm.opassword = ''
+      this.modifyPwdForm.password = ''
+      this.modifyPwdForm.repassword = ''
+    },
+    confirmModify() {
+      var params = {
+        'userid': `${this.userForm.id}`,
+        'oldPassword': `${this.modifyPwdForm.opassword}`,
+        'newPassword': `${this.modifyPwdForm.password}`
+      }
+      modifyPassword(params).then(response => {
+        if (response.status === 200) {
+          this.$message.success('修改密码成功！')
+          this.dialogVisible = true
+        } else {
+          this.$message.error(response.msg)
+        }
+      }).catch(error => {
+        this.$message.error(error)
+      })
+    },
+    onCancel() {
+      this.$router.go(-1)
+    }
   }
 }
 </script>
 
-<style rel="stylesheet/scss" lang="scss" scoped>
-.dashboard {
-  &-container {
-    margin: 30px;
-  }
-  &-text {
-    font-size: 30px;
-    line-height: 46px;
-  }
+<style scoped>
+.line{
+  text-align: center;
 }
 </style>

@@ -46,7 +46,7 @@ export function getUnitInfos(params) {
   })
 }
 
-export function getUnits () {
+export function getUnits() {
   return request({
     url: '/goods/unit/list',
     method: 'get'

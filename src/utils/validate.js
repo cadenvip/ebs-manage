@@ -14,6 +14,14 @@ export function validateURL(textval) {
   return urlregex.test(textval)
 }
 
+/* 小写数字*/
+export function validateDigit(str) {
+  debugger
+  const reg = /^[0-9]+$/
+  var result = reg.test(str)
+  return result
+}
+
 /* 小写字母*/
 export function validateLowerCase(str) {
   const reg = /^[a-z]+$/
@@ -29,6 +37,12 @@ export function validateUpperCase(str) {
 /* 大小写字母*/
 export function validateAlphabets(str) {
   const reg = /^[A-Za-z]+$/
+  return reg.test(str)
+}
+
+/* 字符 */
+export function validateSymbol(str) {
+  const reg = /^[~!@#$%^&*]+$/
   return reg.test(str)
 }
 
@@ -72,5 +86,28 @@ export function validatePass(str) {
 
 export function validatePostcode(str) {
   const reg = /^[1-9][0-9]{5}$/
+  return reg.test(str)
+}
+
+export function containDigit(str) {
+  const reg = /(?=.*?[0-9])/
+  return reg.test(str)
+}
+
+/* 小写字母*/
+export function containLowerCase(str) {
+  const reg = /(?=.*?[a-z])/
+  return reg.test(str)
+}
+
+/* 大写字母*/
+export function containUpperCase(str) {
+  const reg = /(?=.*?[A-Z])/
+  return reg.test(str)
+}
+
+/* 字符 */
+export function containSymbol(str) {
+  const reg = /(?=.*?[#?!@$%^&*-])/
   return reg.test(str)
 }

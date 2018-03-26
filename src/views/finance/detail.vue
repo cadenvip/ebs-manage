@@ -60,7 +60,7 @@
           </el-col>
         </el-row>
       </div>
-      <h3>本月结算交易明细</h3>
+      <h3>结算交易明细</h3>
       <el-table :data="billDetail.detailListpayed" v-loading.body="loading" element-loading-text="Loading" border stripe fit highlight-current-row tooltip-effect="light" style="padding-left:10px">
         <el-table-column label="序号" type="index" :index="indexPayed" align="center"></el-table-column>
         <el-table-column label="订单号" prop="ordercode" align="center"></el-table-column>
@@ -96,7 +96,7 @@
       <br/>
     </div>
     <div>
-      <h3>本月未结算交易明细</h3>
+      <h3>未结算交易明细</h3>
       <el-table :data="billDetail.detailListnopayed" v-loading.body="loading" element-loading-text="Loading" border stripe fit highlight-current-row tooltip-effect="light" style="padding-left:10px">
         <el-table-column label="序号" type="index" :index="indexPayed" align="center"></el-table-column>
         <el-table-column label="订单号" prop="ordercode" align="center"></el-table-column>
@@ -150,16 +150,16 @@ export default {
       var type = ''
       if (this.billDetail.bill.status !== null) {
         switch (this.billDetail.bill.status) {
-          case 0:
+          case '0':
             type = '待确认'
             break
-          case 1:
+          case '1':
             type = '已确认'
             break
-          case 2:
+          case '2':
             type = '待调账'
             break
-          case 3:
+          case '3':
             type = '已结算'
             break
           default:break
@@ -277,12 +277,6 @@ export default {
     },
     goback() {
       this.$router.go(-1)
-    },
-    checkout() {
-      alert('确认结账')
-    },
-    dispute() {
-      alert('核账争议')
     }
   }
 }
