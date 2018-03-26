@@ -2,21 +2,20 @@
   <div class="app-container">
     <h3 class="title">新增人员</h3>
     <el-form ref="userForm" :model="userForm" :rules="rules" label-width="120px">
-      <el-form-item label="类型：" prop="roletype">
-        <el-radio-group v-model="userForm.roletype">
-          <el-radio :label="1">移动管理员</el-radio>
-          <el-radio :label="2">代运营管理员</el-radio>
-        </el-radio-group>
+      <el-form-item label="账号类型：" prop="roletype">
+        <el-select v-model="userForm.roletype">
+          <el-option label="移动人员" value="1"></el-option>
+          <el-option label="商家人员" value="2"></el-option>
+        </el-select>
       </el-form-item>
+      <!-- <el-form-item v-show="item.roletype === '2'" label="商家：" prop="unitname">
+        <el-input v-model="userForm.unitname" style="width: 220px;" placeholder="请选择商家" @focus="unitDialogVisible = true"></el-input>
+      </el-form-item> -->
+      <!-- 目前每个人仅一种角色 -->
       <el-form-item label="角色：" prop="roleids">
-        <el-radio-group v-model="userForm.roleids">
-          <el-row v-show="userForm.roletype === 1">
-            <el-radio v-for="(item, index) in roles" v-if="item.roletype === '1'" :key="item.id" :label="item.id">{{item.rolename}}</el-radio>
-          </el-row>
-          <el-row v-show="userForm.roletype === 2">
-            <el-radio v-for="(item, index) in roles" v-if="item.roletype === '2'" :key="item.id" :label="item.id">{{item.rolename}}</el-radio>
-          </el-row>
-        </el-radio-group>
+        <el-select v-model="userForm.roleids">
+          <el-option v-for="(item, index) in roles" v-show="item.roletype === userForm.roletype" :key="item.id" :label="item.rolename" :value="item.id"></el-option>
+        </el-select>
       </el-form-item>
       <el-row :gutter="20">
         <el-col :span="8">
@@ -62,8 +61,8 @@
       <el-row :gutter="20">
         <el-col :span="8">
           <el-form-item label="归属区域：" prop="locationname">
-            <el-input v-model="userForm.locationname" style="width: 220px;" placeholder="请输入地址" @focus="dialogVisible = true"></el-input>
-          </el-form-item>          
+            <el-input v-model="userForm.locationname" style="width: 220px;" placeholder="请输入地址" @focus="regionDialogVisible = true"></el-input>
+          </el-form-item>
         </el-col>
       </el-row>
       <el-row :gutter="20">
@@ -92,16 +91,49 @@
       <br/>
       <div style="text-align: center">
         <el-button type="primary" @click="onSubmit">提交</el-button>
-        <el-button @click="onCancel">返回</el-button>
+        <el-button type="primary" @click="onCancel">返回</el-button>
       </div>
     </el-form>
-    <el-dialog
-      title="请选择区域"
-      :visible.sync="dialogVisible"
-      width="40%"
-      :before-close="handleClose">
+    <el-dialog title="请选择区域" :visible.sync="regionDialogVisible" width="40%">
       <LocationSelector @locationSelected="getLocationInfo"></LocationSelector>
     </el-dialog>
+    <!-- 
+    <el-dialog title="请选择商家" :visible.sync="unitDialogVisible" width="770px">
+      <el-form ref="businessSearchForm" :model="businessSearchForm" label-width="100px">
+        <el-row :gutter="20">
+          <el-col :span="6" :offset="6">
+            <el-form-item label="商家名称">
+              <el-input v-model="businessSearchForm.businessesName" style="width: 220px;" placeholder="请输入商家名称"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="6">
+            <el-button @click="queryBusinessesList()" type="primary">查询</el-button>
+          </el-col>
+        </el-row>
+      </el-form>
+      <br/>
+      <el-table :data="businessList" ref="businessTable" tooltip-effect="dark" @selection-change="businessSelectionChange" highlight-current-row>
+        <el-table-column label='商家名称' prop="businessesName" width="280" align="center"></el-table-column>
+        <el-table-column label="商家类型" prop="validdate" :formatter="timedateFormat" width="110" align="center"></el-table-column>
+      </el-table>
+      <div class="block" align="right" style="padding-right:20px">
+        <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          layout="total, sizes, prev, pager, next, jumper"
+          :current-page="currentPage"
+          :page-sizes="pagesizes"
+          :page-size="pagesize"
+          :total="total">
+        </el-pagination>
+      </div>
+      <br/>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="unitDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="confirmSelected">确 定</el-button>
+      </span>
+    </el-dialog>
+    -->
   </div>
 </template>
 
@@ -112,6 +144,7 @@ import { getAllRoles } from '@/api/role'
 import LocationSelector from '@/components/LocationSelector/index'
 import PasswordStrength from '@/components/PasswordStrength/index'
 import { validateMobilePhone, validateEmail } from '@/utils/validate'
+// import { getBusinessesList } from '@/api/businesses'
 
 export default {
   data() {
@@ -162,7 +195,7 @@ export default {
     return {
       roles: [],
       userForm: {
-        roletype: 1,
+        roletype: '1',
         roleids: '',
         loginname: '',
         password: '',
@@ -170,6 +203,8 @@ export default {
         name: '',
         locationid: '',
         locationname: '',
+        // unitname: '',
+        // unitid: '',
         email: '',
         address: ''
       },
@@ -181,10 +216,20 @@ export default {
         repassword: [{ required: true, validator: validateRepass, trigger: 'blur' }],
         name: [{ required: true, message: '请输入名称', trigger: 'blur' }],
         locationname: [{ required: true, message: '请选择归属区域', trigger: 'blur' }],
+        // unitname: [{ required: true, message: '请选择商家', trigger: 'blur' }],
         email: [{ required: false, validator: validateMail, trigger: 'blur' }],
         address: [{ required: false, message: '请输入地址', trigger: 'blur' }]
       },
-      dialogVisible: false,
+      regionDialogVisible: false,
+      // businessSearchForm: {
+      //   businessesName: ''
+      // },
+      // businessList: [],
+      // pagesizes: [10, 20, 30, 50],
+      // pagesize: 10,
+      // currentPage: 1,
+      // total: 0,
+      // unitDialogVisible: false,
       pwdInfo: {}
     }
   },
@@ -196,11 +241,6 @@ export default {
     this.getRoleList()
   },
   methods: {
-    handleClose(done) {
-      // this.$confirm('确认关闭？').then(_ => {
-      done()
-      // }).catch(_ => {})
-    },
     getLocationInfo(data) {
       this.userForm.locationid = data.id
       this.userForm.locationname = data.label
@@ -220,6 +260,29 @@ export default {
         this.$message.error(error)
       })
     },
+    // queryBusinessesList() {
+    //   this.loading = true
+    //   getBusinessesList(this.businessSearchForm, this.currentPage, this.pagesize).then(response => {
+    //     if (response.status === 200) {
+    //       this.businessList = response.data.list
+    //       this.total = response.data.total
+    //     } else {
+    //       this.$message.error(response.msg)
+    //     }
+    //     this.loading = false
+    //   }).catch(error => {
+    //     this.loading = false
+    //     this.$message.error(error)
+    //   })
+    // },
+    // handleSizeChange(val) {
+    //   this.pagesize = val
+    //   this.queryBusinessesList()
+    // },
+    // handleCurrentChange(val) {
+    //   this.currentPage = val
+    //   this.queryBusinessesList()
+    // },
     onSubmit() {
       this.$refs.userForm.validate(valid => {
         if (valid) {

@@ -6,9 +6,9 @@
         <el-input v-model="roleForm.rolename" style="width: 400px;" placeholder="请输入角色名称"></el-input>
       </el-form-item>
       <el-form-item label="角色类型：" prop="roletype">
-        <el-select v-model="roleForm.roletype" clearable placeholder="请选择" style="width: 200px;" @change="getAllPermissions">
-          <el-option label="系统管理" value="1"></el-option>
-          <el-option label="企业" value="2"></el-option>
+        <el-select v-model="roleForm.roletype" clearable disabled placeholder="请选择" style="width: 200px;" @change="getAllPermissions">
+          <el-option label="管理角色" value="1"></el-option>
+          <el-option label="商家角色" value="2"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="角色描述：" prop="description">
@@ -36,7 +36,7 @@
       <br/>
       <div style="text-align: center">
         <el-button type="primary" @click="onSubmit">提交</el-button>
-        <el-button @click="onCancel">返回</el-button>
+        <el-button type="primary" @click="onCancel">返回</el-button>
       </div>
     </el-form>
   </div>
@@ -80,9 +80,9 @@ export default {
   computed: {
     getDescLen() {
       if (this.roleForm.description) {
-        return (60 - this.roleForm.description.length) < 0 ? 0 : (60 - this.roleForm.description.length)
+        return (100 - this.roleForm.description.length) < 0 ? 0 : (100 - this.roleForm.description.length)
       } else {
-        return 60
+        return 100
       }
     }
   },

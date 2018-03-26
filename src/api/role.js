@@ -44,9 +44,7 @@ export function updateRole(params) {
     data: { 'id': `${params.id}`,
       'rolename': `${params.rolename}`,
       'description': `${params.description}`,
-      'resourceids': params.resourceids,
-      'issystem': '1',
-      'ishidden': '0'
+      'resourceids': params.resourceids
     }
   })
 }
