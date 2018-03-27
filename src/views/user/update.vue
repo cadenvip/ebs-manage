@@ -83,7 +83,7 @@
       <br/>
       <div style="text-align: center">
         <el-button type="primary" @click="onSubmit">提交</el-button>
-        <el-button @click="onCancel">返回</el-button>
+        <el-button type="primary" @click="onCancel">返回</el-button>
       </div>
     </el-form>
   </div>

@@ -154,7 +154,7 @@ export default {
         }
       }).catch(error => {
         this.loading = false
-        console.log(error)
+        this.$message.error(error)
       })
       getThisMonthBill(params).then(response => {
         if (response.status === 200) {
@@ -164,7 +164,7 @@ export default {
         }
       }).catch(error => {
         this.loading = false
-        console.log(error)
+        this.$message.error(error)
       })
       getHistorySummary(params).then(response => {
         if (response.status === 200) {
@@ -174,7 +174,7 @@ export default {
         }
       }).catch(error => {
         this.loading = false
-        console.log(error)
+        this.$message.error(error)
       })
       getHistoryBill(params).then(response => {
         if (response.status === 200) {
@@ -184,7 +184,7 @@ export default {
         }
       }).catch(error => {
         this.loading = false
-        console.log(error)
+        this.$message.error(error)
       })
       getHistoryBillsList(params).then(response => {
         if (response.status === 200) {
@@ -194,7 +194,7 @@ export default {
         }
       }).catch(error => {
         this.loading = false
-        console.log(error)
+        this.$message.error(error)
       })
       this.loading = false
     },
@@ -229,14 +229,13 @@ export default {
     },
     downloadDetail() {
       downloadBill(this.thisMonthBill, 1).then(response => {
-        console.log('200行 response: ', response)
         if (response.status === 200) {
           this.$message.success('下载结算明细成功')
         } else {
           this.$message.error(response.msg)
         }
       }).catch(error => {
-        console.log(error)
+        this.$message.error(error)
       })
     },
     downloadMonthBill(bill) {
@@ -247,7 +246,7 @@ export default {
           this.$message.error(response.msg)
         }
       }).catch(error => {
-        console.log(error)
+        this.$message.error(error)
       })
     },
     downloadHistoryMonthBill(bill) {
@@ -258,7 +257,7 @@ export default {
           this.$message.error(response.msg)
         }
       }).catch(error => {
-        console.log(error)
+        this.$message.error(error)
       })
     },
     checkout() {
@@ -271,7 +270,7 @@ export default {
             this.$message.error(response.msg)
           }
         }).catch(error => {
-          console.log(error)
+          this.$message.error(error)
         })
       } else {
         this.$message.error('暂无数据')
@@ -300,7 +299,7 @@ export default {
             this.$message.error(response.msg)
           }
         }).catch(error => {
-          console.log(error)
+          this.$message.error(error)
         })
         this.dialogFormVisible = false
       }

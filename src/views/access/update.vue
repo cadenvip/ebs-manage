@@ -19,6 +19,7 @@
         <el-col :span="12">
           <el-form-item label="密码：" prop="password">
             <el-input type="password" v-model="accessBean.password" style="width: 300px;" placeholder="请输入密码"></el-input>
+            <PasswordStrength :password="accessBean.password" @pwdInfo="getPwdInfo"></PasswordStrength>            
           </el-form-item>          
         </el-col>
         <el-col :span="12">
@@ -178,6 +179,7 @@
 import { getAccessDetail, updateAccess, getChanelList, getAllOperationList, getOperationList, getAllInterfaceList, getInterfaceList } from '@/api/access'
 import { str2Timestamp } from '@/utils/index'// formatTime
 import { validateMobilePhone, validateTelephone, validateURL } from '@/utils/validate'
+import PasswordStrength from '@/components/PasswordStrength/index'
 
 export default {
   data() {
@@ -185,10 +187,14 @@ export default {
       if (value === '') {
         callback(new Error('请输入密码'))
       } else {
-        if (this.accessBean.repassword !== '') {
+        if (this.accessBean.password.length < 8) {
+          callback(new Error('请密码长度不足8位'))
+        } else if (this.pwdInfo.score < 4) {
+          callback(new Error('请密码强度不够'))
+        } else if (this.accessBean.repassword !== '') {
           this.$refs.accessBean.validateField('repassword')
+          callback()
         }
-        callback()
       }
     }
     var validateRepass = (rule, value, callback) => {
@@ -201,18 +207,24 @@ export default {
       }
     }
     var validateContact = (rule, value, callback) => {
-      if (value !== '') {
+      if (value !== null && value !== '') {
         if (!validateMobilePhone(value.trim()) && !validateTelephone(value.trim())) {
           callback(new Error('请输入有效的联系方式'))
+        } else {
+          callback()
         }
+      } else {
         callback()
       }
     }
     var validateSi_url = (rule, value, callback) => {
-      if (value !== '') {
+      if (value !== null && value !== '') {
         if (!validateURL(value.trim())) {
           callback(new Error('请输入有效的Url'))
+        } else {
+          callback()
         }
+      } else {
         callback()
       }
     }
@@ -257,6 +269,7 @@ export default {
         si_url: [{ required: false, validator: validateSi_url, trigger: 'blur' }],
         si_type: [{ required: true, message: '请选择接入类别', trigger: 'change' }]
       },
+      pwdInfo: {},
       getOpRowKey(row) {
         return row.id
       },
@@ -265,10 +278,14 @@ export default {
       }
     }
   },
+  components: {
+    PasswordStrength
+  },
   created () {
     getAccessDetail(this.$route.query.id).then(response => {
       if (response.status === 200) {
         this.accessBean = response.data.access
+        this.accessBean.repassword = response.data.access.password
         this.selectedOpList = response.data.operationList
         var i = this.selectedOpList.indexOf(null)
         while (i !== -1) {
@@ -316,6 +333,9 @@ export default {
     })
   },
   methods: {
+    getPwdInfo(data) {
+      this.pwdInfo = data
+    },
     selectOperation() {
       this.operationTableVisible = true
       getAllOperationList().then(response => {
@@ -456,17 +476,18 @@ export default {
           delete params.accessBean.status
           delete params.accessBean.create_time
           delete params.accessBean.update_time
+          debugger
           // TODO 时间格式转换
           if (params.accessBean.begin_time !== undefined && params.accessBean.begin_time !== '') {
             params.accessBean.begin_time = str2Timestamp(params.accessBean.begin_time)
           }
-          if (params.accessBean.begin_time === '0') {
+          if (params.accessBean.begin_time === 0) {
             params.accessBean.begin_time = ''
           }
           if (params.accessBean.end_time !== undefined && params.accessBean.end_time !== '') {
             params.accessBean.end_time = str2Timestamp(params.accessBean.end_time)
           }
-          if (params.accessBean.end_time === '0') {
+          if (params.accessBean.end_time === 0) {
             params.accessBean.end_time = ''
           }
           if (params.accessBean.servicecode === null) {
@@ -499,7 +520,6 @@ export default {
           })
         } else {
           this.$message.error('error submit!!')
-          return false
         }
       })
     },

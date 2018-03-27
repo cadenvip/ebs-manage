@@ -93,7 +93,7 @@
     </div>
     <br/>
     <div style="text-align: center">
-      <el-button @click="onCancel">返回</el-button>
+      <el-button type="primary" @click="onCancel">返回</el-button>
     </div>
   </div>
 </template>

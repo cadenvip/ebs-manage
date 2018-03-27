@@ -89,10 +89,10 @@ export default {
       var type = ''
       switch (this.roleForm.roletype) {
         case '1':
-          type = '系统管理'
+          type = '管理角色'
           break
         case '2':
-          type = '企业'
+          type = '商家角色'
           break
         default:
           type = ''
@@ -193,7 +193,7 @@ export default {
       return tree
     },
     onCancel() {
-      this.$router.go(-1)
+      this.$router.push({ path: '/system/role/list' })
     }
   }
 }
