@@ -318,31 +318,31 @@ export const asyncRouterMap = [
     path: '/user',
     component: Layout,
     redirect: '/user/blist',
-    name: '商家人员管理',
-    meta: { roles: ['2'], title: '商家人员管理', icon: 'enterpriseManage' },
+    name: '人员管理',
+    meta: { roles: ['2'], title: '人员管理', icon: 'enterpriseManage' },
     children: [
       {
-        path: 'user/blist',
+        path: 'blist',
         name: 'userblist',
         component: _import('user/blist'),
         meta: { roles: ['2'], title: '人员管理', icon: 'table' }
       },
       {
-        path: 'user/badd',
+        path: 'badd',
         name: 'userbadd',
         hidden: true,
         component: _import('user/badd'),
         meta: { roles: ['2'], title: '新增人员', icon: 'table' }
       },
       {
-        path: 'user/bupdate',
+        path: 'bupdate',
         name: 'userbupdate',
         hidden: true,
         component: _import('user/bupdate'),
         meta: { roles: ['2'], title: '修改人员', icon: 'table' }
       },
       {
-        path: 'user/bdetail',
+        path: 'bdetail',
         name: 'userbdetail',
         hidden: true,
         component: _import('user/bdetail'),

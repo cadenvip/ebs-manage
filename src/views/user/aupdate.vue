@@ -9,9 +9,6 @@
         </el-select>
       </el-form-item>
       <el-form-item label="角色：" prop="roleids">
-        <!-- <el-select v-model="userForm.roleids" multiple placeholder="请选择角色" style="width:320px">
-          <el-option v-for="(item, index) in allRoles" v-show="item.roletype === userForm.roletype" :key="item.id" :label="item.rolename" :value="item.id"></el-option>
-        </el-select> -->
         <el-checkbox-group v-model="userForm.roleids">
           <el-checkbox v-for="(item, index) in allRoles" v-if="item.roletype === userForm.roletype" :key="item.id" :label="item.id">{{item.rolename}}</el-checkbox>
         </el-checkbox-group>
@@ -29,27 +26,6 @@
           <span style="font-family: 宋体, Arial, sans-serif;font-size: 12px;color: #999;">账号必须为11位中国移动手机号码</span>
         </el-col>
       </el-row>
-      <!-- <el-row :gutter="20">
-        <el-col :span="8">
-          <el-form-item label="密码：" prop="password">
-            <el-input type="password" v-model="userForm.password" :minlength=8 style="width: 220px;" placeholder="请输入密码"></el-input>
-            <PasswordStrength :password="userForm.password" @pwdInfo="getPwdInfo"></PasswordStrength>
-          </el-form-item>          
-        </el-col>
-        <el-col :span="16" style="padding-top:8px">
-          <span style="font-family: 宋体, Arial, sans-serif;font-size: 12px;color: #999;">请输入8-20位由英文大写、英文小写、数字、特殊字符中任意至少三种类型构成的密码信息</span>
-        </el-col>        
-      </el-row>
-      <el-row :gutter="20">
-        <el-col :span="8">
-          <el-form-item label="确认密码：" prop="repassword">
-            <el-input type="password" v-model="userForm.repassword" :minlength=8 style="width: 220px;" placeholder="请再次输入密码"></el-input>
-          </el-form-item>         
-        </el-col>
-        <el-col :span="16" style="padding-top:8px">
-          <span style="font-family: 宋体, Arial, sans-serif;font-size: 12px;color: #999;">请输入8-20位由英文大写、英文小写、数字、特殊字符中任意至少三种类型构成的密码信息</span>
-        </el-col>  
-      </el-row>       -->
       <el-row :gutter="20">
         <el-col :span="8">
           <el-form-item label="姓名：" prop="name">
@@ -115,29 +91,6 @@ import { getAllRoles } from '@/api/role'
 
 export default {
   data() {
-    // var validatePass = (rule, value, callback) => {
-    //   if (value === '') {
-    //     callback(new Error('请输入密码'))
-    //   } else {
-    //     if (this.userForm.password.length < 8) {
-    //       callback(new Error('请密码长度不足8位'))
-    //     } else if (this.pwdInfo.score < 4) {
-    //       callback(new Error('请密码强度不够'))
-    //     } else if (this.userForm.repassword !== '') {
-    //       this.$refs.userForm.validateField('repassword')
-    //       callback()
-    //     }
-    //   }
-    // }
-    // var validateRepass = (rule, value, callback) => {
-    //   if (value === '') {
-    //     callback(new Error('请再次输入密码'))
-    //   } else if (value !== this.userForm.password) {
-    //     callback(new Error('两次输入密码不一致!'))
-    //   } else {
-    //     callback()
-    //   }
-    // }
     var validateMail = (rule, value, callback) => {
       if (value !== null && value !== '') {
         if (!validateEmail(value.trim())) {
@@ -166,8 +119,6 @@ export default {
       },
       rules: {
         loginname: [{ required: true, message: '请输入账号', trigger: 'blur' }],
-        // password: [{ required: true, validator: validatePass, trigger: 'blur' }],
-        // repassword: [{ required: true, validator: validateRepass, trigger: 'blur' }],
         roleids: [{ required: true, message: '请选择角色', trigger: 'change' }],
         name: [{ required: true, message: '请输入名称', trigger: 'blur' }],
         locationname: [{ required: true, message: '请选择归属区域', trigger: 'blur' }],
@@ -197,8 +148,6 @@ export default {
           if (response.data.role.length > 0) {
             this.userForm.roletype = response.data.role[0].roletype
           }
-          console.log(this.userForm)
-          debugger
         } else {
           this.$message.error(response.msg)
         }
@@ -225,16 +174,11 @@ export default {
       this.$refs.userForm.validate(valid => {
         if (valid) {
           var params = { 'id': `${this.userForm.id}`,
-            // 'password': `${this.userForm.password}`,
             'name': `${this.userForm.name}`,
             'email': `${this.userForm.email !== null ? this.userForm.email : ''}`,
             'address': `${this.userForm.address !== null ? this.userForm.address : ''}`,
-            // 'locationid': `${this.userForm.locationid}`,
-            // 'loginname': `${this.userForm.loginname}`,
-            // 'phoneno': `${this.userForm.phoneno}`
             'roleids': `${this.userForm.roleids.join(',')}`
           }
-          console.log(params)
           updateUser(params).then(response => {
             if (response.status === 200) {
               this.$message.success('修改人员成功！')
@@ -251,7 +195,7 @@ export default {
       })
     },
     onCancel() {
-      this.$router.go(-1)
+      this.$router.push({ path: '/system/user/alist' })
     }
   }
 }

@@ -38,24 +38,18 @@
     <el-dialog
       title="请选择区域"
       :visible.sync="dialogVisible"
-      width="440px"
-      :before-close="handleClose">
+      width="440px">
       <locationselector @locationSelected="getLocationInfo"></locationselector>
     </el-dialog>
     <h3 style="padding-left: 20px;">人员列表</h3>
     <el-table :data="list" v-loading.body="loading" element-loading-text="Loading" border stripe fit highlight-current-row style="padding-left:10px">
-      <el-table-column label='账号' prop="loginname" width="110" align="center">
-      </el-table-column>
-      <el-table-column label="姓名" prop="name" width="150" align="center">
-      </el-table-column>
-      <el-table-column label="手机号码" prop="phoneno" width="110" align="center">
-      </el-table-column>
-      <el-table-column label="角色" prop="role" :formatter="joinRoleName" width="110" align="center">
-      </el-table-column>
-      <el-table-column label="归属区域" prop="locationname" width="200" align="center">
-      </el-table-column>
-      <el-table-column label="所属单位" prop="unitname" width="200" align="center">
-      </el-table-column>
+      <el-table-column label='账号' prop="loginname" width="110" align="center"></el-table-column>
+      <el-table-column label="姓名" prop="name" width="120" align="center"></el-table-column>
+      <el-table-column label="手机号码" prop="phoneno" width="110" align="center"></el-table-column>
+      <el-table-column label="归属区域" prop="locationname" width="180" align="center"></el-table-column>
+      <el-table-column label="商家" prop="unitname" width="180" align="center"></el-table-column>
+      <el-table-column label="状态" prop="locked" :formatter="lockedFormat" width="80" align="center"></el-table-column>
+      <el-table-column label="最近登录时间" prop="logintime" width="200" align="center"></el-table-column>      
       <el-table-column label="操作" width="190" align="center">
         <template slot-scope="scope">
           <el-button @click="updateUser(scope.row)" type="text" size="small">修改</el-button>
@@ -79,7 +73,7 @@
 </template>
 
 <script>
-import { getAllUsers, getUserList, resetUserPassword } from '@/api/user'
+import { getBusinessAllUsers, getBusinessUserList, resetBusinessUserPassword } from '@/api/user'
 import locationselector from '@/components/LocationSelector/index'
 
 export default {
@@ -110,7 +104,7 @@ export default {
   methods: {
     queryUserList() {
       this.loading = true
-      getUserList(this.searchForm, this.currentPage, this.pagesize).then(response => {
+      getBusinessUserList(this.searchForm, this.currentPage, this.pagesize).then(response => {
         if (response.status === 200) {
           this.list = response.data.list
           this.total = response.data.total
@@ -124,11 +118,11 @@ export default {
       })
     },
     addUser() {
-      this.$router.push({ path: '/system/user/add' })
+      this.$router.push({ path: '/user/badd' })
     },
     initUserList() {
       this.loading = true
-      getAllUsers(this.currentPage, this.pagesize).then(response => {
+      getBusinessAllUsers(this.currentPage, this.pagesize).then(response => {
         if (response.status === 200) {
           this.list = response.data.list
           this.total = response.data.total
@@ -141,18 +135,23 @@ export default {
         this.$message.error(error)
       })
     },
-    joinRoleName(row, column, cellValue) {
-      var arrRoleNames = []
-      if (cellValue === undefined) {
-        return ''
+    lockedFormat(row, column, cellValue) {
+      var lockStatus = ''
+      if (cellValue !== undefined && cellValue !== null) {
+        switch (cellValue) {
+          case '0':
+            lockStatus = '正常'
+            break
+          case '1':
+            lockStatus = '锁定正常'
+            break
+          default: break
+        }
       }
-      cellValue.forEach(function(v) {
-        arrRoleNames.push(v.rolename)
-      })
-      return arrRoleNames.join()
+      return lockStatus
     },
     updateUser(user) {
-      this.$router.push({ path: '/system/user/update', query: { id: user.id }})
+      this.$router.push({ path: '/user/bupdate', query: { id: user.id }})
     },
     resetPassword(user) {
       this.$confirm(`您确定重置[${user.loginname}]的密码吗, 是否继续?`, '提示', {
@@ -160,7 +159,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        resetUserPassword(user).then(response => {
+        resetBusinessUserPassword(user).then(response => {
           if (response.status === 200) {
             this.$message.success('重置成功!')
           } else {
@@ -172,7 +171,7 @@ export default {
       })
     },
     detail(user) {
-      this.$router.push({ path: '/system/user/detail', query: { id: user.id }})
+      this.$router.push({ path: '/user/bdetail', query: { id: user.id }})
     },
     handleSizeChange(val) {
       this.pagesize = val
@@ -185,11 +184,6 @@ export default {
     getLocationInfo: function(data) {
       this.searchForm.locationid = data.id
       this.searchForm.locationname = data.label
-    },
-    handleClose(done) {
-      // this.$confirm('确认关闭？').then(_ => {
-      done()
-      // }).catch(_ => {})
     },
     handleLocationFocus() {
       this.dialogVisible = true
