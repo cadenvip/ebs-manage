@@ -144,7 +144,7 @@ export const asyncRouterMap = [
         path: 'permissions',
         name: 'permissions',
         component: _import('authentication/index'),
-        meta: { roles: ['1'], title: '权限管理', icon: 'table' }
+        meta: { roles: ['1'], title: '权限管理', icon: 'jurisdiction' }
       },
       {
         path: 'access/list',
@@ -413,7 +413,7 @@ export const asyncRouterMap = [
   {
     path: '/goodstypemanage',
     component: Layout,
-    meta: { roles: ['1', '2'], title: '', icon: 'form' },
+    meta: { roles: ['1', '2'], title: '', icon: 'goodsType' },
     name: '商品分类管理',
     children: [
       // 管理员
@@ -421,7 +421,7 @@ export const asyncRouterMap = [
         path: 'index',
         name: '商品分类',
         component: _import('goodstypemanage/index'),
-        meta: { roles: ['1', '2'], title: '商品分类管理', icon: 'form' }
+        meta: { roles: ['1', '2'], title: '商品分类管理', icon: 'goodsType' }
       }
     ]
   },
@@ -589,13 +589,13 @@ export const asyncRouterMap = [
     path: '/permission',
     component: Layout,
     name: '权限测试',
-    meta: { roles: ['1'], title: '权限测试', icon: 'table' }, // 页面需要的权限
+    meta: { roles: ['1'], title: '权限测试', icon: 'jurisdiction' }, // 页面需要的权限
     children: [
       {
         path: 'index',
         component: _import('tree/index'),
         name: '权限测试页',
-        meta: { roles: ['1'], title: '权限测试', icon: 'table' }  // 页面需要的权限
+        meta: { roles: ['1'], title: '权限测试', icon: 'jurisdiction' }  // 页面需要的权限
       }]
   },
   { path: '*', redirect: '/404', hidden: true }
