@@ -38,15 +38,7 @@ export function addUser(params) {
   return request({
     url: '/user/save',
     method: 'post',
-    data: { 'loginname': `${params.loginname}`,
-      'password': `${params.password}`,
-      'name': `${params.name}`,
-      'phoneno': `${params.loginname}`,
-      'locationid': `${params.locationid}`,
-      'email': `${params.email}`,
-      'address': `${params.address}`,
-      'roleids': `${params.roleids}`
-    }
+    data: params
   })
 }
 
