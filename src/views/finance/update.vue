@@ -477,7 +477,6 @@ export default {
         return
       } else {
         // TODO 对比，找出移除的订单，新增的订单
-        debugger
         var confirmAddedOrder = []
         var confirmRemovedOrder = []
         for (let i = 0; i < this.detailListBack.length; i++) {

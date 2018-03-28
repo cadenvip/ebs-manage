@@ -54,20 +54,20 @@
 <script>
 
 import { getVercode, getUnitInfos, getUnits } from '@/api/login'
-import { validateMobilePhone } from '@/utils/validate'
+// import { validateMobilePhone } from '@/utils/validate'
 
 export default {
   data() {
-    var validateLoginname = (rule, value, callback) => {
-      if (value === '') {
-        callback(new Error('请输入手机号码'))
-      } else {
-        if (!validateMobilePhone(value.trim())) {
-          callback(new Error('请输入有效的手机号码'))
-        }
-        callback()
-      }
-    }
+    // var validateLoginname = (rule, value, callback) => {
+    //   if (value === '') {
+    //     callback(new Error('请输入手机号码'))
+    //   } else {
+    //     if (!validateMobilePhone(value.trim())) {
+    //       callback(new Error('请输入有效的手机号码'))
+    //     }
+    //     callback()
+    //   }
+    // }
     return {
       unitinfos: [],
       loginForm: {
@@ -77,7 +77,8 @@ export default {
         vercode: ''
       },
       loginRules: {
-        loginname: [{ required: true, trigger: 'blur', validator: validateLoginname }],
+        // loginname: [{ required: true, trigger: 'blur', validator: validateLoginname }],
+        loginname: [{ required: true, trigger: 'blur', message: '请输入账号' }],
         password: [{ required: true, trigger: 'blur', message: '请输入密码' }],
         unitid: [{ required: true, trigger: 'change', message: '请选择归属单位' }],
         vercode: [{ required: true, trigger: 'blur', message: '请输入验证码' }]
@@ -127,14 +128,19 @@ export default {
       })
     },
     getUnitids() {
-      this.loginForm.loginname = this.loginForm.loginname.trim()
+      // this.loginForm.loginname = this.loginForm.loginname.trim()
+      // if (this.loginForm.loginname === '') {
+      //   this.$message.error('请输入手机号码')
+      //   return
+      // } else {
+      //   if (!validateMobilePhone(this.loginForm.loginname.trim())) {
+      //     return
+      //   }
+      // }
+
       if (this.loginForm.loginname === '') {
-        this.$message.error('请输入手机号码')
+        this.$message.error('请输入账号')
         return
-      } else {
-        if (!validateMobilePhone(this.loginForm.loginname.trim())) {
-          return
-        }
       }
       getUnitInfos(this.loginForm.loginname).then(response => {
         if (response.status === 200) {
@@ -152,14 +158,18 @@ export default {
       }
     },
     getVercode() {
-      this.loginForm.loginname = this.loginForm.loginname.trim()
+      // this.loginForm.loginname = this.loginForm.loginname.trim()
+      // if (this.loginForm.loginname === '') {
+      //   this.$message.error('请输入手机号码')
+      //   return
+      // } else {
+      //   if (!validateMobilePhone(this.loginForm.loginname.trim())) {
+      //     return
+      //   }
+      // }
       if (this.loginForm.loginname === '') {
-        this.$message.error('请输入手机号码')
+        this.$message.error('请输入账号')
         return
-      } else {
-        if (!validateMobilePhone(this.loginForm.loginname.trim())) {
-          return
-        }
       }
       getVercode(this.loginForm.loginname).then(response => {
         if (response.status === 200) {

@@ -19,7 +19,7 @@
       <el-row :gutter="20">
         <el-col :span="8">
           <el-form-item label="手机号：" prop="phoneno">
-            <el-input v-model="userForm.phoneno" :maxlength=11 style="width: 220px;" placeholder="请输入手机号" disabled></el-input>
+            <el-input v-model="userForm.phoneno" :maxlength=11 style="width: 220px;" placeholder="请输入手机号"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="16" style="padding-top:8px">
@@ -85,12 +85,22 @@
 <script>
 
 import { getUserDetail, updateUser } from '@/api/user'
-import { validateEmail } from '@/utils/validate'
+import { validateMobilePhone, validateEmail } from '@/utils/validate'
 import PasswordStrength from '@/components/PasswordStrength/index'
 import { getAllRoles } from '@/api/role'
 
 export default {
   data() {
+    var validateLoginname = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请输入手机号码'))
+      } else {
+        if (!validateMobilePhone(value.trim())) {
+          callback(new Error('请输入有效的手机号码'))
+        }
+        callback()
+      }
+    }
     var validateMail = (rule, value, callback) => {
       if (value !== null && value !== '') {
         if (!validateEmail(value.trim())) {
@@ -121,6 +131,7 @@ export default {
         loginname: [{ required: true, message: '请输入账号', trigger: 'blur' }],
         roleids: [{ required: true, message: '请选择角色', trigger: 'change' }],
         name: [{ required: true, message: '请输入名称', trigger: 'blur' }],
+        phoneno: [{ required: true, trigger: 'blur', validator: validateLoginname }],
         locationname: [{ required: true, message: '请选择归属区域', trigger: 'blur' }],
         unitname: [{ required: true, message: '请选输入单位', trigger: 'blur' }],
         email: [{ required: false, validator: validateMail, trigger: 'blur' }],
@@ -175,6 +186,7 @@ export default {
         if (valid) {
           var params = { 'id': `${this.userForm.id}`,
             'name': `${this.userForm.name}`,
+            'phoneno': `${this.userForm.phoneno}`,
             'email': `${this.userForm.email !== null ? this.userForm.email : ''}`,
             'address': `${this.userForm.address !== null ? this.userForm.address : ''}`,
             'roleids': `${this.userForm.roleids.join(',')}`

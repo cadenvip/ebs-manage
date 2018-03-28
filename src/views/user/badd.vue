@@ -2,11 +2,11 @@
   <div class="app-container">
     <h3 class="title">新增人员</h3>
     <el-form ref="userForm" :model="userForm" :rules="rules" label-width="120px">
-      <el-form-item label="角色：" prop="roleids">
+      <!-- <el-form-item label="角色：" prop="roleids">
         <el-checkbox-group v-model="userForm.roleids">
           <el-checkbox v-for="(item, index) in allRoles" v-if="item.roletype === '2'" :key="item.id" :label="item.id">{{item.rolename}}</el-checkbox>
         </el-checkbox-group>
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item label="账号：" prop="loginname">
         <el-input v-model="userForm.loginname" style="width: 220px;" placeholder="请输入账号"></el-input>
       </el-form-item>
@@ -95,8 +95,8 @@
 
 <script>
 
-import { addUser } from '@/api/user'
-import { getAllRoles } from '@/api/role'
+import { addBusinessUser } from '@/api/user'
+// import { getAllRoles } from '@/api/role'
 import LocationSelector from '@/components/LocationSelector/index'
 import PasswordStrength from '@/components/PasswordStrength/index'
 import { validateMobilePhone, validateEmail } from '@/utils/validate'
@@ -148,9 +148,9 @@ export default {
       }
     }
     return {
-      allRoles: [],
+      // allRoles: [],
       userForm: {
-        roleids: [],
+        // roleids: [],
         loginname: '',
         password: '',
         repassword: '',
@@ -162,7 +162,7 @@ export default {
         address: ''
       },
       rules: {
-        roleids: [{ required: true, message: '请选择角色', trigger: 'change' }],
+        // roleids: [{ required: true, message: '请选择角色', trigger: 'change' }],
         phoneno: [{ required: true, trigger: 'blur', validator: validateLoginname }],
         loginname: [{ required: true, message: '请输入账号', trigger: 'blur' }],
         password: [{ required: true, validator: validatePass, trigger: 'blur' }],
@@ -180,9 +180,9 @@ export default {
     LocationSelector,
     PasswordStrength
   },
-  mounted () {
-    this.getRoleList()
-  },
+  // mounted () {
+  //   this.getRoleList()
+  // },
   methods: {
     getLocationInfo(data) {
       this.userForm.locationid = data.id
@@ -191,18 +191,18 @@ export default {
     getPwdInfo(data) {
       this.pwdInfo = data
     },
-    getRoleList() {
-      // 角色应该不会超过100个吧！
-      getAllRoles('1', '100').then(response => {
-        if (response.status === 200) {
-          this.allRoles = response.data.list
-        } else {
-          this.$message.error(response.msg)
-        }
-      }).catch(error => {
-        this.$message.error(error)
-      })
-    },
+    // getRoleList() {
+    //   // 角色应该不会超过100个吧！
+    //   getAllRoles('1', '100').then(response => {
+    //     if (response.status === 200) {
+    //       this.allRoles = response.data.list
+    //     } else {
+    //       this.$message.error(response.msg)
+    //     }
+    //   }).catch(error => {
+    //     this.$message.error(error)
+    //   })
+    // },
     onSubmit() {
       this.$refs.userForm.validate(valid => {
         if (valid) {
@@ -212,13 +212,11 @@ export default {
             'phoneno': `${this.userForm.phoneno}`,
             'unitid': `${this.userForm.unitid}`,
             'locationid': `${this.userForm.locationid}`,
+            // 'roleids': `${this.userForm.roleids.join(',')}`,
             'email': `${this.userForm.email}`,
-            'address': `${this.userForm.address}`,
-            'roleids': `${this.userForm.roleids.join(',')}`
+            'address': `${this.userForm.address}`
           }
-          console.log(this.userForm)
-          debugger
-          addUser(params).then(response => {
+          addBusinessUser(params).then(response => {
             if (response.status === 200) {
               this.$message.success('新增人员成功')
               this.$router.push({ path: '/user/blist' })
