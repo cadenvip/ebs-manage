@@ -332,8 +332,6 @@ export default {
             'address': `${this.userForm.address}`,
             'roleids': `${this.userForm.roleids.join(',')}`
           }
-          console.log(this.userForm)
-          debugger
           addUser(params).then(response => {
             if (response.status === 200) {
               this.$message.success('新增人员成功')

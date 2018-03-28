@@ -2,18 +2,18 @@
   <div class="app-container">
     <h3 class="title">修改人员信息</h3>
     <el-form ref="userForm" :model="userForm" :rules="rules" label-width="120px">
-      <el-form-item label="角色：" prop="roleids">
+      <!-- <el-form-item label="角色：" prop="roleids">
         <el-checkbox-group v-model="userForm.roleids">
           <el-checkbox v-for="(item, index) in allRoles" v-if="item.roletype === '2'" :key="item.id" :label="item.id">{{item.rolename}}</el-checkbox>
         </el-checkbox-group>
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item label="账号：" prop="loginname">
         <el-input v-model="userForm.loginname" :maxlength=11 style="width: 220px;" placeholder="请输入账号" disabled></el-input>
       </el-form-item>
       <el-row :gutter="20">
         <el-col :span="8">
           <el-form-item label="手机号：" prop="phoneno">
-            <el-input v-model="userForm.phoneno" :maxlength=11 style="width: 220px;" placeholder="请输入手机号" disabled></el-input>
+            <el-input v-model="userForm.phoneno" :maxlength=11 style="width: 220px;" placeholder="请输入手机号"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="16" style="padding-top:8px">
@@ -39,7 +39,7 @@
       </el-row>
       <el-row :gutter="20">
         <el-col :span="8">
-          <el-form-item label="单位：" prop="unitname">
+          <el-form-item label="商家：" prop="unitname">
             <el-input v-model="userForm.unitname" style="width: 220px;" :disabled="true"></el-input>
           </el-form-item>
         </el-col>
@@ -79,12 +79,22 @@
 <script>
 
 import { getBusinessUserDetail, updateBusinessUser } from '@/api/user'
-import { validateEmail } from '@/utils/validate'
+import { validateMobilePhone, validateEmail } from '@/utils/validate'
 import PasswordStrength from '@/components/PasswordStrength/index'
-import { getAllRoles } from '@/api/role'
+// import { getAllRoles } from '@/api/role'
 
 export default {
   data() {
+    var validateLoginname = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请输入手机号码'))
+      } else {
+        if (!validateMobilePhone(value.trim())) {
+          callback(new Error('请输入有效的手机号码'))
+        }
+        callback()
+      }
+    }
     var validateMail = (rule, value, callback) => {
       if (value !== null && value !== '') {
         if (!validateEmail(value.trim())) {
@@ -97,9 +107,9 @@ export default {
       }
     }
     return {
-      allRoles: [],
+      // allRoles: [],
       userForm: {
-        roleids: [],
+        // roleids: [],
         loginname: '',
         phoneno: '',
         password: '',
@@ -112,10 +122,11 @@ export default {
       },
       rules: {
         loginname: [{ required: true, message: '请输入账号', trigger: 'blur' }],
-        roleids: [{ required: true, message: '请选择角色', trigger: 'change' }],
+        // roleids: [{ required: true, message: '请选择角色', trigger: 'change' }],
         name: [{ required: true, message: '请输入名称', trigger: 'blur' }],
+        phoneno: [{ required: true, trigger: 'blur', validator: validateLoginname }],
         locationname: [{ required: true, message: '请选择归属区域', trigger: 'blur' }],
-        unitname: [{ required: true, message: '请选输入单位', trigger: 'blur' }],
+        unitname: [{ required: false, message: '请选输入单位', trigger: 'blur' }],
         email: [{ required: false, validator: validateMail, trigger: 'blur' }],
         address: [{ required: false, message: '请输入地址', trigger: 'blur' }]
       },
@@ -128,7 +139,7 @@ export default {
   },
   created() {
     this.getUserInfo()
-    this.getRoleList()
+    // this.getRoleList()
   },
   methods: {
     getUserInfo() {
@@ -137,7 +148,7 @@ export default {
           this.userForm = response.data
           this.userForm.repassword = this.userForm.password
           this.pwdBack = response.data.password
-          this.userForm.roleids = response.data.roleIds
+          // this.userForm.roleids = response.data.roleIds
         } else {
           this.$message.error(response.msg)
         }
@@ -148,26 +159,27 @@ export default {
     getPwdInfo(data) {
       this.pwdInfo = data
     },
-    getRoleList() {
-      // 角色应该不会超过100个吧！
-      getAllRoles('1', '100').then(response => {
-        if (response.status === 200) {
-          this.allRoles = response.data.list
-        } else {
-          this.$message.error(response.msg)
-        }
-      }).catch(error => {
-        this.$message.error(error)
-      })
-    },
+    // getRoleList() {
+    //   // 角色应该不会超过100个吧！
+    //   getAllRoles('1', '100').then(response => {
+    //     if (response.status === 200) {
+    //       this.allRoles = response.data.list
+    //     } else {
+    //       this.$message.error(response.msg)
+    //     }
+    //   }).catch(error => {
+    //     this.$message.error(error)
+    //   })
+    // },
     onSubmit() {
       this.$refs.userForm.validate(valid => {
         if (valid) {
           var params = { 'id': `${this.userForm.id}`,
             'name': `${this.userForm.name}`,
+            'phoneno': `${this.userForm.phoneno}`,
             'email': `${this.userForm.email !== null ? this.userForm.email : ''}`,
-            'address': `${this.userForm.address !== null ? this.userForm.address : ''}`,
-            'roleids': `${this.userForm.roleids.join(',')}`
+            // 'roleids': `${this.userForm.roleids.join(',')}`,
+            'address': `${this.userForm.address !== null ? this.userForm.address : ''}`
           }
           updateBusinessUser(params).then(response => {
             if (response.status === 200) {

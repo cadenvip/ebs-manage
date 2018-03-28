@@ -476,7 +476,6 @@ export default {
           delete params.accessBean.status
           delete params.accessBean.create_time
           delete params.accessBean.update_time
-          debugger
           // TODO 时间格式转换
           if (params.accessBean.begin_time !== undefined && params.accessBean.begin_time !== '') {
             params.accessBean.begin_time = str2Timestamp(params.accessBean.begin_time)

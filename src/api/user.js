@@ -106,6 +106,14 @@ export function getBusinessUserList(userinfo, currentpage, pagesize) {
   })
 }
 
+export function addBusinessUser(params) {
+  return request({
+    url: '/businesses/adduser',
+    method: 'post',
+    data: params
+  })
+}
+
 export function getBusinessUserDetail(params) {
   return request({
     url: '/businesses/userdetail',

@@ -2,10 +2,13 @@
   <div class="app-container">
     <h3 class="title">修改个人信息</h3>
     <el-form ref="userForm" :model="userForm" :rules="userRules" label-width="120px">
+      <el-form-item label="账号：" prop="loginname">
+        <el-input v-model="userForm.loginname" style="width: 220px;" placeholder="请输入账号" disabled></el-input>
+      </el-form-item>
       <el-row :gutter="20">
         <el-col :span="8">
-          <el-form-item label="账号：" prop="loginname">
-            <el-input v-model="userForm.loginname" :maxlength=11 style="width: 220px;" placeholder="请输入账号" :disabled="true"></el-input>
+          <el-form-item label="手机号：" prop="phoneno">
+            <el-input v-model="userForm.phoneno" :maxlength=11 style="width: 220px;" placeholder="请输入手机号" :disabled="true"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="16" style="padding-top:8px">
@@ -125,6 +128,7 @@ export default {
         loginname: '',
         name: '',
         locationname: '',
+        phoneno: '',
         unitname: '',
         email: '',
         address: ''
