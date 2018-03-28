@@ -87,30 +87,30 @@ export const asyncRouterMap = [
         meta: { roles: ['1'], title: '区域管理', icon: 'table' }
       },
       {
-        path: 'user/list',
-        name: 'userlist',
-        component: _import('user/list'),
+        path: 'user/alist',
+        name: 'useralist',
+        component: _import('user/alist'),
         meta: { roles: ['1'], title: '人员管理', icon: 'table' }
       },
       {
-        path: 'user/add',
-        name: 'useradd',
+        path: 'user/aadd',
+        name: 'useraadd',
         hidden: true,
-        component: _import('user/add'),
+        component: _import('user/aadd'),
         meta: { roles: ['1'], title: '新增人员', icon: 'table' }
       },
       {
-        path: 'user/update',
-        name: 'userupdate',
+        path: 'user/aupdate',
+        name: 'useraupdate',
         hidden: true,
-        component: _import('user/update'),
+        component: _import('user/aupdate'),
         meta: { roles: ['1'], title: '修改人员', icon: 'table' }
       },
       {
-        path: 'user/detail',
-        name: 'userdetail',
+        path: 'user/adetail',
+        name: 'useradetail',
         hidden: true,
-        component: _import('user/detail'),
+        component: _import('user/adetail'),
         meta: { roles: ['1'], title: '人员详情', icon: 'table' }
       },
       {
@@ -310,6 +310,43 @@ export const asyncRouterMap = [
         component: _import('finance/moreHistory'),
         name: '更多历史结算明细',
         meta: { roles: ['1'], title: '更多历史结算明细', icon: 'table' }
+      }
+    ]
+  },
+
+  {
+    path: '/user',
+    component: Layout,
+    redirect: '/user/blist',
+    name: '人员管理',
+    meta: { roles: ['2'], title: '人员管理', icon: 'enterpriseManage' },
+    children: [
+      {
+        path: 'blist',
+        name: 'userblist',
+        component: _import('user/blist'),
+        meta: { roles: ['2'], title: '人员管理', icon: 'table' }
+      },
+      {
+        path: 'badd',
+        name: 'userbadd',
+        hidden: true,
+        component: _import('user/badd'),
+        meta: { roles: ['2'], title: '新增人员', icon: 'table' }
+      },
+      {
+        path: 'bupdate',
+        name: 'userbupdate',
+        hidden: true,
+        component: _import('user/bupdate'),
+        meta: { roles: ['2'], title: '修改人员', icon: 'table' }
+      },
+      {
+        path: 'bdetail',
+        name: 'userbdetail',
+        hidden: true,
+        component: _import('user/bdetail'),
+        meta: { roles: ['2'], title: '人员详情', icon: 'table' }
       }
     ]
   },

@@ -3,28 +3,30 @@
     <h3 class="title">新增人员</h3>
     <el-form ref="userForm" :model="userForm" :rules="rules" label-width="120px">
       <el-form-item label="账号类型：" prop="roletype">
-        <el-select v-model="userForm.roletype">
+        <el-select v-model="userForm.roletype" @change="roletypeChanged">
           <el-option label="移动人员" value="1"></el-option>
           <el-option label="商家人员" value="2"></el-option>
         </el-select>
       </el-form-item>
-      <!-- <el-form-item v-show="item.roletype === '2'" label="商家：" prop="unitname">
+      <el-form-item v-show="userForm.roletype === '2'" label="商家：" prop="unitname">
         <el-input v-model="userForm.unitname" style="width: 220px;" placeholder="请选择商家" @focus="unitDialogVisible = true"></el-input>
-      </el-form-item> -->
-      <!-- 目前每个人仅一种角色 -->
+      </el-form-item>
       <el-form-item label="角色：" prop="roleids">
-        <el-select v-model="userForm.roleids">
-          <el-option v-for="(item, index) in roles" v-show="item.roletype === userForm.roletype" :key="item.id" :label="item.rolename" :value="item.id"></el-option>
-        </el-select>
+        <el-checkbox-group v-model="userForm.roleids">
+          <el-checkbox v-for="(item, index) in allRoles" v-if="item.roletype === userForm.roletype" :key="item.id" :label="item.id">{{item.rolename}}</el-checkbox>
+        </el-checkbox-group>
+      </el-form-item>
+      <el-form-item label="账号：" prop="loginname">
+        <el-input v-model="userForm.loginname" style="width: 220px;" placeholder="请输入账号"></el-input>
       </el-form-item>
       <el-row :gutter="20">
         <el-col :span="8">
-          <el-form-item label="账号：" prop="loginname">
-            <el-input v-model="userForm.loginname" :maxlength=11 style="width: 220px;" placeholder="请输入账号"></el-input>
+          <el-form-item label="手机号：" prop="phoneno">
+            <el-input v-model="userForm.phoneno" :maxlength=11 style="width: 220px;" placeholder="请输入手机号"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="16" style="padding-top:8px">
-          <span style="font-family: 宋体, Arial, sans-serif;font-size: 12px;color: #999;">账号必须为11位中国移动手机号码</span>
+          <span style="font-family: 宋体, Arial, sans-serif;font-size: 12px;color: #999;">账号必须为1>账号必须为11位中国移动手机号码</span>
         </el-col>
       </el-row>
       <el-row :gutter="20">
@@ -97,24 +99,24 @@
     <el-dialog title="请选择区域" :visible.sync="regionDialogVisible" width="40%">
       <LocationSelector @locationSelected="getLocationInfo"></LocationSelector>
     </el-dialog>
-    <!-- 
+    
     <el-dialog title="请选择商家" :visible.sync="unitDialogVisible" width="770px">
       <el-form ref="businessSearchForm" :model="businessSearchForm" label-width="100px">
         <el-row :gutter="20">
-          <el-col :span="6" :offset="6">
-            <el-form-item label="商家名称">
+          <el-col :span="12">
+            <el-form-item label="商家名称: ">
               <el-input v-model="businessSearchForm.businessesName" style="width: 220px;" placeholder="请输入商家名称"></el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="6">
+          <el-col :span="12">
             <el-button @click="queryBusinessesList()" type="primary">查询</el-button>
           </el-col>
         </el-row>
       </el-form>
       <br/>
-      <el-table :data="businessList" ref="businessTable" tooltip-effect="dark" @selection-change="businessSelectionChange" highlight-current-row>
-        <el-table-column label='商家名称' prop="businessesName" width="280" align="center"></el-table-column>
-        <el-table-column label="商家类型" prop="validdate" :formatter="timedateFormat" width="110" align="center"></el-table-column>
+      <el-table :data="businessList" ref="businessTable" tooltip-effect="dark" @current-change="businessSelectionChange" highlight-current-row>
+        <el-table-column label='商家名称' prop="businessesName" width="400" align="center"></el-table-column>
+        <el-table-column label="商家类型" prop="businessType" :formatter="businessTypeFormat" width="120" align="center"></el-table-column>
       </el-table>
       <div class="block" align="right" style="padding-right:20px">
         <el-pagination
@@ -133,7 +135,6 @@
         <el-button type="primary" @click="confirmSelected">确 定</el-button>
       </span>
     </el-dialog>
-    -->
   </div>
 </template>
 
@@ -144,7 +145,7 @@ import { getAllRoles } from '@/api/role'
 import LocationSelector from '@/components/LocationSelector/index'
 import PasswordStrength from '@/components/PasswordStrength/index'
 import { validateMobilePhone, validateEmail } from '@/utils/validate'
-// import { getBusinessesList } from '@/api/businesses'
+import { getBusinessesList } from '@/api/businesses'
 
 export default {
   data() {
@@ -193,25 +194,27 @@ export default {
       }
     }
     return {
-      roles: [],
+      allRoles: [],
       userForm: {
         roletype: '1',
-        roleids: '',
+        roleids: [],
         loginname: '',
         password: '',
         repassword: '',
+        phoneno: '',
         name: '',
         locationid: '',
         locationname: '',
-        // unitname: '',
-        // unitid: '',
+        unitname: '',
+        unitid: '',
         email: '',
         address: ''
       },
       rules: {
         roletype: [{ required: true, message: '请选择类型', trigger: 'change' }],
         roleids: [{ required: true, message: '请选择角色', trigger: 'change' }],
-        loginname: [{ required: true, trigger: 'blur', validator: validateLoginname }],
+        phoneno: [{ required: true, trigger: 'blur', validator: validateLoginname }],
+        loginname: [{ required: true, message: '请输入账号', trigger: 'blur' }],
         password: [{ required: true, validator: validatePass, trigger: 'blur' }],
         repassword: [{ required: true, validator: validateRepass, trigger: 'blur' }],
         name: [{ required: true, message: '请输入名称', trigger: 'blur' }],
@@ -221,15 +224,19 @@ export default {
         address: [{ required: false, message: '请输入地址', trigger: 'blur' }]
       },
       regionDialogVisible: false,
-      // businessSearchForm: {
-      //   businessesName: ''
-      // },
-      // businessList: [],
-      // pagesizes: [10, 20, 30, 50],
-      // pagesize: 10,
-      // currentPage: 1,
-      // total: 0,
-      // unitDialogVisible: false,
+      businessSearchForm: {
+        businessesName: '',
+        state: '',
+        createsource: '',
+        locationCode: ''
+      },
+      businessList: [],
+      preSelectedBusiness: {},
+      pagesizes: [10, 20, 30, 50],
+      pagesize: 10,
+      currentPage: 1,
+      total: 0,
+      unitDialogVisible: false,
       pwdInfo: {}
     }
   },
@@ -239,6 +246,7 @@ export default {
   },
   mounted () {
     this.getRoleList()
+    this.queryBusinessesList()
   },
   methods: {
     getLocationInfo(data) {
@@ -252,7 +260,7 @@ export default {
       // 角色应该不会超过100个吧！
       getAllRoles('1', '100').then(response => {
         if (response.status === 200) {
-          this.roles = response.data.list
+          this.allRoles = response.data.list
         } else {
           this.$message.error(response.msg)
         }
@@ -260,36 +268,76 @@ export default {
         this.$message.error(error)
       })
     },
-    // queryBusinessesList() {
-    //   this.loading = true
-    //   getBusinessesList(this.businessSearchForm, this.currentPage, this.pagesize).then(response => {
-    //     if (response.status === 200) {
-    //       this.businessList = response.data.list
-    //       this.total = response.data.total
-    //     } else {
-    //       this.$message.error(response.msg)
-    //     }
-    //     this.loading = false
-    //   }).catch(error => {
-    //     this.loading = false
-    //     this.$message.error(error)
-    //   })
-    // },
-    // handleSizeChange(val) {
-    //   this.pagesize = val
-    //   this.queryBusinessesList()
-    // },
-    // handleCurrentChange(val) {
-    //   this.currentPage = val
-    //   this.queryBusinessesList()
-    // },
+    queryBusinessesList() {
+      this.loading = true
+      getBusinessesList(this.businessSearchForm, this.currentPage, this.pagesize).then(response => {
+        if (response.status === 200) {
+          this.businessList = response.data.list
+          this.total = response.data.total
+        } else {
+          this.$message.error(response.msg)
+        }
+        this.loading = false
+      }).catch(error => {
+        this.loading = false
+        this.$message.error(error)
+      })
+    },
+    roletypeChanged() {
+      this.userForm.roleids = []
+    },
+    handleSizeChange(val) {
+      this.pagesize = val
+      this.queryBusinessesList()
+    },
+    handleCurrentChange(val) {
+      this.currentPage = val
+      this.queryBusinessesList()
+    },
+    businessSelectionChange(val) {
+      this.preSelectedBusiness = val
+    },
+    confirmSelected() {
+      this.userForm.unitid = this.preSelectedBusiness.id
+      this.userForm.unitname = this.preSelectedBusiness.businessesName
+      this.unitDialogVisible = false
+      this.preSelectedBusiness = {}
+    },
+    businessTypeFormat(row, column, cellValue) {
+      var businessType = ''
+      if (cellValue !== null) {
+        switch (cellValue) {
+          case '1':
+            businessType = '合作商家'
+            break
+          default:break
+        }
+      }
+      return businessType
+    },
     onSubmit() {
       this.$refs.userForm.validate(valid => {
         if (valid) {
-          addUser(this.userForm).then(response => {
+          if (this.userForm.roletype === '2' && (this.userForm.unitname === undefined || this.userForm.unitname === '')) {
+            this.$message.error('请选择商家')
+            return
+          }
+          var params = { 'loginname': `${this.userForm.loginname}`,
+            'password': `${this.userForm.password}`,
+            'name': `${this.userForm.name}`,
+            'phoneno': `${this.userForm.phoneno}`,
+            'unitid': `${this.userForm.unitid}`,
+            'locationid': `${this.userForm.locationid}`,
+            'email': `${this.userForm.email}`,
+            'address': `${this.userForm.address}`,
+            'roleids': `${this.userForm.roleids.join(',')}`
+          }
+          console.log(this.userForm)
+          debugger
+          addUser(params).then(response => {
             if (response.status === 200) {
               this.$message.success('新增人员成功')
-              this.$router.push({ path: '/system/user/list' })
+              this.$router.push({ path: '/system/user/alist' })
             } else {
               this.$message.error(response.msg)
             }
@@ -302,7 +350,7 @@ export default {
       })
     },
     onCancel() {
-      this.$router.push({ path: '/system/user/list' })
+      this.$router.push({ path: '/system/user/alist' })
     }
   }
 }

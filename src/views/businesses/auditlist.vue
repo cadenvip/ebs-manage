@@ -5,19 +5,19 @@
       <el-row>
         <el-col :span="10">
           <el-form-item label="企业名称：">
-            <el-input v-model="searchForm.businessesName" clearable style="width: 300px;"></el-input>
+            <el-input v-model="searchForm.businessesName" clearable style="width: 300px;" placeholder="请输入企业名称"></el-input>
           </el-form-item>  
         </el-col>
         <el-col :span="10">
           <el-form-item label="所属区域：">
-            <el-input v-model="searchForm.locationname" clearable style="width: 300px;" @focus="handleLocationFocus"></el-input>
+            <el-input v-model="searchForm.locationname" clearable style="width: 300px;" @focus="handleLocationFocus" placeholder="请选择所属区域"></el-input>
           </el-form-item>  
         </el-col>
       </el-row>
         <!-- state审核状态：0-正常 1-暂停 2-企业审核 3-未通过  4- 过期 5-网店待审核 6-待付款 -->
         <!-- status审核状态：0-正常 1-暂停 2-企业审核 3-未通过  4- 过期 5-网店待审核 6-待付款 -->
         <el-form-item label="企业状态：">
-          <el-select v-model="searchForm.state" clearable placeholder="请选择" style="width: 300px;">
+          <el-select v-model="searchForm.state" clearable placeholder="请选择企业状态" style="width: 300px;">
             <el-option label="待审核" value="0"></el-option>
             <el-option label="正常" value="1"></el-option>
             <el-option label="驳回" value="2"></el-option>

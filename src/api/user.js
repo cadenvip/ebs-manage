@@ -38,15 +38,7 @@ export function addUser(params) {
   return request({
     url: '/user/save',
     method: 'post',
-    data: { 'loginname': `${params.loginname}`,
-      'password': `${params.password}`,
-      'name': `${params.name}`,
-      'phoneno': `${params.loginname}`,
-      'locationid': `${params.locationid}`,
-      'email': `${params.email}`,
-      'address': `${params.address}`,
-      'roleids': `${params.roleids}`
-    }
+    data: params
   })
 }
 
@@ -66,6 +58,14 @@ export function resetUserPassword(params) {
   })
 }
 
+export function lockUser(params, locked) {
+  return request({
+    url: '/user/update',
+    method: 'post',
+    data: { 'id': `${params.id}`, 'locked': `${locked}` }
+  })
+}
+
 export function getUserDetail(params) {
   return request({
     url: '/user/detail',
@@ -80,5 +80,52 @@ export function modifyPassword(params) {
     url: '/user/modifyPassword',
     method: 'post',
     data: params
+  })
+}
+
+export function getBusinessAllUsers(currentpage, pagesize) {
+  return request({
+    url: '/businesses/listuser',
+    method: 'post',
+    data: { 'page': `${currentpage}`,
+      'limit': `${pagesize}` }
+  })
+}
+
+export function getBusinessUserList(userinfo, currentpage, pagesize) {
+  return request({
+    url: '/businesses/listuser',
+    method: 'post',
+    data: { 'loginname': `${userinfo.loginname}`,
+      'name': `${userinfo.name}`,
+      'phoneno': `${userinfo.phoneno}`,
+      'locationid': `${userinfo.locationid}`,
+      'page': `${currentpage}`,
+      'limit': `${pagesize}`
+    }
+  })
+}
+
+export function getBusinessUserDetail(params) {
+  return request({
+    url: '/businesses/userdetail',
+    method: 'post',
+    data: { 'userid': `${params}` }
+  })
+}
+
+export function updateBusinessUser(params) {
+  return request({
+    url: '/businesses/updateuser',
+    method: 'post',
+    data: params
+  })
+}
+
+export function resetBusinessUserPassword(params) {
+  return request({
+    url: '/businesses/updateuser',
+    method: 'post',
+    data: { 'id': `${params.id}`, 'password': '123456' }
   })
 }

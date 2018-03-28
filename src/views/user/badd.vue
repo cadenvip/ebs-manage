@@ -1,15 +1,23 @@
 <template>
   <div class="app-container">
-    <h3 class="title">修改人员信息</h3>
+    <h3 class="title">新增人员</h3>
     <el-form ref="userForm" :model="userForm" :rules="rules" label-width="120px">
+      <el-form-item label="角色：" prop="roleids">
+        <el-checkbox-group v-model="userForm.roleids">
+          <el-checkbox v-for="(item, index) in allRoles" v-if="item.roletype === '2'" :key="item.id" :label="item.id">{{item.rolename}}</el-checkbox>
+        </el-checkbox-group>
+      </el-form-item>
+      <el-form-item label="账号：" prop="loginname">
+        <el-input v-model="userForm.loginname" style="width: 220px;" placeholder="请输入账号"></el-input>
+      </el-form-item>
       <el-row :gutter="20">
         <el-col :span="8">
-          <el-form-item label="账号：" prop="loginname">
-            <el-input v-model="userForm.loginname" :maxlength=11 style="width: 220px;" placeholder="请输入账号" :disabled="true"></el-input>
+          <el-form-item label="手机号：" prop="phoneno">
+            <el-input v-model="userForm.phoneno" :maxlength=11 style="width: 220px;" placeholder="请输入手机号"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="16" style="padding-top:8px">
-          <span style="font-family: 宋体, Arial, sans-serif;font-size: 12px;color: #999;">账号必须为11位中国移动手机号码</span>
+          <span style="font-family: 宋体, Arial, sans-serif;font-size: 12px;color: #999;">账号必须为1>账号必须为11位中国移动手机号码</span>
         </el-col>
       </el-row>
       <el-row :gutter="20">
@@ -46,14 +54,7 @@
       <el-row :gutter="20">
         <el-col :span="8">
           <el-form-item label="归属区域：" prop="locationname">
-            <el-input v-model="userForm.locationname" style="width: 220px;" placeholder="请选择地址" @focus="dialogVisible = true" :disabled="true"></el-input>
-          </el-form-item>          
-        </el-col>
-      </el-row>
-      <el-row :gutter="20">
-        <el-col :span="8">
-          <el-form-item label="单位：" prop="unitname">
-            <el-input v-model="userForm.unitname" style="width: 220px;" :disabled="true"></el-input>
+            <el-input v-model="userForm.locationname" style="width: 220px;" placeholder="请输入地址" @focus="regionDialogVisible = true"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -86,17 +87,32 @@
         <el-button type="primary" @click="onCancel">返回</el-button>
       </div>
     </el-form>
+    <el-dialog title="请选择区域" :visible.sync="regionDialogVisible" width="40%">
+      <LocationSelector @locationSelected="getLocationInfo"></LocationSelector>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 
-import { getUserDetail, updateUser } from '@/api/user'
-import { validateEmail } from '@/utils/validate'
+import { addUser } from '@/api/user'
+import { getAllRoles } from '@/api/role'
+import LocationSelector from '@/components/LocationSelector/index'
 import PasswordStrength from '@/components/PasswordStrength/index'
+import { validateMobilePhone, validateEmail } from '@/utils/validate'
 
 export default {
   data() {
+    var validateLoginname = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请输入手机号码'))
+      } else {
+        if (!validateMobilePhone(value.trim())) {
+          callback(new Error('请输入有效的手机号码'))
+        }
+        callback()
+      }
+    }
     var validatePass = (rule, value, callback) => {
       if (value === '') {
         callback(new Error('请输入密码'))
@@ -132,43 +148,54 @@ export default {
       }
     }
     return {
+      allRoles: [],
       userForm: {
+        roleids: [],
         loginname: '',
         password: '',
         repassword: '',
+        phoneno: '',
         name: '',
+        locationid: '',
         locationname: '',
-        unitname: '',
         email: '',
         address: ''
       },
       rules: {
+        roleids: [{ required: true, message: '请选择角色', trigger: 'change' }],
+        phoneno: [{ required: true, trigger: 'blur', validator: validateLoginname }],
         loginname: [{ required: true, message: '请输入账号', trigger: 'blur' }],
         password: [{ required: true, validator: validatePass, trigger: 'blur' }],
         repassword: [{ required: true, validator: validateRepass, trigger: 'blur' }],
         name: [{ required: true, message: '请输入名称', trigger: 'blur' }],
         locationname: [{ required: true, message: '请选择归属区域', trigger: 'blur' }],
-        unitname: [{ required: true, message: '请选输入单位', trigger: 'blur' }],
         email: [{ required: false, validator: validateMail, trigger: 'blur' }],
         address: [{ required: false, message: '请输入地址', trigger: 'blur' }]
       },
-      pwdInfo: {},
-      pwdBack: ''
+      regionDialogVisible: false,
+      pwdInfo: {}
     }
   },
   components: {
+    LocationSelector,
     PasswordStrength
   },
-  created() {
-    this.getUserInfo()
+  mounted () {
+    this.getRoleList()
   },
   methods: {
-    getUserInfo() {
-      getUserDetail(this.$route.query.id).then(response => {
+    getLocationInfo(data) {
+      this.userForm.locationid = data.id
+      this.userForm.locationname = data.label
+    },
+    getPwdInfo(data) {
+      this.pwdInfo = data
+    },
+    getRoleList() {
+      // 角色应该不会超过100个吧！
+      getAllRoles('1', '100').then(response => {
         if (response.status === 200) {
-          this.userForm = response.data
-          this.userForm.repassword = this.userForm.password
-          this.pwdBack = response.data.password
+          this.allRoles = response.data.list
         } else {
           this.$message.error(response.msg)
         }
@@ -176,25 +203,25 @@ export default {
         this.$message.error(error)
       })
     },
-    getPwdInfo(data) {
-      this.pwdInfo = data
-    },
     onSubmit() {
       this.$refs.userForm.validate(valid => {
         if (valid) {
-          var params = { 'id': `${this.userForm.id}`,
+          var params = { 'loginname': `${this.userForm.loginname}`,
             'password': `${this.userForm.password}`,
             'name': `${this.userForm.name}`,
-            'email': `${this.userForm.email !== null ? this.userForm.email : ''}`,
-            'address': `${this.userForm.address !== null ? this.userForm.address : ''}`,
+            'phoneno': `${this.userForm.phoneno}`,
+            'unitid': `${this.userForm.unitid}`,
             'locationid': `${this.userForm.locationid}`,
-            'loginname': `${this.userForm.loginname}`,
-            'phoneno': `${this.userForm.phoneno}`
+            'email': `${this.userForm.email}`,
+            'address': `${this.userForm.address}`,
+            'roleids': `${this.userForm.roleids.join(',')}`
           }
-          updateUser(params).then(response => {
+          console.log(this.userForm)
+          debugger
+          addUser(params).then(response => {
             if (response.status === 200) {
-              this.$message.success('修改人员成功！')
-              this.$router.push({ path: '/system/user/list' })
+              this.$message.success('新增人员成功')
+              this.$router.push({ path: '/user/blist' })
             } else {
               this.$message.error(response.msg)
             }
@@ -207,7 +234,7 @@ export default {
       })
     },
     onCancel() {
-      this.$router.go(-1)
+      this.$router.push({ path: '/user/blist' })
     }
   }
 }

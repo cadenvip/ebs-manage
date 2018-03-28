@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <h3 class="title">人员信息详情</h3>
-    <div style="color: #606266;font-size:14px;width:960px;height:140px;overflow:auto;border:#E6E6E6 solid 1px;">
+    <div style="color: #606266;font-size:14px;width:960px;overflow:auto;border:#E6E6E6 solid 1px;">
       <el-row :gutter="6" style="margin-left:0px;margin-right:0px;margin-top:20px;">
         <el-col :span="4" style="text-align:right">
           <span>
@@ -89,7 +89,29 @@
             {{ rolenames }}
           </span> 
         </el-col>
-      </el-row>                                                   
+      </el-row>
+      <el-row :gutter="6" style="margin-left:0px;margin-right:0px;margin-top:12px;margin-bottom:20px">
+        <el-col :span="4" style="text-align:right">
+          <span>
+            最近登录时间：
+          </span> 
+        </el-col>
+        <el-col :span="8">
+          <span>
+            {{ userForm.logintime ? userForm.logintime : '&nbsp;' }}
+          </span> 
+        </el-col>
+        <el-col :span="4" style="text-align:right" v-if="roletypes === '商家人员'">
+          <span>
+            商家：
+          </span> 
+        </el-col>
+        <el-col :span="8" v-if="roletypes === '商家人员'">
+          <span>
+            {{ userForm.unitname }}
+          </span> 
+        </el-col>
+      </el-row>
     </div>
     <br/>
     <div style="text-align: center">
@@ -106,7 +128,7 @@ export default {
   data() {
     return {
       roletypes: '',
-      userForm: '',
+      userForm: {},
       rolenames: ''
     }
   },
@@ -115,26 +137,20 @@ export default {
   },
   methods: {
     setRoles(roles) {
-      var arrRoleTypes = []
       var arrRoleNames = []
+      switch (roles[0].roletype) {
+        case '1':
+          this.roletypes = '移动人员'
+          break
+        case '2':
+          this.roletypes = '商家人员'
+          break
+        default:break
+      }
       for (var i = 0; i < roles.length; i++) {
         arrRoleNames.push(roles[i].rolename)
-        switch (parseInt(roles[i].roletype)) {
-          case 1:
-            arrRoleTypes.push('系统管理')
-            break
-          case 2:
-            arrRoleTypes.push('商务部')
-            break
-          case 3:
-            arrRoleTypes.push('龙头企业')
-            break
-          case 4:
-            arrRoleTypes.push('农家店')
-            break
-        }
       }
-      this.roletypes = arrRoleTypes.join()
+
       this.rolenames = arrRoleNames.join()
     },
     getUserForm() {
