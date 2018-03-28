@@ -27,18 +27,16 @@
 </template>
 
 <script>
-  import axios from 'axios'
-  import { goodsTypeSave } from '@/api/goodstype'
+  import { goodsTypeSave, getCategoryDetail } from '@/api/goodstype'
   export default {
     created() {
       this.formData.typeName = this.$route.query.name
       this.formData.superTypeCode = this.$route.query.csid
-      var url = process.env.BASE_API + 'category/get/' + this.$route.query.csid
-      axios.get(url).then(res => {
-        if (res.data.status === 200) {
-          this.formData.description = res.data.data.cDesc
+      getCategoryDetail(this.$route.query.csid).then(res => {
+        if (res.status === 200) {
+          this.formData.description = res.data.cDesc
         } else {
-          this.$message.error(res.data.msg)
+          this.$message.error(res.msg)
         }
       }).catch(err => {
         this.$message.error(err)

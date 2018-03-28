@@ -30,3 +30,11 @@ export function giveUp (id) {
     method: 'post'
   })
 }
+// 商品查询
+export function getGoods (params) {
+  return request({
+    url: '/goods/page',
+    method: 'get',
+    params: params
+  })
+}

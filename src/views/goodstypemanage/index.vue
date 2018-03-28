@@ -59,8 +59,8 @@
 </template>
 
 <script>
-  import axios from 'axios'
   import { getGoodsType } from '@/api/goodsRelease'
+  import { CategoryDelete } from '@/api/goodstype'
   export default {
     mounted () {
       this._getGoodsType()
@@ -127,14 +127,13 @@
         }
       },
       confirmDeleteGoodsType() {
-        var url = process.env.BASE_API + 'category/delete/' + this.selectedObj.categoryId
-        axios.post(url).then(res => {
-          if (res.data.status === 200) {
+        CategoryDelete(this.selectedObj.categoryId).then(res => {
+          if (res.status === 200) {
             this.tipInfo = '删除商品分类： 成功！'
             this.dialogVisible2 = false
             this.dialogVisible = true
           } else {
-            this.$message.error(res.data.msg)
+            this.$message.error(res.msg)
           }
         }).catch(err => {
           this.$message.error(err)

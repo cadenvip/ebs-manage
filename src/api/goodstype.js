@@ -15,3 +15,10 @@ export function getCategoryDetail (id) {
     method: 'get'
   })
 }
+// 商品分类删除
+export function CategoryDelete (id) {
+  return request({
+    url: 'category/delete/' + id,
+    method: 'post'
+  })
+}

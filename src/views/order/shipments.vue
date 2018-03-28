@@ -1,5 +1,8 @@
 <template>
   <div style="padding: 20px;">
+    <iframe v-html="html">
+      {{html}}
+    </iframe>
     <h1>请填写发货信息</h1>
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="140px" class="demo-ruleForm">
       <el-form-item label="订单编号：" style="margin-bottom: 0;">
@@ -37,7 +40,8 @@
 
 <script>
   import { validateMobilePhone } from '@/utils/validate'
-  import { getCompanies } from '@/api/order/index'
+  import { getSessionid } from '@/utils/auth'
+  import { getCompanies, sendGoods } from '@/api/order/index'
   export default {
     created() {
       this.ruleForm.orderId = this.$route.query.oid
@@ -54,6 +58,7 @@
         }
       }
       return {
+        html: '',
         ruleForm: {
           orderId: '',
           kdfs: '',
@@ -85,9 +90,17 @@
     },
     methods: {
       submitForm(formName) {
+        var url = process.env.BASE_API + 'order/toSendGoods?JSESSIONID=' + getSessionid() + '&orderId=' + this.$route.query.oid
+        window.open(url)
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            alert('submit!')
+            if (this.$route.query.oid) {
+              sendGoods({ orderId: this.$route.query.oid }).then(res => {
+                this.html = res
+              }).catch(err => {
+                this.$message.error(err)
+              })
+            }
           } else {
             console.log('error submit!!')
             return false

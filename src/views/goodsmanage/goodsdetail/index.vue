@@ -79,20 +79,16 @@
     methods: {
       _getGoodsDetail() {
         this.loading = true
-        if (this.$route.query.goodsId) {
-          getGoodsDetail(this.$route.query.goodsId).then(res => {
-            this.loading = false
-            if (res.status === 200) {
-              this.goodsBean = res.data.goodsBean
-            } else {
-              this.$message.error(res.msg)
-            }
-          }).catch(err => {
-            console.log(err)
-          })
-        } else {
-          this.$message.error('获取数据出错！')
-        }
+        getGoodsDetail(this.$route.query.goodsId).then(res => {
+          this.loading = false
+          if (res.status === 200) {
+            this.goodsBean = res.data.goodsBean
+          } else {
+            this.$message.error(res.msg)
+          }
+        }).catch(err => {
+          this.$message.error(err)
+        })
       },
       format(val) {
         return val || '暂无信息'

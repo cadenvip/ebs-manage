@@ -124,7 +124,7 @@
           </el-table>
           <el-row style="margin-top: 20px;">
             <el-col :span="6" style="padding-left: 20px; text-align: left;padding-top: 5px;">
-              <el-button @click="toggleSelection(tableData)" type="text" size="mini">全选</el-button>
+              <el-button @click="toggleSelection(tableData)" type="text" size="mini">全选/反选</el-button>
               <el-button @click="batchOff" type="text" size="mini">批量下架</el-button>
             </el-col>
             <el-col :span="18" style="text-align: right; padding-right: 20px;">
@@ -140,7 +140,7 @@
           </el-row>
         </el-tab-pane>
         <el-tab-pane label="缺货的商品" name="tab2">
-          <el-table :row-class-name="tableRowClassName" @selection-change="handleTableSelectionChange" ref="multipleTable" :data="tableData2" tooltip-effect="dark" border style="width: 100%" >
+          <el-table :row-class-name="tableRowClassName" @selection-change="handleTableSelectionChange2" ref="multipleTable2" :data="tableData2" tooltip-effect="dark" border style="width: 100%" >
             <el-table-column type="selection" width="55">
             </el-table-column>
             <el-table-column prop="goodsCode" align="center" label="商品编码" width="140"></el-table-column>
@@ -175,7 +175,7 @@
           </el-table>
           <el-row style="margin-top: 20px;">
             <el-col :span="6" style="padding-left: 20px; text-align: left;padding-top: 5px;">
-              <el-button @click="toggleSelection(tableData)" type="text" size="mini">全选</el-button>
+              <el-button @click="toggleSelection2(tableData)" type="text" size="mini">全选</el-button>
               <el-button @click="batchOff" type="text" size="mini">批量下架</el-button>
             </el-col>
             <el-col :span="18" style="text-align: right; padding-right: 20px;">
@@ -341,14 +341,20 @@
         }
       },
       toggleSelection(rows) {
-        this.selectAll = !this.selectAll
-        rows.forEach(row => {
-          this.$refs.multipleTable.toggleRowSelection(row, this.selectAll)
-        })
+        if (rows) {
+          rows.forEach(row => {
+            this.$refs.multipleTable.toggleRowSelection(row)
+          })
+        } else {
+          this.$refs.multipleTable.clearSelection()
+        }
       },
       handleTableSelectionChange(val) {
         this.multipleSelection = val
-        console.log(val)
+      },
+      handleTableSelectionChange2(val) {
+        // this.multipleSelection = val
+        // console.log(val)
       },
       _getStockOutGoods() {
 

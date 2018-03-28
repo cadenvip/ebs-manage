@@ -39,3 +39,11 @@ export function getCompanies (params) {
     params: params
   })
 }
+// 发货
+export function sendGoods (params) {
+  return request({
+    url: '/order/toSendGoods',
+    method: 'get',
+    params: params
+  })
+}
