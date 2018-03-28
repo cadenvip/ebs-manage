@@ -47,10 +47,10 @@
                     <p>业务联系人邮箱:</p>
                   </el-col>
                   <el-col class="text-l" :span="12">
-                    <p>{{ registerForm.legalPaperNumber }}</p>
-                    <p>{{ registerForm.relationPerson }}</p>
-                    <p>{{ registerForm.relationPhone }}</p>
-                    <p>{{ registerForm.relationEmail }}</p>
+                    <p>{{ registerForm.legalPaperNumber ? registerForm.legalPaperNumber : '&nbsp;'}}</p>
+                    <p>{{ registerForm.relationPerson ? registerForm.relationPerson : '&nbsp;'}}</p>
+                    <p>{{ registerForm.relationPhone ? registerForm.relationPhone : '&nbsp;'}}</p>
+                    <p>{{ registerForm.relationEmail ? registerForm.relationEmail : '&nbsp;'}}</p>
                   </el-col>
                 </el-row>
               </div>
