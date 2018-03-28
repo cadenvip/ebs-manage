@@ -22,7 +22,7 @@
           <el-form-item label="角色类型：">
             <el-select v-model="searchForm.roletype" clearable placeholder="请选择角色类型" style="width: 300px;">
               <el-option label="管理角色" value="1"></el-option>
-              <el-option label="商家角色" value="2"></el-option>
+              <el-option label="商家角色" value="3"></el-option>
             </el-select>
           </el-form-item>  
         </el-col>
@@ -200,7 +200,7 @@ export default {
     transformRoleType(row, column, cellValue) {
       if (cellValue === '1') {
         return '管理角色'
-      } else if (cellValue === '2') {
+      } else if (cellValue === '2' || cellValue === '3') {
         return '商家角色'
       } else {
         return ''

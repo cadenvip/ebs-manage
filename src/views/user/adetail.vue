@@ -145,6 +145,9 @@ export default {
         case '2':
           this.roletypes = '商家人员'
           break
+        case '3':
+          this.roletypes = '商家人员'
+          break
         default:break
       }
       for (var i = 0; i < roles.length; i++) {

@@ -5,10 +5,10 @@
       <el-form-item label="账号类型：" prop="roletype">
         <el-select v-model="userForm.roletype" @change="roletypeChanged">
           <el-option label="移动人员" value="1"></el-option>
-          <el-option label="商家人员" value="2"></el-option>
+          <el-option label="商家人员" value="3"></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item v-show="userForm.roletype === '2'" label="商家：" prop="unitname">
+      <el-form-item v-show="userForm.roletype === '2' || userForm.roletype === '3'" label="商家：" prop="unitname">
         <el-input v-model="userForm.unitname" style="width: 220px;" placeholder="请选择商家" @focus="unitDialogVisible = true"></el-input>
       </el-form-item>
       <el-form-item label="角色：" prop="roleids">
@@ -318,7 +318,7 @@ export default {
     onSubmit() {
       this.$refs.userForm.validate(valid => {
         if (valid) {
-          if (this.userForm.roletype === '2' && (this.userForm.unitname === undefined || this.userForm.unitname === '')) {
+          if ((this.userForm.roletype === '2' || this.userForm.roletype === '3') && (this.userForm.unitname === undefined || this.userForm.unitname === '')) {
             this.$message.error('请选择商家')
             return
           }
