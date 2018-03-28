@@ -34,7 +34,7 @@
         <el-table-column label="审批意见" align="center">
           <template slot-scope="scope">
               <el-button type="text" size="small">审核</el-button>
-              <el-button type="text" size="small">预览</el-button>
+              <el-button @click="goPreview" type="text" size="small">预览</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -95,6 +95,11 @@ export default {
     handleCurrentChange(val) {
       this.currentPage = val
       this._getHistoryApply(this.searchForm)
+    },
+    goPreview(val) {
+      if (val.goodsId) {
+        this.$router.push({ name: 'preview', query: { goodsId: val.goodsId }})
+      }
     },
     onSubmit() {
       console.log('test')

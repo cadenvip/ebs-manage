@@ -66,7 +66,7 @@
               </el-col>
               <el-col :span="4">
                 <el-form-item>
-                    <el-date-picker
+                    <el-date-picker style="width: 100%;"
                       v-model="searchForm.sjkssj"
                       :clearable="false"
                       type="date"
@@ -74,9 +74,9 @@
                     </el-date-picker>
                 </el-form-item>
               </el-col>
-              <el-col :span="2">
+              <el-col :span="4">
                 <el-form-item>
-                    <el-date-picker
+                    <el-date-picker style="width: 100%;"
                       v-model="searchForm.sjjssj"
                       type="date"
                       placeholder="上架结束时间">
@@ -321,12 +321,18 @@
         done()
       },
       resetForm(formName) {
-        if (this.$refs[formName] !== undefined) {
-          this.$refs[formName].resetFields()
+        this.searchForm = {
+          spcd: '',
+          spcdcode: '',
+          spmc: '',
+          spbm: '',
+          spzt: '',
+          xsml: '',
+          sjkssj: '',
+          sjjssj: ''
         }
       },
       submitForm(formName) {
-        console.log(this.getUpStartTime)
         const params = {
           placeOfOrigin: this.searchForm.spcdcode,
           name: this.searchForm.spmc,
@@ -374,7 +380,18 @@
         this.pagesize = this.pagesize === val ? this.pagesize : val
       },
       handleCurrentChange(val) {
-        console.log(val)
+        const params = {
+          placeOfOrigin: this.searchForm.spcdcode,
+          name: this.searchForm.spmc,
+          goodsCode: this.searchForm.spbm,
+          typeCode: this.getGoodsCate,
+          statusCode: this.searchForm.spzt,
+          // catalogId: this.searchForm.xsml,
+          upStartTime: this.getUpStartTime,
+          upEndTime: this.getUpEndTime,
+          page: val
+        }
+        this._getSearches(params)
       },
       batchAudit() {
         const len = this.seletedData.length

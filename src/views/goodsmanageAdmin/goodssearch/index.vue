@@ -117,7 +117,7 @@
         </el-table-column>
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">
-              <el-button @click="preview(scope.row)" type="text" size="small">预览</el-button>
+              <el-button @click="goPreview(scope.row)" type="text" size="small">预览</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -305,6 +305,11 @@
         }).catch(err => {
           this.$message.error(err)
         })
+      },
+      goPreview(val) {
+        if (val.goodsId) {
+          this.$router.push({ name: 'preview', query: { goodsId: val.goodsId }})
+        }
       },
       format(val) {
         if (val) {

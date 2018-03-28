@@ -353,7 +353,6 @@ export const asyncRouterMap = [
 
   {
     path: '/goodsmanage',
-    redirect: '/goodsmanage/publishgoods',
     component: Layout,
     meta: { roles: ['1', '2'], title: '商品管理', icon: 'goodsManage' },
     name: '商品管理',
@@ -363,46 +362,46 @@ export const asyncRouterMap = [
         path: 'publishgoods',
         name: 'publish-goods',
         component: _import('goodsmanage/publish-goods/index'),
-        meta: { roles: ['1', '2'], title: '发布商品', icon: 'form' }
+        meta: { roles: ['2'], title: '发布商品', icon: 'form' }
       },
       {
         path: 'publishstep1',
         name: 'publishstep1',
         hidden: true,
         component: _import('goodsmanage/publish-goods/step1'),
-        meta: { roles: ['1', '2'], title: '选择类别' }
+        meta: { roles: ['2'], title: '选择类别' }
       },
       {
         path: 'publishstep2',
         name: 'publishstep2',
         hidden: true,
         component: _import('goodsmanage/publish-goods/step2'),
-        meta: { roles: ['1', '2'], title: '填写详情' }
+        meta: { roles: ['2'], title: '填写详情' }
       },
       {
         path: 'publishstep3',
         name: 'publishstep3',
         hidden: true,
         component: _import('goodsmanage/publish-goods/step3'),
-        meta: { roles: ['1', '2'], title: '提交入库' }
+        meta: { roles: ['2'], title: '提交入库' }
       },
       {
         path: 'onsalegoods',
         name: 'onsalegoods',
         component: _import('goodsmanage/onsalegoods/index'),
-        meta: { roles: ['1', '2'], title: '销售中商品', icon: 'form' }
+        meta: { roles: ['2'], title: '销售中商品', icon: 'form' }
       },
       {
         path: 'noshelfgoods',
         name: 'noshelfgoods',
         component: _import('goodsmanage/noshelfgoods/index'),
-        meta: { roles: ['1', '2'], title: '未上架商品', icon: 'form' }
+        meta: { roles: ['2'], title: '未上架商品', icon: 'form' }
       },
       {
         path: 'goodsdetail',
         name: 'goodsdetail',
         component: _import('goodsmanage/goodsdetail/index'),
-        meta: { roles: ['1', '2'], title: '商品详情' },
+        meta: { roles: ['2'], title: '商品详情' },
         hidden: true
       },
       // 管理员
@@ -410,38 +409,38 @@ export const asyncRouterMap = [
         path: 'goodssearch',  // 商品搜索
         name: 'goodssearch',
         component: _import('goodsmanageAdmin/goodssearch/index'),
-        meta: { roles: ['1', '2'], title: '商品查询', icon: 'form' }
+        meta: { roles: ['1'], title: '商品查询', icon: 'form' }
       },
       {
         path: 'updownaudit',  // 上下架
         name: 'updownaudit',
         component: _import('goodsmanageAdmin/updownaudit/index'),
-        meta: { roles: ['1', '2'], title: '商品上下架审核', icon: 'form' }
+        meta: { roles: ['1'], title: '商品上下架审核', icon: 'form' }
       },
       {
         path: 'onsalemodifyaudit',  // 在售商品修改审核
         name: '在售商品修改审核列表',
         component: _import('goodsmanageAdmin/onsalemodifyaudit/index'),
-        meta: { roles: ['1', '2'], title: '在售商品修改审核', icon: 'form' }
+        meta: { roles: ['1'], title: '在售商品修改审核', icon: 'form' }
       },
       {
         path: 'onsalemodifyaudit/auditpreview',  // 在售商品修改审核
         name: '在售商品修改审核',
         hidden: true,
         component: _import('goodsmanageAdmin/onsalemodifyaudit/audit'),
-        meta: { roles: ['1', '2'], title: '在售商品修改审核', icon: 'form' }
+        meta: { roles: ['1'], title: '在售商品修改审核', icon: 'form' }
       },
       {
         path: 'onsalehistoryaudit',  // 在售商品修改审核
         name: '在售商品历史审核列表',
         component: _import('goodsmanageAdmin/onsalehistoryaudit/index'),
-        meta: { roles: ['1', '2'], title: '在售商品历史审核', icon: 'form' }
+        meta: { roles: ['1'], title: '在售商品历史审核', icon: 'form' }
       },
       {
         path: 'preview',  // 预览
         name: 'preview',
         component: _import('goodsmanageAdmin/preview/index'),
-        meta: { roles: ['1', '2'], title: '商品预览', icon: 'form' },
+        meta: { roles: ['1'], title: '商品预览', icon: 'form' },
         hidden: true
       }
     ]
@@ -450,7 +449,7 @@ export const asyncRouterMap = [
   {
     path: '/goodstypemanage',
     component: Layout,
-    meta: { roles: ['1', '2'], title: '', icon: 'goodsType' },
+    meta: { roles: ['1'], title: '', icon: 'goodsType' },
     name: '商品分类管理',
     children: [
       // 管理员
@@ -458,7 +457,7 @@ export const asyncRouterMap = [
         path: 'index',
         name: '商品分类',
         component: _import('goodstypemanage/index'),
-        meta: { roles: ['1', '2'], title: '商品分类管理', icon: 'goodsType' }
+        meta: { roles: ['1'], title: '商品分类管理', icon: 'goodsType' }
       }
     ]
   },
@@ -513,7 +512,7 @@ export const asyncRouterMap = [
     redirect: '/goodstypemanage/index',
     component: Layout,
     hidden: true,
-    meta: { roles: ['1', '2'], title: '商品分类管理', icon: 'form' },
+    meta: { roles: ['1'], title: '商品分类管理', icon: 'form' },
     name: '商品分类管理新增',
     children: [
       // 管理员
@@ -521,19 +520,19 @@ export const asyncRouterMap = [
         path: 'add',
         name: '新增商品分类',
         component: _import('goodstypemanage/add'),
-        meta: { roles: ['1', '2'], title: '新增商品分类', icon: 'form' }
+        meta: { roles: ['1'], title: '新增商品分类', icon: 'form' }
       },
       {
         path: 'modify',
         name: '修改商品分类',
         component: _import('goodstypemanage/modify'),
-        meta: { roles: ['1', '2'], title: '修改商品分类', icon: 'form' }
+        meta: { roles: ['1'], title: '修改商品分类', icon: 'form' }
       },
       {
         path: 'detail',
         name: '商品分类详情',
         component: _import('goodstypemanage/detail'),
-        meta: { roles: ['1', '2'], title: '商品分类详情', icon: 'form' }
+        meta: { roles: ['1'], title: '商品分类详情', icon: 'form' }
       }
     ]
   },
@@ -548,19 +547,19 @@ export const asyncRouterMap = [
         path: 'index',
         name: '订单首页',
         component: _import('order/businessorder'),
-        meta: { roles: ['1', '2'], title: '订单管理', icon: 'form' }
+        meta: { roles: ['2'], title: '订单管理', icon: 'form' }
       },
       {
         path: 'commonquery',
         name: 'commonquery',
         component: _import('order/admin/commonorderquery'),
-        meta: { roles: ['1', '2'], title: '普通订单查询', icon: 'form' }
+        meta: { roles: ['1'], title: '普通订单查询', icon: 'form' }
       },
       {
         path: 'businessorder2',
         name: 'businessorder2',
         component: _import('order/businessorder2'),
-        meta: { roles: ['1', '2'], title: '普通订单管理', icon: 'form' }
+        meta: { roles: ['1'], title: '普通订单管理', icon: 'form' }
       },
       {
         path: 'orderdetail',
@@ -574,14 +573,14 @@ export const asyncRouterMap = [
         name: 'shipments',
         hidden: true,
         component: _import('order/shipments'),
-        meta: { roles: ['1', '2'], title: '订单发货', icon: 'form' }
+        meta: { roles: ['1'], title: '订单发货', icon: 'form' }
       },
       {
         path: 'orderdetailB',
         name: 'orderdetailB',
         hidden: true,
         component: _import('order/orderdetailB'),
-        meta: { roles: ['1', '2'], title: '订单详情', icon: 'form' }
+        meta: { roles: ['2'], title: '订单详情', icon: 'form' }
       }
     ]
   },

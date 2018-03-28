@@ -79,28 +79,28 @@
       <el-tabs v-model="activeTab" type="border-card" @tab-click="handleTabClick">
         <el-tab-pane align="center" label="待上架商品" name="first">
           <el-table @selection-change="handleTableSelectionChange" v-loading="loading" element-loading-text="Loading" ref="multipleTable" :data="tableData" tooltip-effect="dark" border style="width: 100%" >
-            <el-table-column type="selection" width="55">
+            <el-table-column type="selection">
             </el-table-column>
-            <el-table-column align="center" label="商品编码" width="140">
+            <el-table-column align="center" width="160" label="商品编码">
               <template slot-scope="scope">{{ scope.row.goodsCode }}</template>
             </el-table-column>
-            <el-table-column prop="goodsName" align="center" label="商品名称" width="120">
+            <el-table-column prop="goodsName" align="center" label="商品名称">
             </el-table-column>
             <el-table-column prop="categoryName" align="center" label="商品类型" show-overflow-tooltip>
             </el-table-column>
-            <el-table-column prop="price" align="center" width="60" label="价格">
+            <el-table-column prop="price" align="center" label="价格">
             </el-table-column>
-            <el-table-column prop="stock" align="center" width="60" label="库存" show-overflow-tooltip>
+            <el-table-column prop="stock" align="center" label="库存" show-overflow-tooltip>
             </el-table-column>
             <el-table-column prop="upTime" align="center" label="上架时间" show-overflow-tooltip>
             </el-table-column>
-            <el-table-column align="center" widht="60" label="状态" show-overflow-tooltip>
+            <el-table-column align="center" label="状态" show-overflow-tooltip>
               <template slot-scope="scope">{{ scope.row.status === '1' ? '正常' : '错误' }}</template>
             </el-table-column>
             <el-table-column align="center" label="审核状态" show-overflow-tooltip>
               <template slot-scope="scope">{{ scope.row.auditStatus === '1' ? '上架审批中' : scope.row.auditStatus === '2' ? '上架审批通过' : scope.row.auditStatus === '3' ? '上架审批驳回' : '错误' }}</template>
             </el-table-column>
-            <el-table-column align="center" label="操作" width="200">
+            <el-table-column align="center" label="操作">
               <template slot-scope="scope">
                 <el-button @click="getGoodsDetail(scope.row)" type="text" size="small">详情</el-button>
                 <el-button v-if="scope.row.auditStatus === '3'" @click="_upGoods(scope.row)" type="text" size="small">上架</el-button>
