@@ -227,9 +227,9 @@
       </el-form-item>
       <el-form-item style="display: block;" label="退换货:">
         <el-checkbox-group v-model="ruleForm.thh">
-          <el-checkbox checked label="推荐" name="thh"></el-checkbox>
-          <el-checkbox checked label="支持退货" name="thh"></el-checkbox>
-          <el-checkbox checked label="支持换货" name="thh"></el-checkbox>
+          <el-checkbox label="推荐" name="thh"></el-checkbox>
+          <el-checkbox label="支持退货" name="thh"></el-checkbox>
+          <el-checkbox label="支持换货" name="thh"></el-checkbox>
         </el-checkbox-group>
       </el-form-item>
       <el-form-item style="display: block;" label="视频地址:">
@@ -626,10 +626,10 @@
               isReturn: this.ruleForm.thh.indexOf('支持退货') > -1 ? 0 : 1,
               isExchange: this.ruleForm.thh.indexOf('支持换货') > -1 ? 0 : 1,
               videoUrl: this.ruleForm.spdz,
-              description: '',
-              smsInfo: '',
-              wapInfo: '',
-              wapUrl: ''
+              description: this.ruleForm.shangpjs,
+              smsInfo: this.ruleForm.tuijdx,
+              wapInfo: this.ruleForm.wappushnr,
+              wapUrl: this.ruleForm.wappushlj
             }
             if (this.isFromModifyFlag === 1 || this.isFromModifyFlag === 2) {
               parmas.goodsId = this.$route.query.goodsId
