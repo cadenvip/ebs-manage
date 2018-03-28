@@ -579,7 +579,7 @@
           relationEmail: [{ required: false, validator: validateMail, trigger: 'blur' }],
           sellPersonName: [{ required: true, message: '请输入售后联系人', trigger: 'blur' }],
           sellPersonMobile: [{ required: true, message: '请输入售后电话', validator: validateMobile, trigger: 'blur' }],
-          sellAddressListForm: [{ required: true, message: '请输入售后处理点', trigger: 'change' }],
+          sellAddressListForm: [{ required: true, message: '请输入售后处理点', trigger: 'blur' }],
           financePersonName: [{ required: true, message: '请输入财务联系人', trigger: 'blur' }],
           financePersonMobile: [{ required: true, trigger: 'blur', validator: validateMobile }],
           financePersonEmail: [{ required: false, validator: validateMail, trigger: 'blur' }],

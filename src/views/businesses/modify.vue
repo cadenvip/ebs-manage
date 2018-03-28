@@ -152,8 +152,8 @@
               <el-col :span="12">
                 <el-form-item label="能否开具发票：" prop="isInvoice">
                   <el-radio-group v-model="registerForm.isInvoice">
-                    <el-radio :label="1">能</el-radio>
-                    <el-radio :label="0">不能</el-radio>
+                    <el-radio label="1">能</el-radio>
+                    <el-radio label="0">不能</el-radio>
                   </el-radio-group>
                 </el-form-item>               
               </el-col>
@@ -580,7 +580,7 @@
           relationEmail: [{ required: false, validator: validateMail, trigger: 'blur' }],
           sellPersonName: [{ required: true, message: '请输入售后联系人', trigger: 'blur' }],
           sellPersonMobile: [{ required: true, message: '请输入售后电话', validator: validateMobile, trigger: 'blur' }],
-          sellAddressListForm: [{ required: true, message: '请输入售后处理点', trigger: 'change' }],
+          sellAddressListForm: [{ required: true, message: '请输入售后处理点', trigger: 'blur' }],
           financePersonName: [{ required: true, message: '请输入财务联系人', trigger: 'blur' }],
           financePersonMobile: [{ required: true, trigger: 'blur', validator: validateMobile }],
           financePersonEmail: [{ required: false, validator: validateMail, trigger: 'blur' }],
