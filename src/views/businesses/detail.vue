@@ -17,7 +17,7 @@
                   <el-col class="text-l" :span="16">
                     <p>{{ registerForm.businessesName }}</p>
                     <p>{{ registerForm.businessesShortName }}</p>
-                    <p>{{ registerForm.businessType }}</p>
+                    <p>{{ registerForm.businessType ? registerForm.businessType : '&nbsp;'}}</p>
                     <p>{{ registerForm.validdate_str }}</p>
                   </el-col>
                 </el-row>
@@ -34,7 +34,7 @@
                     <p>{{ registerForm.locationName ? registerForm.locationName : '&nbsp;' }}</p>
                     <p>{{ registerForm.address ? registerForm.address : '&nbsp;' }}</p>
                     <p>{{ registerForm.legalName ? registerForm.legalName : '&nbsp' }}</p>
-                    <p>{{ registerForm.legalPaperType }}</p>
+                    <p>{{ registerForm.legalPaperType === '1' ? '身份证' : registerForm.editApproveStatus === '2' ? '户口本' : registerForm.editApproveStatus === '3' ? '驾驶本' : '&nbsp;' }}</p>
                   </el-col>
                 </el-row>
               </div>
@@ -124,7 +124,7 @@
                   </el-col>
                   <el-col class="text-l" :span="12">
                     <p>{{ registerForm.financePersonPhone ? registerForm.financePersonPhone : '&nbsp;' }}</p>
-                    <p>{{ registerForm.isInvoice === '1' ? '能' : '不能' }}</p>
+                    <p>{{ registerForm.isInvoice === '1' ? '能' : registerForm.isInvoice === '0' ? '不能' : '&nbsp;' }}</p>
                   </el-col>
                 </el-row>
               </div>
@@ -132,133 +132,185 @@
           </div>
         </div>
 
-        <div>
-          <el-form ref="registerForm" :model="registerForm" :rules="registerRules" label-width="170px" style="margin:6px">
-            <hr style="height:1px;border:none;border-top:1px dashed #0066CC;" />
-            <h5>商品销售信息</h5>
-            <el-table :data="registerForm.goodsListForm" border style="width:100%">
-              <el-table-column property="num" label="编号" width="50"></el-table-column>
-              <el-table-column property="name" label="商品名称" width="120">
-                <template slot-scope="scope">
-                  <el-input v-model="scope.row.name" placeholder="请输入名称"></el-input>
-                </template>
-              </el-table-column>
-              <el-table-column property="unit" label="商品规格" width="100">
-                <template slot-scope="scope">
-                  <el-input v-model="scope.row.unit" placeholder="请输入规格"></el-input>
-                </template>
-              </el-table-column>
-              <el-table-column property="origin" label="商品产地" width="120">
-                <template slot-scope="scope">
-                  <el-input v-model="scope.row.origin" placeholder="请输入产地"></el-input>
-                </template>
-              </el-table-column>
-              <el-table-column property="price" label="市场价格" width="100">
-                <template slot-scope="scope">
-                  <el-input v-model="scope.row.price" placeholder="请输入价格">
-                    <template prefix="￥"></template>
-                  </el-input>
-                </template>
-              </el-table-column>
-              <el-table-column property="description" label="商品特色" width="240">
-                <template slot-scope="scope">
-                  <el-input type="textarea" v-model="scope.row.description" placeholder="请输入特色"></el-input>
-                </template>
-              </el-table-column>
-              <el-table-column property="url" label="介绍链接" width="200">
-                <template slot-scope="scope">
-                  <el-input v-model="scope.row.url" placeholder="请输入介绍链接"></el-input>
-                </template>
-              </el-table-column>
-            </el-table>
-            <hr style="height:1px;border:none;border-top:1px dashed #0066CC;" />
-            <h5>支付信息</h5>
-            <el-form-item label="启用语音支付：" prop="merchantPayable">
-              <el-checkbox v-model="registerForm.merchantPayable"></el-checkbox>
-            </el-form-item>
-            <el-form-item label="语音支付商户号：" prop="merchantNo">
-              <el-input v-model="registerForm.merchantNo" clearable style="width: 200px;" placeholder="请输入语音支付商户号" :disabled="!registerForm.merchantPayable"></el-input>
-            </el-form-item>
-            <el-form-item label="启用话费支付：" prop="wirelesscitypayable">
-              <el-checkbox v-model="registerForm.wirelesscitypayable"></el-checkbox>
-            </el-form-item>
-            <el-row :gutter="30">
-              <el-col :span="12">
-                <el-form-item label="话费支付商户号：" prop="wirelesscityno">
-                  <el-input v-model="registerForm.wirelesscityno" clearable style="width: 200px;" placeholder="请输入话费支付商户号" :disabled="!registerForm.wirelesscitypayable"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="12">
-                <el-form-item label="话费支付商户名称：" prop="wirelesscityname">
-                  <el-input v-model="registerForm.wirelesscityname" clearable style="width: 200px;" placeholder="请输入话费支付商户名称" :disabled="!registerForm.wirelesscitypayable"></el-input>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row :gutter="30">
-              <el-col :span="12">
-                <el-form-item label="话费支付渠道编号：" prop="wirelesstpcode">
-                  <el-input v-model="registerForm.wirelesstpcode" clearable style="width: 200px;" placeholder="请输入话费支付渠道编号" :disabled="!registerForm.wirelesscitypayable"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="12">
-                <el-form-item label="话费支付渠道名称：" prop="wirelesstpname">
-                  <el-input v-model="registerForm.wirelesstpname" clearable style="width: 200px;" placeholder="请输入话费支付渠道名称" :disabled="!registerForm.wirelesscitypayable"></el-input>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-form-item label="启用支付宝支付：" prop="aliPayNoPayable">
-              <el-checkbox v-model="registerForm.aliPayNoPayable"></el-checkbox>
-            </el-form-item>
-            <el-row :gutter="30">
-              <el-col :span="12">
-                <el-form-item label="支付宝卖家账号：" prop="aliPayAccount">
-                  <el-input v-model="registerForm.aliPayAccount" clearable style="width: 200px;" placeholder="请输入支付宝卖家账号" :disabled="!registerForm.aliPayNoPayable"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="12">
-                <el-form-item label="支付宝平台签名Key：" prop="aliPaySignKey">
-                  <el-input v-model="registerForm.aliPaySignKey" clearable style="width: 200px;" placeholder="请输入支付宝平台签名Key" :disabled="!registerForm.aliPayNoPayable"></el-input>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-form-item label="支付宝卖家名字：" prop="aliPaySellerAccountName">
-              <el-input v-model="registerForm.aliPaySellerAccountName" clearable style="width: 200px;" placeholder="请输入支付宝卖家名字" :disabled="!registerForm.aliPayNoPayable"></el-input>
-            </el-form-item>
-            <el-form-item label="启用手机和包支付：" prop="cmPayNoPayable">
-              <el-checkbox v-model="registerForm.cmPayNoPayable"></el-checkbox>
-            </el-form-item>
-            <el-row :gutter="30">
-              <el-col :span="12">
-                <el-form-item label="和包支付平台商家ID：" prop="cmPayMerchantId">
-                  <el-input v-model="registerForm.cmPayMerchantId" clearable style="width: 200px;" placeholder="请输入和包支付平台商家ID" :disabled="!registerForm.cmPayNoPayable"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="12">
-                <el-form-item label="和包支付平台签名KEY：" prop="cmPaySignKey">
-                  <el-input v-model="registerForm.cmPaySignKey" clearable style="width: 200px;" placeholder="请输入和包支付平台签名KEY" :disabled="!registerForm.cmPayNoPayable"></el-input>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-form-item label="启用联动优势支付：" prop="umPayNoPayable">
-              <el-checkbox v-model="registerForm.umPayNoPayable"></el-checkbox>
-            </el-form-item>
-            <el-row :gutter="30">
-              <el-col :span="12">
-                <el-form-item label="联动优势平台商家ID：" prop="umPayMerchantId">
-                  <el-input v-model="registerForm.umPayMerchantId" clearable style="width: 200px;" placeholder="请输入联动优势平台商家ID" :disabled="!registerForm.umPayNoPayable"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="12">
-                <el-form-item label="联动优势银行账号名：" prop="umPayBankAccountName">
-                  <el-input v-model="registerForm.umPayBankAccountName" clearable style="width: 200px;" placeholder="请输入联动优势银行账号名" :disabled="!registerForm.umPayNoPayable"></el-input>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-form-item label="联动优势银行账号：" prop="umPayBankAccountNo">
-              <el-input v-model="registerForm.umPayBankAccountNo" clearable style="width: 200px;" placeholder="联动优势银行账号" :disabled="!registerForm.umPayNoPayable"></el-input>
-            </el-form-item>
-            <hr style="height:1px;border:none;border-top:1px dashed #0066CC;" />
-            
+        <div class="part">
+          <h1>商品销售信息</h1>
+          <el-table :data="registerForm.goodsListForm" border style="width: 960px;" tooltip-effect="dark">
+            <el-table-column prop="num" label="编号" align="center"></el-table-column>
+            <el-table-column prop="name" label="商品名称" align="center"></el-table-column>
+            <el-table-column prop="unit" label="商品规格" align="center"></el-table-column>
+            <el-table-column prop="origin" label="商品产地" align="center"></el-table-column>
+            <el-table-column prop="price" label="市场价格(元)" align="center"></el-table-column>
+            <el-table-column prop="description" label="商品特色" align="center" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="url" label="介绍链接" align="center" show-overflow-tooltip></el-table-column>
+          </el-table>
+        </div>         
+
+        <div class="part">
+          <h1>支付信息</h1>
+          <div class="con-box">
+            <div class="clearfix tr-con">
+              <div class="fl">
+                <el-row style="overflow: hidden;">
+                  <el-col class="text-r" :span="10">
+                    <p>启用语音支付:</p>
+                  </el-col>
+                  <el-col class="text-l" :span="14">
+                    <p>{{ registerForm.merchantPayable === '1' ? '启用' : registerForm.merchantPayable === '0' ? '未启用' : '&nbsp;' }}</p>
+                  </el-col>
+                </el-row>
+              </div>
+              <div class="fl">
+                <el-row style="overflow: hidden;">
+                  <el-col class="text-r" :span="10">
+                    <p>语音支付商户号:</p>
+                  </el-col>
+                  <el-col class="text-l" :span="14">
+                    <p>{{ registerForm.merchantNo ? registerForm.merchantNo : '&nbsp;' }}</p>
+                  </el-col>
+                </el-row>
+              </div>
+            </div>
+			      <div class="clearfix tr-con">
+              <div class="fl">
+                <el-row style="overflow: hidden;">
+                  <el-col class="text-r" :span="10">
+                    <p>启用话费支付:</p>
+                    <p>话费支付渠道编号:</p>
+                  </el-col>
+                  <el-col class="text-l" :span="14">
+                    <p>{{ registerForm.wirelesscitypayable === '1' ? '启用' : registerForm.wirelesscitypayable === '0' ? '未启用' : '&nbsp;' }}</p>
+                    <p>{{ registerForm.wirelesstpcode }}</p>
+                  </el-col>
+                </el-row>
+              </div>
+              <div class="fl">
+                <el-row style="overflow: hidden;">
+                  <el-col class="text-r" :span="10">
+                    <p>话费支付商户号:</p>
+                    <p>话费支付渠道名称:</p>
+                  </el-col>
+                  <el-col class="text-l" :span="14">
+                    <p>{{ registerForm.wirelesscityno ? registerForm.wirelesscityno : '&nbsp;' }}</p>
+                    <p>{{ registerForm.wirelesstpname ? registerForm.wirelesstpname : '&nbsp;' }}</p>
+                  </el-col>
+                </el-row>
+              </div>
+              <div class="fl">
+                <el-row style="overflow: hidden;">
+                  <el-col class="text-r" :span="10">
+                    <p>话费支付商户名称:</p>
+                    <p>&nbsp;</p>
+                  </el-col>
+                  <el-col class="text-l" :span="14">
+                    <p>{{ registerForm.wirelesscityname ? registerForm.wirelesscityname : '&nbsp;' }}</p>
+                    <p>&nbsp;</p>
+                  </el-col>
+                </el-row>
+              </div>
+            </div>
+            <div class="clearfix tr-con">
+              <div class="fl">
+                <el-row style="overflow: hidden;">
+                  <el-col class="text-r" :span="10">
+                    <p>启用支付宝支付:</p>
+                    <p>支付宝卖家名字:</p>
+                  </el-col>
+                  <el-col class="text-l" :span="14">
+                    <p>{{ registerForm.aliPayNoPayable === '1' ? '启用' : registerForm.aliPayNoPayable === '0' ? '未启用' : '&nbsp;' }}</p>
+                    <p>{{ registerForm.aliPaySellerAccountName }}</p>
+                  </el-col>
+                </el-row>
+              </div>
+              <div class="fl">
+                <el-row style="overflow: hidden;">
+                  <el-col class="text-r" :span="10">
+                    <p>支付宝卖家账号:</p>
+                  </el-col>
+                  <el-col class="text-l" :span="14">
+                    <p>{{ registerForm.aliPayAccount ? registerForm.aliPayAccount : '&nbsp;' }}</p>
+                  </el-col>
+                </el-row>
+              </div>
+              <div class="fl">
+                <el-row style="overflow: hidden;">
+                  <el-col class="text-r" :span="10">
+                    <p>支付宝平台签名Key:</p>
+                  </el-col>
+                  <el-col class="text-l" :span="14">
+                    <p>{{ registerForm.aliPaySignKey ? registerForm.aliPaySignKey : '&nbsp;' }}</p>
+                  </el-col>
+                </el-row>
+              </div>
+            </div>
+            <div class="clearfix tr-con">
+              <div class="fl">
+                <el-row style="overflow: hidden;">
+                  <el-col class="text-r" :span="10">
+                    <p>启用手机和包支付:</p>
+                  </el-col>
+                  <el-col class="text-l" :span="14">
+                    <p>{{ registerForm.cmPayNoPayable === '1' ? '启用' : registerForm.cmPayNoPayable === '0' ? '未启用' : '&nbsp;' }}</p>
+                  </el-col>
+                </el-row>
+              </div>
+              <div class="fl">
+                <el-row style="overflow: hidden;">
+                  <el-col class="text-r" :span="10">
+                    <p>和包支付平台商家ID:</p>
+                  </el-col>
+                  <el-col class="text-l" :span="14">
+                    <p>{{ registerForm.cmPayMerchantId ? registerForm.cmPayMerchantId : '&nbsp;' }}</p>
+                  </el-col>
+                </el-row>
+              </div>
+              <div class="fl">
+                <el-row style="overflow: hidden;">
+                  <el-col class="text-r" :span="10">
+                    <p>和包支付平台签名KEY:</p>
+                  </el-col>
+                  <el-col class="text-l" :span="14">
+                    <p>{{ registerForm.cmPaySignKey ? registerForm.cmPaySignKey : '&nbsp;' }}</p>
+                  </el-col>
+                </el-row>
+              </div>
+            </div>
+            <div class="clearfix tr-con">
+              <div class="fl">
+                <el-row style="overflow: hidden;">
+                  <el-col class="text-r" :span="10">
+                    <p>启用联动优势支付:</p>
+                    <p>联动优势银行账号:</p>
+                  </el-col>
+                  <el-col class="text-l" :span="14">
+                    <p>{{ registerForm.umPayNoPayable === '1' ? '启用' : registerForm.umPayNoPayable === '0' ? '未启用' : '&nbsp;' }}</p>
+                    <p>{{ registerForm.umPayBankAccountNo }}</p>
+                  </el-col>
+                </el-row>
+              </div>
+              <div class="fl">
+                <el-row style="overflow: hidden;">
+                  <el-col class="text-r" :span="10">
+                    <p>联动优势平台商家ID:</p>
+                  </el-col>
+                  <el-col class="text-l" :span="14">
+                    <p>{{ registerForm.umPayMerchantId ? registerForm.umPayMerchantId : '&nbsp;' }}</p>
+                  </el-col>
+                </el-row>
+              </div>
+              <div class="fl">
+                <el-row style="overflow: hidden;">
+                  <el-col class="text-r" :span="10">
+                    <p>联动优势银行账号名:</p>
+                  </el-col>
+                  <el-col class="text-l" :span="14">
+                    <p>{{ registerForm.umPayBankAccountName ? registerForm.umPayBankAccountName : '&nbsp;' }}</p>
+                  </el-col>
+                </el-row>
+              </div>
+            </div>			
+          </div>
+        </div>
+
         <div class="part">
           <h1>企业经营资质</h1>
           <div class="con-box">
@@ -301,70 +353,56 @@
           </div>
         </div>
 
-            <h5>产品经营许可</h5>
-            <hr style="height:1px;border:none;border-top:1px dashed #0066CC;" />
-            <el-form-item label="请选择企业性质：" prop="merchantKind">
-              <el-radio v-model="registerForm.merchantKind" label="1">生产商</el-radio>
-              <el-radio v-model="registerForm.merchantKind" label="2">经销商</el-radio>
-            </el-form-item>
-            <el-form-item v-show="registerForm.merchantKind === '2'" label="代理授权证明：" prop="proxytestifypicpath">
-              <el-upload
-                action="http://120.79.170.36/upload/"
-                list-type="text"
-                :show-file-list="false"
-                :on-success="handleProxySuccess"
-                :on-preview="handlePictureCardPreview"
-                :on-remove="handleRemove"
-                :before-upload="beforeAvatarUpload">
-                <!-- <img v-if="registerForm.proxytestifypicpath" :src="registerForm.proxytestifypicpath" class="avatar">
-                <i v-else class="el-icon-plus avatar-uploader-icon"></i> -->
-                <el-button size="small" type="primary">点击上传</el-button>
-                <el-button v-if="registerForm.proxytestifypicpath" size="small" type="primary" @click="handlePictureCardPreview(registerForm.proxytestifypicpath)">上传成功，点击预览</el-button>
-              </el-upload>
-            </el-form-item>
-            <el-form-item label="食品安全认证：">
-              <el-upload
-                action="http://120.79.170.36/upload/"
-                list-type="text"
-                :show-file-list="false"
-                :on-success="handleFoodSafetySuccess"
-                :on-preview="handlePictureCardPreview"
-                :on-remove="handleRemove"
-                :before-upload="beforeAvatarUpload">
-                <!-- <img v-if="registerForm.foodsafetypicpath" :src="registerForm.foodsafetypicpath" class="avatar">
-                <i v-else class="el-icon-plus avatar-uploader-icon"></i> -->
-                <el-button size="small" type="primary">点击上传</el-button>
-                <el-button v-if="registerForm.foodsafetypicpath" size="small" type="primary" @click="handlePictureCardPreview(registerForm.foodsafetypicpath)">上传成功，点击预览</el-button>                
-              </el-upload>
-            </el-form-item>
-            <el-form-item label="食品流通许可：">
-              <el-upload
-                action="http://120.79.170.36/upload/"
-                list-type="text"
-                :show-file-list="false"
-                :on-success="handleFoodCirculationSuccess"
-                :on-preview="handlePictureCardPreview"
-                :on-remove="handleRemove"
-                :before-upload="beforeAvatarUpload">
-                <!-- <img v-if="registerForm.foodpathpicpath" :src="registerForm.foodpathpicpath" class="avatar">
-                <i v-else class="el-icon-plus avatar-uploader-icon"></i> -->
-                <el-button size="small" type="primary">点击上传</el-button>
-                <el-button v-if="registerForm.foodpathpicpath" size="small" type="primary" @click="handlePictureCardPreview(registerForm.foodpathpicpath)">上传成功，点击预览</el-button>                 
-              </el-upload>
-            </el-form-item>
-            <el-form-item label="其他：">
-              <el-upload
-                action="http://120.79.170.36/upload/"
-                list-type="picture-card"
-                :on-success="handleFoodOtherSuccess"
-                :on-preview="handlePictureCardPreview"
-                :on-remove="handleRemove"
-                :before-upload="beforeAvatarUpload">
-                <i class="el-icon-plus"></i>
-              </el-upload>
-            </el-form-item>
-          </el-form>
-          <br/>
+        <div class="part">
+          <h1>产品经营许可</h1>
+          <div class="con-box">
+            <div class="clearfix tr-con">
+              <div class="fl">
+                <el-row style="overflow: hidden;">
+                  <el-col class="text-r" :span="8">
+                    <p>企业性质:</p>
+                    <p>代理授权证明:</p>
+                    <p>其他资质证明:</p>
+                  </el-col>
+                  <el-col class="text-l" :span="16">
+                    <p>{{ registerForm.merchantKind === '1' ? '生产商' : registerForm.merchantKind === '2' ? '经销商' : '&nbsp;' }}</p>
+                    <p><el-button v-if="registerForm.proxytestifypicpath" size="mini" type="primary" @click="handlePictureCardPreview(registerForm.proxytestifypicpath)">点击预览</el-button></p>
+                    <p v-for="(item, index) in registerForm.foodotherpicpath" :key="index" >
+                      <el-button v-if="item" size="mini" type="primary" @click="handlePictureCardPreview(item)">点击预览</el-button>
+                    </p>
+                  </el-col>
+                </el-row>
+              </div>
+              <div class="fl">
+                <el-row style="overflow: hidden;">
+                  <el-col class="text-r" :span="8">
+                    <p>&nbsp;</p>
+                    <p>食品安全认证:</p>
+                    <p>&nbsp;</p>
+                  </el-col>
+                  <el-col class="text-l" :span="16">
+                    <p>&nbsp;</p>
+                    <p><el-button v-if="registerForm.foodsafetypicpath" size="mini" type="primary" @click="handlePictureCardPreview(registerForm.foodsafetypicpath)">点击预览</el-button></p>
+                    <p>&nbsp;</p>
+                  </el-col>
+                </el-row>
+              </div>
+              <div class="fl">
+                <el-row style="overflow: hidden;">
+                  <el-col class="text-r" :span="8">
+                    <p>&nbsp;</p>
+                    <p>食品流通许可:</p>
+                    <p>&nbsp;</p>
+                  </el-col>
+                  <el-col class="text-l" :span="16">
+                    <p>&nbsp;</p>
+                    <p><el-button v-if="registerForm.foodpathpicpath" size="mini" type="primary" @click="handlePictureCardPreview(registerForm.foodpathpicpath)">点击预览</el-button></p>
+                    <p>&nbsp;</p>
+                  </el-col>
+                </el-row>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div class="part">
@@ -411,7 +449,7 @@
                   <el-col class="text-l" :span="12">
                     <p>{{ registerForm.fax }}</p>
                     <p>{{ registerForm.zipCode ? registerForm.zipCode : '&nbsp;' }}</p>
-                    <p>{{ registerForm.ownershipType ? registerForm.ownershipType : '&nbsp;' }}</p>
+                    <p>{{ registerForm.ownershipType === '1' ? '国有企业' : registerForm.ownershipType === '2' ? '集体企业' : registerForm.ownershipType === '3' ? '私营企业' : registerForm.ownershipType === '4' ? '混合所有制企业' : '&nbsp;' }}</p>
                   </el-col>
                 </el-row>
               </div>
@@ -432,8 +470,6 @@
 </template>
 
 <script>
-  import RegionSelector from '@/components/RegionSelector/index'
-  import AddressSelector from '@/components/AddressSelector/index'
   import { getBusinessesDetail } from '@/api/businesses'
 
   export default {
@@ -513,34 +549,8 @@
             { num: '03', name: '', unit: '', origin: '', price: '', description: '', url: '' },
             { num: '04', name: '', unit: '', origin: '', price: '', description: '', url: '' }
           ]
-        },
-        registerRules: {
-          businessesName: [{ required: true, message: '请输入企业名称', trigger: 'blur' }],
-          locationCode: [{ required: true, message: '请选择地址', trigger: 'change' }],
-          address: [{ required: true, message: '请输入企业详细地址', trigger: 'blur' }],
-          legalName: [{ required: true, message: '请输入法人姓名', trigger: 'blur' }],
-          legalPaperType: [{ required: true, message: '请选择法人证件类型', trigger: 'change' }],
-          legalPaperNumber: [{ required: true, message: '请输入法人证件号码', trigger: 'blur' }],
-          relationPerson: [{ required: true, message: '请输入业务联系人', trigger: 'blur' }],
-          relationPhone: [{ required: true, message: '请输入业务联系人手机号码', trigger: 'blur' }],
-          sellPersonName: [{ required: true, message: '请输入售后联系人', trigger: 'blur' }],
-          sellPersonMobile: [{ required: true, message: '请输入售后电话', trigger: 'blur' }],
-          sellAddressListForm: [{ required: true, message: '请输入售后处理点', trigger: 'change' }],
-          financePersonName: [{ required: true, message: '请输入财务联系人', trigger: 'blur' }],
-          financePersonMobile: [{ required: true, message: '请输入财务手机', trigger: 'blur' }],
-          isInvoice: [{ required: true, message: '请选择能否开具发票', trigger: 'change' }],
-          businesslicenseNum: [{ required: true, message: '请输入营业执照号码', trigger: 'blur' }],
-          licencepicpath: [{ required: true, message: '请上传营业执照', trigger: 'change' }],
-          operatoridnum: [{ required: true, message: '请输入经办人身份证号码', trigger: 'blur' }],
-          sfzmpicpath: [{ required: true, message: '请上传经办人身份证正面', trigger: 'change' }],
-          sffmpicpath: [{ required: true, message: '请上传经办人身份证发面', trigger: 'change' }],
-          proxytestifypicpath: [{ required: true, message: '请上传代理授权证明', trigger: 'change' }]
         }
       }
-    },
-    components: {
-      RegionSelector,
-      AddressSelector
     },
     created() {
       this.getBusinessesInfo()
@@ -618,48 +628,6 @@
         }).catch(error => {
           this.$message.error(error)
         })
-      },
-      getLocationCode(locationInfo) {
-        this.registerForm.locationCode = locationInfo.id.toString()
-      },
-      getAddressInfo(addressInfo) {
-        return
-      },
-      beforeAvatarUpload(file) {
-        const isJPG = file.type === 'image/jpeg'
-        const isLt2M = file.size / 1024 / 1024 < 2
-
-        if (!isJPG) {
-          this.$message.error('上传头像图片只能是 JPG 格式!')
-        }
-        if (!isLt2M) {
-          this.$message.error('上传头像图片大小不能超过 2MB!')
-        }
-        return isJPG && isLt2M
-      },
-      handleLicenceSuccess(res, file) {
-        this.registerForm.licencepicpath = URL.createObjectURL(file.raw)
-      },
-      handleSfzmSuccess(res, file) {
-        this.registerForm.sfzmpicpath = URL.createObjectURL(file.raw)
-      },
-      handleSffmSuccess(res, file) {
-        this.registerForm.sffmpicpath = URL.createObjectURL(file.raw)
-      },
-      handleProxySuccess(res, file) {
-        this.registerForm.proxytestifypicpath = URL.createObjectURL(file.raw)
-      },
-      handleFoodSafetySuccess(res, file) {
-        this.registerForm.foodsafetypicpath = URL.createObjectURL(file.raw)
-      },
-      handleFoodCirculationSuccess(res, file) {
-        this.registerForm.foodpathpicpath = URL.createObjectURL(file.raw)
-      },
-      handleFoodOtherSuccess(res, file) {
-        this.registerForm.foodotherpicpath.push(URL.createObjectURL(file.raw))
-      },
-      handleRemove(file, fileList) {
-        console.log(file, fileList)
       },
       handlePictureCardPreview(file) {
         this.dialogImageUrl = file
