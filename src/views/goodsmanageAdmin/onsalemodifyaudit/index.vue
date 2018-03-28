@@ -38,7 +38,7 @@
         </el-table-column>
         <el-table-column label="审批状态" align="center">
           <template slot-scope="scope">
-              {{scope.row.applyStatus ==='1' ? '修改待审批':'暂无'}}
+              {{scope.row.applyStatus ==='1' ? '修改待审批':scope.row.applyStatus ==='2' ? '修改审核通过':scope.row.applyStatus ==='3' ? '修改审核驳回':'暂无'}}
           </template>
         </el-table-column>
         <el-table-column label="操作" align="center">

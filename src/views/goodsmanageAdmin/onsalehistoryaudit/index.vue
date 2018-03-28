@@ -2,20 +2,20 @@
   <div style="padding: 20px;">
     <el-form :inline="true" :model="searchForm" class="demo-form-inline">
       <el-form-item>
-        <el-input size="medium" v-model="searchForm.goodsName" placeholder="请输入商品名称"></el-input>
+        <el-input size="medium" v-model="searchForm.name" placeholder="请输入商品名称"></el-input>
       </el-form-item>
       <el-form-item>
         <el-input size="medium" v-model="searchForm.goodsCode" placeholder="请输入商品编码"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button size="medium" type="primary" @click="onSubmit">查询</el-button>
-        <el-button size="medium" type="primary" @click="onSubmit">重置</el-button>
+        <el-button size="medium" type="primary" @click="reset">重置</el-button>
       </el-form-item>
     </el-form>
     <div>
       <div class="goods-list">商品列表</div>
       <el-table :data="tableData" border style="width: 100%">
-        <el-table-column prop="goodsCode" label="商品编码" align="center"></el-table-column>
+        <el-table-column prop="goodsCode" width="140" label="商品编码" align="center"></el-table-column>
         <el-table-column prop="goodsName" label="名称" align="center"></el-table-column>
         <el-table-column prop="businessesName" label="商品类型" align="center"></el-table-column>
         <el-table-column prop="businessesName" label="所属商户" align="center"></el-table-column>
@@ -28,14 +28,10 @@
         </el-table-column>
         <el-table-column label="审批状态" align="center">
           <template slot-scope="scope">
-              {{scope.row.applyStatus ==='1' ? '修改待审批':'暂无'}}
+              {{scope.row.applyStatus ==='1' ? '修改待审批':scope.row.applyStatus ==='2' ? '修改审核通过':scope.row.applyStatus ==='3' ? '修改审核驳回':'暂无'}}              
           </template>
         </el-table-column>
-        <el-table-column label="审批意见" align="center">
-          <template slot-scope="scope">
-              <el-button type="text" size="small">审核</el-button>
-              <el-button @click="goPreview" type="text" size="small">预览</el-button>
-          </template>
+        <el-table-column prop="auditRemark" label="审批意见" align="center">
         </el-table-column>
       </el-table>
     </div>
@@ -60,7 +56,7 @@ export default {
   data() {
     return {
       searchForm: {
-        goodsName: '',
+        name: '',
         goodsCode: ''
       },
       tableData: [],
@@ -102,7 +98,14 @@ export default {
       }
     },
     onSubmit() {
-      console.log('test')
+      this.currentPage = 1
+      this._getHistoryApply(this.searchForm)
+    },
+    reset() {
+      this.searchForm = {
+        name: '',
+        goodsCode: ''
+      }
     }
   }
 }
