@@ -8,7 +8,7 @@
       <el-row :gutter="20">
         <el-col :span="8">
           <el-form-item label="手机号：" prop="phoneno">
-            <el-input v-model="userForm.phoneno" :maxlength=11 style="width: 220px;" placeholder="请输入手机号" :disabled="true"></el-input>
+            <el-input v-model="userForm.phoneno" :maxlength=11 style="width: 220px;" placeholder="请输入手机号"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="16" style="padding-top:8px">
@@ -192,7 +192,7 @@ export default {
       modifyPassword(params).then(response => {
         if (response.status === 200) {
           this.$message.success('修改密码成功！')
-          this.dialogVisible = true
+          this.dialogVisible = false
         } else {
           this.$message.error(response.msg)
         }

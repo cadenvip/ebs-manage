@@ -59,8 +59,8 @@
             <hr style="height:1px;border:none;border-top:1px dashed #0066CC;" />
             <el-form-item label="请选择企业性质：" prop="merchantKind">
               <el-radio-group v-model="registerForm.merchantKind">
-                <el-radio :label="1">生产商</el-radio>
-                <el-radio :label="2">经销商</el-radio>
+                <el-radio label="1">生产商</el-radio>
+                <el-radio label="2">经销商</el-radio>
               </el-radio-group>
             </el-form-item>
             <el-form-item v-show="registerForm.merchantKind === '2'" label="代理授权证明：" prop="proxytestifypicpath">
