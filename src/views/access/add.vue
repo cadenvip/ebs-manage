@@ -180,6 +180,7 @@ import { addAccess, getChanelList, getAllOperationList, getOperationList, getAll
 import { str2Timestamp } from '@/utils/index'
 import { validateMobilePhone, validateTelephone, validateURL } from '@/utils/validate'
 import PasswordStrength from '@/components/PasswordStrength/index'
+import { encryptPassword } from '@/utils/index'
 
 export default {
   data() {
@@ -449,8 +450,10 @@ export default {
             'interfaceIdList': interfaceIdList, // 接口id，通过调用接口interfaceList  得到，及时没有也要传一个空数组
             'operationIdList': operationIdList	 // 服务id，通过调用接口operationList 得到，及时没有也要传一个空数组
           }
+          params.accessBean.password = encryptPassword(params.accessBean.password)
           delete params.accessBean.repassword
           // TODO 时间格式转换
+          debugger
           if (params.accessBean.begin_time !== undefined && params.accessBean.begin_time !== '') {
             params.accessBean.begin_time = str2Timestamp(params.accessBean.begin_time)
           }

@@ -7,7 +7,7 @@
         <span class="svg-container svg-container_login">
           <svg-icon icon-class="user" />
         </span>
-        <el-input name="loginname" type="text" v-model="loginForm.loginname" placeholder="请输入手机号码" v-on:blur="getUnitids"/>
+        <el-input name="loginname" type="text" v-model="loginForm.loginname" placeholder="请输入账号" v-on:blur="getUnitids"/>
       </el-form-item>
       <el-form-item prop="unitid">
         <span class="svg-container svg-container_login">
@@ -55,6 +55,7 @@
 
 import { getVercode, getUnitInfos, getUnits } from '@/api/login'
 // import { validateMobilePhone } from '@/utils/validate'
+import { encryptPassword } from '@/utils/index'
 
 export default {
   data() {
@@ -99,7 +100,14 @@ export default {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           // 提供dispatch(action)方法更新state；
-          this.$store.dispatch('Login', this.loginForm).then(response => {
+          var loginParams = {
+            'loginname': this.loginForm.loginname,
+            'password': this.loginForm.password,
+            'unitid': this.loginForm.unitid,
+            'vercode': '123456'
+          }
+          loginParams.password = encryptPassword(loginParams.password)
+          this.$store.dispatch('Login', loginParams).then(response => {
             // 根据角色进入相应的首页
             if (response.data.role[0].roletype === '1') {
               this.$router.push({ path: '/home/ahome' })

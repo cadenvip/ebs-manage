@@ -22,7 +22,7 @@
           <el-col :span="8">
             <span class="col_r">
               <router-link :to="{ path: '/order/index', query: { tab: 'tab5' }}">
-                {{ homeInfo.orderNum !== null ? homeInfo.orderNum : '&nbsp;' }}
+                {{ homeInfo.orderNum !== null || homeInfo.orderNum !== undefined ? homeInfo.orderNum : '&nbsp;' }}
               </router-link>
             </span> 
           </el-col>

@@ -94,6 +94,7 @@
 import { updateUser, modifyPassword } from '@/api/user'
 import { validateEmail } from '@/utils/validate'
 import PasswordStrength from '@/components/PasswordStrength/index'
+import { encryptPassword } from '@/utils/index'
 
 export default {
   data() {
@@ -202,8 +203,8 @@ export default {
     confirmModify() {
       var params = {
         'userid': `${this.userForm.id}`,
-        'oldPassword': `${this.modifyPwdForm.opassword}`,
-        'newPassword': `${this.modifyPwdForm.password}`
+        'oldPassword': encryptPassword(this.modifyPwdForm.opassword),
+        'newPassword': encryptPassword(this.modifyPwdForm.password)
       }
       modifyPassword(params).then(response => {
         if (response.status === 200) {

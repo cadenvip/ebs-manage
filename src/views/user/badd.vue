@@ -99,6 +99,7 @@ import { addBusinessUser } from '@/api/user'
 // import { getAllRoles } from '@/api/role'
 import LocationSelector from '@/components/LocationSelector/index'
 import PasswordStrength from '@/components/PasswordStrength/index'
+import { encryptPassword } from '@/utils/index'
 import { validateMobilePhone, validateEmail } from '@/utils/validate'
 
 export default {
@@ -207,7 +208,7 @@ export default {
       this.$refs.userForm.validate(valid => {
         if (valid) {
           var params = { 'loginname': `${this.userForm.loginname}`,
-            'password': `${this.userForm.password}`,
+            'password': encryptPassword(this.userForm.password),
             'name': `${this.userForm.name}`,
             'phoneno': `${this.userForm.phoneno}`,
             'unitid': `${this.userForm.unitid}`,

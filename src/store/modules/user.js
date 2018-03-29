@@ -35,9 +35,9 @@ const user = {
 
   actions: {
     // 登录
-    Login({ commit }, userInfo) {
+    Login({ commit }, loginInfo) {
       return new Promise((resolve, reject) => {
-        login(userInfo).then(response => {
+        login(loginInfo).then(response => {
           if (response.status === 200) {
             // 此处将用户加密后的密码作为token
             const data = response.data

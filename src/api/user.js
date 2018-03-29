@@ -1,4 +1,5 @@
 import request from '@/utils/request'
+import { encryptPassword } from '@/utils/index'
 
 export function getAllUsers(currentpage, pagesize) {
   return request({
@@ -22,18 +23,7 @@ export function getUserList(userinfo, currentpage, pagesize) {
     }
   })
 }
-/*
-{
-    "address":"",
-    "email":"",
-    "locationid":"2606820000",
-    "loginname":"15800000001",
-    "phoneno":"15800000001",
-    "name":"bbbb",
-    "password":"123456",
-    "roleids":"1",
-}
-*/
+
 export function addUser(params) {
   return request({
     url: '/user/save',
@@ -54,7 +44,7 @@ export function resetUserPassword(params) {
   return request({
     url: '/user/update',
     method: 'post',
-    data: { 'id': `${params.id}`, 'password': '123456' }
+    data: { 'id': `${params.id}`, 'password': encryptPassword('123456') }
   })
 }
 
@@ -134,6 +124,6 @@ export function resetBusinessUserPassword(params) {
   return request({
     url: '/businesses/updateuser',
     method: 'post',
-    data: { 'id': `${params.id}`, 'password': '123456' }
+    data: { 'id': `${params.id}`, 'password': encryptPassword('123456') }
   })
 }

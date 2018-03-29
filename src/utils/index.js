@@ -1,3 +1,5 @@
+import JSEncrypt from 'jsencrypt'
+
 export function parseTime (time, cFormat) {
   if (arguments.length === 0) {
     return null
@@ -72,4 +74,17 @@ export function getUnitsOptions () {
     }
   }
   return unitsOptions
+}
+
+const publicKey = 'MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDAkMbtAysvfRui7QxlDx8z39WpIGOOMHxDf6qJyNDGZtsSRyu69IOBNn3rOz7eywJNMBTB4XswyWNnilUYmAGSH1gRz2UXk+MeXV4f7Osk7Ig5uRer1BBM91yfstQuwJFUFD6tUHVqmAc4Tt51dp/3E6BTvHc/lCH1W8blMitf2QIDAQAB'
+export function encryptPassword (password) {
+  var encryptedPassword = ''
+  if (password !== undefined && password !== null && password !== '') {
+    var encrypt = new JSEncrypt()
+    encrypt.setPublicKey(publicKey)
+    encryptedPassword = encrypt.encrypt(password)
+  } else {
+    console.log('password is null.')
+  }
+  return encryptedPassword
 }

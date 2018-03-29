@@ -5,12 +5,7 @@ export function login(params) {
   return request({
     url: '/login',
     method: 'post',
-    data: {
-      'loginname': params.loginname,
-      'password': params.password,
-      'unitid': params.unitid,
-      'vercode': '123456'
-    }
+    data: params
   })
 }
 

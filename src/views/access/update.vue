@@ -180,6 +180,7 @@ import { getAccessDetail, updateAccess, getChanelList, getAllOperationList, getO
 import { str2Timestamp } from '@/utils/index'// formatTime
 import { validateMobilePhone, validateTelephone, validateURL } from '@/utils/validate'
 import PasswordStrength from '@/components/PasswordStrength/index'
+import { encryptPassword } from '@/utils/index'
 
 export default {
   data() {
@@ -472,6 +473,7 @@ export default {
             'operationIdList': operationIdList	 // 服务id，通过调用接口operationList 得到，及时没有也要传一个空数组
           }
           params.accessBean.id = this.$route.query.id
+          params.accessBean.password = encryptPassword(params.accessBean.password)
           delete params.accessBean.repassword
           delete params.accessBean.status
           delete params.accessBean.create_time
