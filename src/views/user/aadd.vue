@@ -149,7 +149,7 @@ import { getBusinessesList } from '@/api/businesses'
 
 export default {
   data() {
-    var validateLoginname = (rule, value, callback) => {
+    var validateCellphone = (rule, value, callback) => {
       if (value === '') {
         callback(new Error('请输入手机号码'))
       } else {
@@ -213,7 +213,7 @@ export default {
       rules: {
         roletype: [{ required: true, message: '请选择类型', trigger: 'change' }],
         roleids: [{ required: true, message: '请选择角色', trigger: 'change' }],
-        phoneno: [{ required: true, trigger: 'blur', validator: validateLoginname }],
+        phoneno: [{ required: true, trigger: 'blur', validator: validateCellphone }],
         loginname: [{ required: true, message: '请输入账号', trigger: 'blur' }],
         password: [{ required: true, validator: validatePass, trigger: 'blur' }],
         repassword: [{ required: true, validator: validateRepass, trigger: 'blur' }],

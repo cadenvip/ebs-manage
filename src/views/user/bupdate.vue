@@ -85,14 +85,15 @@ import PasswordStrength from '@/components/PasswordStrength/index'
 
 export default {
   data() {
-    var validateLoginname = (rule, value, callback) => {
+    var validateCellphone = (rule, value, callback) => {
       if (value === '') {
         callback(new Error('请输入手机号码'))
       } else {
         if (!validateMobilePhone(value.trim())) {
           callback(new Error('请输入有效的手机号码'))
+        } else {
+          callback()
         }
-        callback()
       }
     }
     var validateMail = (rule, value, callback) => {
@@ -124,7 +125,7 @@ export default {
         loginname: [{ required: true, message: '请输入账号', trigger: 'blur' }],
         // roleids: [{ required: true, message: '请选择角色', trigger: 'change' }],
         name: [{ required: true, message: '请输入名称', trigger: 'blur' }],
-        phoneno: [{ required: true, trigger: 'blur', validator: validateLoginname }],
+        phoneno: [{ required: true, trigger: 'blur', validator: validateCellphone }],
         locationname: [{ required: true, message: '请选择归属区域', trigger: 'blur' }],
         unitname: [{ required: false, message: '请选输入单位', trigger: 'blur' }],
         email: [{ required: false, validator: validateMail, trigger: 'blur' }],

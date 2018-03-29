@@ -70,7 +70,7 @@
                   </el-col>
                   <el-col class="text-l" :span="16">
                     <p>{{ registerForm.sellPersonName }}</p>
-                    <p v-for="(item, index) in sellAddressListForm" :key="item.id">{{item.locationcode}} {{ item.selladdress }}</p>
+                    <p v-for="(item, index) in sellAddressListForm" :key="item.id">{{ item.locationName }} {{ item.selladdress }}</p>
                   </el-col>
                 </el-row>
               </div>
@@ -471,6 +471,7 @@
 
 <script>
   import { getBusinessesDetail } from '@/api/businesses'
+  import { getLocationInfoById } from '@/api/regionselecter'
 
   export default {
     data() {
@@ -574,7 +575,39 @@
           if (response.status === 200) {
             this.registerForm = response.data.businesses
             this.registerForm.locationCode = response.data.businesses.locationCode.toString()
+            if (this.registerForm.locationCode !== null && this.registerForm.locationName === null) {
+              getLocationInfoById(this.registerForm.locationCode).then(response => {
+                if (response.status === 200) {
+                  if (response.data.list.length > 0) {
+                    this.registerForm.locationName = response.data.list[0].locationName
+                  } else {
+                    this.$message.error('编码对应的区域不存在!')
+                  }
+                } else {
+                  this.$message.error(response.msg)
+                }
+              }).catch(error => {
+                this.$message.error(error)
+              })
+            }
             this.sellAddressListForm = response.data.sellAddresslist
+            if (this.sellAddressListForm.length > 0) {
+              this.sellAddressListForm.forEach(item => {
+                getLocationInfoById(item.locationcode).then(response => {
+                  if (response.status === 200) {
+                    if (response.data.list.length > 0) {
+                      item['locationName'] = response.data.list[0].locationName
+                    } else {
+                      this.$message.error('编码对应的区域不存在!')
+                    }
+                  } else {
+                    this.$message.error(response.msg)
+                  }
+                }).catch(error => {
+                  this.$message.error(error)
+                })
+              })
+            }
             this.registerForm.validdate_str = (response.data.businesses.validdate !== null ? response.data.businesses.validdate.substr(0, 10) : '')
             var goodsSamplelist = [{ num: '示例', name: '鱼香大米', unit: '5KG', origin: '重庆,西永', price: '￥250', description: '多种蛋白质、营养丰富、色泽光亮、颗粒饱满', url: 'http://detail.tmall.com/item.htm?spm=a230r.1.14.172.VhFL' }]
             switch (response.data.goodsSamplelist.length) {

@@ -58,7 +58,7 @@ import { getVercode, getUnitInfos, getUnits } from '@/api/login'
 
 export default {
   data() {
-    // var validateLoginname = (rule, value, callback) => {
+    // var validateCellphone = (rule, value, callback) => {
     //   if (value === '') {
     //     callback(new Error('请输入手机号码'))
     //   } else {
@@ -77,7 +77,7 @@ export default {
         vercode: ''
       },
       loginRules: {
-        // loginname: [{ required: true, trigger: 'blur', validator: validateLoginname }],
+        // loginname: [{ required: true, trigger: 'blur', validator: validateCellphone }],
         loginname: [{ required: true, trigger: 'blur', message: '请输入账号' }],
         password: [{ required: true, trigger: 'blur', message: '请输入密码' }],
         unitid: [{ required: true, trigger: 'change', message: '请选择归属单位' }],

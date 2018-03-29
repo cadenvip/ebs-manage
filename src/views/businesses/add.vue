@@ -469,15 +469,19 @@
         } else {
           if (!validateMobilePhone(value.trim())) {
             callback(new Error('请输入有效的手机号码'))
+          } else {
+            callback()
           }
-          callback()
         }
       }
       var validateMail = (rule, value, callback) => {
-        if (value !== '') {
+        if (value !== null && value !== '') {
           if (!validateEmail(value.trim())) {
             callback(new Error('请输入有效的邮箱地址'))
+          } else {
+            callback()
           }
+        } else {
           callback()
         }
       }
@@ -487,8 +491,9 @@
         } else {
           if (!validateID(value.trim())) {
             callback(new Error('请输入有效的身份证号码'))
+          } else {
+            callback()
           }
-          callback()
         }
       }
       return {

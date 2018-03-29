@@ -103,7 +103,7 @@ import { validateMobilePhone, validateEmail } from '@/utils/validate'
 
 export default {
   data() {
-    var validateLoginname = (rule, value, callback) => {
+    var validateCellphone = (rule, value, callback) => {
       if (value === '') {
         callback(new Error('请输入手机号码'))
       } else {
@@ -163,7 +163,7 @@ export default {
       },
       rules: {
         // roleids: [{ required: true, message: '请选择角色', trigger: 'change' }],
-        phoneno: [{ required: true, trigger: 'blur', validator: validateLoginname }],
+        phoneno: [{ required: true, trigger: 'blur', validator: validateCellphone }],
         loginname: [{ required: true, message: '请输入账号', trigger: 'blur' }],
         password: [{ required: true, validator: validatePass, trigger: 'blur' }],
         repassword: [{ required: true, validator: validateRepass, trigger: 'blur' }],

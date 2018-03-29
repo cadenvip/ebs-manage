@@ -71,6 +71,7 @@
         </el-form-item>
         <el-form-item label="新密码：" prop="password">
           <el-input type="password" v-model="modifyPwdForm.password" :minlength=8 style="width: 220px;" placeholder="请输入新密码"></el-input>
+          <PasswordStrength :password="modifyPwdForm.password" @pwdInfo="getPwdInfo"></PasswordStrength>
         </el-form-item>          
         <el-form-item label="确认新密码：" prop="repassword">
           <el-input type="password" v-model="modifyPwdForm.repassword" :minlength=8 style="width: 220px;" placeholder="请再次输入新密码"></el-input>
@@ -92,6 +93,7 @@
 <script>
 import { updateUser, modifyPassword } from '@/api/user'
 import { validateEmail } from '@/utils/validate'
+import PasswordStrength from '@/components/PasswordStrength/index'
 
 export default {
   data() {
@@ -99,10 +101,14 @@ export default {
       if (value === '') {
         callback(new Error('请输入密码'))
       } else {
-        if (this.modifyPwdForm.repassword !== '') {
+        if (this.modifyPwdForm.password.length < 8) {
+          callback(new Error('请密码长度不足8位'))
+        } else if (this.pwdInfo.score < 4) {
+          callback(new Error('请密码强度不够'))
+        } else if (this.modifyPwdForm.repassword !== '') {
           this.$refs.modifyPwdForm.validateField('repassword')
+          callback()
         }
-        callback()
       }
     }
     var validateRepass = (rule, value, callback) => {
@@ -118,7 +124,10 @@ export default {
       if (value !== null && value !== '') {
         if (!validateEmail(value.trim())) {
           callback(new Error('请输入有效的邮箱地址'))
+        } else {
+          callback()
         }
+      } else {
         callback()
       }
     }
@@ -133,11 +142,6 @@ export default {
         email: '',
         address: ''
       },
-      modifyPwdForm: {
-        opassword: '',
-        password: '',
-        repassword: ''
-      },
       dialogVisible: false,
       userRules: {
         loginname: [{ required: true, message: '请输入账号', trigger: 'blur' }],
@@ -147,12 +151,21 @@ export default {
         email: [{ required: false, validator: validateMail, trigger: 'blur' }],
         address: [{ required: false, message: '请输入地址', trigger: 'blur' }]
       },
+      modifyPwdForm: {
+        opassword: '',
+        password: '',
+        repassword: ''
+      },
       modifyPwdRules: {
         opassword: [{ required: true, message: '请输入原密码', trigger: 'blur' }],
         password: [{ required: true, validator: validatePass, trigger: 'blur' }],
         repassword: [{ required: true, validator: validateRepass, trigger: 'blur' }]
-      }
+      },
+      pwdInfo: {}
     }
+  },
+  components: {
+    PasswordStrength
   },
   created() {
     var userInfo = window.sessionStorage.getItem('userInfo')
@@ -162,6 +175,9 @@ export default {
     }
   },
   methods: {
+    getPwdInfo(data) {
+      this.pwdInfo = data
+    },
     onSubmit() {
       if (this.userForm.name === undefined || this.userForm.name === null || this.userForm.name === '') {
         this.$message.error('请输入姓名！')
