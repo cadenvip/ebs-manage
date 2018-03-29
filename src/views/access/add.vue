@@ -128,7 +128,7 @@
           </el-row>
         </el-form>
         <br/>
-        <el-table :data="operationList" ref="operationTable" :row-key="getOpRowKey" tooltip-effect="dark" @selection-change="opSelectionChange">
+        <el-table :data="operationList" ref="operationTable" :row-key="getOpRowKey" tooltip-effect="dark" @selection-change="opSelectionChange" border stripe fit highlight-current-row>
           <el-table-column type="selection" :reserve-selection="true" width="40"></el-table-column>
           <el-table-column label='业务名称' prop="operationname" width="160" align="center"></el-table-column>
           <el-table-column label="业务编号" prop="operationcode" width="140" align="center"></el-table-column>
@@ -159,7 +159,7 @@
           </el-row>
         </el-form>
         <br/>
-        <el-table :data="interfaceList" ref="interfaceTable" :row-key="getInRowKey" tooltip-effect="dark" @selection-change="inSelectionChange">
+        <el-table :data="interfaceList" ref="interfaceTable" :row-key="getInRowKey" tooltip-effect="dark" @selection-change="inSelectionChange" border stripe fit highlight-current-row>
           <el-table-column type="selection" :reserve-selection="true" width="40"></el-table-column>
           <el-table-column label="接口名称" prop="inter_name" width="200" align="center"></el-table-column>
           <el-table-column label="接口方法" prop="inter_method" width="200" align="center"></el-table-column>

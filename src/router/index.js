@@ -90,7 +90,7 @@ export const asyncRouterMap = [
         path: 'user/alist',
         name: 'useralist',
         component: _import('user/alist'),
-        meta: { roles: ['1'], title: '人员管理', icon: 'table' }
+        meta: { roles: ['1'], title: '人员管理', icon: 'user' }
       },
       {
         path: 'user/aadd',
@@ -325,7 +325,7 @@ export const asyncRouterMap = [
         path: 'blist',
         name: 'userblist',
         component: _import('user/blist'),
-        meta: { roles: ['2', '3'], title: '人员管理', icon: 'table' }
+        meta: { roles: ['2', '3'], title: '人员管理', icon: 'user' }
       },
       {
         path: 'badd',

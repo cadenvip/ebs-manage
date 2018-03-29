@@ -135,7 +135,7 @@
         </el-row>
       </el-form>
       <br/>
-      <el-table :data="allOrderList" ref="allOrderTable" tooltip-effect="dark" @selection-change="allOrderSelectionChange">
+      <el-table :data="allOrderList" ref="allOrderTable" tooltip-effect="dark" @selection-change="allOrderSelectionChange" border stripe fit highlight-current-row>
         <el-table-column type="selection" width="40"></el-table-column>
         <!-- <el-table-column type="selection" :reserve-selection="true" width="40"></el-table-column> -->
         <el-table-column label='订单编号' prop="orderCode" width="120" align="center"></el-table-column>
