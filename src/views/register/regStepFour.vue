@@ -1,6 +1,6 @@
 <template>
   <el-container>
-  <Regheader></Regheader>
+    <Regheader></Regheader>
     <el-container style="width:1000px;margin:0 auto 20px">
       <el-header style="margin-top:20px">
         <el-steps :active="3" simple>
@@ -31,20 +31,22 @@
 
   export default {
     data() {
-      return {
-      }
+      return {}
     },
     components: {
       Regheader,
       Regfooter
     },
-    mounted () {
+    mounted() {
       window.localStorage.removeItem('registerInfo')
     },
     methods: {
       goLogin() {
-        this.$router.push({ path: '/login' })
+        this.$router.push({
+          path: '/login'
+        })
       }
     }
   }
+
 </script>

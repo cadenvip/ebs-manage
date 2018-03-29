@@ -12,85 +12,94 @@
       </span>
     </div>
     <div style="text-align: center">
-      <el-button @click="goback" type="primary" >返回</el-button>        
+      <el-button @click="goback" type="primary">返回</el-button>
     </div>
   </div>
 </template>
 
 <script>
+  import {
+    getThisYearAllBill,
+    getHistoryBillsList,
+    downloadBill
+  } from '@/api/finance'
+  // import { getAllBills, getHistoryBill, downloadBill } from '@/api/finance'
 
-import { getThisYearAllBill, getHistoryBillsList, downloadBill } from '@/api/finance'
-// import { getAllBills, getHistoryBill, downloadBill } from '@/api/finance'
-
-export default {
-  data() {
-    return {
-      billList: [],
-      historyBillList: [],
-      loading: false
-    }
-  },
-  created() {
-    this.initBillList()
-  },
-  methods: {
-    initBillList() {
-      this.loading = true
-      getThisYearAllBill().then(response => {
-        if (response.status === 200) {
-          this.billList = response.data
-        } else {
-          this.$message.error(response.msg)
-        }
-        this.loading = false
-      }).catch(error => {
-        this.loading = false
-        this.$message.error(error)
-      })
-      getHistoryBillsList().then(response => {
-        if (response.status === 200) {
-          this.historyBillList = response.data
-        } else {
-          this.$message.error(response.msg)
-        }
-        this.loading = false
-      }).catch(error => {
-        this.loading = false
-        this.$message.error(error)
-      })
-    },
-    formatYearMonth(bill) {
-      const billmonth = bill.billmonth.toString()
-      if (billmonth !== undefined) {
-        return billmonth.substr(0, 4) + '年' + billmonth.substr(4, 2) + '月'
-      } else {
-        return '年' + '月'
+  export default {
+    data() {
+      return {
+        billList: [],
+        historyBillList: [],
+        loading: false
       }
     },
-    chechMonthBillDetail(bill) {
-      this.$router.push({ path: '/finance/detail', query: { id: bill.id }})
+    created() {
+      this.initBillList()
     },
-    downloadMonthBill(bill) {
-      downloadBill(bill, 1).then(response => {
-        if (response.status === 200) {
-          this.$message.success('下载成功')
+    methods: {
+      initBillList() {
+        this.loading = true
+        getThisYearAllBill().then(response => {
+          if (response.status === 200) {
+            this.billList = response.data
+          } else {
+            this.$message.error(response.msg)
+          }
+          this.loading = false
+        }).catch(error => {
+          this.loading = false
+          this.$message.error(error)
+        })
+        getHistoryBillsList().then(response => {
+          if (response.status === 200) {
+            this.historyBillList = response.data
+          } else {
+            this.$message.error(response.msg)
+          }
+          this.loading = false
+        }).catch(error => {
+          this.loading = false
+          this.$message.error(error)
+        })
+      },
+      formatYearMonth(bill) {
+        const billmonth = bill.billmonth.toString()
+        if (billmonth !== undefined) {
+          return billmonth.substr(0, 4) + '年' + billmonth.substr(4, 2) + '月'
         } else {
-          this.$message.error(response.msg)
+          return '年' + '月'
         }
-      })
-    },
-    downloadHistoryMonthBill(bill) {
-      downloadBill(bill, 0).then(response => {
-        if (response.status === 200) {
-          this.$message.success('下载成功')
-        } else {
-          this.$message.error(response.msg)
-        }
-      })
-    },
-    goback() {
-      this.$router.go(-1)
+      },
+      chechMonthBillDetail(bill) {
+        this.$router.push({
+          path: '/finance/detail',
+          query: {
+            id: bill.id
+          }
+        })
+      },
+      downloadMonthBill(bill) {
+        downloadBill(bill, 1).then(response => {
+          if (response.status === 200) {
+            this.$message.success('下载成功')
+          } else {
+            this.$message.error(response.msg)
+          }
+        })
+      },
+      downloadHistoryMonthBill(bill) {
+        downloadBill(bill, 0).then(response => {
+          if (response.status === 200) {
+            this.$message.success('下载成功')
+          } else {
+            this.$message.error(response.msg)
+          }
+        })
+      },
+      goback() {
+        this.$router.go(-1)
+      }
     }
   }
-}
+
 </script>

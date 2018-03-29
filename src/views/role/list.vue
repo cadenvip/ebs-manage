@@ -6,7 +6,7 @@
         <el-col :span="10">
           <el-form-item label="角色名称：">
             <el-input v-model="searchForm.rolename" style="width: 300px;" placeholder="请输入角色名称"></el-input>
-          </el-form-item>  
+          </el-form-item>
         </el-col>
         <el-col :span="10">
           <el-form-item label="是否系统角色：">
@@ -14,7 +14,7 @@
               <el-option label="是" value="1"></el-option>
               <el-option label="否" value="0"></el-option>
             </el-select>
-          </el-form-item>  
+          </el-form-item>
         </el-col>
       </el-row>
       <el-row>
@@ -24,7 +24,7 @@
               <el-option label="管理角色" value="1"></el-option>
               <el-option label="商家角色" value="3"></el-option>
             </el-select>
-          </el-form-item>  
+          </el-form-item>
         </el-col>
         <el-col :span="10">
           <el-form-item label="是否隐藏角色：">
@@ -32,7 +32,7 @@
               <el-option label="是" value="1"></el-option>
               <el-option label="否" value="0"></el-option>
             </el-select>
-          </el-form-item>  
+          </el-form-item>
         </el-col>
       </el-row>
       <el-row>
@@ -60,152 +60,163 @@
       <el-table-column label="角色描述" prop="description" width="200" align="center">
       </el-table-column>
       <el-table-column label="操作" width="190" align="center">
-      <template slot-scope="scope">
-        <el-button @click="detail(scope.row)" type="text" size="small">详细</el-button>
-        <el-button @click="updateRole(scope.row)" type="text" size="small">修改</el-button>
-        <el-button @click="deleteRole(scope.row)" type="text" size="small">删除</el-button>
-      </template>
+        <template slot-scope="scope">
+          <el-button @click="detail(scope.row)" type="text" size="small">详细</el-button>
+          <el-button @click="updateRole(scope.row)" type="text" size="small">修改</el-button>
+          <el-button @click="deleteRole(scope.row)" type="text" size="small">删除</el-button>
+        </template>
       </el-table-column>
     </el-table>
     <div class="block" align="right" style="padding-right:20px">
-      <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        layout="total, sizes, prev, pager, next, jumper"
-        :current-page="currentPage"
-        :page-sizes="pagesizes"
-        :page-size="pagesize"
-        :total="total">
+      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" layout="total, sizes, prev, pager, next, jumper"
+        :current-page="currentPage" :page-sizes="pagesizes" :page-size="pagesize" :total="total">
       </el-pagination>
     </div>
   </div>
 </template>
 
 <script>
-import { getAllRoles, getRoleList, deleteRole } from '@/api/role'
+  import {
+    getAllRoles,
+    getRoleList,
+    deleteRole
+  } from '@/api/role'
 
-export default {
-  data() {
-    return {
-      list: [],
-      searchForm: {
-        rolename: '',
-        issystem: '',
-        roletype: '',
-        ishidden: ''
-      },
-      pagesizes: [10, 20, 30, 50],
-      pagesize: 10,
-      currentPage: 1,
-      total: 0,
-      loading: true
-    }
-  },
-  created() {
-    this.initRoleList()
-  },
-  methods: {
-    queryRoleList() {
-      this.loading = true
-      getRoleList(this.searchForm, this.currentPage, this.pagesize).then(response => {
-        if (response.status === 200) {
-          this.list = response.data.list
-          this.total = response.data.total
-        } else {
-          this.$message.error(response.msg)
-        }
-        this.loading = false
-      }).catch(error => {
-        this.loading = false
-        this.$message.error(error)
-      })
+  export default {
+    data() {
+      return {
+        list: [],
+        searchForm: {
+          rolename: '',
+          issystem: '',
+          roletype: '',
+          ishidden: ''
+        },
+        pagesizes: [10, 20, 30, 50],
+        pagesize: 10,
+        currentPage: 1,
+        total: 0,
+        loading: true
+      }
     },
-    addRole() {
-      this.$router.push({ path: '/system/role/add' })
+    created() {
+      this.initRoleList()
     },
-    initRoleList() {
-      this.loading = true
-      getAllRoles(this.currentPage, this.pagesize).then(response => {
-        if (response.status === 200) {
-          this.list = response.data.list
-          this.total = response.data.total
-        } else {
-          this.$message.error(response.msg)
-        }
-        this.loading = false
-      }).catch(error => {
-        this.loading = false
-        this.$message.error(error)
-      })
-    },
-    updateRole(role) {
-      this.$router.push({ path: '/system/role/update', query: { id: role.id }})
-    },
-    deleteRole(role) {
-      this.$confirm(`您确定删除名称为[${role.rolename}]的角色吗, 是否继续?`, '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        deleteRole(role.id).then(response => {
+    methods: {
+      queryRoleList() {
+        this.loading = true
+        getRoleList(this.searchForm, this.currentPage, this.pagesize).then(response => {
           if (response.status === 200) {
-          // 页面删除处理
-            var index = this.list.indexOf(role)
-            if (index > -1) {
-              this.list.splice(index, 1)
-            }
-            this.$message.success('删除成功!')
+            this.list = response.data.list
+            this.total = response.data.total
           } else {
             this.$message.error(response.msg)
           }
-        }).catch(() => {
-          this.$message.error('删除失败')
+          this.loading = false
+        }).catch(error => {
+          this.loading = false
+          this.$message.error(error)
         })
-      }).catch(() => {
-        this.$message.info('已取消删除')
-      })
-    },
-    detail(role) {
-      this.$router.push({ path: '/system/role/detail', query: { id: role.id }})
-    },
-    resetForm(formname) {
-      // this.$refs[formname].resetFields()
-      this.searchForm.rolename = ''
-      this.searchForm.issystem = ''
-      this.searchForm.roletype = ''
-      this.searchForm.ishidden = ''
-    },
-    handleSizeChange(val) {
-      this.pagesize = val
-      this.queryRoleList()
-    },
-    handleCurrentChange(val) {
-      this.currentPage = val
-      this.queryRoleList()
-    },
-    transformIsSystem(row, column, cellValue) {
-      if (cellValue === '1') {
-        return '是'
-      } else {
-        return '否'
-      }
-    },
-    transformIsHidden(row, column, cellValue) {
-      if (cellValue === '1') {
-        return '是'
-      } else {
-        return '否'
-      }
-    },
-    transformRoleType(row, column, cellValue) {
-      if (cellValue === '1') {
-        return '管理角色'
-      } else if (cellValue === '2' || cellValue === '3') {
-        return '商家角色'
-      } else {
-        return ''
+      },
+      addRole() {
+        this.$router.push({
+          path: '/system/role/add'
+        })
+      },
+      initRoleList() {
+        this.loading = true
+        getAllRoles(this.currentPage, this.pagesize).then(response => {
+          if (response.status === 200) {
+            this.list = response.data.list
+            this.total = response.data.total
+          } else {
+            this.$message.error(response.msg)
+          }
+          this.loading = false
+        }).catch(error => {
+          this.loading = false
+          this.$message.error(error)
+        })
+      },
+      updateRole(role) {
+        this.$router.push({
+          path: '/system/role/update',
+          query: {
+            id: role.id
+          }
+        })
+      },
+      deleteRole(role) {
+        this.$confirm(`您确定删除名称为[${role.rolename}]的角色吗, 是否继续?`, '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          deleteRole(role.id).then(response => {
+            if (response.status === 200) {
+              // 页面删除处理
+              var index = this.list.indexOf(role)
+              if (index > -1) {
+                this.list.splice(index, 1)
+              }
+              this.$message.success('删除成功!')
+            } else {
+              this.$message.error(response.msg)
+            }
+          }).catch(() => {
+            this.$message.error('删除失败')
+          })
+        }).catch(() => {
+          this.$message.info('已取消删除')
+        })
+      },
+      detail(role) {
+        this.$router.push({
+          path: '/system/role/detail',
+          query: {
+            id: role.id
+          }
+        })
+      },
+      resetForm(formname) {
+        // this.$refs[formname].resetFields()
+        this.searchForm.rolename = ''
+        this.searchForm.issystem = ''
+        this.searchForm.roletype = ''
+        this.searchForm.ishidden = ''
+      },
+      handleSizeChange(val) {
+        this.pagesize = val
+        this.queryRoleList()
+      },
+      handleCurrentChange(val) {
+        this.currentPage = val
+        this.queryRoleList()
+      },
+      transformIsSystem(row, column, cellValue) {
+        if (cellValue === '1') {
+          return '是'
+        } else {
+          return '否'
+        }
+      },
+      transformIsHidden(row, column, cellValue) {
+        if (cellValue === '1') {
+          return '是'
+        } else {
+          return '否'
+        }
+      },
+      transformRoleType(row, column, cellValue) {
+        if (cellValue === '1') {
+          return '管理角色'
+        } else if (cellValue === '2' || cellValue === '3') {
+          return '商家角色'
+        } else {
+          return ''
+        }
       }
     }
   }
-}
+
 </script>

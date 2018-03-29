@@ -1,7 +1,13 @@
 import axios from 'axios'
-import { Message, MessageBox } from 'element-ui'
+import {
+  Message,
+  MessageBox
+} from 'element-ui'
 import store from '../store'
-import { getToken, getSessionid } from '@/utils/auth'
+import {
+  getToken,
+  getSessionid
+} from '@/utils/auth'
 
 // 创建axios实例
 const service = axios.create({
@@ -77,7 +83,11 @@ error => {
       })
     }
   } else {
-    Message({ message: error.message, type: 'error', duration: 5 * 1000 })
+    Message({
+      message: error.message,
+      type: 'error',
+      duration: 5 * 1000
+    })
   }
   return Promise.reject(error)
 })

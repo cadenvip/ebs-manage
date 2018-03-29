@@ -2,7 +2,7 @@
   <div>
     <h3 style="padding-left: 20px;">关键词查询条件</h3>
     <el-form ref="searchForm" :model="searchForm" label-width="100px" class="demo-ruleForm">
-      <el-form-item label="关键词：" >
+      <el-form-item label="关键词：">
         <el-input v-model="searchForm.keyword" clearable style="width: 300px;"></el-input>
       </el-form-item>
       <el-row>
@@ -28,102 +28,103 @@
       </el-table-column>
     </el-table>
     <div class="block" align="right" style="padding-right:20px">
-      <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        layout="total, sizes, prev, pager, next, jumper"
-        :current-page="currentPage"
-        :page-sizes="pagesizes"
-        :page-size="pagesize"
-        :total="total">
+      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" layout="total, sizes, prev, pager, next, jumper"
+        :current-page="currentPage" :page-sizes="pagesizes" :page-size="pagesize" :total="total">
       </el-pagination>
     </div>
   </div>
 </template>
 
 <script>
-import { getAllSensitives, getSensitiveList, deleteSensitive } from '@/api/sensitive'
+  import {
+    getAllSensitives,
+    getSensitiveList,
+    deleteSensitive
+  } from '@/api/sensitive'
 
-export default {
-  data() {
-    return {
-      list: [],
-      searchForm: {
-        keyword: ''
-      },
-      pagesizes: [10, 20, 30, 50],
-      pagesize: 10,
-      currentPage: 1,
-      total: 0,
-      loading: true
-    }
-  },
-  created() {
-    this.initSensitiveList()
-  },
-  methods: {
-    querySensitiveList() {
-      this.loading = true
-      getSensitiveList(this.searchForm.keyword, this.currentPage, this.pagesize).then(response => {
-        if (response.status === 200) {
-          this.list = response.data.list
-          this.total = response.data.total
-        } else {
-          this.$message.error(response.msg)
-        }
-        this.loading = false
-      }).catch(error => {
-        this.loading = false
-        this.$message.error(error)
-      })
+  export default {
+    data() {
+      return {
+        list: [],
+        searchForm: {
+          keyword: ''
+        },
+        pagesizes: [10, 20, 30, 50],
+        pagesize: 10,
+        currentPage: 1,
+        total: 0,
+        loading: true
+      }
     },
-    addSensitive() {
-      this.$router.push({ path: '/system/sensitive/add' })
+    created() {
+      this.initSensitiveList()
     },
-    initSensitiveList() {
-      this.loading = true
-      getAllSensitives(this.currentPage, this.pagesize).then(response => {
-        if (response.status === 200) {
-          this.list = response.data.list
-          this.total = response.data.total
-        } else {
-          this.$message.error(response.msg)
-        }
-        this.loading = false
-      }).catch(error => {
-        this.loading = false
-        this.$message.error(error)
-      })
-    },
-    deleteSensitive(sensitive) {
-      this.$confirm(`您确定删除吗, 是否继续?`, '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        deleteSensitive(sensitive.id).then(response => {
+    methods: {
+      querySensitiveList() {
+        this.loading = true
+        getSensitiveList(this.searchForm.keyword, this.currentPage, this.pagesize).then(response => {
           if (response.status === 200) {
-            this.$message.success('删除成功!')
-            this.querySensitiveList()
+            this.list = response.data.list
+            this.total = response.data.total
           } else {
             this.$message.error(response.msg)
           }
+          this.loading = false
+        }).catch(error => {
+          this.loading = false
+          this.$message.error(error)
         })
-      }).catch(() => {
-        this.$message.info('已取消删除')
-      })
-    },
-    resetForm(formname) {
-      this.searchForm.keyword = ''
-    },
-    handleSizeChange(val) {
-      this.pagesize = val
-      this.querySensitiveList()
-    },
-    handleCurrentChange(val) {
-      this.currentPage = val
-      this.querySensitiveList()
+      },
+      addSensitive() {
+        this.$router.push({
+          path: '/system/sensitive/add'
+        })
+      },
+      initSensitiveList() {
+        this.loading = true
+        getAllSensitives(this.currentPage, this.pagesize).then(response => {
+          if (response.status === 200) {
+            this.list = response.data.list
+            this.total = response.data.total
+          } else {
+            this.$message.error(response.msg)
+          }
+          this.loading = false
+        }).catch(error => {
+          this.loading = false
+          this.$message.error(error)
+        })
+      },
+      deleteSensitive(sensitive) {
+        this.$confirm(`您确定删除吗, 是否继续?`, '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          deleteSensitive(sensitive.id).then(response => {
+            if (response.status === 200) {
+              this.$message.success('删除成功!')
+              this.querySensitiveList()
+            } else {
+              this.$message.error(response.msg)
+            }
+          })
+        }).catch(() => {
+          this.$message.info('已取消删除')
+        })
+      },
+      resetForm(formname) {
+        this.searchForm.keyword = ''
+      },
+      handleSizeChange(val) {
+        this.pagesize = val
+        this.querySensitiveList()
+      },
+      handleCurrentChange(val) {
+        this.currentPage = val
+        this.querySensitiveList()
+      }
     }
   }
-}
+
 </script>

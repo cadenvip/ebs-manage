@@ -1,18 +1,11 @@
 <template>
   <div class="Authenticater" style="margin-left: 30px;margin-top:30px">
     <h3 class="title">授权管理</h3>
-    <el-tree
-      :data="data"
-      show-checkbox
-      node-key="id"
-      :highlight-current="true"
-      :default-expand-all="false"
-      :props="defaultProps"
-      v-loading="loading"
-      ref="tree">
+    <el-tree :data="data" show-checkbox node-key="id" :highlight-current="true" :default-expand-all="false" :props="defaultProps"
+      v-loading="loading" ref="tree">
     </el-tree>
     <br/>
-    <div class="buttons" >
+    <div class="buttons">
       <!-- <el-button type="primary" @click="getCheckedNodes">提交</el-button> -->
       <el-button type="primary" @click="submitSelected">提交</el-button>
       <el-button type="primary" @click="resetChecked">清空</el-button>
@@ -22,7 +15,10 @@
 
 <script>
   // import store from '../../store'
-  import { getAllResources, givePermission } from '@/api/authentication'
+  import {
+    getAllResources,
+    givePermission
+  } from '@/api/authentication'
 
   export default {
     data() {
@@ -40,7 +36,7 @@
         loading: false
       }
     },
-    mounted () {
+    mounted() {
       this.getAllPermissions()
     },
     methods: {
@@ -69,7 +65,11 @@
             })
             // 整理数据
             // 如果有id=-1的根目录，则删除
-            this.data = this.list2Tree(this.aliveResources, { 'idKey': 'id', 'parentKey': 'parentid', 'childrenKey': 'children' })
+            this.data = this.list2Tree(this.aliveResources, {
+              'idKey': 'id',
+              'parentKey': 'parentid',
+              'childrenKey': 'children'
+            })
             // 设置选中
             this.$refs.tree.setCheckedKeys(this.defaultCheckedKeys)
           } else {
@@ -124,7 +124,10 @@
           }
           if (j === checkedKeys.length) {
             // 选中变为未选中
-            changedKeys.push({ 'id': `${this.defaultCheckedKeys[i]}`, 'status': '1' })
+            changedKeys.push({
+              'id': `${this.defaultCheckedKeys[i]}`,
+              'status': '1'
+            })
           }
         }
         for (let i = 0; i < checkedKeys.length; i++) {
@@ -136,13 +139,19 @@
           }
           if (j === this.defaultCheckedKeys.length) {
             // 未选中变为选中
-            changedKeys.push({ 'id': `${checkedKeys[i]}`, 'status': '0' })
+            changedKeys.push({
+              'id': `${checkedKeys[i]}`,
+              'status': '0'
+            })
           }
         }
         // 提交状态变化的项
         givePermission(changedKeys).then(response => {
           if (response.status === 200) {
-            this.$message({ type: 'success', message: '授权成功!' })
+            this.$message({
+              type: 'success',
+              message: '授权成功!'
+            })
             // 更新
             this.defaultCheckedKeys = checkedKeys
           } else {
@@ -157,4 +166,5 @@
       }
     }
   }
+
 </script>

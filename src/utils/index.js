@@ -1,6 +1,6 @@
 import JSEncrypt from 'jsencrypt'
 
-export function parseTime (time, cFormat) {
+export function parseTime(time, cFormat) {
   if (arguments.length === 0) {
     return null
   }
@@ -33,7 +33,7 @@ export function parseTime (time, cFormat) {
   return time_str
 }
 
-export function formatTime (time, option) {
+export function formatTime(time, option) {
   time = +time * 1000
   const d = new Date(time)
   const now = Date.now()
@@ -56,12 +56,12 @@ export function formatTime (time, option) {
   }
 }
 
-export function str2Timestamp (strDatetime) {
+export function str2Timestamp(strDatetime) {
   var d = new Date(strDatetime)
   return Math.round(d.getTime())
 }
 
-export function getUnitsOptions () {
+export function getUnitsOptions() {
   const Units = JSON.parse(window.localStorage.getItem('units'))
   var unitsOptions = []
   if (Units) {
@@ -77,7 +77,7 @@ export function getUnitsOptions () {
 }
 
 const publicKey = 'MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDAkMbtAysvfRui7QxlDx8z39WpIGOOMHxDf6qJyNDGZtsSRyu69IOBNn3rOz7eywJNMBTB4XswyWNnilUYmAGSH1gRz2UXk+MeXV4f7Osk7Ig5uRer1BBM91yfstQuwJFUFD6tUHVqmAc4Tt51dp/3E6BTvHc/lCH1W8blMitf2QIDAQAB'
-export function encryptPassword (password) {
+export function encryptPassword(password) {
   var encryptedPassword = ''
   if (password !== undefined && password !== null && password !== '') {
     var encrypt = new JSEncrypt()

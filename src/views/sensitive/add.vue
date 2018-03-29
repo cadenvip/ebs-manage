@@ -16,51 +16,62 @@
 </template>
 
 <script>
+  import {
+    addSensitive
+  } from '@/api/sensitive'
 
-import { addSensitive } from '@/api/sensitive'
-
-export default {
-  data() {
-    return {
-      sensitiveForm: {
-        word: ''
+  export default {
+    data() {
+      return {
+        sensitiveForm: {
+          word: ''
+        },
+        rules: {
+          word: [{
+            required: true,
+            message: '请输入账号',
+            trigger: 'blur'
+          }]
+        }
+      }
+    },
+    methods: {
+      onSubmit() {
+        this.$refs.sensitiveForm.validate(valid => {
+          if (valid) {
+            addSensitive(this.sensitiveForm.word).then(response => {
+              if (response.status === 200) {
+                this.$router.push({
+                  path: '/system/sensitive/list'
+                })
+                this.$message.success('新增敏感词成功！')
+              } else {
+                this.$message.error(response.msg)
+              }
+            }).catch(error => {
+              this.$message.error(error)
+            })
+          } else {
+            this.$message.error('error submit!!')
+          }
+        })
       },
-      rules: {
-        word: [{ required: true, message: '请输入账号', trigger: 'blur' }]
+      resetForm(formname) {
+        this.searchForm.word = ''
+      },
+      onCancel() {
+        this.$router.push({
+          path: '/system/sensitive/list'
+        })
       }
     }
-  },
-  methods: {
-    onSubmit() {
-      this.$refs.sensitiveForm.validate(valid => {
-        if (valid) {
-          addSensitive(this.sensitiveForm.word).then(response => {
-            if (response.status === 200) {
-              this.$router.push({ path: '/system/sensitive/list' })
-              this.$message.success('新增敏感词成功！')
-            } else {
-              this.$message.error(response.msg)
-            }
-          }).catch(error => {
-            this.$message.error(error)
-          })
-        } else {
-          this.$message.error('error submit!!')
-        }
-      })
-    },
-    resetForm(formname) {
-      this.searchForm.word = ''
-    },
-    onCancel() {
-      this.$router.push({ path: '/system/sensitive/list' })
-    }
   }
-}
+
 </script>
 
 <style scoped>
-.line{
-  text-align: center;
-}
+  .line {
+    text-align: center;
+  }
+
 </style>

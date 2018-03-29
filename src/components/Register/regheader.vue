@@ -7,25 +7,28 @@
 </template>
 
 <script>
-import logo from '@/assets/logo/logo.png'
+  import logo from '@/assets/logo/logo.png'
 
-export default {
-  data () {
-    return {
-      logo
+  export default {
+    data() {
+      return {
+        logo
+      }
     }
   }
-}
+
 </script>
 
 <style>
   .header {
-      height: 70px;
-      background-color: #f1f1f1;
-      border-bottom: #e5e5e5 solid 1px;
+    height: 70px;
+    background-color: #f1f1f1;
+    border-bottom: #e5e5e5 solid 1px;
   }
+
   .logo {
-      width: 960px;
-      margin: 0 auto;
+    width: 960px;
+    margin: 0 auto;
   }
+
 </style>

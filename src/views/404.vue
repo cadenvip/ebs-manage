@@ -12,143 +12,144 @@
 </template>
 
 <script>
-import img_404 from '@/assets/404_images/404.png'
-import img_404_cloud from '@/assets/404_images/404_cloud.png'
+  import img_404 from '@/assets/404_images/404.png'
+  import img_404_cloud from '@/assets/404_images/404_cloud.png'
 
-export default {
-  data() {
-    return {
-      img_404,
-      img_404_cloud
-    }
-  },
-  computed: {
-    message() {
-      return '特朗普说这个页面你不能进......'
+  export default {
+    data() {
+      return {
+        img_404,
+        img_404_cloud
+      }
+    },
+    computed: {
+      message() {
+        return '特朗普说这个页面你不能进......'
+      }
     }
   }
-}
+
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-.wscn-http404 {
-  position: relative;
-  width: 1200px;
-  margin: 20px auto 60px;
-  padding: 0 100px;
-  overflow: hidden;
-  .pic-404 {
+  .wscn-http404 {
     position: relative;
-    float: left;
-    width: 600px;
-    padding: 150px 0;
+    width: 1200px;
+    margin: 20px auto 60px;
+    padding: 0 100px;
     overflow: hidden;
-    &__parent {
-      width: 100%;
-    }
-    &__child {
-      position: absolute;
-      &.left {
-        width: 80px;
-        top: 17px;
-        left: 220px;
-        opacity: 0;
-        animation-name: cloudLeft;
-        animation-duration: 2s;
-        animation-timing-function: linear;
-        animation-fill-mode: forwards;
-        animation-delay: 1s;
+    .pic-404 {
+      position: relative;
+      float: left;
+      width: 600px;
+      padding: 150px 0;
+      overflow: hidden;
+      &__parent {
+        width: 100%;
       }
-      &.mid {
-        width: 46px;
-        top: 10px;
-        left: 420px;
-        opacity: 0;
-        animation-name: cloudMid;
-        animation-duration: 2s;
-        animation-timing-function: linear;
-        animation-fill-mode: forwards;
-        animation-delay: 1.2s;
-      }
-      &.right {
-        width: 62px;
-        top: 100px;
-        left: 500px;
-        opacity: 0;
-        animation-name: cloudRight;
-        animation-duration: 2s;
-        animation-timing-function: linear;
-        animation-fill-mode: forwards;
-        animation-delay: 1s;
-      }
-      @keyframes cloudLeft {
-        0% {
+      &__child {
+        position: absolute;
+        &.left {
+          width: 80px;
           top: 17px;
           left: 220px;
           opacity: 0;
+          animation-name: cloudLeft;
+          animation-duration: 2s;
+          animation-timing-function: linear;
+          animation-fill-mode: forwards;
+          animation-delay: 1s;
         }
-        20% {
-          top: 33px;
-          left: 188px;
-          opacity: 1;
-        }
-        80% {
-          top: 81px;
-          left: 92px;
-          opacity: 1;
-        }
-        100% {
-          top: 97px;
-          left: 60px;
-          opacity: 0;
-        }
-      }
-      @keyframes cloudMid {
-        0% {
+        &.mid {
+          width: 46px;
           top: 10px;
           left: 420px;
           opacity: 0;
+          animation-name: cloudMid;
+          animation-duration: 2s;
+          animation-timing-function: linear;
+          animation-fill-mode: forwards;
+          animation-delay: 1.2s;
         }
-        20% {
-          top: 40px;
-          left: 360px;
-          opacity: 1;
-        }
-        70% {
-          top: 130px;
-          left: 180px;
-          opacity: 1;
-        }
-        100% {
-          top: 160px;
-          left: 120px;
-          opacity: 0;
-        }
-      }
-      @keyframes cloudRight {
-        0% {
+        &.right {
+          width: 62px;
           top: 100px;
           left: 500px;
           opacity: 0;
+          animation-name: cloudRight;
+          animation-duration: 2s;
+          animation-timing-function: linear;
+          animation-fill-mode: forwards;
+          animation-delay: 1s;
         }
-        20% {
-          top: 120px;
-          left: 460px;
-          opacity: 1;
+        @keyframes cloudLeft {
+          0% {
+            top: 17px;
+            left: 220px;
+            opacity: 0;
+          }
+          20% {
+            top: 33px;
+            left: 188px;
+            opacity: 1;
+          }
+          80% {
+            top: 81px;
+            left: 92px;
+            opacity: 1;
+          }
+          100% {
+            top: 97px;
+            left: 60px;
+            opacity: 0;
+          }
         }
-        80% {
-          top: 180px;
-          left: 340px;
-          opacity: 1;
+        @keyframes cloudMid {
+          0% {
+            top: 10px;
+            left: 420px;
+            opacity: 0;
+          }
+          20% {
+            top: 40px;
+            left: 360px;
+            opacity: 1;
+          }
+          70% {
+            top: 130px;
+            left: 180px;
+            opacity: 1;
+          }
+          100% {
+            top: 160px;
+            left: 120px;
+            opacity: 0;
+          }
         }
-        100% {
-          top: 200px;
-          left: 300px;
-          opacity: 0;
+        @keyframes cloudRight {
+          0% {
+            top: 100px;
+            left: 500px;
+            opacity: 0;
+          }
+          20% {
+            top: 120px;
+            left: 460px;
+            opacity: 1;
+          }
+          80% {
+            top: 180px;
+            left: 340px;
+            opacity: 1;
+          }
+          100% {
+            top: 200px;
+            left: 300px;
+            opacity: 0;
+          }
         }
       }
     }
   }
-}
 
 </style>

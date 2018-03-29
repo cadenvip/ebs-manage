@@ -4,8 +4,10 @@ export function getAllAccesss(currentpage, pagesize) {
   return request({
     url: '/access/listAccess',
     method: 'post',
-    data: { 'page': `${currentpage}`,
-      'limit': `${pagesize}` }
+    data: {
+      'page': `${currentpage}`,
+      'limit': `${pagesize}`
+    }
   })
 }
 
@@ -50,7 +52,9 @@ export function getAccessDetail(params) {
   return request({
     url: '/access/detail',
     method: 'post',
-    data: { 'id': `${params}` }
+    data: {
+      'id': `${params}`
+    }
   })
 }
 
@@ -72,7 +76,9 @@ export function getOperationList(params) {
   return request({
     url: '/access/operationList',
     method: 'post',
-    data: { 'operationname': `${params.operationname}` }
+    data: {
+      'operationname': `${params.operationname}`
+    }
   })
 }
 
@@ -87,7 +93,8 @@ export function getInterfaceList(params) {
   return request({
     url: '/access/interfaceList',
     method: 'post',
-    data: { 'inter_name': `${params.inter_name}`,
+    data: {
+      'inter_name': `${params.inter_name}`,
       'inter_version': `${params.inter_version}`
     }
   })

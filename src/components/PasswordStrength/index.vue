@@ -1,17 +1,17 @@
 <template>
   <div>
-    <el-rate
-      v-model="score"
-      disabled
-      :colors="['#99A9BF', '#F7BA2A', '#FF9900']"
-      show-text
-      :texts="['非常低', '低', '中', '高', '非常高']">
+    <el-rate v-model="score" disabled :colors="['#99A9BF', '#F7BA2A', '#FF9900']" show-text :texts="['非常低', '低', '中', '高', '非常高']">
     </el-rate>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
-  import { containDigit, containLowerCase, containUpperCase, containSymbol } from '@/utils/validate'
+  import {
+    containDigit,
+    containLowerCase,
+    containUpperCase,
+    containSymbol
+  } from '@/utils/validate'
 
   export default {
     props: {
@@ -20,7 +20,7 @@
         default: ''
       }
     },
-    data () {
+    data() {
       return {
         score: 0,
         containDigit: 0,
@@ -50,4 +50,5 @@
       }
     }
   }
+
 </script>

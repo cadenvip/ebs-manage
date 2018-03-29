@@ -6,7 +6,7 @@
         <el-col :span="10">
           <el-form-item label="接入码：">
             <el-input v-model="searchForm.code" clearable style="width: 300px;"></el-input>
-          </el-form-item>  
+          </el-form-item>
         </el-col>
         <el-col :span="10">
           <el-form-item label="接入名称：">
@@ -43,101 +43,111 @@
       </el-table-column>
     </el-table>
     <div class="block" align="right" style="padding-right:20px">
-      <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        layout="total, sizes, prev, pager, next, jumper"
-        :current-page="currentPage"
-        :page-sizes="pagesizes"
-        :page-size="pagesize"
-        :total="total">
+      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" layout="total, sizes, prev, pager, next, jumper"
+        :current-page="currentPage" :page-sizes="pagesizes" :page-size="pagesize" :total="total">
       </el-pagination>
     </div>
   </div>
 </template>
 
 <script>
-import { getAllAccesss, getAccessList } from '@/api/access'
+  import {
+    getAllAccesss,
+    getAccessList
+  } from '@/api/access'
 
-export default {
-  data() {
-    return {
-      list: [],
-      searchForm: {
-        code: '',
-        si_name: ''
+  export default {
+    data() {
+      return {
+        list: [],
+        searchForm: {
+          code: '',
+          si_name: ''
+        },
+        pagesizes: [10, 20, 30, 50],
+        pagesize: 10,
+        currentPage: 1,
+        total: 0,
+        loading: true
+      }
+    },
+    created() {
+      this.initAccessList()
+    },
+    methods: {
+      queryAccessList() {
+        this.loading = true
+        getAccessList(this.searchForm, this.currentPage, this.pagesize).then(response => {
+          if (response.status === 200) {
+            this.list = response.data.list
+            this.total = response.data.total
+          } else {
+            this.$message.error(response.msg)
+          }
+          this.loading = false
+        }).catch(error => {
+          this.loading = false
+          this.$message.error(error)
+        })
       },
-      pagesizes: [10, 20, 30, 50],
-      pagesize: 10,
-      currentPage: 1,
-      total: 0,
-      loading: true
-    }
-  },
-  created() {
-    this.initAccessList()
-  },
-  methods: {
-    queryAccessList() {
-      this.loading = true
-      getAccessList(this.searchForm, this.currentPage, this.pagesize).then(response => {
-        if (response.status === 200) {
-          this.list = response.data.list
-          this.total = response.data.total
+      addAccess() {
+        this.$router.push({
+          path: '/system/access/add'
+        })
+      },
+      initAccessList() {
+        this.loading = true
+        getAllAccesss(this.currentPage, this.pagesize).then(response => {
+          if (response.status === 200) {
+            this.list = response.data.list
+            this.total = response.data.total
+          } else {
+            this.$message.error(response.msg)
+          }
+          this.loading = false
+        }).catch(error => {
+          this.loading = false
+          this.$message.error(error)
+        })
+      },
+      updateAccess(access) {
+        this.$router.push({
+          path: '/system/access/update',
+          query: {
+            id: access.id
+          }
+        })
+      },
+      detail(access) {
+        this.$router.push({
+          path: '/system/access/detail',
+          query: {
+            id: access.id
+          }
+        })
+      },
+      resetForm(formname) {
+        this.searchForm.code = ''
+        this.searchForm.si_name = ''
+      },
+      handleSizeChange(val) {
+        this.pagesize = val
+        this.queryAccessList()
+      },
+      handleCurrentChange(val) {
+        this.currentPage = val
+        this.queryAccessList()
+      },
+      typeFormat(row, column, cellValue) {
+        if (cellValue === '1') {
+          return '渠道门户'
+        } else if (cellValue === '2') {
+          return '业务平台'
         } else {
-          this.$message.error(response.msg)
+          return '未知'
         }
-        this.loading = false
-      }).catch(error => {
-        this.loading = false
-        this.$message.error(error)
-      })
-    },
-    addAccess() {
-      this.$router.push({ path: '/system/access/add' })
-    },
-    initAccessList() {
-      this.loading = true
-      getAllAccesss(this.currentPage, this.pagesize).then(response => {
-        if (response.status === 200) {
-          this.list = response.data.list
-          this.total = response.data.total
-        } else {
-          this.$message.error(response.msg)
-        }
-        this.loading = false
-      }).catch(error => {
-        this.loading = false
-        this.$message.error(error)
-      })
-    },
-    updateAccess(access) {
-      this.$router.push({ path: '/system/access/update', query: { id: access.id }})
-    },
-    detail(access) {
-      this.$router.push({ path: '/system/access/detail', query: { id: access.id }})
-    },
-    resetForm(formname) {
-      this.searchForm.code = ''
-      this.searchForm.si_name = ''
-    },
-    handleSizeChange(val) {
-      this.pagesize = val
-      this.queryAccessList()
-    },
-    handleCurrentChange(val) {
-      this.currentPage = val
-      this.queryAccessList()
-    },
-    typeFormat(row, column, cellValue) {
-      if (cellValue === '1') {
-        return '渠道门户'
-      } else if (cellValue === '2') {
-        return '业务平台'
-      } else {
-        return '未知'
       }
     }
   }
-}
+
 </script>

@@ -2,7 +2,8 @@
   <div style="margin:20px">
     <el-tabs type="border-card">
       <el-tab-pane label="本月账单">
-        <el-table :data="thisMonthSumery" v-loading.body="loading" element-loading-text="Loading" border stripe fit highlight-current-row style="padding-left:10px">
+        <el-table :data="thisMonthSumery" v-loading.body="loading" element-loading-text="Loading" border stripe fit highlight-current-row
+          style="padding-left:10px">
           <el-table-column label="交易日期" prop="dealmonth" width="180" align="center"></el-table-column>
           <el-table-column label="交易笔数" prop="ordercount" width="180" align="center"></el-table-column>
           <el-table-column label="交易金额" prop="totalpay" :formatter="unitFormat" width="180" align="center"></el-table-column>
@@ -13,22 +14,22 @@
           <el-col :span="4" style="text-align:right">
             <span>
               转账手续费：
-            </span> 
+            </span>
           </el-col>
           <el-col :span="8">
             <span>
               {{ transferfeeFormat }}
-            </span> 
+            </span>
           </el-col>
           <el-col :span="4" style="text-align:right">
             <span>
               应结算合计：
-            </span> 
+            </span>
           </el-col>
           <el-col :span="8">
             <span>
               {{ totalpayFormat }}
-            </span> 
+            </span>
           </el-col>
         </el-row>
         <br/>
@@ -36,25 +37,25 @@
         <el-row :gutter="20" style="margin-left:0px;margin-right:0px;margin-top:20px;">
           <el-col :span="3" style="text-align:right">
             <span>
-              <el-button @click="checkDetail" type="text" >查看结算明细</el-button>
-            </span> 
+              <el-button @click="checkDetail" type="text">查看结算明细</el-button>
+            </span>
           </el-col>
           <el-col :span="3">
             <span>
-              <el-button @click="downloadDetail" type="primary" >打包下载结算明细</el-button>
-            </span> 
+              <el-button @click="downloadDetail" type="primary">打包下载结算明细</el-button>
+            </span>
           </el-col>
           <el-col :span="3" :offset="10" style="text-align:right">
             <span>
-              <el-button @click="checkout" type="primary" >确认结账</el-button>
-            </span> 
+              <el-button @click="checkout" type="primary">确认结账</el-button>
+            </span>
           </el-col>
           <el-col :span="3">
             <span>
-              <el-button @click="dispute" type="primary" >核账争议</el-button>
-            </span> 
+              <el-button @click="dispute" type="primary">核账争议</el-button>
+            </span>
           </el-col>
-        </el-row>        
+        </el-row>
       </el-tab-pane>
       <el-tab-pane label="历史月账单">
         <div style="margin:20px">
@@ -81,7 +82,9 @@
     </div>
     <el-dialog title="核账争议" :visible.sync="dialogFormVisible" style="padding:10px 20px">
       <el-input v-model="content" type="textarea" :rows=8 placeholder='请输入核账争议内容'></el-input>
-      <p>剩余字数: <span style="color:red;">{{getContentLen}}</span></p>
+      <p>剩余字数:
+        <span style="color:red;">{{getContentLen}}</span>
+      </p>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
         <el-button type="primary" @click="confirmDispute">确 定</el-button>
@@ -91,225 +94,249 @@
 </template>
 
 <script>
+  import {
+    getThisMonthSummary,
+    getHistorySummary,
+    getThisMonthBill,
+    downloadBill,
+    getHistoryBill,
+    getHistoryBillsList,
+    businessDealBill,
+    submitDispute
+  } from '@/api/finance'
 
-import { getThisMonthSummary, getHistorySummary, getThisMonthBill, downloadBill,
-  getHistoryBill, getHistoryBillsList, businessDealBill, submitDispute } from '@/api/finance'
-
-export default {
-  data() {
-    return {
-      unitId: '',
-      thisMonthSumery: [],
-      historySumery: [],
-      thisMonthBill: {},
-      historyBill: [],
-      moreHistoryBill: [],
-      content: '',
-      dialogFormVisible: false
-    }
-  },
-  created() {
-    var userInfo = window.sessionStorage.getItem('userInfo')
-    if (userInfo !== undefined && userInfo !== '') {
-      userInfo = JSON.parse(userInfo)
-      this.unitId = userInfo.unitid
-    } else {
-      this.$message.error('请先登录')
-      // this.$router.push({ path: '/login' })
-    }
-    this.initData()
-  },
-  computed: {
-    getContentLen() {
-      if (this.content) {
-        return (200 - this.content.length) < 0 ? 0 : (200 - this.content.length)
-      } else {
-        return 200
+  export default {
+    data() {
+      return {
+        unitId: '',
+        thisMonthSumery: [],
+        historySumery: [],
+        thisMonthBill: {},
+        historyBill: [],
+        moreHistoryBill: [],
+        content: '',
+        dialogFormVisible: false
       }
     },
-    transferfeeFormat: function() {
-      if (this.thisMonthBill !== null && this.thisMonthBill.transferfee !== undefined && this.thisMonthBill.transferfee !== null) {
-        return '￥' + (this.thisMonthBill.transferfee / 100).toFixed(2)
+    created() {
+      var userInfo = window.sessionStorage.getItem('userInfo')
+      if (userInfo !== undefined && userInfo !== '') {
+        userInfo = JSON.parse(userInfo)
+        this.unitId = userInfo.unitid
       } else {
-        return '￥0.00'
+        this.$message.error('请先登录')
+        // this.$router.push({ path: '/login' })
       }
+      this.initData()
     },
-    totalpayFormat: function() {
-      if (this.thisMonthBill !== null && this.thisMonthBill.totalpay !== undefined && this.thisMonthBill.totalpay !== null) {
-        return '￥' + (this.thisMonthBill.totalpay / 100).toFixed(2)
-      } else {
-        return '￥0.00'
-      }
-    }
-  },
-  methods: {
-    initData() {
-      this.loading = true
-      var params = { 'unitid': `${this.unitId}` }
-      getThisMonthSummary(params).then(response => {
-        if (response.status === 200) {
-          this.thisMonthSumery = response.data
+    computed: {
+      getContentLen() {
+        if (this.content) {
+          return (200 - this.content.length) < 0 ? 0 : (200 - this.content.length)
         } else {
-          this.$message.error(response.msg)
+          return 200
         }
-      }).catch(error => {
-        this.loading = false
-        this.$message.error(error)
-      })
-      getThisMonthBill(params).then(response => {
-        if (response.status === 200) {
-          this.thisMonthBill = response.data
+      },
+      transferfeeFormat: function () {
+        if (this.thisMonthBill !== null && this.thisMonthBill.transferfee !== undefined && this.thisMonthBill.transferfee !==
+          null) {
+          return '￥' + (this.thisMonthBill.transferfee / 100).toFixed(2)
         } else {
-          this.$message.error(response.msg)
+          return '￥0.00'
         }
-      }).catch(error => {
-        this.loading = false
-        this.$message.error(error)
-      })
-      getHistorySummary(params).then(response => {
-        if (response.status === 200) {
-          this.historySumery = response.data
+      },
+      totalpayFormat: function () {
+        if (this.thisMonthBill !== null && this.thisMonthBill.totalpay !== undefined && this.thisMonthBill.totalpay !==
+          null) {
+          return '￥' + (this.thisMonthBill.totalpay / 100).toFixed(2)
         } else {
-          this.$message.error(response.msg)
+          return '￥0.00'
         }
-      }).catch(error => {
-        this.loading = false
-        this.$message.error(error)
-      })
-      getHistoryBill(params).then(response => {
-        if (response.status === 200) {
-          this.historyBill = response.data
-        } else {
-          this.$message.error(response.msg)
-        }
-      }).catch(error => {
-        this.loading = false
-        this.$message.error(error)
-      })
-      getHistoryBillsList(params).then(response => {
-        if (response.status === 200) {
-          this.moreHistoryBill = response.data
-        } else {
-          this.$message.error(response.msg)
-        }
-      }).catch(error => {
-        this.loading = false
-        this.$message.error(error)
-      })
-      this.loading = false
-    },
-    unitFormat(row, column, cellValue) {
-      if (cellValue !== null) {
-        return '￥' + (cellValue / 100).toFixed(2)
-      } else {
-        return ''
       }
     },
-    formatYearMonth(bill) {
-      const billmonth = bill.billmonth.toString()
-      if (billmonth !== undefined) {
-        return billmonth.substr(0, 4) + '年' + billmonth.substr(4, 2) + '月'
-      } else {
-        return '年' + '月'
-      }
-    },
-    checkDetail() {
-      if (this.thisMonthBill !== null) {
-        this.$router.push({ path: '/statement/thisMonthBillDetail', query: { id: this.thisMonthBill.id }})
-      } else {
-        this.$message.error('暂无数据')
-      }
-    },
-    chechMonthBillDetail(bill) {
-      if (this.thisMonthBill !== null) {
-        this.$router.push({ path: '/statement/detail', query: { id: bill.id }})
-      } else {
-        this.$message.error('暂无数据')
-      }
-    },
-    downloadDetail() {
-      if (this.thisMonthBill !== null) {
-        downloadBill(this.thisMonthBill, 1).then(response => {
-          if (response.status === 200) {
-            this.$message.success('下载结算明细成功')
-          } else {
-            this.$message.error(response.msg)
-          }
-        }).catch(error => {
-          this.$message.error(error)
-        })
-      } else {
-        this.$message.error('暂无数据')
-      }
-    },
-    downloadMonthBill(bill) {
-      downloadBill(bill, 1).then(response => {
-        if (response.status === 200) {
-          this.$message.success('下载成功')
-        } else {
-          this.$message.error(response.msg)
-        }
-      }).catch(error => {
-        this.$message.error(error)
-      })
-    },
-    downloadHistoryMonthBill(bill) {
-      downloadBill(bill, 0).then(response => {
-        if (response.status === 200) {
-          this.$message.success('下载成功')
-        } else {
-          this.$message.error(response.msg)
-        }
-      }).catch(error => {
-        this.$message.error(error)
-      })
-    },
-    checkout() {
-      if (this.thisMonthBill !== null) {
-        var params = { 'billid': `${this.thisMonthBill.id}` }
-        businessDealBill(params).then(response => {
-          if (response.status === 200) {
-            this.$message.success('确认结账成功，等待管理员处理')
-          } else {
-            this.$message.error(response.msg)
-          }
-        }).catch(error => {
-          this.$message.error(error)
-        })
-      } else {
-        this.$message.error('暂无数据')
-      }
-    },
-    dispute() {
-      if (this.thisMonthBill !== null) {
-        this.dialogFormVisible = true
-      } else {
-        this.$message.error('暂无数据')
-      }
-    },
-    confirmDispute() {
-      if (this.content === undefined || this.content === '') {
-        this.$message.error('请填写争议内容')
-        return
-      } else {
+    methods: {
+      initData() {
+        this.loading = true
         var params = {
-          'billid': `${this.thisMonthBill.id}`,
-          'content': this.content
+          'unitid': `${this.unitId}`
         }
-        submitDispute(params).then(response => {
+        getThisMonthSummary(params).then(response => {
           if (response.status === 200) {
-            this.$message.success('提交成功')
+            this.thisMonthSumery = response.data
+          } else {
+            this.$message.error(response.msg)
+          }
+        }).catch(error => {
+          this.loading = false
+          this.$message.error(error)
+        })
+        getThisMonthBill(params).then(response => {
+          if (response.status === 200) {
+            this.thisMonthBill = response.data
+          } else {
+            this.$message.error(response.msg)
+          }
+        }).catch(error => {
+          this.loading = false
+          this.$message.error(error)
+        })
+        getHistorySummary(params).then(response => {
+          if (response.status === 200) {
+            this.historySumery = response.data
+          } else {
+            this.$message.error(response.msg)
+          }
+        }).catch(error => {
+          this.loading = false
+          this.$message.error(error)
+        })
+        getHistoryBill(params).then(response => {
+          if (response.status === 200) {
+            this.historyBill = response.data
+          } else {
+            this.$message.error(response.msg)
+          }
+        }).catch(error => {
+          this.loading = false
+          this.$message.error(error)
+        })
+        getHistoryBillsList(params).then(response => {
+          if (response.status === 200) {
+            this.moreHistoryBill = response.data
+          } else {
+            this.$message.error(response.msg)
+          }
+        }).catch(error => {
+          this.loading = false
+          this.$message.error(error)
+        })
+        this.loading = false
+      },
+      unitFormat(row, column, cellValue) {
+        if (cellValue !== null) {
+          return '￥' + (cellValue / 100).toFixed(2)
+        } else {
+          return ''
+        }
+      },
+      formatYearMonth(bill) {
+        const billmonth = bill.billmonth.toString()
+        if (billmonth !== undefined) {
+          return billmonth.substr(0, 4) + '年' + billmonth.substr(4, 2) + '月'
+        } else {
+          return '年' + '月'
+        }
+      },
+      checkDetail() {
+        if (this.thisMonthBill !== null) {
+          this.$router.push({
+            path: '/statement/thisMonthBillDetail',
+            query: {
+              id: this.thisMonthBill.id
+            }
+          })
+        } else {
+          this.$message.error('暂无数据')
+        }
+      },
+      chechMonthBillDetail(bill) {
+        if (this.thisMonthBill !== null) {
+          this.$router.push({
+            path: '/statement/detail',
+            query: {
+              id: bill.id
+            }
+          })
+        } else {
+          this.$message.error('暂无数据')
+        }
+      },
+      downloadDetail() {
+        if (this.thisMonthBill !== null) {
+          downloadBill(this.thisMonthBill, 1).then(response => {
+            if (response.status === 200) {
+              this.$message.success('下载结算明细成功')
+            } else {
+              this.$message.error(response.msg)
+            }
+          }).catch(error => {
+            this.$message.error(error)
+          })
+        } else {
+          this.$message.error('暂无数据')
+        }
+      },
+      downloadMonthBill(bill) {
+        downloadBill(bill, 1).then(response => {
+          if (response.status === 200) {
+            this.$message.success('下载成功')
           } else {
             this.$message.error(response.msg)
           }
         }).catch(error => {
           this.$message.error(error)
         })
-        this.dialogFormVisible = false
+      },
+      downloadHistoryMonthBill(bill) {
+        downloadBill(bill, 0).then(response => {
+          if (response.status === 200) {
+            this.$message.success('下载成功')
+          } else {
+            this.$message.error(response.msg)
+          }
+        }).catch(error => {
+          this.$message.error(error)
+        })
+      },
+      checkout() {
+        if (this.thisMonthBill !== null) {
+          var params = {
+            'billid': `${this.thisMonthBill.id}`
+          }
+          businessDealBill(params).then(response => {
+            if (response.status === 200) {
+              this.$message.success('确认结账成功，等待管理员处理')
+            } else {
+              this.$message.error(response.msg)
+            }
+          }).catch(error => {
+            this.$message.error(error)
+          })
+        } else {
+          this.$message.error('暂无数据')
+        }
+      },
+      dispute() {
+        if (this.thisMonthBill !== null) {
+          this.dialogFormVisible = true
+        } else {
+          this.$message.error('暂无数据')
+        }
+      },
+      confirmDispute() {
+        if (this.content === undefined || this.content === '') {
+          this.$message.error('请填写争议内容')
+          return
+        } else {
+          var params = {
+            'billid': `${this.thisMonthBill.id}`,
+            'content': this.content
+          }
+          submitDispute(params).then(response => {
+            if (response.status === 200) {
+              this.$message.success('提交成功')
+            } else {
+              this.$message.error(response.msg)
+            }
+          }).catch(error => {
+            this.$message.error(error)
+          })
+          this.dialogFormVisible = false
+        }
       }
     }
   }
-}
+
 </script>
 
 <style scoped>
@@ -319,9 +346,11 @@ export default {
     padding-top: 5px;
     width: 960px;
     color: #656565;
-    font: 12px/1.6 simsun,Arial;
+    font: 12px/1.6 simsun, Arial;
   }
+
   .fl {
-      float: left;
+    float: left;
   }
+
 </style>

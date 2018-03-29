@@ -4,8 +4,10 @@ export function getAllRoles(currentpage, pagesize) {
   return request({
     url: '/role/list',
     method: 'post',
-    data: { 'page': `${currentpage}`,
-      'limit': `${pagesize}` }
+    data: {
+      'page': `${currentpage}`,
+      'limit': `${pagesize}`
+    }
   })
 }
 
@@ -13,7 +15,8 @@ export function getRoleList(roleinfo, currentpage, pagesize) {
   return request({
     url: '/role/list',
     method: 'post',
-    data: { 'rolename': `${roleinfo.rolename}`,
+    data: {
+      'rolename': `${roleinfo.rolename}`,
       'issystem': `${roleinfo.issystem}`,
       'roletype': `${roleinfo.roletype}`,
       'ishidden': `${roleinfo.ishidden}`,
@@ -27,7 +30,8 @@ export function addRole(params) {
   return request({
     url: '/role/save',
     method: 'post',
-    data: { 'rolename': `${params.rolename}`,
+    data: {
+      'rolename': `${params.rolename}`,
       'roletype': `${params.roletype}`,
       'description': `${params.description}`,
       'resourceids': params.resourceids,
@@ -41,7 +45,8 @@ export function updateRole(params) {
   return request({
     url: '/role/update',
     method: 'post',
-    data: { 'id': `${params.id}`,
+    data: {
+      'id': `${params.id}`,
       'rolename': `${params.rolename}`,
       'description': `${params.description}`,
       'resourceids': params.resourceids
@@ -61,6 +66,8 @@ export function getRoleDetail(params) {
   return request({
     url: '/role/detail',
     method: 'post',
-    data: { 'roleid': `${params}` }
+    data: {
+      'roleid': `${params}`
+    }
   })
 }

@@ -8,7 +8,7 @@
               <strong>
                 截止{{ deadTime }}
               </strong>
-            </span> 
+            </span>
           </el-col>
         </el-row>
         <el-row :gutter="6" style="margin-left:0px;margin-right:0px;margin-top:20px;">
@@ -17,26 +17,26 @@
               <strong>
                 订单总量：
               </strong>
-            </span> 
+            </span>
           </el-col>
           <el-col :span="8">
             <span class="col_r">
               <router-link :to="{ path: '/order/index', query: { tab: 'tab5' }}">
                 {{ homeInfo.orderNum !== null || homeInfo.orderNum !== undefined ? homeInfo.orderNum : '&nbsp;' }}
               </router-link>
-            </span> 
+            </span>
           </el-col>
           <el-col :span="4" style="text-align:right">
             <span>
               <strong>
                 销售总额：
               </strong>
-            </span> 
+            </span>
           </el-col>
           <el-col :span="8">
             <span class="col_r col_r1">
               ￥{{ homeInfo.totalPrice !== null ? homeInfo.totalPrice : '&nbsp;' }}
-            </span> 
+            </span>
           </el-col>
         </el-row>
         <el-row :gutter="6" style="margin-left:0px;margin-right:0px;margin-top:12px;">
@@ -45,7 +45,7 @@
               <strong>
                 订单情况：
               </strong>
-            </span> 
+            </span>
           </el-col>
           <el-col :span="8">
             <span>
@@ -55,50 +55,50 @@
                   {{ homeInfo.deliveredOrder !== null ? homeInfo.deliveredOrder : '&nbsp;' }}
                 </router-link>
               </span>
-            </span> 
+            </span>
           </el-col>
           <el-col :span="4" style="text-align:right">
             <span>
               待退货订单：
-            </span> 
+            </span>
           </el-col>
           <el-col :span="8">
             <span class="col_r">
               <router-link :to="{ path: '/order/index', query: { tab: 'tab7' }}">
-                {{ homeInfo.returnOrder !== null ? homeInfo.returnOrder : '&nbsp;' }}                
-              </router-link>              
-            </span> 
+                {{ homeInfo.returnOrder !== null ? homeInfo.returnOrder : '&nbsp;' }}
+              </router-link>
+            </span>
           </el-col>
         </el-row>
         <el-row :gutter="6" style="margin-left:0px;margin-right:0px;margin-top:12px;margin-bottom:20px">
           <el-col :span="4" style="text-align:right">
             <span>
               <strong>
-              商品情况：
+                商品情况：
               </strong>
-            </span> 
+            </span>
           </el-col>
           <el-col :span="8">
             <span>
               在售商品：
-              <span class="col_r">        
+              <span class="col_r">
                 <router-link :to="{ path: '/goodsmanage/onsalegoods', query: { tab: 'tab1' }}">
                   {{ homeInfo.sellGoods !== null ? homeInfo.sellGoods : '&nbsp;' }}
-                </router-link>                 
+                </router-link>
               </span>
             </span>
           </el-col>
           <el-col :span="4" style="text-align:right">
             <span>
               缺货商品：
-            </span> 
+            </span>
           </el-col>
           <el-col :span="8">
             <span class="col_r">
               <router-link :to="{ path: '/goodsmanage/onsalegoods', query: { tab: 'tab2' }}">
-                {{ homeInfo.defectGoods !== null ? homeInfo.defectGoods : '&nbsp;' }}                
-              </router-link>                
-            </span> 
+                {{ homeInfo.defectGoods !== null ? homeInfo.defectGoods : '&nbsp;' }}
+              </router-link>
+            </span>
           </el-col>
         </el-row>
       </div>
@@ -107,7 +107,9 @@
 </template>
 
 <script>
-  import { getHomeInfo } from '@/api/homepage'
+  import {
+    getHomeInfo
+  } from '@/api/homepage'
   export default {
     data() {
       return {
@@ -134,17 +136,21 @@
       })
     }
   }
+
 </script>
 
 <style>
   .col_r {
     color: #ff6600;
   }
+
   .col_r1 {
     font-size: 16px;
     font-weight: bold;
   }
+
   .d9 {
     color: #d99e00;
   }
+
 </style>

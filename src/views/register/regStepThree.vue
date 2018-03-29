@@ -1,6 +1,6 @@
 <template>
   <el-container>
-  <Regheader></Regheader>
+    <Regheader></Regheader>
     <el-container style="width:1000px;margin:0 auto 20px">
       <el-header style="margin-top:20px">
         <el-steps :active="2" simple>
@@ -11,7 +11,7 @@
         </el-steps>
       </el-header>
       <el-main>
-        <div style="border:1px solid #000">   
+        <div style="border:1px solid #000">
           <el-form ref="registerForm" :model="registerForm" :rules="registerRules" label-width="170px" style="margin:6px">
             <h5>企业经营资质</h5>
             <hr style="height:1px;border:none;border-top:1px dashed #0066CC;" />
@@ -19,36 +19,24 @@
               <el-input v-model="registerForm.businesslicenseNum" clearable style="width: 270px;" placeholder="请输入营业执照号码"></el-input>
             </el-form-item>
             <el-form-item label="营业执照：" prop="licencepicpath">
-              <el-upload
-                action="http://10.189.13.151:8080/ebs/common/upload"
-                list-type="text"
-                :show-file-list="false"
-                :on-success="handleLicenceSuccess"
+              <el-upload action="http://10.189.13.151:8080/ebs/common/upload" list-type="text" :show-file-list="false" :on-success="handleLicenceSuccess"
                 :before-upload="beforeAvatarUpload">
                 <el-button size="small" type="primary">点击上传</el-button>
               </el-upload>
               <el-button v-if="registerForm.licencepicpath" size="small" type="primary" @click="handlePictureCardPreview(registerForm.licencepicpath)">上传成功，点击预览</el-button>
             </el-form-item>
-          <el-form-item label="经办人身份证：" prop="operatoridnum">
-            <el-input v-model="registerForm.operatoridnum" clearable :maxlength=18 style="width: 270px;" placeholder="输入身份证号码"></el-input>
-          </el-form-item>
-          <el-form-item label="身份证正面：" prop="sfzmpicpath">
-              <el-upload
-                action="http://10.189.13.151:8080/ebs/common/upload"
-                list-type="text"
-                :show-file-list="false"
-                :on-success="handleSfzmSuccess"
+            <el-form-item label="经办人身份证：" prop="operatoridnum">
+              <el-input v-model="registerForm.operatoridnum" clearable :maxlength=18 style="width: 270px;" placeholder="输入身份证号码"></el-input>
+            </el-form-item>
+            <el-form-item label="身份证正面：" prop="sfzmpicpath">
+              <el-upload action="http://10.189.13.151:8080/ebs/common/upload" list-type="text" :show-file-list="false" :on-success="handleSfzmSuccess"
                 :before-upload="beforeAvatarUpload">
                 <el-button size="small" type="primary">点击上传</el-button>
               </el-upload>
               <el-button v-if="registerForm.sfzmpicpath" size="small" type="primary" @click="handlePictureCardPreview(registerForm.sfzmpicpath)">上传成功，点击预览</el-button>
             </el-form-item>
             <el-form-item label="身份证反面：" prop="sffmpicpath">
-              <el-upload
-                action="http://10.189.13.151:8080/ebs/common/upload"
-                list-type="text"
-                :show-file-list="false"
-                :on-success="handleSffmSuccess"
+              <el-upload action="http://10.189.13.151:8080/ebs/common/upload" list-type="text" :show-file-list="false" :on-success="handleSffmSuccess"
                 :before-upload="beforeAvatarUpload">
                 <el-button size="small" type="primary">点击上传</el-button>
               </el-upload>
@@ -64,46 +52,29 @@
               </el-radio-group>
             </el-form-item>
             <el-form-item v-show="registerForm.merchantKind === '2'" label="代理授权证明：" prop="proxytestifypicpath">
-              <el-upload
-                action="http://10.189.13.151:8080/ebs/common/upload"
-                list-type="text"
-                :show-file-list="false"
-                :on-success="handleProxySuccess"               
+              <el-upload action="http://10.189.13.151:8080/ebs/common/upload" list-type="text" :show-file-list="false" :on-success="handleProxySuccess"
                 :before-upload="beforeAvatarUpload">
                 <el-button size="small" type="primary">点击上传</el-button>
               </el-upload>
               <el-button v-if="registerForm.proxytestifypicpath" size="small" type="primary" @click="handlePictureCardPreview(registerForm.proxytestifypicpath)">上传成功，点击预览</el-button>
             </el-form-item>
             <el-form-item label="食品安全认证：">
-              <el-upload
-                action="http://10.189.13.151:8080/ebs/common/upload"
-                list-type="text"
-                :show-file-list="false"
-                :on-success="handleFoodSafetySuccess"
+              <el-upload action="http://10.189.13.151:8080/ebs/common/upload" list-type="text" :show-file-list="false" :on-success="handleFoodSafetySuccess"
                 :before-upload="beforeAvatarUpload">
                 <el-button size="small" type="primary">点击上传</el-button>
               </el-upload>
-              <el-button v-if="registerForm.foodsafetypicpath" size="small" type="primary" @click="handlePictureCardPreview(registerForm.foodsafetypicpath)">上传成功，点击预览</el-button>                
+              <el-button v-if="registerForm.foodsafetypicpath" size="small" type="primary" @click="handlePictureCardPreview(registerForm.foodsafetypicpath)">上传成功，点击预览</el-button>
             </el-form-item>
             <el-form-item label="食品流通许可：">
-              <el-upload
-                action="http://10.189.13.151:8080/ebs/common/upload"
-                list-type="text"
-                :show-file-list="false"
-                :on-success="handleFoodCirculationSuccess"
+              <el-upload action="http://10.189.13.151:8080/ebs/common/upload" list-type="text" :show-file-list="false" :on-success="handleFoodCirculationSuccess"
                 :before-upload="beforeAvatarUpload">
                 <el-button size="small" type="primary">点击上传</el-button>
               </el-upload>
-              <el-button v-if="registerForm.foodpathpicpath" size="small" type="primary" @click="handlePictureCardPreview(registerForm.foodpathpicpath)">上传成功，点击预览</el-button>                 
+              <el-button v-if="registerForm.foodpathpicpath" size="small" type="primary" @click="handlePictureCardPreview(registerForm.foodpathpicpath)">上传成功，点击预览</el-button>
             </el-form-item>
             <el-form-item label="其他：">
-              <el-upload
-                action="http://10.189.13.151:8080/ebs/common/upload"
-                list-type="picture-card"
-                :on-success="handleFoodOtherSuccess"
-                :on-preview="handlePictureCardPreview"
-                :on-remove="handleRemove"
-                :before-upload="beforeAvatarUpload">
+              <el-upload action="http://10.189.13.151:8080/ebs/common/upload" list-type="picture-card" :on-success="handleFoodOtherSuccess"
+                :on-preview="handlePictureCardPreview" :on-remove="handleRemove" :before-upload="beforeAvatarUpload">
                 <i class="el-icon-plus"></i>
               </el-upload>
             </el-form-item>
@@ -128,9 +99,13 @@
 <script>
   import Regheader from '@/components/Register/regheader'
   import Regfooter from '@/components/Register/regfooter'
-  import { EnterpriseRegister } from '@/api/register'
-  import { validateID } from '@/utils/validate'
-  
+  import {
+    EnterpriseRegister
+  } from '@/api/register'
+  import {
+    validateID
+  } from '@/utils/validate'
+
   export default {
     data() {
       var validateId = (rule, value, callback) => {
@@ -171,21 +146,84 @@
           foodpathpicpath: '',
           foodotherpicpath: [],
           // },
-          goodsListForm: [
-            { num: '示例', name: '鱼香大米', unit: '5KG', origin: '重庆,西永', price: '￥250', description: '多种蛋白质、营养丰富、色泽光亮、颗粒饱满', url: 'http://detail.tmall.com/item.htm?spm=a230r.1.14.172.VhFL' },
-            { num: '01', name: '', unit: '', origin: '', price: '', description: '', url: '' },
-            { num: '02', name: '', unit: '', origin: '', price: '', description: '', url: '' },
-            { num: '03', name: '', unit: '', origin: '', price: '', description: '', url: '' },
-            { num: '04', name: '', unit: '', origin: '', price: '', description: '', url: '' }
+          goodsListForm: [{
+            num: '示例',
+            name: '鱼香大米',
+            unit: '5KG',
+            origin: '重庆,西永',
+            price: '￥250',
+            description: '多种蛋白质、营养丰富、色泽光亮、颗粒饱满',
+            url: 'http://detail.tmall.com/item.htm?spm=a230r.1.14.172.VhFL'
+          },
+          {
+            num: '01',
+            name: '',
+            unit: '',
+            origin: '',
+            price: '',
+            description: '',
+            url: ''
+          },
+          {
+            num: '02',
+            name: '',
+            unit: '',
+            origin: '',
+            price: '',
+            description: '',
+            url: ''
+          },
+          {
+            num: '03',
+            name: '',
+            unit: '',
+            origin: '',
+            price: '',
+            description: '',
+            url: ''
+          },
+          {
+            num: '04',
+            name: '',
+            unit: '',
+            origin: '',
+            price: '',
+            description: '',
+            url: ''
+          }
           ]
         },
         registerRules: {
-          businesslicenseNum: [{ required: true, message: '请输入营业执照号码', trigger: 'blur' }],
-          licencepicpath: [{ required: true, message: '请上传营业执照', trigger: 'change' }],
-          operatoridnum: [{ required: true, trigger: 'blur', validator: validateId }],
-          sfzmpicpath: [{ required: true, message: '请上传经办人身份证正面', trigger: 'change' }],
-          sffmpicpath: [{ required: true, message: '请上传经办人身份证发面', trigger: 'change' }],
-          proxytestifypicpath: [{ required: true, message: '请上传代理授权证明', trigger: 'change' }]
+          businesslicenseNum: [{
+            required: true,
+            message: '请输入营业执照号码',
+            trigger: 'blur'
+          }],
+          licencepicpath: [{
+            required: true,
+            message: '请上传营业执照',
+            trigger: 'change'
+          }],
+          operatoridnum: [{
+            required: true,
+            trigger: 'blur',
+            validator: validateId
+          }],
+          sfzmpicpath: [{
+            required: true,
+            message: '请上传经办人身份证正面',
+            trigger: 'change'
+          }],
+          sffmpicpath: [{
+            required: true,
+            message: '请上传经办人身份证发面',
+            trigger: 'change'
+          }],
+          proxytestifypicpath: [{
+            required: true,
+            message: '请上传代理授权证明',
+            trigger: 'change'
+          }]
         }
       }
     },
@@ -193,7 +231,7 @@
       Regheader,
       Regfooter
     },
-    mounted () {
+    mounted() {
       // 从下一步返回到上一步时取出之前填写的值
       var registerInfo = window.localStorage.getItem('registerInfo')
       if (registerInfo !== undefined && registerInfo !== '') {
@@ -245,12 +283,17 @@
         this.dialogVisible = true
       },
       goBack() {
-        this.$router.push({ path: '/regStepTwo' })
+        this.$router.push({
+          path: '/regStepTwo'
+        })
       },
       goNext() {
         // 校验输入数据
         if (this.registerForm.businesslicenseNum === '') {
-          this.$message({ type: 'warning', message: '请输入营业执照号码' })
+          this.$message({
+            type: 'warning',
+            message: '请输入营业执照号码'
+          })
           return
         }
         // if (this.registerForm.sfzmpicpath === '') {
@@ -258,7 +301,10 @@
         //   return
         // }
         if (this.registerForm.operatoridnum === '') {
-          this.$message({ type: 'warning', message: '请输入经办人身份证号码' })
+          this.$message({
+            type: 'warning',
+            message: '请输入经办人身份证号码'
+          })
           return
         }
         // if (this.registerForm.sfzmpicpath === '') {
@@ -278,7 +324,8 @@
         // 提交到后台
         var goodsSamplelist = []
         for (let i = 1; i < this.registerForm.goodsListForm.length; i++) {
-          if ((this.registerForm.goodsListForm[i].name.trim() !== undefined && this.registerForm.goodsListForm[i].name.trim() !== '')) {
+          if ((this.registerForm.goodsListForm[i].name.trim() !== undefined && this.registerForm.goodsListForm[i].name.trim() !==
+              '')) {
             goodsSamplelist.push({
               'name': `${this.registerForm.goodsListForm[i].name}`,
               'unit': `${this.registerForm.goodsListForm[i].unit}`,
@@ -291,20 +338,20 @@
         }
         var params = {
           'businessesBean': {
-            'businessesName': this.registerForm.businessesName,       // 企业名称
-            'locationCode': `${this.registerForm.locationCode}`,		// 归属区域ID
+            'businessesName': this.registerForm.businessesName, // 企业名称
+            'locationCode': `${this.registerForm.locationCode}`, // 归属区域ID
             'merchantKind': `${this.registerForm.merchantKind}`,
             'businesslicenseNum': this.registerForm.businesslicenseNum, // 企业营业执照号码
-            'address': this.registerForm.address,				// 详细地址
-            'relationPerson': this.registerForm.relationPerson,			// 联系人姓名
-            'relationPhone': this.registerForm.relationPhone,		// 联系人电话，用于登陆，初始密码123456
-            'sellPersonName': this.registerForm.sellPersonName,			// 售后联系人
-            'sellPersonMobile': this.registerForm.sellPersonMobile,	// 售后联系人电话
-            'financePersonName': this.registerForm.financePersonName,		// 财务姓名
+            'address': this.registerForm.address, // 详细地址
+            'relationPerson': this.registerForm.relationPerson, // 联系人姓名
+            'relationPhone': this.registerForm.relationPhone, // 联系人电话，用于登陆，初始密码123456
+            'sellPersonName': this.registerForm.sellPersonName, // 售后联系人
+            'sellPersonMobile': this.registerForm.sellPersonMobile, // 售后联系人电话
+            'financePersonName': this.registerForm.financePersonName, // 财务姓名
             'financePersonMobile': this.registerForm.financePersonMobile, // 财务联系人手机
-            'operatoridnum': this.registerForm.operatoridnum,	// 经办人身份证
-            'isInvoice': `${this.registerForm.isInvoice}`,   // 是否可开发票，0:不开，1：可以开发票
-            'createsource': '1'           // 录入渠道 1、商家注册 2、管理员添加
+            'operatoridnum': this.registerForm.operatoridnum, // 经办人身份证
+            'isInvoice': `${this.registerForm.isInvoice}`, // 是否可开发票，0:不开，1：可以开发票
+            'createsource': '1' // 录入渠道 1、商家注册 2、管理员添加
           },
           'registerAttachmentBean': {
             'sfzmpicpath': `http:www.baidu.com`,
@@ -336,7 +383,9 @@
         }
         EnterpriseRegister(params).then(response => {
           if (response.status === 200) {
-            this.$router.push({ path: '/regStepFour' })
+            this.$router.push({
+              path: '/regStepFour'
+            })
           } else {
             this.$message.error(response.msg)
           }
@@ -346,12 +395,13 @@
       }
     }
   }
+
 </script>
 
 <style>
-.avatar{
-  width: 146px;
-  height: 146px
-}
-</style>
+  .avatar {
+    width: 146px;
+    height: 146px
+  }
 
+</style>

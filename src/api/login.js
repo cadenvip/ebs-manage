@@ -13,7 +13,9 @@ export function getInfo(userid) {
   return request({
     url: '/user/detail',
     method: 'post',
-    data: { 'userid': userid }
+    data: {
+      'userid': userid
+    }
   })
 }
 
@@ -28,7 +30,9 @@ export function getVercode(params) {
   return request({
     url: '/vercode',
     method: 'post',
-    data: { 'loginname': `${params}` }
+    data: {
+      'loginname': `${params}`
+    }
   })
 }
 
@@ -36,7 +40,9 @@ export function getUnitInfos(params) {
   return request({
     url: '/sreachunit',
     method: 'post',
-    data: { 'loginname': `${params}` }
+    data: {
+      'loginname': `${params}`
+    }
   })
 }
 

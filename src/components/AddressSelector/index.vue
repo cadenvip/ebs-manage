@@ -24,222 +24,228 @@
 </template>
 
 <script type="text/ecmascript-6">
+  import {
+    getAllProvinces,
+    getAllCities,
+    getAllCounties,
+    getLocationInfoById
+  } from '@/api/regionselecter'
 
-import { getAllProvinces, getAllCities, getAllCounties, getLocationInfoById } from '@/api/regionselecter'
-
-export default {
-  props: {
-    grade: {
-      type: Number,
-      default: 4
+  export default {
+    props: {
+      grade: {
+        type: Number,
+        default: 4
+      },
+      locationId: {
+        type: String,
+        default: '0'
+      },
+      detailAddress: {
+        type: String,
+        default: ''
+      },
+      index: {
+        Number,
+        default: -1
+      }
     },
-    locationId: {
-      type: String,
-      default: '0'
+    data: function () {
+      return {
+        province: '',
+        city: '',
+        county: '',
+        town_village: this.detailAddress,
+        provinces: [],
+        cities: [],
+        counties: [],
+        locationInfo: {}
+      }
     },
-    detailAddress: {
-      type: String,
-      default: ''
-    },
-    index: {
-      Number,
-      default: -1
-    }
-  },
-  data: function () {
-    return {
-      province: '',
-      city: '',
-      county: '',
-      town_village: this.detailAddress,
-      provinces: [],
-      cities: [],
-      counties: [],
-      locationInfo: {}
-    }
-  },
-  created () {
-    if (this.locationId === undefined || this.locationId === '' || this.locationId === '0') {
-      this.province = ''
-      this.city = ''
-      this.county = ''
-    } else {
-      this.getLocationById(this.locationId)
-    }
-  },
-  mounted () {
-    // 默认中国
-    this.getProvinces()
-  },
-  watch: {
-    locationId: function() {
+    created() {
       if (this.locationId === undefined || this.locationId === '' || this.locationId === '0') {
         this.province = ''
         this.city = ''
         this.county = ''
       } else {
-        if (this.locationInfo === undefined || this.locationInfo.id === undefined || this.locationInfo.id.toString() !== this.locationId) {
+        this.getLocationById(this.locationId)
+      }
+    },
+    mounted() {
+      // 默认中国
+      this.getProvinces()
+    },
+    watch: {
+      locationId: function () {
+        if (this.locationId === undefined || this.locationId === '' || this.locationId === '0') {
           this.province = ''
           this.city = ''
           this.county = ''
-          this.getLocationById(this.locationId)
+        } else {
+          if (this.locationInfo === undefined || this.locationInfo.id === undefined || this.locationInfo.id.toString() !==
+            this.locationId) {
+            this.province = ''
+            this.city = ''
+            this.county = ''
+            this.getLocationById(this.locationId)
+          }
         }
+      },
+      detailAddress: function () {
+        this.town_village = this.detailAddress
       }
     },
-    detailAddress: function () {
-      this.town_village = this.detailAddress
-    }
-  },
-  methods: {
-    getLocationById (locationId) {
-      getLocationInfoById(locationId).then(response => {
-        if (response.status === 200) {
-          var resultData = response.data.list[0]
-          if (resultData !== undefined) {
-            switch (resultData.locationLevel) {
-              case 3:
-                this.county = resultData.id
-                getAllCounties(resultData.parentId).then(response => {
-                  if (response.status === 200) {
-                    this.counties = response.data.list
-                    this.getLocationById(resultData.parentId)
-                  } else {
-                    this.$message.error(response.msg)
-                  }
-                }).catch(error => {
-                  this.$message.error(error)
-                })
-                break
-              case 2:
-                this.city = resultData.id
-                getAllCities(resultData.parentId).then(response => {
-                  if (response.status === 200) {
-                    this.cities = response.data.list
-                    this.getLocationById(resultData.parentId)
-                  } else {
-                    this.$message.error(response.msg)
-                  }
-                }).catch(error => {
-                  this.$message.error(error)
-                })
-                break
-              case 1:
-                this.province = resultData.id
-                getAllProvinces(resultData.parentId).then(response => {
-                  if (response.status === 200) {
-                    this.provinces = response.data.list
-                    this.getLocationById(resultData.parentId)
-                  } else {
-                    this.$message.error(response.msg)
-                  }
-                }).catch(error => {
-                  this.$message.error(error)
-                })
-                break
-              default:
-                break
+    methods: {
+      getLocationById(locationId) {
+        getLocationInfoById(locationId).then(response => {
+          if (response.status === 200) {
+            var resultData = response.data.list[0]
+            if (resultData !== undefined) {
+              switch (resultData.locationLevel) {
+                case 3:
+                  this.county = resultData.id
+                  getAllCounties(resultData.parentId).then(response => {
+                    if (response.status === 200) {
+                      this.counties = response.data.list
+                      this.getLocationById(resultData.parentId)
+                    } else {
+                      this.$message.error(response.msg)
+                    }
+                  }).catch(error => {
+                    this.$message.error(error)
+                  })
+                  break
+                case 2:
+                  this.city = resultData.id
+                  getAllCities(resultData.parentId).then(response => {
+                    if (response.status === 200) {
+                      this.cities = response.data.list
+                      this.getLocationById(resultData.parentId)
+                    } else {
+                      this.$message.error(response.msg)
+                    }
+                  }).catch(error => {
+                    this.$message.error(error)
+                  })
+                  break
+                case 1:
+                  this.province = resultData.id
+                  getAllProvinces(resultData.parentId).then(response => {
+                    if (response.status === 200) {
+                      this.provinces = response.data.list
+                      this.getLocationById(resultData.parentId)
+                    } else {
+                      this.$message.error(response.msg)
+                    }
+                  }).catch(error => {
+                    this.$message.error(error)
+                  })
+                  break
+                default:
+                  break
+              }
+            }
+          } else {
+            this.$message.error(response.msg)
+          }
+        }).catch(error => {
+          this.$message.error(error)
+        })
+      },
+      getProvinces() {
+        getAllProvinces('0').then(response => {
+          if (response.status === 200) {
+            this.provinces = response.data.list
+          } else {
+            this.$message.error(response.msg)
+          }
+        }).catch(error => {
+          this.$message.error(error)
+        })
+      },
+      getCities() {
+        getAllCities(this.province).then(response => {
+          if (response.status === 200) {
+            this.cities = response.data.list
+          } else {
+            this.$message.error(response.msg)
+          }
+        }).catch(error => {
+          this.$message.error(error)
+        })
+      },
+      getCounties() {
+        getAllCounties(this.city).then(response => {
+          if (response.status === 200) {
+            this.counties = response.data.list
+          } else {
+            this.$message.error(response.msg)
+          }
+        }).catch(error => {
+          this.$message.error(error)
+        })
+      },
+      provinceChanged() {
+        this.city = ''
+        this.county = ''
+        this.town_village = ''
+        if (this.province !== '') {
+          this.getCities()
+        } else {
+          this.cities = []
+        }
+        this.counties = []
+        this.getLocationInfo()
+      },
+      cityChanged() {
+        this.county = ''
+        this.town_village = ''
+        if (this.city !== '') {
+          this.getCounties()
+        } else {
+          this.counties = []
+        }
+        this.getLocationInfo()
+      },
+      countyChanged() {
+        this.town_village = ''
+        this.getLocationInfo()
+      },
+      town_villageChanged() {
+        this.getLocationInfo()
+      },
+      getLocationInfo() {
+        if (this.county !== '') {
+          for (let i = 0; i < this.counties.length; i++) {
+            if (this.counties[i].id === this.county) {
+              this.locationInfo = this.counties[i]
+              break
+            }
+          }
+        } else if (this.city !== '') {
+          for (let i = 0; i < this.cities.length; i++) {
+            if (this.cities[i].id === this.city) {
+              this.locationInfo = this.cities[i]
+              break
+            }
+          }
+        } else if (this.province !== '') {
+          for (let i = 0; i < this.provinces.length; i++) {
+            if (this.provinces[i].id === this.province) {
+              this.locationInfo = this.provinces[i]
+              break
             }
           }
         } else {
-          this.$message.error(response.msg)
+          this.locationInfo = {}
         }
-      }).catch(error => {
-        this.$message.error(error)
-      })
-    },
-    getProvinces() {
-      getAllProvinces('0').then(response => {
-        if (response.status === 200) {
-          this.provinces = response.data.list
-        } else {
-          this.$message.error(response.msg)
+        if (this.locationInfo !== undefined) {
+          this.locationInfo.town_village = this.town_village
         }
-      }).catch(error => {
-        this.$message.error(error)
-      })
-    },
-    getCities() {
-      getAllCities(this.province).then(response => {
-        if (response.status === 200) {
-          this.cities = response.data.list
-        } else {
-          this.$message.error(response.msg)
-        }
-      }).catch(error => {
-        this.$message.error(error)
-      })
-    },
-    getCounties() {
-      getAllCounties(this.city).then(response => {
-        if (response.status === 200) {
-          this.counties = response.data.list
-        } else {
-          this.$message.error(response.msg)
-        }
-      }).catch(error => {
-        this.$message.error(error)
-      })
-    },
-    provinceChanged() {
-      this.city = ''
-      this.county = ''
-      this.town_village = ''
-      if (this.province !== '') {
-        this.getCities()
-      } else {
-        this.cities = []
+        this.locationInfo.index = this.index
+        this.$emit('addressChanged', this.locationInfo)
       }
-      this.counties = []
-      this.getLocationInfo()
-    },
-    cityChanged() {
-      this.county = ''
-      this.town_village = ''
-      if (this.city !== '') {
-        this.getCounties()
-      } else {
-        this.counties = []
-      }
-      this.getLocationInfo()
-    },
-    countyChanged() {
-      this.town_village = ''
-      this.getLocationInfo()
-    },
-    town_villageChanged() {
-      this.getLocationInfo()
-    },
-    getLocationInfo () {
-      if (this.county !== '') {
-        for (let i = 0; i < this.counties.length; i++) {
-          if (this.counties[i].id === this.county) {
-            this.locationInfo = this.counties[i]
-            break
-          }
-        }
-      } else if (this.city !== '') {
-        for (let i = 0; i < this.cities.length; i++) {
-          if (this.cities[i].id === this.city) {
-            this.locationInfo = this.cities[i]
-            break
-          }
-        }
-      } else if (this.province !== '') {
-        for (let i = 0; i < this.provinces.length; i++) {
-          if (this.provinces[i].id === this.province) {
-            this.locationInfo = this.provinces[i]
-            break
-          }
-        }
-      } else {
-        this.locationInfo = {}
-      }
-      if (this.locationInfo !== undefined) {
-        this.locationInfo.town_village = this.town_village
-      }
-      this.locationInfo.index = this.index
-      this.$emit('addressChanged', this.locationInfo)
     }
   }
-}
+
 </script>

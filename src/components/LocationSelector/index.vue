@@ -1,5 +1,3 @@
-
-
 <template>
   <div class="LocationSelector">
     <el-row :gutter="6">
@@ -12,32 +10,18 @@
     </el-row>
     <br/>
     <div v-show="showLazyTree" class="Tree">
-      <el-tree
-        lazy
-        :highlight-current="true"
-        :load="loadNode"
-        :props="defaultProps"
-        @node-click="handleNodeClick"
-        ref="lazyTree">
+      <el-tree lazy :highlight-current="true" :load="loadNode" :props="defaultProps" @node-click="handleNodeClick" ref="lazyTree">
       </el-tree>
     </div>
     <div v-show="showQueryResult" class="Tree">
-      <el-tree
-        :data="data"
-        :load="loadNode"
-        :highlight-current="true"
-        :default-expand-all="true"
-        :props="defaultProps"
-        @node-click="handleNodeClick"
-        v-loading="loading"
-        ref="resultTree">
+      <el-tree :data="data" :load="loadNode" :highlight-current="true" :default-expand-all="true" :props="defaultProps" @node-click="handleNodeClick"
+        v-loading="loading" ref="resultTree">
       </el-tree>
     </div>
   </div>
 </template>
 
 <script>
-
   import { // getAllCountries
     getAllProvinces,
     getAllCities,
@@ -122,8 +106,18 @@
                     this.arrCounties = this.removeDuplicatedItem(this.arrCounties)
                     this.arrCities = this.removeDuplicatedItem(this.arrCities)
                     this.arrProvinces = this.removeDuplicatedItem(this.arrProvinces)
-                    var dataTemp = [{ 'id': 0, 'locationName': '全国', 'locationCode': '100', 'lastLevelCode': '',
-                      'parentId': -1, 'locationLevel': 0, 'description': '中国', 'orderindex': '', 'locationLevelName': '', 'label': '全国' }]
+                    var dataTemp = [{
+                      'id': 0,
+                      'locationName': '全国',
+                      'locationCode': '100',
+                      'lastLevelCode': '',
+                      'parentId': -1,
+                      'locationLevel': 0,
+                      'description': '中国',
+                      'orderindex': '',
+                      'locationLevelName': '',
+                      'label': '全国'
+                    }]
                     dataTemp.push.apply(dataTemp, this.arrProvinces)
                     dataTemp.push.apply(dataTemp, this.arrCities)
                     dataTemp.push.apply(dataTemp, this.arrCounties)
@@ -138,7 +132,11 @@
                       delete dataTemp[i].description
                       delete dataTemp[i].locationName
                     }
-                    this.data = this.list2Tree(dataTemp, { 'idKey': 'id', 'parentKey': 'parentId', 'childrenKey': 'children' })
+                    this.data = this.list2Tree(dataTemp, {
+                      'idKey': 'id',
+                      'parentKey': 'parentId',
+                      'childrenKey': 'children'
+                    })
                     this.loading = false
                   })
                 })
@@ -214,7 +212,13 @@
       },
       loadNode(node, resolve) {
         if (node.level === 0) {
-          return resolve([{ label: '全国', id: '0', 'parentId': '-1', 'locationCode': '100', 'locationLevel': '0' }])
+          return resolve([{
+            label: '全国',
+            id: '0',
+            'parentId': '-1',
+            'locationCode': '100',
+            'locationLevel': '0'
+          }])
         }
         // if (node.level === 1) {
         //   getAllCountries('-1').then(response => {
@@ -236,8 +240,14 @@
           getAllProvinces(node.data.id).then(response => {
             if (response.status === 200) {
               var arrProvinces = []
-              response.data.list.forEach(function(v) {
-                arrProvinces.push({ 'id': v.id, 'label': v.locationName, 'parent': v.parentId, 'locationCode': v.locationCode, 'locationLevel': v.locationLevel })
+              response.data.list.forEach(function (v) {
+                arrProvinces.push({
+                  'id': v.id,
+                  'label': v.locationName,
+                  'parent': v.parentId,
+                  'locationCode': v.locationCode,
+                  'locationLevel': v.locationLevel
+                })
                 return resolve(arrProvinces)
               })
             } else {
@@ -253,8 +263,14 @@
           getAllCities(node.data.id).then(response => {
             if (response.status === 200) {
               var arrCities = []
-              response.data.list.forEach(function(v) {
-                arrCities.push({ 'id': v.id, 'label': v.locationName, 'parent': v.parentId, 'locationCode': v.locationCode, 'locationLevel': v.locationLevel })
+              response.data.list.forEach(function (v) {
+                arrCities.push({
+                  'id': v.id,
+                  'label': v.locationName,
+                  'parent': v.parentId,
+                  'locationCode': v.locationCode,
+                  'locationLevel': v.locationLevel
+                })
                 return resolve(arrCities)
               })
             } else {
@@ -270,8 +286,14 @@
           getAllCounties(node.data.id).then(response => {
             if (response.status === 200) {
               var arrCounties = []
-              response.data.list.forEach(function(v) {
-                arrCounties.push({ 'id': v.id, 'label': v.locationName, 'parent': v.parentId, 'locationCode': v.locationCode, 'locationLevel': v.locationLevel })
+              response.data.list.forEach(function (v) {
+                arrCounties.push({
+                  'id': v.id,
+                  'label': v.locationName,
+                  'parent': v.parentId,
+                  'locationCode': v.locationCode,
+                  'locationLevel': v.locationLevel
+                })
                 return resolve(arrCounties)
               })
             } else {
@@ -287,8 +309,14 @@
           getAllTowns(node.data.id).then(response => {
             if (response.status === 200) {
               var arrTowns = []
-              response.data.list.forEach(function(v) {
-                arrTowns.push({ 'id': v.id, 'label': v.locationName, 'parent': v.parentId, 'locationCode': v.locationCode, 'locationLevel': v.locationLevel })
+              response.data.list.forEach(function (v) {
+                arrTowns.push({
+                  'id': v.id,
+                  'label': v.locationName,
+                  'parent': v.parentId,
+                  'locationCode': v.locationCode,
+                  'locationLevel': v.locationLevel
+                })
                 return resolve(arrTowns)
               })
             } else {
@@ -304,8 +332,14 @@
           getAllVillages(node.data.id).then(response => {
             if (response.status === 200) {
               var arrVillages = []
-              response.data.list.forEach(function(v) {
-                arrVillages.push({ 'id': v.id, 'label': v.locationName, 'parent': v.parentId, 'locationCode': v.locationCode, 'locationLevel': v.locationLevel })
+              response.data.list.forEach(function (v) {
+                arrVillages.push({
+                  'id': v.id,
+                  'label': v.locationName,
+                  'parent': v.parentId,
+                  'locationCode': v.locationCode,
+                  'locationLevel': v.locationLevel
+                })
                 return resolve(arrVillages)
               })
             } else {
@@ -362,6 +396,7 @@
       }
     }
   }
+
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
@@ -370,4 +405,5 @@
     height: 400px;
     overflow-x: auto
   }
+
 </style>

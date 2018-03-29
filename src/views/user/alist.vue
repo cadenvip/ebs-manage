@@ -6,24 +6,24 @@
         <el-col :span="10">
           <el-form-item label="账号：">
             <el-input v-model="searchForm.loginname" clearable style="width: 300px;" placeholder="请输入账号"></el-input>
-          </el-form-item>  
+          </el-form-item>
         </el-col>
         <el-col :span="10">
           <el-form-item label="手机号码：">
             <el-input v-model="searchForm.phoneno" clearable style="width: 300px;" placeholder="请输入手机号码"></el-input>
-          </el-form-item>  
+          </el-form-item>
         </el-col>
       </el-row>
       <el-row>
         <el-col :span="10">
           <el-form-item label="姓名：">
             <el-input v-model="searchForm.name" clearable style="width: 300px;" placeholder="请输入姓名"></el-input>
-          </el-form-item>  
+          </el-form-item>
         </el-col>
         <el-col :span="10">
           <el-form-item label="归属区域：">
             <el-input v-model="searchForm.locationname" clearable style="width: 300px;" @focus="handleLocationFocus" placeholder="请选择归属区域"></el-input>
-          </el-form-item>  
+          </el-form-item>
         </el-col>
       </el-row>
       <el-row>
@@ -35,10 +35,7 @@
         </el-col>
       </el-row>
     </el-form>
-    <el-dialog
-      title="请选择区域"
-      :visible.sync="dialogVisible"
-      width="440px">
+    <el-dialog title="请选择区域" :visible.sync="dialogVisible" width="440px">
       <locationselector @locationSelected="getLocationInfo"></locationselector>
     </el-dialog>
     <h3 style="padding-left: 20px;">人员列表</h3>
@@ -49,7 +46,7 @@
       <el-table-column label="归属区域" prop="locationname" width="180" align="center"></el-table-column>
       <el-table-column label="商家" prop="unitname" width="180" align="center"></el-table-column>
       <el-table-column label="状态" prop="locked" :formatter="lockedFormat" width="80" align="center"></el-table-column>
-      <el-table-column label="最近登录时间" prop="logintime" width="180" align="center"></el-table-column>  
+      <el-table-column label="最近登录时间" prop="logintime" width="180" align="center"></el-table-column>
       <el-table-column label="操作" width="220" align="center">
         <template slot-scope="scope">
           <el-button @click="updateUser(scope.row)" type="text" size="small">修改</el-button>
@@ -61,155 +58,168 @@
       </el-table-column>
     </el-table>
     <div class="block" align="right" style="padding-right:20px">
-      <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        layout="total, sizes, prev, pager, next, jumper"
-        :current-page="currentPage"
-        :page-sizes="pagesizes"
-        :page-size="pagesize"
-        :total="total">
+      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" layout="total, sizes, prev, pager, next, jumper"
+        :current-page="currentPage" :page-sizes="pagesizes" :page-size="pagesize" :total="total">
       </el-pagination>
     </div>
   </div>
 </template>
 
 <script>
-import { getAllUsers, getUserList, resetUserPassword, lockUser } from '@/api/user'
-import locationselector from '@/components/LocationSelector/index'
+  import {
+    getAllUsers,
+    getUserList,
+    resetUserPassword,
+    lockUser
+  } from '@/api/user'
+  import locationselector from '@/components/LocationSelector/index'
 
-export default {
-  data() {
-    return {
-      list: [],
-      searchForm: {
-        loginname: '',
-        phoneno: '',
-        name: '',
-        locationid: '',
-        locationname: ''
-      },
-      pagesizes: [10, 20, 30, 50],
-      pagesize: 10,
-      currentPage: 1,
-      total: 0,
-      loading: true,
-      dialogVisible: false
-    }
-  },
-  components: {
-    locationselector
-  },
-  created() {
-    this.initUserList()
-  },
-  methods: {
-    queryUserList() {
-      this.loading = true
-      getUserList(this.searchForm, this.currentPage, this.pagesize).then(response => {
-        if (response.status === 200) {
-          this.list = response.data.list
-          this.total = response.data.total
-        } else {
-          this.$message.error(response.msg)
-        }
-        this.loading = false
-      }).catch(error => {
-        this.loading = false
-        this.$message.error(error)
-      })
-    },
-    addUser() {
-      this.$router.push({ path: '/system/user/aadd' })
-    },
-    initUserList() {
-      this.loading = true
-      getAllUsers(this.currentPage, this.pagesize).then(response => {
-        if (response.status === 200) {
-          this.list = response.data.list
-          this.total = response.data.total
-        } else {
-          this.$message.error(response.msg)
-        }
-        this.loading = false
-      }).catch(error => {
-        this.loading = false
-        this.$message.error(error)
-      })
-    },
-    lockedFormat(row, column, cellValue) {
-      var lockStatus = ''
-      if (cellValue !== undefined && cellValue !== null) {
-        switch (cellValue) {
-          case '0':
-            lockStatus = '正常'
-            break
-          case '1':
-            lockStatus = '锁定'
-            break
-          default: break
-        }
+  export default {
+    data() {
+      return {
+        list: [],
+        searchForm: {
+          loginname: '',
+          phoneno: '',
+          name: '',
+          locationid: '',
+          locationname: ''
+        },
+        pagesizes: [10, 20, 30, 50],
+        pagesize: 10,
+        currentPage: 1,
+        total: 0,
+        loading: true,
+        dialogVisible: false
       }
-      return lockStatus
     },
-    updateUser(user) {
-      this.$router.push({ path: '/system/user/aupdate', query: { id: user.id }})
+    components: {
+      locationselector
     },
-    resetPassword(user) {
-      this.$confirm(`您确定重置[${user.loginname}]的密码吗, 是否继续?`, '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        resetUserPassword(user).then(response => {
+    created() {
+      this.initUserList()
+    },
+    methods: {
+      queryUserList() {
+        this.loading = true
+        getUserList(this.searchForm, this.currentPage, this.pagesize).then(response => {
           if (response.status === 200) {
-            this.$message.success('重置成功!')
+            this.list = response.data.list
+            this.total = response.data.total
           } else {
             this.$message.error(response.msg)
           }
+          this.loading = false
+        }).catch(error => {
+          this.loading = false
+          this.$message.error(error)
         })
-      }).catch(() => {
-        this.$message.info('已取消重置')
-      })
-    },
-    opLock(user, locked) {
-      this.$confirm(`您确定锁定账号[${user.loginname}]的吗, 是否继续?`, '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        lockUser(user, locked).then(response => {
+      },
+      addUser() {
+        this.$router.push({
+          path: '/system/user/aadd'
+        })
+      },
+      initUserList() {
+        this.loading = true
+        getAllUsers(this.currentPage, this.pagesize).then(response => {
           if (response.status === 200) {
-            this.$message.success('操作成功!')
-            user.locked = locked
+            this.list = response.data.list
+            this.total = response.data.total
           } else {
             this.$message.error(response.msg)
           }
+          this.loading = false
+        }).catch(error => {
+          this.loading = false
+          this.$message.error(error)
         })
-      }).catch(() => {
-        this.$message.info('已取消操作')
-      })
-    },
-    detail(user) {
-      this.$router.push({ path: '/system/user/adetail', query: { id: user.id }})
-    },
-    handleSizeChange(val) {
-      this.pagesize = val
-      this.queryUserList()
-    },
-    handleCurrentChange(val) {
-      this.currentPage = val
-      this.queryUserList()
-    },
-    getLocationInfo: function(data) {
-      this.searchForm.locationid = data.id
-      this.searchForm.locationname = data.label
-    },
-    handleLocationFocus() {
-      this.dialogVisible = true
-      this.searchForm.locationid = ''
-      this.searchForm.locationname = ''
+      },
+      lockedFormat(row, column, cellValue) {
+        var lockStatus = ''
+        if (cellValue !== undefined && cellValue !== null) {
+          switch (cellValue) {
+            case '0':
+              lockStatus = '正常'
+              break
+            case '1':
+              lockStatus = '锁定'
+              break
+            default:
+              break
+          }
+        }
+        return lockStatus
+      },
+      updateUser(user) {
+        this.$router.push({
+          path: '/system/user/aupdate',
+          query: {
+            id: user.id
+          }
+        })
+      },
+      resetPassword(user) {
+        this.$confirm(`您确定重置[${user.loginname}]的密码吗, 是否继续?`, '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          resetUserPassword(user).then(response => {
+            if (response.status === 200) {
+              this.$message.success('重置成功!')
+            } else {
+              this.$message.error(response.msg)
+            }
+          })
+        }).catch(() => {
+          this.$message.info('已取消重置')
+        })
+      },
+      opLock(user, locked) {
+        this.$confirm(`您确定锁定账号[${user.loginname}]的吗, 是否继续?`, '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          lockUser(user, locked).then(response => {
+            if (response.status === 200) {
+              this.$message.success('操作成功!')
+              user.locked = locked
+            } else {
+              this.$message.error(response.msg)
+            }
+          })
+        }).catch(() => {
+          this.$message.info('已取消操作')
+        })
+      },
+      detail(user) {
+        this.$router.push({
+          path: '/system/user/adetail',
+          query: {
+            id: user.id
+          }
+        })
+      },
+      handleSizeChange(val) {
+        this.pagesize = val
+        this.queryUserList()
+      },
+      handleCurrentChange(val) {
+        this.currentPage = val
+        this.queryUserList()
+      },
+      getLocationInfo: function (data) {
+        this.searchForm.locationid = data.id
+        this.searchForm.locationname = data.label
+      },
+      handleLocationFocus() {
+        this.dialogVisible = true
+        this.searchForm.locationid = ''
+        this.searchForm.locationname = ''
+      }
     }
   }
-}
+
 </script>

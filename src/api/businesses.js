@@ -19,7 +19,8 @@ export function getBusinessesList(businessesInfo, currentpage, pagesize) {
   return request({
     url: '/businesses/listbusinesses',
     method: 'post',
-    data: { 'businessesName': `${businessesInfo.businessesName}`,
+    data: {
+      'businessesName': `${businessesInfo.businessesName}`,
       'state': `${businessesInfo.state}`,
       'createsource': `${businessesInfo.createsource !== undefined ? businessesInfo.createsource : ''}`,
       'locationCode': `${businessesInfo.locationCode !== '' ? businessesInfo.locationCode : 0}`,
@@ -65,7 +66,9 @@ export function getBusinessesDetail(params) {
   return request({
     url: '/businesses/businessesdetail',
     method: 'post',
-    data: { 'unitid': `${params}` }
+    data: {
+      'unitid': `${params}`
+    }
   })
 }
 
@@ -73,7 +76,8 @@ export function auditBusinesses(params) {
   return request({
     url: '/businesses/businessesaudit',
     method: 'post',
-    data: { 'businessesid': `${params.businessesid}`,
+    data: {
+      'businessesid': `${params.businessesid}`,
       'state': `${params.state}`,
       'reason': `${params.reason}`
     }

@@ -7,90 +7,90 @@
           <el-col :span="4" style="text-align:right">
             <span>
               流水号：
-            </span> 
+            </span>
           </el-col>
           <el-col :span="8">
             <span>
               {{ logDetail.reqseq }}
-            </span> 
+            </span>
           </el-col>
           <el-col :span="4" style="text-align:right">
             <span>
               接口服务名：
-            </span> 
+            </span>
           </el-col>
           <el-col :span="8">
             <span>
               {{ logDetail.reqservice }}
-            </span> 
+            </span>
           </el-col>
         </el-row>
         <el-row :gutter="6" style="margin-left:0px;margin-right:0px;margin-top:12px;">
           <el-col :span="4" style="text-align:right">
             <span>
               接口消息标志：
-            </span> 
+            </span>
           </el-col>
           <el-col :span="8">
             <span>
               {{ logDetail.reqaction }}
-            </span> 
+            </span>
           </el-col>
           <el-col :span="4" style="text-align:right">
             <span>
               发起方编码：
-            </span> 
+            </span>
           </el-col>
           <el-col :span="8">
             <span>
               {{ logDetail.reqcode }}
-            </span> 
+            </span>
           </el-col>
         </el-row>
         <el-row :gutter="6" style="margin-left:0px;margin-right:0px;margin-top:12px;">
           <el-col :span="4" style="text-align:right">
             <span>
               发起方IP地址：
-            </span> 
+            </span>
           </el-col>
           <el-col :span="8">
             <span>
               {{ logDetail.clientip }}
-            </span> 
+            </span>
           </el-col>
           <el-col :span="4" style="text-align:right">
             <span>
               接口协议：
-            </span> 
+            </span>
           </el-col>
           <el-col :span="8">
             <span>
               {{ logDetail.protocol }}
-            </span> 
+            </span>
           </el-col>
         </el-row>
         <el-row :gutter="6" style="margin-left:0px;margin-right:0px;margin-top:12px;">
           <el-col :span="4" style="text-align:right">
             <span>
               耗时（毫秒）：
-            </span> 
+            </span>
           </el-col>
           <el-col :span="8">
             <span>
               {{ logDetail.timed }}
-            </span> 
+            </span>
           </el-col>
           <el-col :span="4" style="text-align:right">
             <span>
               创建时间：
-            </span> 
+            </span>
           </el-col>
           <el-col :span="8">
             <span>
               {{ logDetail.createtime }}
-            </span> 
+            </span>
           </el-col>
-        </el-row>                                                   
+        </el-row>
       </div>
       <h3>请求报文</h3>
       <div style="color: #606266;font-size:14px;width:960px;height:200px;overflow-x:hidden;border:#E6E6E6 solid 1px;padding:15px 20px;line-height:30px;word-wrap:break-word;word-break:break-all;">
@@ -112,7 +112,9 @@
 </template>
 
 <script>
-  import { getILogDetail } from '@/api/log'
+  import {
+    getILogDetail
+  } from '@/api/log'
   export default {
     data() {
       return {
@@ -151,9 +153,12 @@
         })
       },
       goBack() {
-        this.$router.push({ path: '/log/ilog/list' })
+        this.$router.push({
+          path: '/log/ilog/list'
+        })
         // this.$router.go(-1)
       }
     }
   }
+
 </script>

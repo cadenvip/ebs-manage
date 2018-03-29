@@ -7,100 +7,100 @@
           <el-col :span="4" style="text-align:right">
             <span>
               流水号：
-            </span> 
+            </span>
           </el-col>
           <el-col :span="8">
             <span>
               {{ logDetail.id }}
-            </span> 
+            </span>
           </el-col>
           <el-col :span="4" style="text-align:right">
             <span>
               操作门户：
-            </span> 
+            </span>
           </el-col>
           <el-col :span="8">
             <span>
               {{ systemFormat }}
-            </span> 
+            </span>
           </el-col>
         </el-row>
         <el-row :gutter="6" style="margin-left:0px;margin-right:0px;margin-top:12px;">
           <el-col :span="4" style="text-align:right">
             <span>
               操作人账号：
-            </span> 
+            </span>
           </el-col>
           <el-col :span="8">
             <span>
               {{ logDetail.loginName !== null ? logDetail.loginName : '&nbsp;' }}
-            </span> 
+            </span>
           </el-col>
           <el-col :span="4" style="text-align:right">
             <span>
               操作模块：
-            </span> 
+            </span>
           </el-col>
           <el-col :span="8">
             <span>
               {{ logDetail.moduleId !== null ? logDetail.moduleId : '&nbsp;' }}
-            </span> 
+            </span>
           </el-col>
         </el-row>
         <el-row :gutter="6" style="margin-left:0px;margin-right:0px;margin-top:12px;">
           <el-col :span="4" style="text-align:right">
             <span>
               操作类型：
-            </span> 
+            </span>
           </el-col>
           <el-col :span="8">
             <span>
               {{ logDetail.operType !== null ? logDetail.operType : '&nbsp;' }}
-            </span> 
+            </span>
           </el-col>
           <el-col :span="4" style="text-align:right">
             <span>
               操作人IP：
-            </span> 
+            </span>
           </el-col>
           <el-col :span="8">
             <span>
               {{ logDetail.clientIp }}
-            </span> 
+            </span>
           </el-col>
         </el-row>
         <el-row :gutter="6" style="margin-left:0px;margin-right:0px;margin-top:12px;">
           <el-col :span="4" style="text-align:right">
             <span>
               耗时（毫秒）：
-            </span> 
+            </span>
           </el-col>
           <el-col :span="8">
             <span>
               {{ logDetail.timed }}
-            </span> 
+            </span>
           </el-col>
           <el-col :span="4" style="text-align:right">
             <span>
               创建时间：
-            </span> 
+            </span>
           </el-col>
           <el-col :span="8">
             <span>
               {{ logDetail.createTime }}
-            </span> 
+            </span>
           </el-col>
         </el-row>
         <el-row :gutter="6" style="margin-left:0px;margin-right:0px;margin-top:12px;margin-bottom:20px">
           <el-col :span="4" style="text-align:right">
             <span>
               操作内容：
-            </span> 
+            </span>
           </el-col>
           <el-col :span="20">
             <span>
               {{ logDetail.operContent }}
-            </span> 
+            </span>
           </el-col>
         </el-row>
       </div>
@@ -112,7 +112,9 @@
 </template>
 
 <script>
-  import { getOLogDetail } from '@/api/log'
+  import {
+    getOLogDetail
+  } from '@/api/log'
   export default {
     data() {
       return {
@@ -134,7 +136,7 @@
       this.getOLogInfo()
     },
     computed: {
-      systemFormat: function() {
+      systemFormat: function () {
         if (this.logDetail.system === undefined || this.logDetail.system === null) {
           return ''
         } else {
@@ -165,4 +167,5 @@
       }
     }
   }
+
 </script>

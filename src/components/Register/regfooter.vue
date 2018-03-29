@@ -10,35 +10,39 @@
 </template>
 
 <script>
-
-export default {
-  data () {
-    return {
+  export default {
+    data() {
+      return {}
     }
   }
-}
+
 </script>
 
 <style>
   .footer {
-      width: 100%;
-      position: absolute;
-      left: left;
-      bottom: bottom;
-      height: 50px;
-      border-top: #ebebeb solid 1px;
+    width: 100%;
+    position: absolute;
+    left: left;
+    bottom: bottom;
+    height: 50px;
+    border-top: #ebebeb solid 1px;
   }
+
   .fl {
     float: left;
   }
+
   .light_gray {
     line-height: 20px;
   }
+
   .ml20_oy {
     margin-left: 20px;
   }
+
   .logo {
-      width: 960px;
-      margin: 0 auto;
+    width: 960px;
+    margin: 0 auto;
   }
+
 </style>

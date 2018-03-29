@@ -6,22 +6,22 @@
 </template>
 
 <script>
+  import locationselector from '@/components/LocationSelector/index'
 
-import locationselector from '@/components/LocationSelector/index'
-
-export default {
-  data() {
-    return {
-      locationid: ''
-    }
-  },
-  components: {
-    locationselector
-  },
-  methods: {
-    getRegionCode: function(data) {
-      this.regioncode = data
+  export default {
+    data() {
+      return {
+        locationid: ''
+      }
+    },
+    components: {
+      locationselector
+    },
+    methods: {
+      getRegionCode: function (data) {
+        this.regioncode = data
+      }
     }
   }
-}
+
 </script>

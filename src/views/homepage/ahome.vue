@@ -11,12 +11,12 @@
               <router-link :to="{ path: '/businesses/auditlist', query: { state: '0' } }">
                 [ 待审核信息 ] {{item.businessesName}}
               </router-link>
-            </span> 
+            </span>
           </el-col style="text-align:right">
           <el-col :span="6">
             <span>
               {{item.createdate}}
-            </span> 
+            </span>
           </el-col>
         </el-row>
       </div>
@@ -25,30 +25,33 @@
 </template>
 
 <script>
-import { getBusinessesList } from '@/api/businesses'
+  import {
+    getBusinessesList
+  } from '@/api/businesses'
 
-export default {
-  data () {
-    return {
-      todoList: []
-    }
-  },
-  created () {
-    var params = {
-      'businessesName': '',
-      'state': '0',
-      'createsource': '',
-      'locationCode': ''
-    }
-    getBusinessesList(params, 1, 10).then(response => {
-      if (response.status === 200) {
-        this.todoList = response.data.list
-      } else {
-        this.$message.error(response.msg)
+  export default {
+    data() {
+      return {
+        todoList: []
       }
-    }).catch(error => {
-      this.$message.error(error)
-    })
+    },
+    created() {
+      var params = {
+        'businessesName': '',
+        'state': '0',
+        'createsource': '',
+        'locationCode': ''
+      }
+      getBusinessesList(params, 1, 10).then(response => {
+        if (response.status === 200) {
+          this.todoList = response.data.list
+        } else {
+          this.$message.error(response.msg)
+        }
+      }).catch(error => {
+        this.$message.error(error)
+      })
+    }
   }
-}
+
 </script>

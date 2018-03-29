@@ -4,9 +4,11 @@ export function getAllSensitives(currentpage, pagesize) {
   return request({
     url: '/sensitive/search',
     method: 'post',
-    data: { 'keyword': '',
+    data: {
+      'keyword': '',
       'page': `${currentpage}`,
-      'limit': `${pagesize}` }
+      'limit': `${pagesize}`
+    }
   })
 }
 
@@ -14,9 +16,11 @@ export function getSensitiveList(sensitive, currentpage, pagesize) {
   return request({
     url: '/sensitive/search',
     method: 'post',
-    data: { 'keyword': `${sensitive}`,
+    data: {
+      'keyword': `${sensitive}`,
       'page': `${currentpage}`,
-      'limit': `${pagesize}` }
+      'limit': `${pagesize}`
+    }
   })
 }
 
@@ -24,7 +28,9 @@ export function addSensitive(sensitive) {
   return request({
     url: '/sensitive/add',
     method: 'post',
-    data: { 'word': `${sensitive}` }
+    data: {
+      'word': `${sensitive}`
+    }
   })
 }
 

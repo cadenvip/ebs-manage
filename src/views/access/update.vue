@@ -7,25 +7,25 @@
         <el-col :span="12">
           <el-form-item label="接入码：" prop="code">
             <el-input v-model="accessBean.code" style="width: 300px;" placeholder="请输入接入码"></el-input>
-          </el-form-item>        
+          </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item label="接入方名称：" prop="si_name">
             <el-input v-model="accessBean.si_name" style="width: 300px;" placeholder="请输入接入名称"></el-input>
-          </el-form-item>          
+          </el-form-item>
         </el-col>
       </el-row>
       <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item label="密码：" prop="password">
             <el-input type="password" v-model="accessBean.password" style="width: 300px;" placeholder="请输入密码"></el-input>
-            <PasswordStrength :password="accessBean.password" @pwdInfo="getPwdInfo"></PasswordStrength>            
-          </el-form-item>          
+            <PasswordStrength :password="accessBean.password" @pwdInfo="getPwdInfo"></PasswordStrength>
+          </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item label="确认密码：" prop="repassword">
             <el-input type="password" v-model="accessBean.repassword" style="width: 300px;" placeholder="请再次输入密码"></el-input>
-          </el-form-item>          
+          </el-form-item>
         </el-col>
       </el-row>
       <el-row :gutter="20">
@@ -42,8 +42,8 @@
             <el-select v-model="accessBean.channel_code" clearable style="width: 180px;" placeholder="请选择接入类别">
               <el-option v-for="(item, key) in channelList" :key="key" :label="item.channel_name" :value="item.channel_code"></el-option>
             </el-select>
-          </el-form-item>          
-        </el-col>        
+          </el-form-item>
+        </el-col>
       </el-row>
       <el-form-item label="系统地址：" prop="si_url">
         <el-input v-model="accessBean.si_url" style="width: 700px;" placeholder="请输入系统地址url"></el-input>
@@ -52,26 +52,28 @@
         <el-col :span="12">
           <el-form-item label="联系人：" prop="si_person">
             <el-input v-model="accessBean.si_person" style="width: 300px;" placeholder="请输入联系人"></el-input>
-          </el-form-item>        
+          </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item label="联系电话：" prop="si_phone">
             <el-input v-model="accessBean.si_phone" style="width: 300px;" :maxlength="13" placeholder="请输入联系电话"></el-input>
-          </el-form-item>          
+          </el-form-item>
         </el-col>
       </el-row>
       <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item label="开始时间：" prop="begin_time">
-            <el-date-picker v-model="accessBean.begin_time" type="datetime" format="yyyy-MM-dd HH:mm:ss" value-format="yyyy-MM-dd HH:mm:ss" style="width: 300px;" placeholder="请选择开始时间">
+            <el-date-picker v-model="accessBean.begin_time" type="datetime" format="yyyy-MM-dd HH:mm:ss" value-format="yyyy-MM-dd HH:mm:ss"
+              style="width: 300px;" placeholder="请选择开始时间">
             </el-date-picker>
-          </el-form-item>        
+          </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item label="结束时间：" prop="end_time">
-            <el-date-picker v-model="accessBean.end_time" type="datetime" format="yyyy-MM-dd HH:mm:ss" value-format="yyyy-MM-dd HH:mm:ss" style="width: 300px;" placeholder="请选择结束时间">
+            <el-date-picker v-model="accessBean.end_time" type="datetime" format="yyyy-MM-dd HH:mm:ss" value-format="yyyy-MM-dd HH:mm:ss"
+              style="width: 300px;" placeholder="请选择结束时间">
             </el-date-picker>
-          </el-form-item>          
+          </el-form-item>
         </el-col>
       </el-row>
       <el-form-item label="备注：" prop="remark">
@@ -81,7 +83,7 @@
       <h5>使用的业务</h5>
       <el-form-item>
         <el-button type="primary" @click="selectOperation">选择业务</el-button>
-        <el-table :data="selectedOpList" border stripe fit highlight-current-row style="padding-left:10px;margin-top:10px;"  align="center">
+        <el-table :data="selectedOpList" border stripe fit highlight-current-row style="padding-left:10px;margin-top:10px;" align="center">
           <el-table-column label='业务名称' prop="operationname" width="180" align="center"></el-table-column>
           <el-table-column label="业务编号" prop="operationcode" width="140" align="center"></el-table-column>
           <el-table-column label="业务启用时间" prop="startdate" width="200" align="center"></el-table-column>
@@ -91,7 +93,7 @@
               <el-button @click="deleteOperation(scope.row)" type="text" size="small">删除</el-button>
             </template>
           </el-table-column>
-        </el-table>        
+        </el-table>
       </el-form-item>
       <hr style="height:1px;border:none;border-top:1px dashed #0066CC;" />
       <h5>接口列表</h5>
@@ -107,7 +109,7 @@
               <el-button @click="deleteInterface(scope.row)" type="text" size="small">删除</el-button>
             </template>
           </el-table-column>
-        </el-table>        
+        </el-table>
       </el-form-item>
       <br/>
       <div style="text-align: center">
@@ -175,364 +177,413 @@
 </template>
 
 <script>
+  import {
+    getAccessDetail,
+    updateAccess,
+    getChanelList,
+    getAllOperationList,
+    getOperationList,
+    getAllInterfaceList,
+    getInterfaceList
+  } from '@/api/access'
+  import {
+    str2Timestamp
+  } from '@/utils/index' // formatTime
+  import {
+    validateMobilePhone,
+    validateTelephone,
+    validateURL
+  } from '@/utils/validate'
+  import PasswordStrength from '@/components/PasswordStrength/index'
+  import {
+    encryptPassword
+  } from '@/utils/index'
 
-import { getAccessDetail, updateAccess, getChanelList, getAllOperationList, getOperationList, getAllInterfaceList, getInterfaceList } from '@/api/access'
-import { str2Timestamp } from '@/utils/index'// formatTime
-import { validateMobilePhone, validateTelephone, validateURL } from '@/utils/validate'
-import PasswordStrength from '@/components/PasswordStrength/index'
-import { encryptPassword } from '@/utils/index'
-
-export default {
-  data() {
-    var validatePass = (rule, value, callback) => {
-      if (value === '') {
-        callback(new Error('请输入密码'))
-      } else {
-        if (this.accessBean.password.length < 8) {
-          callback(new Error('请密码长度不足8位'))
-        } else if (this.pwdInfo.score < 4) {
-          callback(new Error('请密码强度不够'))
-        } else if (this.accessBean.repassword !== '') {
-          this.$refs.accessBean.validateField('repassword')
-          callback()
+  export default {
+    data() {
+      var validatePass = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('请输入密码'))
+        } else {
+          if (this.accessBean.password.length < 8) {
+            callback(new Error('请密码长度不足8位'))
+          } else if (this.pwdInfo.score < 4) {
+            callback(new Error('请密码强度不够'))
+          } else if (this.accessBean.repassword !== '') {
+            this.$refs.accessBean.validateField('repassword')
+            callback()
+          }
         }
       }
-    }
-    var validateRepass = (rule, value, callback) => {
-      if (value === '') {
-        callback(new Error('请再次输入密码'))
-      } else if (value !== this.accessBean.password) {
-        callback(new Error('两次输入密码不一致!'))
-      } else {
-        callback()
-      }
-    }
-    var validateContact = (rule, value, callback) => {
-      if (value !== null && value !== '') {
-        if (!validateMobilePhone(value.trim()) && !validateTelephone(value.trim())) {
-          callback(new Error('请输入有效的联系方式'))
+      var validateRepass = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('请再次输入密码'))
+        } else if (value !== this.accessBean.password) {
+          callback(new Error('两次输入密码不一致!'))
         } else {
           callback()
         }
-      } else {
-        callback()
       }
-    }
-    var validateSi_url = (rule, value, callback) => {
-      if (value !== null && value !== '') {
-        if (!validateURL(value.trim())) {
-          callback(new Error('请输入有效的Url'))
+      var validateContact = (rule, value, callback) => {
+        if (value !== null && value !== '') {
+          if (!validateMobilePhone(value.trim()) && !validateTelephone(value.trim())) {
+            callback(new Error('请输入有效的联系方式'))
+          } else {
+            callback()
+          }
         } else {
           callback()
         }
-      } else {
-        callback()
       }
-    }
-    return {
-      operationTableVisible: false,
-      interfaceTableVisible: false,
-      channelList: [],
-      accessBean: {
-        code: '',
-        password: '',
-        repassword: '',
-        servicecode: '', // 业务代码
-        remark: '',
-        si_type: '', // SI接入类别 1:渠道门户,2:业务平台
-        si_name: '',
-        begin_time: '', // 该值为时间戳
-        end_time: '', // 该值为时间戳
-        si_url: '', //
-        si_person: '', // 接入方联系人
-        si_phone: '', // 接入方联系人电话
-        channel_code: ''// 渠道编码 通过调用接口channelList 得到
-      },
-      operationList: [],	 // （全部）服务id，通过调用接口operationList 得到，及时没有也要传一个空数组
-      interfaceList: [], // （全部）接口id，通过调用接口interfaceList  得到，及时没有也要传一个空数组
-      selectedOpList: [],	 // （选中）服务id，通过调用接口operationList 得到，及时没有也要传一个空数组
-      selectedInList: [], // （选中）接口id，通过调用接口interfaceList  得到，及时没有也要传一个空数组
-      // selectedOpTmpList: [],	 // （临时选中）服务id，通过调用接口operationList 得到，及时没有也要传一个空数组
-      // selectedInTmpList: [], // （临时选中）接口id，通过调用接口interfaceList  得到，及时没有也要传一个空数组
-      opSearchForm: {
-        operationname: ''
-      },
-      inSearchForm: {
-        inter_name: '',
-        inter_version: ''
-      },
-      rules: {
-        code: [{ required: true, message: '请输入接入码', trigger: 'blur' }],
-        si_name: [{ required: true, message: '请输入接入名称', trigger: 'blur' }],
-        password: [{ required: true, validator: validatePass, trigger: 'blur' }],
-        repassword: [{ required: true, validator: validateRepass, trigger: 'blur' }],
-        si_phone: [{ required: false, validator: validateContact, trigger: 'blur' }],
-        si_url: [{ required: false, validator: validateSi_url, trigger: 'blur' }],
-        si_type: [{ required: true, message: '请选择接入类别', trigger: 'change' }]
-      },
-      pwdInfo: {},
-      getOpRowKey(row) {
-        return row.id
-      },
-      getInRowKey(row) {
-        return row.id
-      }
-    }
-  },
-  components: {
-    PasswordStrength
-  },
-  created () {
-    getAccessDetail(this.$route.query.id).then(response => {
-      if (response.status === 200) {
-        this.accessBean = response.data.access
-        this.accessBean.repassword = response.data.access.password
-        this.selectedOpList = response.data.operationList
-        var i = this.selectedOpList.indexOf(null)
-        while (i !== -1) {
-          this.selectedOpList.splice(i, 1)
-          i = this.selectedOpList.indexOf(null)
+      var validateSi_url = (rule, value, callback) => {
+        if (value !== null && value !== '') {
+          if (!validateURL(value.trim())) {
+            callback(new Error('请输入有效的Url'))
+          } else {
+            callback()
+          }
+        } else {
+          callback()
         }
-        this.selectedInList = response.data.interfaceList
-        i = this.selectedInList.indexOf(null)
-        while (i !== -1) {
-          this.selectedInList.splice(i, 1)
-          i = this.selectedInList.indexOf(null)
+      }
+      return {
+        operationTableVisible: false,
+        interfaceTableVisible: false,
+        channelList: [],
+        accessBean: {
+          code: '',
+          password: '',
+          repassword: '',
+          servicecode: '', // 业务代码
+          remark: '',
+          si_type: '', // SI接入类别 1:渠道门户,2:业务平台
+          si_name: '',
+          begin_time: '', // 该值为时间戳
+          end_time: '', // 该值为时间戳
+          si_url: '', //
+          si_person: '', // 接入方联系人
+          si_phone: '', // 接入方联系人电话
+          channel_code: '' // 渠道编码 通过调用接口channelList 得到
+        },
+        operationList: [], // （全部）服务id，通过调用接口operationList 得到，及时没有也要传一个空数组
+        interfaceList: [], // （全部）接口id，通过调用接口interfaceList  得到，及时没有也要传一个空数组
+        selectedOpList: [], // （选中）服务id，通过调用接口operationList 得到，及时没有也要传一个空数组
+        selectedInList: [], // （选中）接口id，通过调用接口interfaceList  得到，及时没有也要传一个空数组
+        // selectedOpTmpList: [],	 // （临时选中）服务id，通过调用接口operationList 得到，及时没有也要传一个空数组
+        // selectedInTmpList: [], // （临时选中）接口id，通过调用接口interfaceList  得到，及时没有也要传一个空数组
+        opSearchForm: {
+          operationname: ''
+        },
+        inSearchForm: {
+          inter_name: '',
+          inter_version: ''
+        },
+        rules: {
+          code: [{
+            required: true,
+            message: '请输入接入码',
+            trigger: 'blur'
+          }],
+          si_name: [{
+            required: true,
+            message: '请输入接入名称',
+            trigger: 'blur'
+          }],
+          password: [{
+            required: true,
+            validator: validatePass,
+            trigger: 'blur'
+          }],
+          repassword: [{
+            required: true,
+            validator: validateRepass,
+            trigger: 'blur'
+          }],
+          si_phone: [{
+            required: false,
+            validator: validateContact,
+            trigger: 'blur'
+          }],
+          si_url: [{
+            required: false,
+            validator: validateSi_url,
+            trigger: 'blur'
+          }],
+          si_type: [{
+            required: true,
+            message: '请选择接入类别',
+            trigger: 'change'
+          }]
+        },
+        pwdInfo: {},
+        getOpRowKey(row) {
+          return row.id
+        },
+        getInRowKey(row) {
+          return row.id
         }
-      } else {
-        this.$message.error(response.msg)
       }
-    }).catch(error => {
-      this.$message.error(error)
-    })
-    getChanelList().then(response => {
-      if (response.status === 200) {
-        this.channelList = response.data
-      } else {
-        this.$message.error(response.msg)
-      }
-    }).catch(error => {
-      this.$message.error(error)
-    })
-    getAllOperationList().then(response => {
-      if (response.status === 200) {
-        this.operationList = response.data
-      } else {
-        this.$message.error(response.msg)
-      }
-    }).catch(error => {
-      this.$message.error(error)
-    })
-    getAllInterfaceList().then(response => {
-      if (response.status === 200) {
-        this.interfaceList = response.data
-      } else {
-        this.$message.error(response.msg)
-      }
-    }).catch(error => {
-      this.$message.error(error)
-    })
-  },
-  methods: {
-    getPwdInfo(data) {
-      this.pwdInfo = data
     },
-    selectOperation() {
-      this.operationTableVisible = true
+    components: {
+      PasswordStrength
+    },
+    created() {
+      getAccessDetail(this.$route.query.id).then(response => {
+        if (response.status === 200) {
+          this.accessBean = response.data.access
+          this.accessBean.repassword = response.data.access.password
+          this.selectedOpList = response.data.operationList
+          var i = this.selectedOpList.indexOf(null)
+          while (i !== -1) {
+            this.selectedOpList.splice(i, 1)
+            i = this.selectedOpList.indexOf(null)
+          }
+          this.selectedInList = response.data.interfaceList
+          i = this.selectedInList.indexOf(null)
+          while (i !== -1) {
+            this.selectedInList.splice(i, 1)
+            i = this.selectedInList.indexOf(null)
+          }
+        } else {
+          this.$message.error(response.msg)
+        }
+      }).catch(error => {
+        this.$message.error(error)
+      })
+      getChanelList().then(response => {
+        if (response.status === 200) {
+          this.channelList = response.data
+        } else {
+          this.$message.error(response.msg)
+        }
+      }).catch(error => {
+        this.$message.error(error)
+      })
       getAllOperationList().then(response => {
         if (response.status === 200) {
           this.operationList = response.data
-          this.opSearchForm.operationname = ''
-          var defaultSelected = []
-          if (this.operationList !== undefined && this.operationList.length > 0) {
-            if (this.selectedOpList !== undefined && this.selectedOpList.length > 0) {
-              this.operationList.forEach(row => {
-                for (var index = 0; index < this.selectedOpList.length; index++) {
-                  if (this.selectedOpList[index].id === row.id) {
-                  // this.$refs.operationTable.toggleRowSelection(row, true)
-                    defaultSelected.push(row)
-                    break
-                  }
-                }
-              })
-            }
-          }
-          this.$refs.operationTable.clearSelection()
-          defaultSelected.forEach(row => {
-            this.$refs.operationTable.toggleRowSelection(row, true)
-          })
         } else {
           this.$message.error(response.msg)
         }
       }).catch(error => {
         this.$message.error(error)
       })
-    },
-    selectInterface() {
-      this.interfaceTableVisible = true
       getAllInterfaceList().then(response => {
         if (response.status === 200) {
           this.interfaceList = response.data
-          this.inSearchForm.inter_name = ''
-          this.inSearchForm.inter_version = ''
-          var defaultSelected = []
-          if (this.interfaceList !== undefined && this.interfaceList.length > 0) {
-            if (this.selectedInList !== undefined && this.selectedInList.length > 0) {
-              this.interfaceList.forEach(row => {
-                for (var index = 0; index < this.selectedInList.length; index++) {
-                  if (this.selectedInList[index].id === row.id) {
-                  // this.$refs.interfaceTable.toggleRowSelection(row, true)
-                    defaultSelected.push(row)
-                    break
+        } else {
+          this.$message.error(response.msg)
+        }
+      }).catch(error => {
+        this.$message.error(error)
+      })
+    },
+    methods: {
+      getPwdInfo(data) {
+        this.pwdInfo = data
+      },
+      selectOperation() {
+        this.operationTableVisible = true
+        getAllOperationList().then(response => {
+          if (response.status === 200) {
+            this.operationList = response.data
+            this.opSearchForm.operationname = ''
+            var defaultSelected = []
+            if (this.operationList !== undefined && this.operationList.length > 0) {
+              if (this.selectedOpList !== undefined && this.selectedOpList.length > 0) {
+                this.operationList.forEach(row => {
+                  for (var index = 0; index < this.selectedOpList.length; index++) {
+                    if (this.selectedOpList[index].id === row.id) {
+                      // this.$refs.operationTable.toggleRowSelection(row, true)
+                      defaultSelected.push(row)
+                      break
+                    }
                   }
-                }
+                })
+              }
+            }
+            this.$refs.operationTable.clearSelection()
+            defaultSelected.forEach(row => {
+              this.$refs.operationTable.toggleRowSelection(row, true)
+            })
+          } else {
+            this.$message.error(response.msg)
+          }
+        }).catch(error => {
+          this.$message.error(error)
+        })
+      },
+      selectInterface() {
+        this.interfaceTableVisible = true
+        getAllInterfaceList().then(response => {
+          if (response.status === 200) {
+            this.interfaceList = response.data
+            this.inSearchForm.inter_name = ''
+            this.inSearchForm.inter_version = ''
+            var defaultSelected = []
+            if (this.interfaceList !== undefined && this.interfaceList.length > 0) {
+              if (this.selectedInList !== undefined && this.selectedInList.length > 0) {
+                this.interfaceList.forEach(row => {
+                  for (var index = 0; index < this.selectedInList.length; index++) {
+                    if (this.selectedInList[index].id === row.id) {
+                      // this.$refs.interfaceTable.toggleRowSelection(row, true)
+                      defaultSelected.push(row)
+                      break
+                    }
+                  }
+                })
+              }
+            }
+            this.$refs.interfaceTable.clearSelection()
+            defaultSelected.forEach(row => {
+              this.$refs.interfaceTable.toggleRowSelection(row, true)
+            })
+          } else {
+            this.$message.error(response.msg)
+          }
+        }).catch(error => {
+          this.$message.error(error)
+        })
+      },
+      queryOperation() {
+        getOperationList(this.opSearchForm).then(response => {
+          if (response.status === 200) {
+            this.operationList = response.data
+          } else {
+            this.$message.error(response.msg)
+          }
+        }).catch(error => {
+          this.$message.error(error)
+        })
+      },
+      queryInterface() {
+        getInterfaceList(this.inSearchForm).then(response => {
+          if (response.status === 200) {
+            this.interfaceList = response.data
+          } else {
+            this.$message.error(response.msg)
+          }
+        }).catch(error => {
+          this.$message.error(error)
+        })
+      },
+      opSelectionChange(val) {
+        // console.log(val)
+        // this.selectedOpTmpList = val
+        this.selectedOpList = val
+      },
+      inSelectionChange(val) {
+        // console.log(val)
+        // this.selectedInTmpList = val
+        this.selectedInList = val
+      },
+      // confirmOpSelected() {
+      //   this.selectedOpList = this.selectedOpTmpList
+      //   this.operationTableVisible = false
+      // },
+      // confirmInSelected() {
+      //   this.selectedInList = this.selectedInTmpList
+      //   this.interfaceTableVisible = false
+      // },
+      deleteOperation(operationInfo) {
+        var index = this.selectedOpList.indexOf(operationInfo)
+        if (index > -1) {
+          this.selectedOpList.splice(index, 1)
+        }
+      },
+      deleteInterface(interfaceInfo) {
+        var index = this.selectedInList.indexOf(interfaceInfo)
+        if (index > -1) {
+          this.selectedInList.splice(index, 1)
+        }
+      },
+      onSubmit() {
+        this.$refs.accessBean.validate(valid => {
+          if (valid) {
+            var operationIdList = []
+            if (this.selectedOpList !== undefined && this.selectedOpList.length > 0) {
+              this.selectedOpList.forEach(v => {
+                operationIdList.push(v.id)
               })
             }
-          }
-          this.$refs.interfaceTable.clearSelection()
-          defaultSelected.forEach(row => {
-            this.$refs.interfaceTable.toggleRowSelection(row, true)
-          })
-        } else {
-          this.$message.error(response.msg)
-        }
-      }).catch(error => {
-        this.$message.error(error)
-      })
-    },
-    queryOperation() {
-      getOperationList(this.opSearchForm).then(response => {
-        if (response.status === 200) {
-          this.operationList = response.data
-        } else {
-          this.$message.error(response.msg)
-        }
-      }).catch(error => {
-        this.$message.error(error)
-      })
-    },
-    queryInterface() {
-      getInterfaceList(this.inSearchForm).then(response => {
-        if (response.status === 200) {
-          this.interfaceList = response.data
-        } else {
-          this.$message.error(response.msg)
-        }
-      }).catch(error => {
-        this.$message.error(error)
-      })
-    },
-    opSelectionChange(val) {
-      // console.log(val)
-      // this.selectedOpTmpList = val
-      this.selectedOpList = val
-    },
-    inSelectionChange(val) {
-      // console.log(val)
-      // this.selectedInTmpList = val
-      this.selectedInList = val
-    },
-    // confirmOpSelected() {
-    //   this.selectedOpList = this.selectedOpTmpList
-    //   this.operationTableVisible = false
-    // },
-    // confirmInSelected() {
-    //   this.selectedInList = this.selectedInTmpList
-    //   this.interfaceTableVisible = false
-    // },
-    deleteOperation(operationInfo) {
-      var index = this.selectedOpList.indexOf(operationInfo)
-      if (index > -1) {
-        this.selectedOpList.splice(index, 1)
-      }
-    },
-    deleteInterface(interfaceInfo) {
-      var index = this.selectedInList.indexOf(interfaceInfo)
-      if (index > -1) {
-        this.selectedInList.splice(index, 1)
-      }
-    },
-    onSubmit() {
-      this.$refs.accessBean.validate(valid => {
-        if (valid) {
-          var operationIdList = []
-          if (this.selectedOpList !== undefined && this.selectedOpList.length > 0) {
-            this.selectedOpList.forEach(v => {
-              operationIdList.push(v.id)
-            })
-          }
-          var interfaceIdList = []
-          if (this.selectedInList !== undefined && this.selectedInList.length > 0) {
-            this.selectedInList.forEach(v => {
-              interfaceIdList.push(v.id)
-            })
-          }
-          var params = {
-            'accessBean': this.accessBean,
-            'interfaceIdList': interfaceIdList, // 接口id，通过调用接口interfaceList  得到，及时没有也要传一个空数组
-            'operationIdList': operationIdList	 // 服务id，通过调用接口operationList 得到，及时没有也要传一个空数组
-          }
-          params.accessBean.id = this.$route.query.id
-          params.accessBean.password = encryptPassword(params.accessBean.password)
-          delete params.accessBean.repassword
-          delete params.accessBean.status
-          delete params.accessBean.create_time
-          delete params.accessBean.update_time
-          // TODO 时间格式转换
-          if (params.accessBean.begin_time !== undefined && params.accessBean.begin_time !== '') {
-            params.accessBean.begin_time = str2Timestamp(params.accessBean.begin_time)
-          }
-          if (params.accessBean.begin_time === 0) {
-            params.accessBean.begin_time = ''
-          }
-          if (params.accessBean.end_time !== undefined && params.accessBean.end_time !== '') {
-            params.accessBean.end_time = str2Timestamp(params.accessBean.end_time)
-          }
-          if (params.accessBean.end_time === 0) {
-            params.accessBean.end_time = ''
-          }
-          if (params.accessBean.servicecode === null) {
-            params.accessBean.servicecode = ''
-          }
-          if (params.accessBean.remark === null) {
-            params.accessBean.remark = ''
-          }
-          if (params.accessBean.si_url === null) {
-            params.accessBean.si_url = ''
-          }
-          if (params.accessBean.si_person === null) {
-            params.accessBean.si_person = ''
-          }
-          if (params.accessBean.si_phone === null) {
-            params.accessBean.si_phone = ''
-          }
-          if (params.accessBean.channel_code === null) {
-            params.accessBean.channel_code = ''
-          }
-          updateAccess(params).then(response => {
-            if (response.status === 200) {
-              this.$router.push({ path: '/system/access/list' })
-              this.$message.success('修改接入方成功')
-            } else {
-              this.$message.error(response.msg)
+            var interfaceIdList = []
+            if (this.selectedInList !== undefined && this.selectedInList.length > 0) {
+              this.selectedInList.forEach(v => {
+                interfaceIdList.push(v.id)
+              })
             }
-          }).catch(error => {
-            this.$message.error(error)
-          })
-        } else {
-          this.$message.error('error submit!!')
-        }
-      })
-    },
-    onCancel() {
-      this.$router.push({ path: '/system/access/list' })
+            var params = {
+              'accessBean': this.accessBean,
+              'interfaceIdList': interfaceIdList, // 接口id，通过调用接口interfaceList  得到，及时没有也要传一个空数组
+              'operationIdList': operationIdList // 服务id，通过调用接口operationList 得到，及时没有也要传一个空数组
+            }
+            params.accessBean.id = this.$route.query.id
+            params.accessBean.password = encryptPassword(params.accessBean.password)
+            delete params.accessBean.repassword
+            delete params.accessBean.status
+            delete params.accessBean.create_time
+            delete params.accessBean.update_time
+            // TODO 时间格式转换
+            if (params.accessBean.begin_time !== undefined && params.accessBean.begin_time !== '') {
+              params.accessBean.begin_time = str2Timestamp(params.accessBean.begin_time)
+            }
+            if (params.accessBean.begin_time === 0) {
+              params.accessBean.begin_time = ''
+            }
+            if (params.accessBean.end_time !== undefined && params.accessBean.end_time !== '') {
+              params.accessBean.end_time = str2Timestamp(params.accessBean.end_time)
+            }
+            if (params.accessBean.end_time === 0) {
+              params.accessBean.end_time = ''
+            }
+            if (params.accessBean.servicecode === null) {
+              params.accessBean.servicecode = ''
+            }
+            if (params.accessBean.remark === null) {
+              params.accessBean.remark = ''
+            }
+            if (params.accessBean.si_url === null) {
+              params.accessBean.si_url = ''
+            }
+            if (params.accessBean.si_person === null) {
+              params.accessBean.si_person = ''
+            }
+            if (params.accessBean.si_phone === null) {
+              params.accessBean.si_phone = ''
+            }
+            if (params.accessBean.channel_code === null) {
+              params.accessBean.channel_code = ''
+            }
+            updateAccess(params).then(response => {
+              if (response.status === 200) {
+                this.$router.push({
+                  path: '/system/access/list'
+                })
+                this.$message.success('修改接入方成功')
+              } else {
+                this.$message.error(response.msg)
+              }
+            }).catch(error => {
+              this.$message.error(error)
+            })
+          } else {
+            this.$message.error('error submit!!')
+          }
+        })
+      },
+      onCancel() {
+        this.$router.push({
+          path: '/system/access/list'
+        })
+      }
     }
   }
-}
+
 </script>
 
 <style scoped>
-.line{
-  text-align: center;
-}
+  .line {
+    text-align: center;
+  }
+
 </style>

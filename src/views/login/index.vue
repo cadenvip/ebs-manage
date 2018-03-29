@@ -1,13 +1,12 @@
 <template>
   <div class="login-container">
-    <el-form :model="loginForm" :rules="loginRules" ref="loginForm" label-position="left" label-width="0px"
-      class="card-box login-form">
+    <el-form :model="loginForm" :rules="loginRules" ref="loginForm" label-position="left" label-width="0px" class="card-box login-form">
       <h3 class="title">中国移动商户管理系统</h3>
       <el-form-item prop="loginname">
         <span class="svg-container svg-container_login">
           <svg-icon icon-class="user" />
         </span>
-        <el-input name="loginname" type="text" v-model="loginForm.loginname" placeholder="请输入账号" v-on:blur="getUnitids"/>
+        <el-input name="loginname" type="text" v-model="loginForm.loginname" placeholder="请输入账号" v-on:blur="getUnitids" />
       </el-form-item>
       <el-form-item prop="unitid">
         <span class="svg-container svg-container_login">
@@ -22,7 +21,9 @@
           <svg-icon icon-class="password"></svg-icon>
         </span>
         <el-input name="password" :type="pwdType" @keyup.enter.native="handleLogin" v-model="loginForm.password" placeholder="请输入密码"></el-input>
-          <span class="show-pwd" @click="showPwd"><svg-icon icon-class="eye" /></span>
+        <span class="show-pwd" @click="showPwd">
+          <svg-icon icon-class="eye" />
+        </span>
       </el-form-item>
       <el-row :gutter="14">
         <el-col :span="15">
@@ -30,7 +31,7 @@
             <span class="svg-container svg-container_login">
               <svg-icon icon-class="user" />
             </span>
-            <el-input name="vercode" type="text" v-model="loginForm.vercode" placeholder="请输入验证码" style="width:50%;"/>
+            <el-input name="vercode" type="text" v-model="loginForm.vercode" placeholder="请输入验证码" style="width:50%;" />
           </el-form-item>
         </el-col>
         <el-col :span="8">
@@ -52,149 +53,177 @@
 </template>
 
 <script>
+  import {
+    getVercode,
+    getUnitInfos,
+    getUnits
+  } from '@/api/login'
+  // import { validateMobilePhone } from '@/utils/validate'
+  import {
+    encryptPassword
+  } from '@/utils/index'
 
-import { getVercode, getUnitInfos, getUnits } from '@/api/login'
-// import { validateMobilePhone } from '@/utils/validate'
-import { encryptPassword } from '@/utils/index'
-
-export default {
-  data() {
-    // var validateCellphone = (rule, value, callback) => {
-    //   if (value === '') {
-    //     callback(new Error('请输入手机号码'))
-    //   } else {
-    //     if (!validateMobilePhone(value.trim())) {
-    //       callback(new Error('请输入有效的手机号码'))
-    //     }
-    //     callback()
-    //   }
-    // }
-    return {
-      unitinfos: [],
-      loginForm: {
-        loginname: '',
-        password: '',
-        unitid: '',
-        vercode: ''
-      },
-      loginRules: {
-        // loginname: [{ required: true, trigger: 'blur', validator: validateCellphone }],
-        loginname: [{ required: true, trigger: 'blur', message: '请输入账号' }],
-        password: [{ required: true, trigger: 'blur', message: '请输入密码' }],
-        unitid: [{ required: true, trigger: 'change', message: '请选择归属单位' }],
-        vercode: [{ required: true, trigger: 'blur', message: '请输入验证码' }]
-      },
-      pwdType: 'password'
-    }
-  },
-  methods: {
-    showPwd() {
-      if (this.pwdType === 'password') {
-        this.pwdType = ''
-      } else {
-        this.pwdType = 'password'
+  export default {
+    data() {
+      // var validateCellphone = (rule, value, callback) => {
+      //   if (value === '') {
+      //     callback(new Error('请输入手机号码'))
+      //   } else {
+      //     if (!validateMobilePhone(value.trim())) {
+      //       callback(new Error('请输入有效的手机号码'))
+      //     }
+      //     callback()
+      //   }
+      // }
+      return {
+        unitinfos: [],
+        loginForm: {
+          loginname: '',
+          password: '',
+          unitid: '',
+          vercode: ''
+        },
+        loginRules: {
+          // loginname: [{ required: true, trigger: 'blur', validator: validateCellphone }],
+          loginname: [{
+            required: true,
+            trigger: 'blur',
+            message: '请输入账号'
+          }],
+          password: [{
+            required: true,
+            trigger: 'blur',
+            message: '请输入密码'
+          }],
+          unitid: [{
+            required: true,
+            trigger: 'change',
+            message: '请选择归属单位'
+          }],
+          vercode: [{
+            required: true,
+            trigger: 'blur',
+            message: '请输入验证码'
+          }]
+        },
+        pwdType: 'password'
       }
     },
-    handleLogin() {
-      // validate element-ui的一个方法
-      this.$refs.loginForm.validate(valid => {
-        if (valid) {
-          // 提供dispatch(action)方法更新state；
-          var loginParams = {
-            'loginname': this.loginForm.loginname,
-            'password': this.loginForm.password,
-            'unitid': this.loginForm.unitid,
-            'vercode': '123456'
-          }
-          loginParams.password = encryptPassword(loginParams.password)
-          this.$store.dispatch('Login', loginParams).then(response => {
-            // 根据角色进入相应的首页
-            if (response.data.role[0].roletype === '1') {
-              this.$router.push({ path: '/home/ahome' })
-            } else if (response.data.role[0].roletype === '2' || response.data.role[0].roletype === '3') {
-              this.$router.push({ path: '/home/bhome' })
-            } else {
-              this.$message.error('登录失败！')
+    methods: {
+      showPwd() {
+        if (this.pwdType === 'password') {
+          this.pwdType = ''
+        } else {
+          this.pwdType = 'password'
+        }
+      },
+      handleLogin() {
+        // validate element-ui的一个方法
+        this.$refs.loginForm.validate(valid => {
+          if (valid) {
+            // 提供dispatch(action)方法更新state；
+            var loginParams = {
+              'loginname': this.loginForm.loginname,
+              'password': this.loginForm.password,
+              'unitid': this.loginForm.unitid,
+              'vercode': '123456'
             }
-            getUnits().then(res => {
-              if (res.status === 200) {
-                this.units = res.data
-                window.localStorage.setItem('units', JSON.stringify(this.units))
+            loginParams.password = encryptPassword(loginParams.password)
+            this.$store.dispatch('Login', loginParams).then(response => {
+              // 根据角色进入相应的首页
+              if (response.data.role[0].roletype === '1') {
+                this.$router.push({
+                  path: '/home/ahome'
+                })
+              } else if (response.data.role[0].roletype === '2' || response.data.role[0].roletype === '3') {
+                this.$router.push({
+                  path: '/home/bhome'
+                })
               } else {
-                this.$message.error(res.msg)
+                this.$message.error('登录失败！')
               }
-            }).catch(err => {
-              this.$message.error(err)
+              getUnits().then(res => {
+                if (res.status === 200) {
+                  this.units = res.data
+                  window.localStorage.setItem('units', JSON.stringify(this.units))
+                } else {
+                  this.$message.error(res.msg)
+                }
+              }).catch(err => {
+                this.$message.error(err)
+              })
+            }).catch(errpr => {
+              this.$message.error(errpr)
             })
-          }).catch(errpr => {
-            this.$message.error(errpr)
-          })
-        } else {
-          this.$message.error('error submit!!')
-          return false
-        }
-      })
-    },
-    getUnitids() {
-      // this.loginForm.loginname = this.loginForm.loginname.trim()
-      // if (this.loginForm.loginname === '') {
-      //   this.$message.error('请输入手机号码')
-      //   return
-      // } else {
-      //   if (!validateMobilePhone(this.loginForm.loginname.trim())) {
-      //     return
-      //   }
-      // }
+          } else {
+            this.$message.error('error submit!!')
+            return false
+          }
+        })
+      },
+      getUnitids() {
+        // this.loginForm.loginname = this.loginForm.loginname.trim()
+        // if (this.loginForm.loginname === '') {
+        //   this.$message.error('请输入手机号码')
+        //   return
+        // } else {
+        //   if (!validateMobilePhone(this.loginForm.loginname.trim())) {
+        //     return
+        //   }
+        // }
 
-      if (this.loginForm.loginname === '') {
-        this.$message.error('请输入账号')
-        return
-      }
-      getUnitInfos(this.loginForm.loginname).then(response => {
-        if (response.status === 200) {
-          this.unitinfos = response.data
-        } else {
-          this.$message.error(response.msg)
+        if (this.loginForm.loginname === '') {
+          this.$message.error('请输入账号')
+          return
         }
-      }).catch(error => {
-        this.$message.error(error)
-      })
-    },
-    selectUnit() {
-      if (this.unitinfos === undefined || this.unitinfos.length <= 0) {
-        this.getUnitids()
-      }
-    },
-    getVercode() {
-      // this.loginForm.loginname = this.loginForm.loginname.trim()
-      // if (this.loginForm.loginname === '') {
-      //   this.$message.error('请输入手机号码')
-      //   return
-      // } else {
-      //   if (!validateMobilePhone(this.loginForm.loginname.trim())) {
-      //     return
-      //   }
-      // }
-      if (this.loginForm.loginname === '') {
-        this.$message.error('请输入账号')
-        return
-      }
-      getVercode(this.loginForm.loginname).then(response => {
-        if (response.status === 200) {
-          // TODO
-          this.$message.success('获取验证码成功！')
-        } else {
-          this.$message.error(response.msg)
+        getUnitInfos(this.loginForm.loginname).then(response => {
+          if (response.status === 200) {
+            this.unitinfos = response.data
+          } else {
+            this.$message.error(response.msg)
+          }
+        }).catch(error => {
+          this.$message.error(error)
+        })
+      },
+      selectUnit() {
+        if (this.unitinfos === undefined || this.unitinfos.length <= 0) {
+          this.getUnitids()
         }
-      }).catch(error => {
-        this.$message.error(error)
-      })
-    },
-    handleRegist() {
-      this.$router.push({ path: '/register' })
+      },
+      getVercode() {
+        // this.loginForm.loginname = this.loginForm.loginname.trim()
+        // if (this.loginForm.loginname === '') {
+        //   this.$message.error('请输入手机号码')
+        //   return
+        // } else {
+        //   if (!validateMobilePhone(this.loginForm.loginname.trim())) {
+        //     return
+        //   }
+        // }
+        if (this.loginForm.loginname === '') {
+          this.$message.error('请输入账号')
+          return
+        }
+        getVercode(this.loginForm.loginname).then(response => {
+          if (response.status === 200) {
+            // TODO
+            this.$message.success('获取验证码成功！')
+          } else {
+            this.$message.error(response.msg)
+          }
+        }).catch(error => {
+          this.$message.error(error)
+        })
+      },
+      handleRegist() {
+        this.$router.push({
+          path: '/register'
+        })
+      }
     }
   }
-}
+
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
@@ -269,15 +298,16 @@ export default {
       font-size: 16px;
       color: $dark_gray;
       cursor: pointer;
-      user-select:none;
+      user-select: none;
     }
-    .thirdparty-button{
+    .thirdparty-button {
       position: absolute;
       right: 35px;
       bottom: 28px;
     }
-    .el-input--suffix{
+    .el-input--suffix {
       width: 292px;
     }
   }
+
 </style>

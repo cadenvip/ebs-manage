@@ -23,13 +23,15 @@ export function getAllBills(currentpage, pagesize) {
   return request({
     url: '/statement/totalbillList',
     method: 'post',
-    data: { 'merchantname': '',
+    data: {
+      'merchantname': '',
       'yearmonth': '',
       'status': '',
       'locationcode': '',
       'greater500': '1',
       'page': `${currentpage !== undefined ? currentpage : 1}`,
-      'limit': `${pagesize !== undefined ? pagesize : 10}` }
+      'limit': `${pagesize !== undefined ? pagesize : 10}`
+    }
   })
 }
 
@@ -65,7 +67,8 @@ export function downloadBillList(params) {
 }
 
 export function downloadBill(bill, thisyear) {
-  var params = { 'billid': `${bill.id}`,
+  var params = {
+    'billid': `${bill.id}`,
     'thisyear': `${thisyear}`
   }
   return request({
