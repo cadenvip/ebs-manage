@@ -94,6 +94,9 @@ export default {
         case '2':
           type = '商家角色'
           break
+        case '3':
+          type = '商家角色'
+          break
         default:
           type = ''
           break
@@ -120,7 +123,7 @@ export default {
     getAllPermissions() {
       this.data = []
       var issystem = ''
-      // 1系统管理 2企业 （roletype: 1----> issystem: 1, roletype: 2---->issystem: 0)
+      // 1系统管理 2企业 （roletype: 1----> issystem: 1, roletype: 2(3)---->issystem: 0)
       if (this.roleForm.roletype === '1') {
         issystem = 0
       } else {

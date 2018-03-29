@@ -103,7 +103,7 @@ export default {
             // 根据角色进入相应的首页
             if (response.data.role[0].roletype === '1') {
               this.$router.push({ path: '/home/ahome' })
-            } else if (response.data.role[0].roletype === '2') {
+            } else if (response.data.role[0].roletype === '2' || response.data.role[0].roletype === '3') {
               this.$router.push({ path: '/home/bhome' })
             } else {
               this.$message.error('登录失败！')

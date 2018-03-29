@@ -46,7 +46,7 @@
     methods: {
       getAllPermissions() {
         this.loading = true
-        // 1系统管理 2企业 （roletype: 1----> issystem: 0, roletype: 2---->issystem: 1)
+        // 1系统管理 2企业 （roletype: 1----> issystem: 0, roletype: 2(3)---->issystem: 1)
         getAllResources(1).then(response => {
           if (response.status === 200) {
             response.data.forEach(v => {

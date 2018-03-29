@@ -38,7 +38,7 @@ export function adnminAddBusniess(params) {
 }
 
 export function updateBusinesses(params, roletype) {
-  if (roletype === 2) {
+  if (roletype === '2' || roletype === '3') {
     return request({
       url: '/businesses/updatebusinesses', // 商家自己修改
       method: 'post',

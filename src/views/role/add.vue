@@ -8,7 +8,7 @@
       <el-form-item label="角色类型：" prop="roletype">
         <el-select v-model="roleForm.roletype" clearable placeholder="请选择" @change="getAllPermissions" style="width: 200px;">
           <el-option label="管理角色" value="1"></el-option>
-          <el-option label="商家角色" value="2"></el-option>
+          <el-option label="商家角色" value="3"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="角色描述：" prop="description">
@@ -88,7 +88,7 @@ export default {
     getAllPermissions() {
       this.data = []
       var issystem = ''
-      // 1系统管理 2企业 （roletype: 1----> issystem: 0, roletype: 2---->issystem: 1)
+      // 1系统管理 2企业 （roletype: 1----> issystem: 0, roletype: 2(3)---->issystem: 1)
       if (this.roleForm.roletype === '1') {
         issystem = 0
       } else {

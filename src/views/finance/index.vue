@@ -228,15 +228,19 @@ export default {
       }
     },
     downloadDetail() {
-      downloadBill(this.thisMonthBill, 1).then(response => {
-        if (response.status === 200) {
-          this.$message.success('下载结算明细成功')
-        } else {
-          this.$message.error(response.msg)
-        }
-      }).catch(error => {
-        this.$message.error(error)
-      })
+      if (this.thisMonthBill !== null) {
+        downloadBill(this.thisMonthBill, 1).then(response => {
+          if (response.status === 200) {
+            this.$message.success('下载结算明细成功')
+          } else {
+            this.$message.error(response.msg)
+          }
+        }).catch(error => {
+          this.$message.error(error)
+        })
+      } else {
+        this.$message.error('暂无数据')
+      }
     },
     downloadMonthBill(bill) {
       downloadBill(bill, 1).then(response => {

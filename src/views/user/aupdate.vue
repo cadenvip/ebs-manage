@@ -5,7 +5,7 @@
       <el-form-item label="账号类型：" prop="roletype">
         <el-select v-model="userForm.roletype" disabled>
           <el-option label="移动人员" value="1"></el-option>
-          <el-option label="商家人员" value="2"></el-option>
+          <el-option label="商家人员" value="3"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="角色：" prop="roleids">

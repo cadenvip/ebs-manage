@@ -67,7 +67,7 @@ export const asyncRouterMap = [
         path: 'bhome',
         name: '商家首页',
         component: _import('homepage/bhome'),
-        meta: { roles: ['2'], title: '商家首页', icon: 'form' }
+        meta: { roles: ['2', '3'], title: '商家首页', icon: 'form' }
       }
     ]
   },
@@ -319,34 +319,34 @@ export const asyncRouterMap = [
     component: Layout,
     redirect: '/user/blist',
     name: '人员管理',
-    meta: { roles: ['2'], title: '人员管理', icon: 'enterpriseManage' },
+    meta: { roles: ['2', '3'], title: '人员管理', icon: 'enterpriseManage' },
     children: [
       {
         path: 'blist',
         name: 'userblist',
         component: _import('user/blist'),
-        meta: { roles: ['2'], title: '人员管理', icon: 'table' }
+        meta: { roles: ['2', '3'], title: '人员管理', icon: 'table' }
       },
       {
         path: 'badd',
         name: 'userbadd',
         hidden: true,
         component: _import('user/badd'),
-        meta: { roles: ['2'], title: '新增人员', icon: 'table' }
+        meta: { roles: ['2', '3'], title: '新增人员', icon: 'table' }
       },
       {
         path: 'bupdate',
         name: 'userbupdate',
         hidden: true,
         component: _import('user/bupdate'),
-        meta: { roles: ['2'], title: '修改人员', icon: 'table' }
+        meta: { roles: ['2', '3'], title: '修改人员', icon: 'table' }
       },
       {
         path: 'bdetail',
         name: 'userbdetail',
         hidden: true,
         component: _import('user/bdetail'),
-        meta: { roles: ['2'], title: '人员详情', icon: 'table' }
+        meta: { roles: ['2', '3'], title: '人员详情', icon: 'table' }
       }
     ]
   },
@@ -354,7 +354,7 @@ export const asyncRouterMap = [
   {
     path: '/goodsmanage',
     component: Layout,
-    meta: { roles: ['1', '2'], title: '商品管理', icon: 'goodsManage' },
+    meta: { roles: ['1', '2', '3'], title: '商品管理', icon: 'goodsManage' },
     name: '商品管理',
     children: [
       // 商家
@@ -362,46 +362,46 @@ export const asyncRouterMap = [
         path: 'publishgoods',
         name: 'publish-goods',
         component: _import('goodsmanage/publish-goods/index'),
-        meta: { roles: ['2'], title: '发布商品', icon: 'form' }
+        meta: { roles: ['2', '3'], title: '发布商品', icon: 'form' }
       },
       {
         path: 'publishstep1',
         name: 'publishstep1',
         hidden: true,
         component: _import('goodsmanage/publish-goods/step1'),
-        meta: { roles: ['2'], title: '选择类别' }
+        meta: { roles: ['2', '3'], title: '选择类别' }
       },
       {
         path: 'publishstep2',
         name: 'publishstep2',
         hidden: true,
         component: _import('goodsmanage/publish-goods/step2'),
-        meta: { roles: ['2'], title: '填写详情' }
+        meta: { roles: ['2', '3'], title: '填写详情' }
       },
       {
         path: 'publishstep3',
         name: 'publishstep3',
         hidden: true,
         component: _import('goodsmanage/publish-goods/step3'),
-        meta: { roles: ['2'], title: '提交入库' }
+        meta: { roles: ['2', '3'], title: '提交入库' }
       },
       {
         path: 'onsalegoods',
         name: 'onsalegoods',
         component: _import('goodsmanage/onsalegoods/index'),
-        meta: { roles: ['2'], title: '销售中商品', icon: 'form' }
+        meta: { roles: ['2', '3'], title: '销售中商品', icon: 'form' }
       },
       {
         path: 'noshelfgoods',
         name: 'noshelfgoods',
         component: _import('goodsmanage/noshelfgoods/index'),
-        meta: { roles: ['2'], title: '未上架商品', icon: 'form' }
+        meta: { roles: ['2', '3'], title: '未上架商品', icon: 'form' }
       },
       {
         path: 'goodsdetail',
         name: 'goodsdetail',
         component: _import('goodsmanage/goodsdetail/index'),
-        meta: { roles: ['2'], title: '商品详情' },
+        meta: { roles: ['2', '3'], title: '商品详情' },
         hidden: true
       },
       // 管理员
@@ -467,27 +467,27 @@ export const asyncRouterMap = [
     component: Layout,
     name: '财务管理',
     redirect: '/statement/index',
-    meta: { roles: ['2'], title: '财务管理', icon: 'table' },
+    meta: { roles: ['2', '3'], title: '财务管理', icon: 'table' },
     children: [
       {
         path: 'index',
         component: _import('finance/index'),
         name: '财务对账',
-        meta: { roles: ['2'], title: '财务对账', icon: 'table' }
+        meta: { roles: ['2', '3'], title: '财务对账', icon: 'table' }
       },
       {
         path: 'thisMonthBillDetail',
         hidden: true,
         component: _import('finance/thisMonthBillDetail'),
         name: '对账交易明细',
-        meta: { roles: ['2'], title: '对账交易明细', icon: 'table' }
+        meta: { roles: ['2', '3'], title: '对账交易明细', icon: 'table' }
       },
       {
         path: 'detail',
         hidden: true,
         component: _import('finance/detail'),
         name: '历史交易明细',
-        meta: { roles: ['2'], title: '历史交易明细', icon: 'table' }
+        meta: { roles: ['2', '3'], title: '历史交易明细', icon: 'table' }
       }
     ]
   },
@@ -495,14 +495,14 @@ export const asyncRouterMap = [
   {
     path: '/businesses',
     component: Layout,
-    meta: { roles: ['2'], title: '企业信息管理', icon: 'form' },
+    meta: { roles: ['2', '3'], title: '企业信息管理', icon: 'form' },
     name: '企业信息管理',
     children: [
       {
         path: 'modify',
         name: '企业信息修改',
         component: _import('businesses/modify'),
-        meta: { roles: ['2'], title: '企业信息修改', icon: 'form' }
+        meta: { roles: ['2', '3'], title: '企业信息修改', icon: 'form' }
       }
     ]
   },
@@ -541,13 +541,13 @@ export const asyncRouterMap = [
     path: '/order',
     component: Layout,
     name: '订单管理',
-    meta: { roles: ['1', '2'], title: '订单管理', icon: 'order' },
+    meta: { roles: ['1', '2', '3'], title: '订单管理', icon: 'order' },
     children: [
       {
         path: 'index',
         name: '订单首页',
         component: _import('order/businessorder'),
-        meta: { roles: ['2'], title: '订单管理', icon: 'form' }
+        meta: { roles: ['2', '3'], title: '订单管理', icon: 'form' }
       },
       {
         path: 'commonquery',
@@ -566,7 +566,7 @@ export const asyncRouterMap = [
         name: 'orderdetail',
         hidden: true,
         component: _import('order/orderdetail'),
-        meta: { roles: ['1', '2'], title: '订单详情', icon: 'form' }
+        meta: { roles: ['1', '2', '3'], title: '订单详情', icon: 'form' }
       },
       {
         path: 'shipments',
@@ -580,7 +580,7 @@ export const asyncRouterMap = [
         name: 'orderdetailB',
         hidden: true,
         component: _import('order/orderdetailB'),
-        meta: { roles: ['2'], title: '订单详情', icon: 'form' }
+        meta: { roles: ['2', '3'], title: '订单详情', icon: 'form' }
       }
     ]
   },
@@ -591,32 +591,32 @@ export const asyncRouterMap = [
     redirect: '/addrmanage/index',
     component: Layout,
     name: '管理地址',
-    meta: { roles: ['2'], title: '管理地址', icon: 'form' },
+    meta: { roles: ['2', '3'], title: '管理地址', icon: 'form' },
     children: [
       {
         path: 'index',
         name: '地址管理',
         component: _import('addrManage/index'),
-        meta: { roles: ['2'], title: '地址管理', icon: 'form' }
+        meta: { roles: ['2', '3'], title: '地址管理', icon: 'form' }
       },
       {
         path: 'freight',
         name: '运费管理',
         component: _import('addrManage/freight'),
-        meta: { roles: ['2'], title: '运费管理', icon: 'form' }
+        meta: { roles: ['2', '3'], title: '运费管理', icon: 'form' }
       },
       {
         path: 'freighttemp',
         hidden: true,
         name: '运费模板',
         component: _import('addrManage/freighttemplate'),
-        meta: { roles: ['2'], title: '运费模板', icon: 'form' }
+        meta: { roles: ['2', '3'], title: '运费模板', icon: 'form' }
       },
       {
         path: 'getmyself',
         name: '自提管理',
         component: _import('addrManage/getmyself'),
-        meta: { roles: ['2'], title: '自提管理', icon: 'form' }
+        meta: { roles: ['2', '3'], title: '自提管理', icon: 'form' }
       }
     ]
   },
