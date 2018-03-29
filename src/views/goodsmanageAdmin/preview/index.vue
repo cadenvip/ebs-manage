@@ -31,7 +31,7 @@
               物流方式：<span v-if="goodsBean.logisticsTypes">{{goodsBean.logisticsTypes.indexOf('1') > -1 ? '自提' : ''}} {{goodsBean.logisticsTypes.indexOf('2')>-1 ? '物流' : ''}} {{goodsBean.logisticsTypes.indexOf('2')>-1 ? '物流模板：'+goodsBean.logisticsTemplateCode : ''}}</span>
             </p>
             <p>
-              物流费用：<span>{{transportList.shipAreaLocationName}}至{{transportList.arrivalLocationName}} <el-button size="mini">选择区域</el-button> 快递：￥{{transportList.defaultMoney}}</span>
+              物流费用：<span v-if="transportList">{{transportList.shipAreaLocationName}}至{{transportList.arrivalLocationName}} <el-button size="mini">选择区域</el-button> 快递：￥{{transportList.defaultMoney}}</span>
             </p>
             <div style="font-size: 12px;color:grey;">商品阶梯价：<span class="corange" v-if="goodsBean.gradientPriceFlag">暂无信息</span>
               <div v-else>
