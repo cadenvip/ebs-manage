@@ -334,8 +334,8 @@
                     <p>营业执照:</p>
                   </el-col>
                   <el-col class="text-l" :span="16">
-                    <p><el-button v-if="registerForm.sfzmpicpath" size="mini" type="primary" @click="handlePictureCardPreview(registerForm.sfzmpicpath)">点击预览</el-button></p>
-                    <p><el-button v-if="registerForm.licencepicpath" size="mini" type="primary" @click="handlePictureCardPreview(registerForm.licencepicpath)">点击预览</el-button></p>
+                    <p><el-button v-if="registerForm.sfzmpicpath" size="mini" type="primary" @click="handlePictureCardPreview(registerForm.sfzmpicpath)" icon="el-icon-zoom-in" ></el-button></p>
+                    <p><el-button v-if="registerForm.licencepicpath" size="mini" type="primary" @click="handlePictureCardPreview(registerForm.licencepicpath)" icon="el-icon-zoom-in" ></el-button></p>
                   </el-col>
                 </el-row>
               </div>
@@ -345,7 +345,7 @@
                     <p>身份证反面:</p>
                   </el-col>
                   <el-col class="text-l" :span="12">
-                    <p><el-button v-if="registerForm.sffmpicpath" size="mini" type="primary" @click="handlePictureCardPreview(registerForm.sffmpicpath)">点击预览</el-button></p>
+                    <p><el-button v-if="registerForm.sffmpicpath" size="mini" type="primary" @click="handlePictureCardPreview(registerForm.sffmpicpath)" icon="el-icon-zoom-in" ></el-button></p>
                   </el-col>
                 </el-row>
               </div>
@@ -362,14 +362,10 @@
                   <el-col class="text-r" :span="8">
                     <p>企业性质:</p>
                     <p>代理授权证明:</p>
-                    <p>其他资质证明:</p>
                   </el-col>
                   <el-col class="text-l" :span="16">
                     <p>{{ registerForm.merchantKind === '1' ? '生产商' : registerForm.merchantKind === '2' ? '经销商' : '&nbsp;' }}</p>
-                    <p><el-button v-if="registerForm.proxytestifypicpath" size="mini" type="primary" @click="handlePictureCardPreview(registerForm.proxytestifypicpath)">点击预览</el-button></p>
-                    <p v-for="(item, index) in registerForm.foodotherpicpath" :key="index" >
-                      <el-button v-if="item" size="mini" type="primary" @click="handlePictureCardPreview(item)">点击预览</el-button>
-                    </p>
+                    <p><el-button v-if="registerForm.proxytestifypicpath" size="mini" type="primary" @click="handlePictureCardPreview(registerForm.proxytestifypicpath)" icon="el-icon-zoom-in" style="margin:0px"></el-button></p>
                   </el-col>
                 </el-row>
               </div>
@@ -378,12 +374,10 @@
                   <el-col class="text-r" :span="8">
                     <p>&nbsp;</p>
                     <p>食品安全认证:</p>
-                    <p>&nbsp;</p>
                   </el-col>
                   <el-col class="text-l" :span="16">
                     <p>&nbsp;</p>
-                    <p><el-button v-if="registerForm.foodsafetypicpath" size="mini" type="primary" @click="handlePictureCardPreview(registerForm.foodsafetypicpath)">点击预览</el-button></p>
-                    <p>&nbsp;</p>
+                    <p><el-button v-if="registerForm.foodsafetypicpath" size="mini" type="primary" @click="handlePictureCardPreview(registerForm.foodsafetypicpath)" icon="el-icon-zoom-in" ></el-button></p>
                   </el-col>
                 </el-row>
               </div>
@@ -392,16 +386,18 @@
                   <el-col class="text-r" :span="8">
                     <p>&nbsp;</p>
                     <p>食品流通许可:</p>
-                    <p>&nbsp;</p>
                   </el-col>
                   <el-col class="text-l" :span="16">
                     <p>&nbsp;</p>
-                    <p><el-button v-if="registerForm.foodpathpicpath" size="mini" type="primary" @click="handlePictureCardPreview(registerForm.foodpathpicpath)">点击预览</el-button></p>
-                    <p>&nbsp;</p>
+                    <p><el-button v-if="registerForm.foodpathpicpath" size="mini" type="primary" @click="handlePictureCardPreview(registerForm.foodpathpicpath)" icon="el-icon-zoom-in" ></el-button></p>
                   </el-col>
                 </el-row>
               </div>
             </div>
+            <p class="bt-info" style="display:inline-block;">其他资质证明:</p>
+            <p v-for="(item, index) in registerForm.foodotherpicpath" :key="index" style="display:inline-block; margin-left:10px;">
+              <el-button v-if="item" size="mini" type="primary" @click="handlePictureCardPreview(item)" icon="el-icon-zoom-in"></el-button>
+            </p>
           </div>
         </div>
 
@@ -463,7 +459,7 @@
           <p>剩余字数: <span style="color:red;">{{ getDescLen }}</span></p>
         </div>
         
-        <!-- 图片预览 -->
+        <!-- 图片 -->
         <el-dialog :visible.sync="dialogVisible">
           <img width="100%" :src="dialogImageUrl" alt="">
         </el-dialog>
@@ -744,7 +740,14 @@
   line-height: 20px;
   font-weight: bold;
 }
-
+.bt-info{
+  color: #787878;
+  font-size: 12px;
+  line-height: 20px;
+  font-weight: bold;
+  padding-left: 25px;
+  margin-bottom: 0;
+}
 .el-table{
   font-size: 13px;
 }

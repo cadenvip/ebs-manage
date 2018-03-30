@@ -245,14 +245,14 @@ export const asyncRouterMap = [
         name: 'businessesadd',
         hidden: true,
         component: _import('businesses/add'),
-        meta: { roles: ['1'], title: '新增企业', icon: 'form' }
+        meta: { roles: ['1'], title: '新增企业', icon: 'enterpriseList' }
       },
       {
         path: 'update',
         name: 'businessesupdate',
         hidden: true,
         component: _import('businesses/update'),
-        meta: { roles: ['1'], title: '修改企业', icon: 'form' }
+        meta: { roles: ['1'], title: '修改企业', icon: 'enterpriseList' }
       },
       {
         path: 'detail',
@@ -622,18 +622,18 @@ export const asyncRouterMap = [
     ]
   },
 
-  {
-    path: '/permission',
-    component: Layout,
-    name: '权限测试',
-    meta: { roles: ['1'], title: '权限测试', icon: 'jurisdiction' }, // 页面需要的权限
-    children: [
-      {
-        path: 'index',
-        component: _import('tree/index'),
-        name: '权限测试页',
-        meta: { roles: ['1'], title: '权限测试', icon: 'jurisdiction' }  // 页面需要的权限
-      }]
-  },
+  // {
+  //   path: '/permission',
+  //   component: Layout,
+  //   name: '权限测试',
+  //   meta: { roles: ['1'], title: '权限测试', icon: 'jurisdiction' }, // 页面需要的权限
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       component: _import('tree/index'),
+  //       name: '权限测试页',
+  //       meta: { roles: ['1'], title: '权限测试', icon: 'jurisdiction' }  // 页面需要的权限
+  //     }]
+  // },
   { path: '*', redirect: '/404', hidden: true }
 ]

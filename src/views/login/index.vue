@@ -29,7 +29,7 @@
         <el-col :span="15">
           <el-form-item prop="vercode">
             <span class="svg-container svg-container_login">
-              <svg-icon icon-class="user" />
+              <svg-icon icon-class="verifycode" />
             </span>
             <el-input name="vercode" type="text" v-model="loginForm.vercode" placeholder="请输入验证码" style="width:50%;" />
           </el-form-item>

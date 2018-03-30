@@ -289,27 +289,27 @@
             </el-form-item>
             <el-form-item label="营业执照：" prop="licencepicpath">
               <el-upload action="http://10.189.13.151:8080/ebs/common/upload" list-type="text" :show-file-list="false" :on-success="handleLicenceSuccess"
-                :before-upload="beforeAvatarUpload">
-                <el-button size="small" type="primary">点击上传</el-button>
+                :before-upload="beforeAvatarUpload" style="display:inline-block">
+                <el-button size="small" type="primary">选择</el-button>
               </el-upload>
-              <el-button v-if="registerForm.licencepicpath" size="small" type="primary" @click="handlePictureCardPreview(registerForm.licencepicpath)">上传成功，点击预览</el-button>
+              <el-button v-if="registerForm.licencepicpath" size="small" type="primary" @click="handlePictureCardPreview(registerForm.licencepicpath)" icon="el-icon-zoom-in" ></el-button>
             </el-form-item>
             <el-form-item label="经办人身份证：" prop="operatoridnum">
               <el-input v-model="registerForm.operatoridnum" clearable :maxlength=18 style="width: 270px;" placeholder="输入身份证号码"></el-input>
             </el-form-item>
             <el-form-item label="身份证正面：" prop="sfzmpicpath">
               <el-upload action="http://10.189.13.151:8080/ebs/common/upload" list-type="text" :show-file-list="false" :on-success="handleSfzmSuccess"
-                :before-upload="beforeAvatarUpload">
-                <el-button size="small" type="primary">点击上传</el-button>
+                :before-upload="beforeAvatarUpload" style="display:inline-block">
+                <el-button size="small" type="primary">选择</el-button>
               </el-upload>
-              <el-button v-if="registerForm.sfzmpicpath" size="small" type="primary" @click="handlePictureCardPreview(registerForm.sfzmpicpath)">上传成功，点击预览</el-button>
+              <el-button v-if="registerForm.sfzmpicpath" size="small" type="primary" @click="handlePictureCardPreview(registerForm.sfzmpicpath)" icon="el-icon-zoom-in" ></el-button>
             </el-form-item>
             <el-form-item label="身份证反面：" prop="sffmpicpath">
               <el-upload action="http://10.189.13.151:8080/ebs/common/upload" list-type="text" :show-file-list="false" :on-success="handleSffmSuccess"
-                :before-upload="beforeAvatarUpload">
-                <el-button size="small" type="primary">点击上传</el-button>
+                :before-upload="beforeAvatarUpload" style="display:inline-block">
+                <el-button size="small" type="primary">选择</el-button>
               </el-upload>
-              <el-button v-if="registerForm.sffmpicpath" size="small" type="primary" @click="handlePictureCardPreview(registerForm.sffmpicpath)">上传成功，点击预览</el-button>
+              <el-button v-if="registerForm.sffmpicpath" size="small" type="primary" @click="handlePictureCardPreview(registerForm.sffmpicpath)" icon="el-icon-zoom-in" ></el-button>
             </el-form-item>
             <br/>
             <h5>产品经营许可</h5>
@@ -320,28 +320,28 @@
             </el-form-item>
             <el-form-item v-show="registerForm.merchantKind === '2'" label="代理授权证明：" prop="proxytestifypicpath">
               <el-upload action="http://10.189.13.151:8080/ebs/common/upload" list-type="text" :show-file-list="false" :on-success="handleProxySuccess"
-                :before-upload="beforeAvatarUpload">
-                <el-button size="small" type="primary">点击上传</el-button>
+                :before-upload="beforeAvatarUpload" style="display:inline-block">
+                <el-button size="small" type="primary">选择</el-button>
               </el-upload>
-              <el-button v-if="registerForm.proxytestifypicpath" size="small" type="primary" @click="handlePictureCardPreview(registerForm.proxytestifypicpath)">上传成功，点击预览</el-button>
+              <el-button v-if="registerForm.proxytestifypicpath" size="small" type="primary" @click="handlePictureCardPreview(registerForm.proxytestifypicpath)" icon="el-icon-zoom-in" ></el-button>
             </el-form-item>
             <el-form-item label="食品安全认证：">
               <el-upload action="http://10.189.13.151:8080/ebs/common/upload" list-type="text" :show-file-list="false" :on-success="handleFoodSafetySuccess"
-                :before-upload="beforeAvatarUpload">
-                <el-button size="small" type="primary">点击上传</el-button>
+                :before-upload="beforeAvatarUpload" style="display:inline-block">
+                <el-button size="small" type="primary">选择</el-button>
               </el-upload>
-              <el-button v-if="registerForm.foodsafetypicpath" size="small" type="primary" @click="handlePictureCardPreview(registerForm.foodsafetypicpath)">上传成功，点击预览</el-button>
+              <el-button v-if="registerForm.foodsafetypicpath" size="small" type="primary" @click="handlePictureCardPreview(registerForm.foodsafetypicpath)" icon="el-icon-zoom-in" ></el-button>
             </el-form-item>
             <el-form-item label="食品流通许可：">
               <el-upload action="http://10.189.13.151:8080/ebs/common/upload" list-type="text" :show-file-list="false" :on-success="handleFoodCirculationSuccess"
-                :before-upload="beforeAvatarUpload">
-                <el-button size="small" type="primary">点击上传</el-button>
+                :before-upload="beforeAvatarUpload" style="display:inline-block">
+                <el-button size="small" type="primary">选择</el-button>
               </el-upload>
-              <el-button v-if="registerForm.foodpathpicpath" size="small" type="primary" @click="handlePictureCardPreview(registerForm.foodpathpicpath)">上传成功，点击预览</el-button>
+              <el-button v-if="registerForm.foodpathpicpath" size="small" type="primary" @click="handlePictureCardPreview(registerForm.foodpathpicpath)" icon="el-icon-zoom-in" ></el-button>
             </el-form-item>
             <el-form-item label="其他：">
-              <el-upload action="http://10.189.13.151:8080/ebs/common/upload" list-type="picture-card" :on-success="handleFoodOtherSuccess"
-                :before-upload="beforeAvatarUpload">
+              <el-upload action="http://10.189.13.151:8080/ebs/common/upload" list-type="picture-card" :on-success="handleFoodOtherSuccess" :limit="3"
+                :on-preview="handlePictureCardPreview" :on-remove="handleRemove" :before-upload="beforeAvatarUpload">
                 <i class="el-icon-plus"></i>
               </el-upload>
             </el-form-item>
@@ -415,7 +415,7 @@
           </el-form>
           <br/>
         </div>
-        <!-- 图片预览 -->
+        <!-- 图片 -->
         <el-dialog :visible.sync="dialogVisible">
           <img width="100%" :src="dialogImageUrl" alt="">
         </el-dialog>
