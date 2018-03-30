@@ -497,7 +497,6 @@
             params.accessBean.password = encryptPassword(params.accessBean.password)
             delete params.accessBean.repassword
             // TODO 时间格式转换
-            debugger
             if (params.accessBean.begin_time !== undefined && params.accessBean.begin_time !== '') {
               params.accessBean.begin_time = str2Timestamp(params.accessBean.begin_time)
             }

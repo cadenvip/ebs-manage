@@ -61,13 +61,13 @@ export const asyncRouterMap = [
         path: 'ahome',
         name: '管理员首页',
         component: _import('homepage/ahome'),
-        meta: { roles: ['1'], title: '管理员首页', icon: 'form' }
+        meta: { roles: ['1'], title: '管理员首页', icon: 'home' }
       },
       {
         path: 'bhome',
         name: '商家首页',
         component: _import('homepage/bhome'),
-        meta: { roles: ['2', '3'], title: '商家首页', icon: 'form' }
+        meta: { roles: ['2', '3'], title: '商家首页', icon: 'home' }
       }
     ]
   },
@@ -84,61 +84,61 @@ export const asyncRouterMap = [
         path: 'location',
         name: 'location',
         component: _import('location/index'),
-        meta: { roles: ['1'], title: '区域管理', icon: 'table' }
+        meta: { roles: ['1'], title: '区域管理', icon: 'region' }
       },
       {
         path: 'user/alist',
         name: 'useralist',
         component: _import('user/alist'),
-        meta: { roles: ['1'], title: '人员管理', icon: 'user' }
+        meta: { roles: ['1'], title: '人员管理', icon: 'userList' }
       },
       {
         path: 'user/aadd',
         name: 'useraadd',
         hidden: true,
         component: _import('user/aadd'),
-        meta: { roles: ['1'], title: '新增人员', icon: 'table' }
+        meta: { roles: ['1'], title: '新增人员', icon: 'user' }
       },
       {
         path: 'user/aupdate',
         name: 'useraupdate',
         hidden: true,
         component: _import('user/aupdate'),
-        meta: { roles: ['1'], title: '修改人员', icon: 'table' }
+        meta: { roles: ['1'], title: '修改人员', icon: 'user' }
       },
       {
         path: 'user/adetail',
         name: 'useradetail',
         hidden: true,
         component: _import('user/adetail'),
-        meta: { roles: ['1'], title: '人员详情', icon: 'table' }
+        meta: { roles: ['1'], title: '人员详情', icon: 'user' }
       },
       {
         path: 'role/list',
         name: 'rolelist',
         component: _import('role/list'),
-        meta: { roles: ['1'], title: '角色管理', icon: 'table' }
+        meta: { roles: ['1'], title: '角色管理', icon: 'role' }
       },
       {
         path: 'role/add',
         name: 'roleadd',
         hidden: true,
         component: _import('role/add'),
-        meta: { roles: ['1'], title: '新增角色', icon: 'table' }
+        meta: { roles: ['1'], title: '新增角色', icon: 'role' }
       },
       {
         path: 'role/update',
         name: 'roleupdate',
         hidden: true,
         component: _import('role/update'),
-        meta: { roles: ['1'], title: '修改角色', icon: 'table' }
+        meta: { roles: ['1'], title: '修改角色', icon: 'role' }
       },
       {
         path: 'role/detail',
         name: 'roledetail',
         hidden: true,
         component: _import('role/detail'),
-        meta: { roles: ['1'], title: '角色详情', icon: 'table' }
+        meta: { roles: ['1'], title: '角色详情', icon: 'role' }
       },
       {
         path: 'permissions',
@@ -150,41 +150,41 @@ export const asyncRouterMap = [
         path: 'access/list',
         name: 'accesslist',
         component: _import('access/list'),
-        meta: { roles: ['1'], title: '接入方管理', icon: 'table' }
+        meta: { roles: ['1'], title: '接入方管理', icon: 'access' }
       },
       {
         path: 'access/add',
         name: 'accessadd',
         hidden: true,
         component: _import('access/add'),
-        meta: { roles: ['1'], title: '新增接入方', icon: 'table' }
+        meta: { roles: ['1'], title: '新增接入方', icon: 'access' }
       },
       {
         path: 'access/update',
         name: 'accessupdate',
         hidden: true,
         component: _import('access/update'),
-        meta: { roles: ['1'], title: '修改接入方', icon: 'table' }
+        meta: { roles: ['1'], title: '修改接入方', icon: 'access' }
       },
       {
         path: 'access/detail',
         name: 'accessdetail',
         hidden: true,
         component: _import('access/detail'),
-        meta: { roles: ['1'], title: '接入方详情', icon: 'table' }
+        meta: { roles: ['1'], title: '接入方详情', icon: 'access' }
       },
       {
         path: 'sensitive/list',
         name: 'sensitivelist',
         component: _import('sensitive/list'),
-        meta: { roles: ['1'], title: '敏感词管理', icon: 'table' }
+        meta: { roles: ['1'], title: '敏感词管理', icon: 'sensitive' }
       },
       {
         path: 'sensitive/add',
         name: 'sensitiveadd',
         hidden: true,
         component: _import('sensitive/add'),
-        meta: { roles: ['1'], title: '新增敏感词', icon: 'table' }
+        meta: { roles: ['1'], title: '新增敏感词', icon: 'sensitive' }
       }
     ]
   },
@@ -201,27 +201,27 @@ export const asyncRouterMap = [
         path: 'olog/list',
         name: 'ologlist',
         component: _import('log/oLogList'),
-        meta: { roles: ['1'], title: '操作日志', icon: 'table' }
+        meta: { roles: ['1'], title: '操作日志', icon: 'olog' }
       },
       {
         path: 'olog/detail',
         name: 'ologdetail',
         hidden: true,
         component: _import('log/oLogDetail'),
-        meta: { roles: ['1'], title: '操作日志详情', icon: 'table' }
+        meta: { roles: ['1'], title: '操作日志详情', icon: 'olog' }
       },
       {
         path: 'ilog/list',
         name: 'iloglist',
         component: _import('log/iLogList'),
-        meta: { roles: ['1'], title: '接口日志', icon: 'table' }
+        meta: { roles: ['1'], title: '接口日志', icon: 'ilog' }
       },
       {
         path: 'ilog/detail',
         name: 'ilogdetail',
         hidden: true,
         component: _import('log/iLogDetail'),
-        meta: { roles: ['1'], title: '接口日志详情', icon: 'table' }
+        meta: { roles: ['1'], title: '接口日志详情', icon: 'ilog' }
       }
     ]
   },
@@ -238,41 +238,41 @@ export const asyncRouterMap = [
         path: 'list',
         name: 'businesseslist',
         component: _import('businesses/list'),
-        meta: { roles: ['1'], title: '企业列表', icon: 'table' }
+        meta: { roles: ['1'], title: '企业列表', icon: 'enterpriseList' }
       },
       {
         path: 'add',
         name: 'businessesadd',
         hidden: true,
         component: _import('businesses/add'),
-        meta: { roles: ['1'], title: '新增企业', icon: 'table' }
+        meta: { roles: ['1'], title: '新增企业', icon: 'form' }
       },
       {
         path: 'update',
         name: 'businessesupdate',
         hidden: true,
         component: _import('businesses/update'),
-        meta: { roles: ['1'], title: '修改企业', icon: 'table' }
+        meta: { roles: ['1'], title: '修改企业', icon: 'form' }
       },
       {
         path: 'detail',
         name: 'businessesdetail',
         hidden: true,
         component: _import('businesses/detail'),
-        meta: { roles: ['1'], title: '企业详情', icon: 'table' }
+        meta: { roles: ['1'], title: '企业详情', icon: 'enterpriseList' }
       },
       {
         path: 'auditlist',
         name: 'businessesauditlist',
         component: _import('businesses/auditlist'),
-        meta: { roles: ['1'], title: '企业审核', icon: 'user' }
+        meta: { roles: ['1'], title: '企业审核', icon: 'enterpriseAudit' }
       },
       {
         path: 'audit',
         name: 'businessesaudit',
         hidden: true,
         component: _import('businesses/audit'),
-        meta: { roles: ['1'], title: '企业审核', icon: 'user' }
+        meta: { roles: ['1'], title: '企业审核', icon: 'enterpriseAudit' }
       }
     ]
   },
@@ -288,28 +288,28 @@ export const asyncRouterMap = [
         path: 'list',
         component: _import('finance/list'),
         name: '财务列表',
-        meta: { roles: ['1'], title: '财务列表', icon: 'table' }
+        meta: { roles: ['1'], title: '财务列表', icon: 'finance' }
       },
       {
         path: 'detail',
         hidden: true,
         component: _import('finance/detail'),
         name: '对账明细',
-        meta: { roles: ['1'], title: '对账明细', icon: 'table' }
+        meta: { roles: ['1'], title: '对账明细', icon: 'finance' }
       },
       {
         path: 'update',
         hidden: true,
         component: _import('finance/update'),
         name: '调账',
-        meta: { roles: ['1'], title: '调账', icon: 'table' }
+        meta: { roles: ['1'], title: '调账', icon: 'finance' }
       },
       {
         path: 'moreHistory',
         hidden: true,
         component: _import('finance/moreHistory'),
         name: '更多历史结算明细',
-        meta: { roles: ['1'], title: '更多历史结算明细', icon: 'table' }
+        meta: { roles: ['1'], title: '更多历史结算明细', icon: 'finance' }
       }
     ]
   },
@@ -319,34 +319,34 @@ export const asyncRouterMap = [
     component: Layout,
     redirect: '/user/blist',
     name: '人员管理',
-    meta: { roles: ['2', '3'], title: '人员管理', icon: 'enterpriseManage' },
+    meta: { roles: ['2', '3'], title: '人员管理', icon: 'userList' },
     children: [
       {
         path: 'blist',
         name: 'userblist',
         component: _import('user/blist'),
-        meta: { roles: ['2', '3'], title: '人员管理', icon: 'user' }
+        meta: { roles: ['2', '3'], title: '人员管理', icon: 'userList' }
       },
       {
         path: 'badd',
         name: 'userbadd',
         hidden: true,
         component: _import('user/badd'),
-        meta: { roles: ['2', '3'], title: '新增人员', icon: 'table' }
+        meta: { roles: ['2', '3'], title: '新增人员', icon: 'user' }
       },
       {
         path: 'bupdate',
         name: 'userbupdate',
         hidden: true,
         component: _import('user/bupdate'),
-        meta: { roles: ['2', '3'], title: '修改人员', icon: 'table' }
+        meta: { roles: ['2', '3'], title: '修改人员', icon: 'user' }
       },
       {
         path: 'bdetail',
         name: 'userbdetail',
         hidden: true,
         component: _import('user/bdetail'),
-        meta: { roles: ['2', '3'], title: '人员详情', icon: 'table' }
+        meta: { roles: ['2', '3'], title: '人员详情', icon: 'user' }
       }
     ]
   },
@@ -362,7 +362,7 @@ export const asyncRouterMap = [
         path: 'publishgoods',
         name: 'publish-goods',
         component: _import('goodsmanage/publish-goods/index'),
-        meta: { roles: ['2', '3'], title: '发布商品', icon: 'form' }
+        meta: { roles: ['2', '3'], title: '发布商品', icon: 'publish' }
       },
       {
         path: 'publishstep1',
@@ -467,27 +467,27 @@ export const asyncRouterMap = [
     component: Layout,
     name: '财务管理',
     redirect: '/statement/index',
-    meta: { roles: ['2', '3'], title: '财务管理', icon: 'table' },
+    meta: { roles: ['2', '3'], title: '财务管理', icon: 'finance' },
     children: [
       {
         path: 'index',
         component: _import('finance/index'),
         name: '财务对账',
-        meta: { roles: ['2', '3'], title: '财务对账', icon: 'table' }
+        meta: { roles: ['2', '3'], title: '财务对账', icon: 'finance' }
       },
       {
         path: 'thisMonthBillDetail',
         hidden: true,
         component: _import('finance/thisMonthBillDetail'),
         name: '对账交易明细',
-        meta: { roles: ['2', '3'], title: '对账交易明细', icon: 'table' }
+        meta: { roles: ['2', '3'], title: '对账交易明细', icon: 'finance' }
       },
       {
         path: 'detail',
         hidden: true,
         component: _import('finance/detail'),
         name: '历史交易明细',
-        meta: { roles: ['2', '3'], title: '历史交易明细', icon: 'table' }
+        meta: { roles: ['2', '3'], title: '历史交易明细', icon: 'finance' }
       }
     ]
   },
@@ -495,14 +495,14 @@ export const asyncRouterMap = [
   {
     path: '/businesses',
     component: Layout,
-    meta: { roles: ['2', '3'], title: '企业信息管理', icon: 'form' },
+    meta: { roles: ['2', '3'], title: '信息管理', icon: 'form' },
     name: '企业信息管理',
     children: [
       {
         path: 'modify',
         name: '企业信息修改',
         component: _import('businesses/modify'),
-        meta: { roles: ['2', '3'], title: '企业信息修改', icon: 'form' }
+        meta: { roles: ['2', '3'], title: '信息修改', icon: 'form' }
       }
     ]
   },

@@ -10,7 +10,7 @@
       </el-form-item>
       <el-form-item prop="unitid">
         <span class="svg-container svg-container_login">
-          <svg-icon icon-class="user" />
+          <svg-icon icon-class="department" />
         </span>
         <el-select v-model="loginForm.unitid" placeholder="请选择归属单位" v-on:focus="selectUnit">
           <el-option v-for="(item, index) in unitinfos" v-if="item" :key="index" :label="item.businessesName" :value="item.id" selected></el-option>
