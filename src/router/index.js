@@ -389,13 +389,13 @@ export const asyncRouterMap = [
         path: 'onsalegoods',
         name: 'onsalegoods',
         component: _import('goodsmanage/onsalegoods/index'),
-        meta: { roles: ['2', '3'], title: '销售中商品', icon: 'form' }
+        meta: { roles: ['2', '3'], title: '销售中商品', icon: 'onsale' }
       },
       {
         path: 'noshelfgoods',
         name: 'noshelfgoods',
         component: _import('goodsmanage/noshelfgoods/index'),
-        meta: { roles: ['2', '3'], title: '未上架商品', icon: 'form' }
+        meta: { roles: ['2', '3'], title: '未上架商品', icon: 'offsale' }
       },
       {
         path: 'goodsdetail',
@@ -409,38 +409,38 @@ export const asyncRouterMap = [
         path: 'goodssearch',  // 商品搜索
         name: 'goodssearch',
         component: _import('goodsmanageAdmin/goodssearch/index'),
-        meta: { roles: ['1'], title: '商品查询', icon: 'form' }
+        meta: { roles: ['1'], title: '商品查询', icon: 'goodsList' }
       },
       {
         path: 'updownaudit',  // 上下架
         name: 'updownaudit',
         component: _import('goodsmanageAdmin/updownaudit/index'),
-        meta: { roles: ['1'], title: '商品上下架审核', icon: 'form' }
+        meta: { roles: ['1'], title: '商品上下架审核', icon: 'goodsAudit' }
       },
       {
         path: 'onsalemodifyaudit',  // 在售商品修改审核
         name: '在售商品修改审核列表',
         component: _import('goodsmanageAdmin/onsalemodifyaudit/index'),
-        meta: { roles: ['1'], title: '在售商品修改审核', icon: 'form' }
+        meta: { roles: ['1'], title: '在售商品修改审核', icon: 'goodsModifyAudit' }
       },
       {
         path: 'onsalemodifyaudit/auditpreview',  // 在售商品修改审核
         name: '在售商品修改审核',
         hidden: true,
         component: _import('goodsmanageAdmin/onsalemodifyaudit/audit'),
-        meta: { roles: ['1'], title: '在售商品修改审核', icon: 'form' }
+        meta: { roles: ['1'], title: '在售商品修改审核', icon: 'goodsHistoryAudit' }
       },
       {
         path: 'onsalehistoryaudit',  // 在售商品修改审核
         name: '在售商品历史审核列表',
         component: _import('goodsmanageAdmin/onsalehistoryaudit/index'),
-        meta: { roles: ['1'], title: '在售商品历史审核', icon: 'form' }
+        meta: { roles: ['1'], title: '在售商品历史审核', icon: 'goodsManage' }
       },
       {
         path: 'preview',  // 预览
         name: 'preview',
         component: _import('goodsmanageAdmin/preview/index'),
-        meta: { roles: ['1'], title: '商品预览', icon: 'form' },
+        meta: { roles: ['1'], title: '商品预览', icon: 'goodsManage' },
         hidden: true
       }
     ]
@@ -495,14 +495,15 @@ export const asyncRouterMap = [
   {
     path: '/businesses',
     component: Layout,
-    meta: { roles: ['2', '3'], title: '信息管理', icon: 'form' },
+    redirect: '/businesses/modify',
+    meta: { roles: ['2', '3'], title: '信息管理', icon: 'enterpriseInfo' },
     name: '企业信息管理',
     children: [
       {
         path: 'modify',
         name: '企业信息修改',
         component: _import('businesses/modify'),
-        meta: { roles: ['2', '3'], title: '信息修改', icon: 'form' }
+        meta: { roles: ['2', '3'], title: '信息修改', icon: 'enterpriseInfo' }
       }
     ]
   },
@@ -547,40 +548,40 @@ export const asyncRouterMap = [
         path: 'index',
         name: '订单首页',
         component: _import('order/businessorder'),
-        meta: { roles: ['2', '3'], title: '订单管理', icon: 'form' }
+        meta: { roles: ['2', '3'], title: '订单管理', icon: 'order' }
       },
       {
         path: 'commonquery',
         name: 'commonquery',
         component: _import('order/admin/commonorderquery'),
-        meta: { roles: ['1'], title: '普通订单查询', icon: 'form' }
+        meta: { roles: ['1'], title: '普通订单查询', icon: 'order' }
       },
       {
         path: 'businessorder2',
         name: 'businessorder2',
         component: _import('order/businessorder2'),
-        meta: { roles: ['1'], title: '普通订单管理', icon: 'form' }
+        meta: { roles: ['1'], title: '普通订单管理', icon: 'order' }
       },
       {
         path: 'orderdetail',
         name: 'orderdetail',
         hidden: true,
         component: _import('order/orderdetail'),
-        meta: { roles: ['1', '2', '3'], title: '订单详情', icon: 'form' }
+        meta: { roles: ['1', '2', '3'], title: '订单详情', icon: 'order' }
       },
       {
         path: 'shipments',
         name: 'shipments',
         hidden: true,
         component: _import('order/shipments'),
-        meta: { roles: ['1'], title: '订单发货', icon: 'form' }
+        meta: { roles: ['1'], title: '订单发货', icon: 'order' }
       },
       {
         path: 'orderdetailB',
         name: 'orderdetailB',
         hidden: true,
         component: _import('order/orderdetailB'),
-        meta: { roles: ['2', '3'], title: '订单详情', icon: 'form' }
+        meta: { roles: ['2', '3'], title: '订单详情', icon: 'order' }
       }
     ]
   },
@@ -591,32 +592,32 @@ export const asyncRouterMap = [
     redirect: '/addrmanage/index',
     component: Layout,
     name: '管理地址',
-    meta: { roles: ['2', '3'], title: '管理地址', icon: 'form' },
+    meta: { roles: ['2', '3'], title: '管理地址', icon: 'addressManage' },
     children: [
       {
         path: 'index',
         name: '地址管理',
         component: _import('addrManage/index'),
-        meta: { roles: ['2', '3'], title: '地址管理', icon: 'form' }
+        meta: { roles: ['2', '3'], title: '地址管理', icon: 'addressManage' }
       },
       {
         path: 'freight',
         name: '运费管理',
         component: _import('addrManage/freight'),
-        meta: { roles: ['2', '3'], title: '运费管理', icon: 'form' }
+        meta: { roles: ['2', '3'], title: '运费管理', icon: 'freight' }
       },
       {
         path: 'freighttemp',
         hidden: true,
         name: '运费模板',
         component: _import('addrManage/freighttemplate'),
-        meta: { roles: ['2', '3'], title: '运费模板', icon: 'form' }
+        meta: { roles: ['2', '3'], title: '运费模板', icon: 'freight' }
       },
       {
         path: 'getmyself',
         name: '自提管理',
         component: _import('addrManage/getmyself'),
-        meta: { roles: ['2', '3'], title: '自提管理', icon: 'form' }
+        meta: { roles: ['2', '3'], title: '自提管理', icon: 'selflifting' }
       }
     ]
   },
