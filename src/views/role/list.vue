@@ -1,11 +1,11 @@
 <template>
-  <div>
-    <h3 style="padding-left: 20px;">角色查询条件</h3>
+  <div style="padding-left: 20px;">
+    <h4>角色查询条件</h4>
     <el-form ref="searchForm" :model="searchForm" label-width="120px">
       <el-row>
         <el-col :span="10">
           <el-form-item label="角色名称：">
-            <el-input v-model="searchForm.rolename" style="width: 300px;" placeholder="请输入角色名称"></el-input>
+            <el-input v-model="searchForm.rolename" clearable style="width: 300px;" placeholder="请输入角色名称"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="10">
@@ -47,19 +47,20 @@
         </el-col>
       </el-row>
     </el-form>
-    <h3 style="padding-left: 20px;">角色列表</h3>
-    <el-table :data="list" v-loading.body="loading" element-loading-text="Loading" border stripe fit highlight-current-row style="padding-left:10px">
-      <el-table-column label='角色名称' prop="rolename" width="110" align="center">
+    <br/>
+    <div class="list">角色列表</div>    
+    <el-table :data="list" v-loading.body="loading" element-loading-text="Loading" border stripe fit highlight-current-row style="width:100%">
+      <el-table-column label='角色名称' prop="rolename" align="center">
       </el-table-column>
-      <el-table-column label="系统角色" prop="issystem" :formatter="transformIsSystem" width="150" align="center">
+      <el-table-column label="系统角色" prop="issystem" :formatter="transformIsSystem" align="center">
       </el-table-column>
-      <el-table-column label="隐藏角色" prop="ishidden" :formatter="transformIsHidden" width="110" align="center">
+      <el-table-column label="隐藏角色" prop="ishidden" :formatter="transformIsHidden" align="center">
       </el-table-column>
-      <el-table-column label="角色类型" prop="roletype" :formatter="transformRoleType" width="110" align="center">
+      <el-table-column label="角色类型" prop="roletype" :formatter="transformRoleType" align="center">
       </el-table-column>
-      <el-table-column label="角色描述" prop="description" width="200" align="center">
+      <el-table-column label="角色描述" prop="description" align="center">
       </el-table-column>
-      <el-table-column label="操作" width="190" align="center">
+      <el-table-column label="操作" align="center">
         <template slot-scope="scope">
           <el-button @click="detail(scope.row)" type="text" size="small">详细</el-button>
           <el-button @click="updateRole(scope.row)" type="text" size="small">修改</el-button>
@@ -220,3 +221,15 @@
   }
 
 </script>
+
+<style scoped>
+  .list{
+    height: 30px;
+    line-height: 30px;
+    background: #6ebfec;
+    font-size: 14px;
+    color:#fff;
+    padding-left: 20px;
+    font-weight: bold;
+  }
+</style>

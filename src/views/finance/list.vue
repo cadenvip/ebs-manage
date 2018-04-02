@@ -1,8 +1,8 @@
 <template>
-  <div>
-    <h3 style="padding-left: 20px;">账目查询条件</h3>
+  <div style="padding-left: 20px;">
+    <h4>账目查询条件</h4>
     <el-form ref="searchForm" :model="searchForm" label-width="130px" class="demo-ruleForm">
-      <el-row :gutter="30">
+      <el-row :gutter="30"></el-row>
         <el-col :span="7">
           <el-form-item label="企业名称：" prop="merchantname">
             <el-input v-model="searchForm.merchantname" clearable style="width: 180px;" placeholder="请输入企业名称"></el-input>
@@ -47,15 +47,16 @@
         </el-col>
       </el-row>
     </el-form>
-    <h3 style="padding-left: 20px;">账目列表</h3>
+    <br/>
+    <div class="list">账目列表</div>
     <el-table :data="billlist" v-loading.body="loading" element-loading-text="Loading" border stripe fit highlight-current-row
-      style="padding-left:10px">
-      <el-table-column label='企业名称' prop="merchantname" width="240" align="center"></el-table-column>
-      <el-table-column label="区域" prop="locationname" width="180" align="center"></el-table-column>
-      <el-table-column label="出账周期" prop="startmonth" :formatter="formatPeriod" width="140" align="center"></el-table-column>
-      <el-table-column label="应结算合计" prop="totalpay" :formatter="formatUnit" width="120" align="center"></el-table-column>
-      <el-table-column label="对账状态" prop="status" :formatter="formatStatus" width="100" align="center"></el-table-column>
-      <el-table-column label="操作" width="180" align="center">
+      style="width:100%">
+      <el-table-column label='企业名称' prop="merchantname" align="center"></el-table-column>
+      <el-table-column label="区域" prop="locationname" align="center"></el-table-column>
+      <el-table-column label="出账周期" prop="startmonth" :formatter="formatPeriod" align="center"></el-table-column>
+      <el-table-column label="应结算合计" prop="totalpay" :formatter="formatUnit" align="center"></el-table-column>
+      <el-table-column label="对账状态" prop="status" :formatter="formatStatus" align="center"></el-table-column>
+      <el-table-column label="操作" align="center">
         <template slot-scope="scope">
           <el-button @click="detail(scope.row)" type="text" size="small">明细</el-button>
           <el-button @click="confirmBill(scope.row)" v-if="scope.row.status === '1'" type="text" size="small">结账</el-button>
@@ -280,3 +281,15 @@
   }
 
 </script>
+
+<style scoped>
+  .list{
+    height: 30px;
+    line-height: 30px;
+    background: #6ebfec;
+    font-size: 14px;
+    color:#fff;
+    padding-left: 20px;
+    font-weight: bold;
+  }
+</style>

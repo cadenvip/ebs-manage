@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <h3 style="padding-left: 20px;">关键词查询条件</h3>
+  <div style="padding-left: 20px;">
+    <h4>关键词查询条件</h4>
     <el-form ref="searchForm" :model="searchForm" label-width="100px" class="demo-ruleForm">
       <el-form-item label="关键词：">
         <el-input v-model="searchForm.keyword" clearable style="width: 300px;"></el-input>
@@ -17,11 +17,12 @@
         </el-col>
       </el-row>
     </el-form>
-    <h3 style="padding-left: 20px;">关键词列表</h3>
-    <el-table :data="list" v-loading.body="loading" element-loading-text="Loading" border stripe fit highlight-current-row style="padding-left:10px">
-      <el-table-column label='关键词' prop="sensitiveWord" width="600px" align="center">
+    <br/>
+    <div class="list">关键词列表</div>
+    <el-table :data="list" v-loading.body="loading" element-loading-text="Loading" border stripe fit highlight-current-row style="width:100%">
+      <el-table-column label='关键词' prop="sensitiveWord" align="center">
       </el-table-column>
-      <el-table-column label="操作" width="200px" align="center">
+      <el-table-column label="操作" align="center">
         <template slot-scope="scope">
           <el-button @click="deleteSensitive(scope.row)" type="text" size="small">删除</el-button>
         </template>
@@ -128,3 +129,15 @@
   }
 
 </script>
+
+<style scoped>
+  .list{
+    height: 30px;
+    line-height: 30px;
+    background: #6ebfec;
+    font-size: 14px;
+    color:#fff;
+    padding-left: 20px;
+    font-weight: bold;
+  }
+</style>

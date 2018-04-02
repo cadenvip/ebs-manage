@@ -6,13 +6,13 @@
         <span class="svg-container svg-container_login">
           <svg-icon icon-class="user" />
         </span>
-        <el-input name="loginname" type="text" v-model="loginForm.loginname" placeholder="请输入账号" v-on:blur="getUnitids" />
+        <el-input name="loginname" type="text" v-model="loginForm.loginname" placeholder="请输入账号" clearable v-on:blur="getUnitids" />
       </el-form-item>
       <el-form-item prop="unitid">
         <span class="svg-container svg-container_login">
           <svg-icon icon-class="department" />
         </span>
-        <el-select v-model="loginForm.unitid" placeholder="请选择归属单位" v-on:focus="selectUnit">
+        <el-select v-model="loginForm.unitid" placeholder="请选择归属单位" clearable v-on:focus="selectUnit">
           <el-option v-for="(item, index) in unitinfos" v-if="item" :key="index" :label="item.businessesName" :value="item.id" selected></el-option>
         </el-select>
       </el-form-item>
@@ -20,26 +20,21 @@
         <span class="svg-container">
           <svg-icon icon-class="password"></svg-icon>
         </span>
-        <el-input name="password" :type="pwdType" @keyup.enter.native="handleLogin" v-model="loginForm.password" placeholder="请输入密码"></el-input>
+        <el-input name="password" :type="pwdType" @keyup.enter.native="handleLogin" clearable v-model="loginForm.password" placeholder="请输入密码"></el-input>
         <span class="show-pwd" @click="showPwd">
           <svg-icon icon-class="eye" />
         </span>
       </el-form-item>
-      <el-row :gutter="14">
-        <el-col :span="15">
-          <el-form-item prop="vercode">
-            <span class="svg-container svg-container_login">
-              <svg-icon icon-class="verifycode" />
-            </span>
-            <el-input name="vercode" type="text" v-model="loginForm.vercode" placeholder="请输入验证码" style="width:50%;" />
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-button type="primary" style="margin-top:6px" @click.native.prevent="getVercode">
-            获取验证码
-          </el-button>
-        </el-col>
-      </el-row>
+      <el-form-item prop="vercode">
+        <span class="svg-container svg-container_login">
+          <svg-icon icon-class="verifycode" />
+        </span>
+        <el-input name="vercode" type="text" v-model="loginForm.vercode" placeholder="请输入验证码" style="width:50%;display:inline-block;" />
+        <el-button type="text" style="margin-top:6px;margin-left: 50px;" @click.native.prevent="getVercode" :disabled="disableBtn">
+          获取验证码
+        </el-button>
+      </el-form-item>
+      <p v-show="disableBtn">{{ timerCodeMsg }}</p>
       <el-form-item style="text-align: center;">
         <el-button type="primary" style="width:47.85%;" @click.native.prevent="handleLogin">
           登录
@@ -106,7 +101,11 @@
             message: '请输入验证码'
           }]
         },
-        pwdType: 'password'
+        pwdType: 'password',
+        disableBtn: false,
+        timerCodeMsg: '',
+        timer: null,
+        count: ''
       }
     },
     methods: {
@@ -205,11 +204,27 @@
           this.$message.error('请输入账号')
           return
         }
+
         getVercode(this.loginForm.loginname).then(response => {
           if (response.status === 200) {
-            // TODO
-            this.$message.success('获取验证码成功！')
+            const TIME_COUNT = 10
+            if (!this.timer) {
+              this.count = TIME_COUNT
+              this.disableBtn = false
+              this.timer = setInterval(() => {
+                if (this.count > 0 && this.count <= TIME_COUNT) {
+                  this.timerCodeMsg = `验证码发送成功，${this.count}秒后可重发验证码。`
+                  this.count--
+                  this.disableBtn = true
+                } else {
+                  this.disableBtn = false
+                  clearInterval(this.timer)
+                  this.timer = null
+                }
+              }, 1000)
+            }
           } else {
+            console.log('dafsdfasd')
             this.$message.error(response.msg)
           }
         }).catch(error => {

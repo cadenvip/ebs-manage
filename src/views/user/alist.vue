@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <h3 style="padding-left: 20px;">人员查询条件</h3>
+  <div style="padding-left: 20px;">
+    <h4>人员查询条件</h4>
     <el-form ref="searchForm" :model="searchForm" label-width="100px" class="demo-ruleForm">
       <el-row>
         <el-col :span="10">
@@ -38,16 +38,17 @@
     <el-dialog title="请选择区域" :visible.sync="dialogVisible" width="440px">
       <locationselector @locationSelected="getLocationInfo"></locationselector>
     </el-dialog>
-    <h3 style="padding-left: 20px;">人员列表</h3>
-    <el-table :data="list" v-loading.body="loading" element-loading-text="Loading" border stripe fit highlight-current-row style="padding-left:10px">
-      <el-table-column label='账号' prop="loginname" width="110" align="center"></el-table-column>
-      <el-table-column label="姓名" prop="name" width="120" align="center"></el-table-column>
-      <el-table-column label="手机号码" prop="phoneno" width="110" align="center"></el-table-column>
-      <el-table-column label="归属区域" prop="locationname" width="180" align="center"></el-table-column>
-      <el-table-column label="商家" prop="unitname" width="180" align="center"></el-table-column>
-      <el-table-column label="状态" prop="locked" :formatter="lockedFormat" width="80" align="center"></el-table-column>
-      <el-table-column label="最近登录时间" prop="logintime" width="180" align="center"></el-table-column>
-      <el-table-column label="操作" width="220" align="center">
+    <br/>
+    <div class="list">人员列表</div>
+    <el-table :data="list" v-loading.body="loading" element-loading-text="Loading" border stripe fit highlight-current-row style="width:100%;">
+      <el-table-column label='账号' prop="loginname" align="center"></el-table-column>
+      <el-table-column label="姓名" prop="name" align="center"></el-table-column>
+      <el-table-column label="手机号码" prop="phoneno" align="center"></el-table-column>
+      <el-table-column label="归属区域" prop="locationname" align="center"></el-table-column>
+      <el-table-column label="商家" prop="unitname" align="center"></el-table-column>
+      <el-table-column label="状态" prop="locked" :formatter="lockedFormat" align="center"></el-table-column>
+      <el-table-column label="最近登录时间" prop="logintime" align="center"></el-table-column>
+      <el-table-column label="操作" align="center">
         <template slot-scope="scope">
           <el-button @click="updateUser(scope.row)" type="text" size="small">修改</el-button>
           <el-button @click="resetPassword(scope.row)" type="text" size="small">重置密码</el-button>
@@ -223,3 +224,15 @@
   }
 
 </script>
+
+<style scoped>
+  .list{
+    height: 30px;
+    line-height: 30px;
+    background: #6ebfec;
+    font-size: 14px;
+    color:#fff;
+    padding-left: 20px;
+    font-weight: bold;
+  }
+</style>

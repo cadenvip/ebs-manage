@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <h3 style="padding-left: 20px;">接入方查询条件</h3>
+  <div style="padding-left: 20px;">
+    <h4>接入方查询条件</h4>
     <el-form ref="searchForm" :model="searchForm" label-width="100px">
       <el-row>
         <el-col :span="10">
@@ -26,16 +26,17 @@
         </el-col>
       </el-row>
     </el-form>
-    <h3 style="padding-left: 20px;">接入方列表</h3>
-    <el-table :data="list" v-loading.body="loading" element-loading-text="Loading" border stripe fit highlight-current-row style="padding-left:10px">
-      <el-table-column label='接入码' prop="code" width="90" align="center"></el-table-column>
-      <el-table-column label="接入方名称" prop="si_name" width="150" align="center"></el-table-column>
-      <el-table-column label="接入类别" prop="si_type" :formatter="typeFormat" width="90" align="center"></el-table-column>
-      <el-table-column label="开始时间" prop="begin_time" width="200" align="center"></el-table-column>
-      <el-table-column label="到期时间" prop="end_time" width="200" align="center"></el-table-column>
-      <el-table-column label="联系人" prop="si_person" width="100" align="center"></el-table-column>
-      <el-table-column label="联系电话" prop="si_phone" width="120" align="center"></el-table-column>
-      <el-table-column label="操作" width="120" align="center">
+    <br/>
+    <div class="list">接入方列表</div>    
+    <el-table :data="list" v-loading.body="loading" element-loading-text="Loading" border stripe fit highlight-current-row style="width:100%">
+      <el-table-column label='接入码' prop="code" align="center"></el-table-column>
+      <el-table-column label="接入方名称" prop="si_name" align="center"></el-table-column>
+      <el-table-column label="接入类别" prop="si_type" :formatter="typeFormat"align="center"></el-table-column>
+      <el-table-column label="开始时间" prop="begin_time" align="center"></el-table-column>
+      <el-table-column label="到期时间" prop="end_time" align="center"></el-table-column>
+      <el-table-column label="联系人" prop="si_person" align="center"></el-table-column>
+      <el-table-column label="联系电话" prop="si_phone" align="center"></el-table-column>
+      <el-table-column label="操作" align="center">
         <template slot-scope="scope">
           <el-button @click="detail(scope.row)" type="text" size="small">详细</el-button>
           <el-button @click="updateAccess(scope.row)" type="text" size="small">修改</el-button>
@@ -151,3 +152,16 @@
   }
 
 </script>
+
+<style scoped>
+  .list{
+    height: 30px;
+    line-height: 30px;
+    background: #6ebfec;
+    font-size: 14px;
+    color:#fff;
+    padding-left: 20px;
+    font-weight: bold;
+  }
+</style>
+
