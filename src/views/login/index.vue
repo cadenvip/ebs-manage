@@ -224,7 +224,6 @@
               }, 1000)
             }
           } else {
-            console.log('dafsdfasd')
             this.$message.error(response.msg)
           }
         }).catch(error => {
