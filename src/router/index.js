@@ -55,19 +55,19 @@ export const asyncRouterMap = [
   {
     path: '/home',
     component: Layout,
-    name: '首页',
+    name: 'homepage',
     children: [
       {
         path: 'ahome',
-        name: '管理员首页',
+        name: '首页',
         component: _import('homepage/ahome'),
-        meta: { roles: ['1'], title: '管理员首页', icon: 'home' }
+        meta: { roles: ['1'], title: '首页', icon: 'home' }
       },
       {
         path: 'bhome',
-        name: '商家首页',
+        name: '首页',
         component: _import('homepage/bhome'),
-        meta: { roles: ['2', '3'], title: '商家首页', icon: 'home' }
+        meta: { roles: ['2', '3'], title: '首页', icon: 'home' }
       }
     ]
   },

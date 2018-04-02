@@ -92,7 +92,7 @@
                   <el-input v-model="scope.row.name" placeholder="请输入名称"></el-input>
                 </template>
               </el-table-column>
-              <el-table-column property="unit" label="商品规格" width="100">
+              <el-table-column property="unit" label="商品规格" width="90">
                 <template slot-scope="scope">
                   <el-input v-model="scope.row.unit" placeholder="请输入规格"></el-input>
                 </template>
@@ -102,10 +102,9 @@
                   <el-input v-model="scope.row.origin" placeholder="请输入产地"></el-input>
                 </template>
               </el-table-column>
-              <el-table-column property="price" label="市场价格" width="100">
+              <el-table-column property="price" label="市场价格(元)" width="110">
                 <template slot-scope="scope">
                   <el-input v-model="scope.row.price" placeholder="请输入价格">
-                    <template prefix="￥"></template>
                   </el-input>
                 </template>
               </el-table-column>
@@ -201,7 +200,7 @@
             name: '鱼香大米',
             unit: '5KG',
             origin: '重庆,西永',
-            price: '￥250',
+            price: '250',
             description: '多种蛋白质、营养丰富、色泽光亮、颗粒饱满',
             url: 'http://detail.tmall.com/item.htm?spm=a230r.1.14.172.VhFL'
           },

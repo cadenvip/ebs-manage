@@ -2,22 +2,22 @@
   <div class="RegionSelector">
     <el-row :gutter="4">
       <el-col :span="4" v-if="grade >= 1 && showCountry">
-        <el-select v-model="country" placeholder="请选择国" clearable filterable v-on:change="countryChanged">
+        <el-select v-model="country" placeholder="请选择国" clearable filterable v-on:change="countryChanged" :disabled="editable >= 1">
           <el-option v-for="(item, key) in countries" :key="key" :label="item.locationName" :value="item.id"></el-option>
         </el-select>
       </el-col>
       <el-col :span="4" v-if="grade >= 2">
-        <el-select v-model="province" placeholder="请选择省" clearable filterable v-on:change="provinceChanged">
+        <el-select v-model="province" placeholder="请选择省" clearable filterable v-on:change="provinceChanged" :disabled="editable >= 2">
           <el-option v-for="(item, key) in provinces" :key="key" :label="item.locationName" :value="item.id"></el-option>
         </el-select>
       </el-col>
       <el-col :span="4" v-if="grade >= 3">
-        <el-select v-model="city" placeholder="请选择市" clearable filterable v-on:change="cityChanged">
+        <el-select v-model="city" placeholder="请选择市" clearable filterable v-on:change="cityChanged" :disabled="editable >= 3">
           <el-option v-for="(item,key) in cities" :key="key" :label="item.locationName" :value="item.id"></el-option>
         </el-select>
       </el-col>
       <el-col :span="4" v-if="grade >= 4">
-        <el-select v-model="county" placeholder="请选择区县" clearable filterable v-on:change="countyChanged">
+        <el-select v-model="county" placeholder="请选择区县" clearable filterable v-on:change="countyChanged" :disabled="editable >= 4">
           <el-option v-for="(item,key) in counties" :key="key" :label="item.locationName" :value="item.id"></el-option>
         </el-select>
       </el-col>
@@ -59,6 +59,10 @@
       locationId: {
         type: String,
         default: '0'
+      },
+      editable: {
+        type: Number,
+        default: 0
       }
     },
     data: function () {

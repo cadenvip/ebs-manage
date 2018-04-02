@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <h3 style="padding-left: 20px;">企业查询条件</h3>
+  <div style="padding-left: 20px;">
+    <h4>企业查询条件</h4>
     <el-form ref="searchForm" :model="searchForm" label-width="100px" class="demo-ruleForm">
       <el-row>
         <el-col :span="10">
@@ -58,19 +58,20 @@
       :before-close="handleClose">
       <locationselector @locationSelected="getLocationInfo"></locationselector>
     </el-dialog>
-    <h3 style="padding-left: 20px;">企业列表</h3>
-    <el-table :data="list" v-loading.body="loading" element-loading-text="Loading" border stripe fit highlight-current-row style="padding-left:10px">
-      <el-table-column label='企业名称' prop="businessesName" width="280" align="center">
+    <br/>
+    <div class="list">企业列表</div>
+    <el-table :data="list" v-loading.body="loading" element-loading-text="Loading" border stripe fit highlight-current-row style="width: 100%">
+      <el-table-column label='企业名称' prop="businessesName" align="center">
       </el-table-column>
-      <el-table-column label="区域" prop="locationName" width="110" align="center">
+      <el-table-column label="区域" prop="locationName" align="center">
       </el-table-column>
-      <el-table-column label="有效时间" prop="validdate" :formatter="timedateFormat" width="110" align="center">
+      <el-table-column label="有效时间" prop="validdate" :formatter="timedateFormat" align="center">
       </el-table-column>
-      <el-table-column label="企业状态" prop="state" :formatter="stateFormat" width="100" align="center">
+      <el-table-column label="企业状态" prop="state" :formatter="stateFormat" align="center">
       </el-table-column>
-      <el-table-column label="录入来源" prop="createsource" :formatter="sourceFormat" width="100" align="center">
+      <el-table-column label="录入来源" prop="createsource" :formatter="sourceFormat" align="center">
       </el-table-column>
-      <el-table-column label="操作" width="190" align="center">
+      <el-table-column label="操作" align="center">
         <template slot-scope="scope">
           <el-button @click="detail(scope.row)" type="text" size="small">详细</el-button>
           <el-button @click="updateBusinesses(scope.row)" type="text" size="small">修改</el-button>
@@ -246,3 +247,15 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+  .list{
+    height: 30px;
+    line-height: 30px;
+    background: #6ebfec;
+    font-size: 14px;
+    color:#fff;
+    padding-left: 20px;
+    font-weight: bold;
+  }
+</style>

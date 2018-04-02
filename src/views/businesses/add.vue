@@ -1,8 +1,8 @@
 <template>
   <el-container>
-    <el-container style="width:1000px;margin:0 auto 20px">
+    <el-container>
       <el-main>
-        <div>
+        <div style="width:1000px;margin:0 auto 20px;border:1px solid #000">
           <el-form ref="registerForm" :model="registerForm" :rules="registerRules" label-width="170px" style="margin:6px">
             <h5>企业基本信息</h5>
             <el-row :gutter="20">
@@ -64,7 +64,7 @@
                   <el-input v-model="registerForm.relationPerson" clearable style="width: 220px;" placeholder="请输入业务联系人"></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="15" style="padding-top:8px">
+              <el-col :span="15" style="padding-top:8px;padding-left:30px">
                 <span style="font-family: 宋体, Arial, sans-serif;font-size: 12px;color: #999;">该联系人用户业务联系，请填写主要平台使用负责人</span>
               </el-col>
             </el-row>
@@ -74,7 +74,7 @@
                   <el-input v-model="registerForm.relationPhone" clearable :maxlength=11 style="width: 220px;" placeholder="请输入业务联系人手机号码"></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="15" style="padding-top:8px">
+              <el-col :span="15" style="padding-top:8px;padding-left:30px">
                 <span style="font-family: 宋体, Arial, sans-serif;font-size: 12px;color: #999;">该手机将用于平台登陆帐号，接收发送的关键信息，请填写有效移动手机号码</span>
               </el-col>
             </el-row>
@@ -89,7 +89,7 @@
                   <el-input v-model="registerForm.sellPersonName" clearable style="width: 220px;" placeholder="请输入售后联系人"></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="15" style="padding-top:8px">
+              <el-col :span="15" style="padding-top:8px;padding-left:30px">
                 <span style="font-family: 宋体, Arial, sans-serif;font-size: 12px;color: #999;">用于解答用户投诉或商品质量问题</span>
               </el-col>
             </el-row>
@@ -121,7 +121,7 @@
                   <el-input v-model="registerForm.financePersonName" clearable style="width: 220px;" placeholder="请输入财务联系人"></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="15" style="padding-top:8px">
+              <el-col :span="15" style="padding-top:8px;padding-left:30px">
                 <span style="font-family: 宋体, Arial, sans-serif;font-size: 12px;color: #999;">用于在线支付相关结算对账联系使用</span>
               </el-col>
             </el-row>
@@ -168,7 +168,7 @@
                   <el-input v-model="scope.row.name" placeholder="请输入名称"></el-input>
                 </template>
               </el-table-column>
-              <el-table-column property="unit" label="商品规格" width="100">
+              <el-table-column property="unit" label="商品规格" width="90">
                 <template slot-scope="scope">
                   <el-input v-model="scope.row.unit" placeholder="请输入规格"></el-input>
                 </template>
@@ -178,10 +178,9 @@
                   <el-input v-model="scope.row.origin" placeholder="请输入产地"></el-input>
                 </template>
               </el-table-column>
-              <el-table-column property="price" label="市场价格" width="100">
+              <el-table-column property="price" label="市场价格(元)" width="110">
                 <template slot-scope="scope">
                   <el-input v-model="scope.row.price" placeholder="请输入价格">
-                    <template prefix="￥"></template>
                   </el-input>
                 </template>
               </el-table-column>
@@ -549,7 +548,7 @@
             name: '鱼香大米',
             unit: '5KG',
             origin: '重庆,西永',
-            price: '￥250',
+            price: '250',
             description: '多种蛋白质、营养丰富、色泽光亮、颗粒饱满',
             url: 'http://detail.tmall.com/item.htm?spm=a230r.1.14.172.VhFL'
           },
@@ -770,6 +769,9 @@
       },
       handleFoodOtherSuccess(res, file) {
         this.registerForm.foodotherpicpath.push(URL.createObjectURL(file.raw))
+      },
+      handleRemove(file, fileList) {
+        console.log(file, fileList)
       },
       handlePictureCardPreview(file) {
         this.dialogImageUrl = file
