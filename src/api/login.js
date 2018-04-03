@@ -30,9 +30,7 @@ export function getVercode(params) {
   return request({
     url: '/vercode',
     method: 'post',
-    data: {
-      'loginname': `${params}`
-    }
+    data: params
   })
 }
 

@@ -127,11 +127,10 @@
             // 提供dispatch(action)方法更新state；
             var loginParams = {
               'loginname': this.loginForm.loginname,
-              'password': this.loginForm.password,
+              'password': encryptPassword(this.loginForm.password),
               'unitid': this.loginForm.unitid,
               'vercode': '123456'
             }
-            loginParams.password = encryptPassword(loginParams.password)
             this.$store.dispatch('Login', loginParams).then(response => {
               // 根据角色进入相应的首页
               if (response.data.role[0].roletype === '1') {
@@ -159,8 +158,8 @@
               this.$message.error(errpr)
             })
           } else {
-            this.$message.error('error submit!!')
-            return false
+            // this.$message.error('error submit!!')
+            return
           }
         })
       },
@@ -208,7 +207,20 @@
           this.$message.error('请输入账号')
           return
         }
-        getVercode(this.loginForm.loginname).then(response => {
+        if (this.loginForm.unitid === '') {
+          this.$message.error('请选择归属单位')
+          return
+        }
+        if (this.loginForm.password === '') {
+          this.$message.error('请输入密码')
+          return
+        }
+        var params = {
+          'loginname': this.loginForm.loginname,
+          'password': encryptPassword(this.loginForm.password),
+          'unitid': this.loginForm.unitid
+        }
+        getVercode(params).then(response => {
           if (response.status === 200) {
             const TIME_COUNT = 60
             if (!this.timer) {

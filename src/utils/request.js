@@ -64,13 +64,13 @@ service.interceptors.response.use(response => {
     //   type: 'warning'
     // }).then(() => {
     // 前端登出（清除登录数据）
+    store.dispatch('FedLogOut').then(() => {
+      window.location.reload()
+    })
     Message({
       message: '您已超时，请重新登录!',
       type: 'error',
       duration: 5 * 1000
-    })
-    store.dispatch('FedLogOut').then(() => {
-      window.location.reload()
     })
     // })
     // this.$router.push({
@@ -82,7 +82,7 @@ service.interceptors.response.use(response => {
 },
 error => {
   // 错误处理
-  console.log('87198748error', error)
+  console.log('error', error)
   if (error.response !== undefined) {
     if (error.response.status === 401) {
       // MessageBox('您已超时或被登出，可以取消继续留在该页面，或者重新登录', '确定登出', {
@@ -91,13 +91,13 @@ error => {
       //   type: 'warning'
       // }).then(() => {
       // 前端登出（清除登录数据）
+      store.dispatch('FedLogOut').then(() => {
+        window.location.reload()
+      })
       Message({
         message: '您已超时，请重新登录!',
         type: 'error',
         duration: 5 * 1000
-      })
-      store.dispatch('FedLogOut').then(() => {
-        window.location.reload()
       })
       // })
       // this.$router.push({
