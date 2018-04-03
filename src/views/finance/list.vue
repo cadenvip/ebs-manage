@@ -2,18 +2,18 @@
   <div style="padding-left: 20px;">
     <h4>账目查询条件</h4>
     <el-form ref="searchForm" :model="searchForm" label-width="130px" class="demo-ruleForm">
-      <el-row :gutter="30"></el-row>
-        <el-col :span="7">
+      <el-row :gutter="20">
+        <el-col :span="8">
           <el-form-item label="企业名称：" prop="merchantname">
             <el-input v-model="searchForm.merchantname" clearable style="width: 180px;" placeholder="请输入企业名称"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="7">
+        <el-col :span="8">
           <el-form-item label="归属区域：">
             <el-input v-model="searchForm.locationname" clearable style="width: 180px;" @focus="handleLocationFocus" placeholder="请选择所属区域"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="7">
+        <el-col :span="8">
           <el-form-item label="对账状态：" prop="status">
             <el-select v-model="searchForm.status" clearable style="width: 180px;" placeholder="请选择对账状态">
               <!-- // 对账状态(0 待确认 1 已确认 2 待调账 3 已结算 ) -->
@@ -25,20 +25,20 @@
           </el-form-item>
         </el-col>
       </el-row>
-      <el-row :gutter="30">
-        <el-col :span="7">
+      <el-row :gutter="20">
+        <el-col :span="8">
           <el-form-item label="到账时间：" prop="yearmonth">
             <el-date-picker v-model="searchForm.yearmonth" type="month" value-format="yyyyMM" style="width: 180px;" placeholder="请选择到账时间">
             </el-date-picker>
           </el-form-item>
         </el-col>
-        <el-col :span="7">
+        <el-col :span="8">
           <el-form-item label="" prop="greater500">
             <el-checkbox v-model="searchForm.greater500">显示不足500的</el-checkbox>
           </el-form-item>
         </el-col>
       </el-row>
-      <el-row :gutter="30">
+      <el-row :gutter="20">
         <el-col :span="3" :offset="8">
           <el-button type="primary" @click.native.prevent="queryBillList">查询</el-button>
         </el-col>
@@ -83,7 +83,7 @@
         </span>
       </el-col>
     </el-row>
-    <el-dialog title="请选择区域" :visible.sync="dialogVisible" width="440px" :before-close="handleClose">
+    <el-dialog title="请选择区域" :visible.sync="dialogVisible" width="440px">
       <locationselector @locationSelected="getLocationInfo"></locationselector>
     </el-dialog>
   </div>
@@ -220,11 +220,6 @@
       handleCurrentChange(val) {
         this.currentPage = val
         this.queryBillList()
-      },
-      handleClose(done) {
-        // this.$confirm('确认关闭？').then(_ => {
-        done()
-        // }).catch(_ => {})
       },
       handleLocationFocus() {
         this.dialogVisible = true
