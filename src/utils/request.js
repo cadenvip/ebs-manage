@@ -1,7 +1,10 @@
 import axios from 'axios'
+// import {
+//   Message,
+//   MessageBox
+// } from 'element-ui'
 import {
-  Message,
-  MessageBox
+  Message
 } from 'element-ui'
 import store from '../store'
 import {
@@ -49,39 +52,57 @@ const downloadUrl = url => {
 
 // respone拦截器
 service.interceptors.response.use(response => {
+  console.log('response', response)
   if (response.headers && (response.headers['content-type'] === 'application/x-msdownload' || response.headers['content-type'] === 'application/msexcel;charset=UTF-8' || response.headers['content-type'] === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')) {
     downloadUrl(response.request.responseURL)
     return response
   }
-  if (response.status === 401) {
-    MessageBox('您已超时或被登出，可以取消继续留在该页面，或者重新登录', '确定登出', {
-      confirmButtonText: '重新登录',
-      cancelButtonText: '取消',
-      type: 'warning'
-    }).then(() => {
-      // 前端登出（清除登录数据）
-      store.dispatch('FedLogOut').then(() => {
-        window.location.reload()
-      })
+  if (response.data.status === 401) {
+    // MessageBox('您已超时或被登出，可以取消继续留在该页面，或者重新登录', '确定登出', {
+    //   confirmButtonText: '重新登录',
+    //   cancelButtonText: '取消',
+    //   type: 'warning'
+    // }).then(() => {
+    // 前端登出（清除登录数据）
+    Message({
+      message: '您已超时，请重新登录!',
+      type: 'error',
+      duration: 5 * 1000
     })
+    store.dispatch('FedLogOut').then(() => {
+      window.location.reload()
+    })
+    // })
+    // this.$router.push({
+    //   path: '/timeout'
+    // })
     return Promise.reject('error')
   }
   return response.data
 },
 error => {
   // 错误处理
+  console.log('87198748error', error)
   if (error.response !== undefined) {
     if (error.response.status === 401) {
-      MessageBox('您已超时或被登出，可以取消继续留在该页面，或者重新登录', '确定登出', {
-        confirmButtonText: '重新登录',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        // 前端登出（清除登录数据）
-        store.dispatch('FedLogOut').then(() => {
-          window.location.reload()
-        })
+      // MessageBox('您已超时或被登出，可以取消继续留在该页面，或者重新登录', '确定登出', {
+      //   confirmButtonText: '重新登录',
+      //   cancelButtonText: '取消',
+      //   type: 'warning'
+      // }).then(() => {
+      // 前端登出（清除登录数据）
+      Message({
+        message: '您已超时，请重新登录!',
+        type: 'error',
+        duration: 5 * 1000
       })
+      store.dispatch('FedLogOut').then(() => {
+        window.location.reload()
+      })
+      // })
+      // this.$router.push({
+      //   path: '/timeout'
+      // })
     }
     return Promise.reject(error.response.data)
   } else {

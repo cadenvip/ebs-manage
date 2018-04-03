@@ -34,7 +34,7 @@
           获取验证码
         </el-button>
       </el-form-item>
-      <p v-show="disableBtn">{{ timerCodeMsg }}</p>
+      <p v-show="disableBtn" style="color: #f56c6c; font-size: 12px; line-height: 1;">{{ timerCodeMsg }}</p>
       <el-form-item style="text-align: center;">
         <el-button type="primary" style="width:47.85%;" @click.native.prevent="handleLogin">
           登录
@@ -42,6 +42,9 @@
         <el-button type="primary" style="width:47.85%;" @click.native.prevent="handleRegist">
           注册
         </el-button>
+        <!-- <el-button type="primary" style="width:47.85%;" @click.native.prevent="Test">
+          测试
+        </el-button> -->
       </el-form-item>
     </el-form>
   </div>
@@ -57,6 +60,7 @@
   import {
     encryptPassword
   } from '@/utils/index'
+  // import { downloadBillList } from '@/api/finance'
 
   export default {
     data() {
@@ -204,10 +208,9 @@
           this.$message.error('请输入账号')
           return
         }
-
         getVercode(this.loginForm.loginname).then(response => {
           if (response.status === 200) {
-            const TIME_COUNT = 10
+            const TIME_COUNT = 60
             if (!this.timer) {
               this.count = TIME_COUNT
               this.disableBtn = false
@@ -235,6 +238,13 @@
           path: '/register'
         })
       }
+      // Test () {
+      //   downloadBillList().then(response => {
+      //     console.log('246', response)
+      //   }).catch(error => {
+      //     console.log(error)
+      //   })
+      // }
     }
   }
 

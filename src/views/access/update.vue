@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <h3 class="title">修改接入方</h3>
+    <h4 class="title">修改接入方</h4>
     <el-form ref="accessBean" :model="accessBean" :rules="rules" label-width="120px">
       <h5>基础信息</h5>
       <el-row :gutter="20">

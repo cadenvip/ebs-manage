@@ -1,7 +1,7 @@
 <template>
   <el-container style="width:1000px;margin:0 auto 20px">
     <el-main>
-      <h3>基本信息</h3>
+      <h4>基本信息</h4>
       <div style="color: #606266;font-size:14px;width:960px;height:140px;overflow:auto;border:#E6E6E6 solid 1px;">
         <el-row :gutter="6" style="margin-left:0px;margin-right:0px;margin-top:20px;">
           <el-col :span="4" style="text-align:right">
@@ -92,13 +92,13 @@
           </el-col>
         </el-row>
       </div>
-      <h3>请求报文</h3>
+      <h4>请求报文</h4>
       <div style="color: #606266;font-size:14px;width:960px;height:200px;overflow-x:hidden;border:#E6E6E6 solid 1px;padding:15px 20px;line-height:30px;word-wrap:break-word;word-break:break-all;">
         <span>
           {{ logDetail.reqmessage }}
         </span>
       </div>
-      <h3>响应报文</h3>
+      <h4>响应报文</h4>
       <div style="color: #606266;font-size:14px;width:960px;height:300px;overflow-x:hidden;border:#E6E6E6 solid 1px;padding:15px 20px;line-height:30px;word-wrap:break-word;word-break:break-all;">
         <span>
           {{ logDetail.rspmessage }}

@@ -1,7 +1,7 @@
 <template>
   <div style="margin:20px">
     <div>
-      <h3>基本信息</h3>
+      <h4>基本信息</h4>
       <div style="color: #606266;font-size:14px;width:960px;height:140px;overflow:auto;border:#E6E6E6 solid 1px;">
         <el-row :gutter="6" style="margin-left:0px;margin-right:0px;margin-top:20px;">
           <el-col :span="4" style="text-align:right">
@@ -60,23 +60,23 @@
           </el-col>
         </el-row>
       </div>
-      <h3>交易明细</h3>
+      <h4>交易明细</h4>
       <div style="text-align: right;margin-bottom:12px">
         <el-button @click="addOrder" type="primary">新增</el-button>
         <el-button @click="deleteOrderList" type="primary">批量移除</el-button>
       </div>
       <el-table :data="detailList" v-loading.body="loading" element-loading-text="Loading" border stripe fit highlight-current-row
-        tooltip-effect="light" style="padding-left:10px" @selection-change="orderSelectionChange">
-        <el-table-column type="selection" width="40"></el-table-column>
-        <el-table-column label="序号" type="index" :index="indexList" width="50" align="center"></el-table-column>
-        <el-table-column label="订单号" prop="ordercode" width="110" align="center"></el-table-column>
-        <el-table-column label="订单下单时间" prop="ordertime" :show-overflow-tooltip="true" width="180" align="center"></el-table-column>
-        <el-table-column label="订单完成时间" prop="finishtime" :show-overflow-tooltip="true" width="180" align="center"></el-table-column>
-        <el-table-column label="支付渠道" prop="paytype" :formatter="typeFormat" width="100" align="center"></el-table-column>
-        <el-table-column label="交易金额" prop="totalamount" :formatter="unitFormat" width="100" align="center"></el-table-column>
-        <el-table-column label="手续费" prop="feeamount" :formatter="unitFormat" width="100" align="center"></el-table-column>
-        <el-table-column label="应结算金额" prop="payamount" :formatter="unitFormat" width="100" align="center"></el-table-column>
-        <el-table-column label="操作" width="80" align="center">
+        tooltip-effect="light" style="width:100%" @selection-change="orderSelectionChange">
+        <el-table-column type="selection"></el-table-column>
+        <el-table-column label="序号" type="index" :index="indexList" align="center"></el-table-column>
+        <el-table-column label="订单号" prop="ordercode" align="center"></el-table-column>
+        <el-table-column label="订单下单时间" prop="ordertime" :show-overflow-tooltip="true" align="center"></el-table-column>
+        <el-table-column label="订单完成时间" prop="finishtime" :show-overflow-tooltip="true" align="center"></el-table-column>
+        <el-table-column label="支付渠道" prop="paytype" :formatter="typeFormat" align="center"></el-table-column>
+        <el-table-column label="交易金额" prop="totalamount" :formatter="unitFormat" align="center"></el-table-column>
+        <el-table-column label="手续费" prop="feeamount" :formatter="unitFormat" align="center"></el-table-column>
+        <el-table-column label="应结算金额" prop="payamount" :formatter="unitFormat" align="center"></el-table-column>
+        <el-table-column label="操作" align="center">
           <template slot-scope="scope">
             <el-button @click="deleteOrder(scope.row)" type="text" size="small">移除</el-button>
           </template>
@@ -450,14 +450,18 @@
             if (response.status === 200) {
               if (response.data.length > 0) {
                 response.data.forEach(v => {
-                  var i = 0
-                  for (; i < this.detailList.length; i++) {
-                    if (this.detailList[i].ordercode === v.ordercode) {
-                      break
+                  if (v !== null) {
+                    var i = 0
+                    for (; i < this.detailList.length; i++) {
+                      if (this.detailList[i].ordercode === v.ordercode) {
+                        break
+                      }
                     }
-                  }
-                  if (i === this.detailList.length) {
-                    this.detailList.push(v)
+                    if (i === this.detailList.length) {
+                      this.detailList.push(v)
+                    }
+                  } else {
+                    this.$message.error('订单数据为空！')
                   }
                 })
               }

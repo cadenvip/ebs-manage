@@ -1,7 +1,7 @@
 <template>
   <div style="margin:20px">
     <div>
-      <h3>基本信息</h3>
+      <h4>基本信息</h4>
       <div style="color: #606266;font-size:14px;width:960px;height:140px;overflow:auto;border:#E6E6E6 solid 1px;">
         <el-row :gutter="6" style="margin-left:0px;margin-right:0px;margin-top:20px;">
           <el-col :span="4" style="text-align:right">
@@ -60,9 +60,9 @@
           </el-col>
         </el-row>
       </div>
-      <h3>本月结算交易明细</h3>
+      <h4>本月结算交易明细</h4>
       <el-table :data="thisMonthDetail.detailListpayed" v-loading.body="loading" element-loading-text="Loading" border stripe fit
-        highlight-current-row tooltip-effect="light" style="padding-left:10px">
+        highlight-current-row tooltip-effect="light" style="width:100%">
         <el-table-column label="序号" type="index" :index="indexPayed" align="center"></el-table-column>
         <el-table-column label="订单号" prop="ordercode" align="center"></el-table-column>
         <el-table-column label="订单下单时间" prop="ordertime" :show-overflow-tooltip="true" align="center"></el-table-column>
@@ -104,9 +104,9 @@
       <el-button @click="downloadDetail" type="primary">打包下载交易明细</el-button>
     </div>
     <div>
-      <h3>本月未结算交易明细</h3>
+      <h4>本月未结算交易明细</h4>
       <el-table :data="thisMonthDetail.detailListnopayed" v-loading.body="loading" element-loading-text="Loading" border stripe
-        fit highlight-current-row tooltip-effect="light" style="padding-left:10px">
+        fit highlight-current-row tooltip-effect="light" style="width:100%">
         <el-table-column label="序号" type="index" :index="indexPayed" align="center"></el-table-column>
         <el-table-column label="订单号" prop="ordercode" align="center"></el-table-column>
         <el-table-column label="订单下单时间" prop="ordertime" :show-overflow-tooltip="true" align="center"></el-table-column>

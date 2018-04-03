@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <h3 class="title">区域管理</h3>
+    <h4 class="title">区域管理</h4>
     <locationselector v-model="locationid" :grade="3" v-on:regionCodeChanged="getRegionCode" :showCountry="false"></locationselector>
   </div>
 </template>

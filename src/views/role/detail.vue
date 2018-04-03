@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <h3 class="title">角色信息详情</h3>
+    <h4 class="title">角色信息详情</h4>
     <div style="color: #606266;font-size:14px;width:960px;overflow:auto;">
       <el-row :gutter="6" style="margin-left:0px;margin-right:0px;margin-top:20px;">
         <el-col :span="4" style="text-align:right">

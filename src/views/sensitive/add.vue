@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <h3 class="title">新增敏感词</h3>
+    <h4 class="title">新增敏感词</h4>
     <el-form ref="sensitiveForm" :model="sensitiveForm" :rules="rules" label-width="120px">
       <el-form-item label="敏感词：" prop="word">
         <el-input v-model="sensitiveForm.word" style="width: 300px;" placeholder="请输入账号"></el-input>

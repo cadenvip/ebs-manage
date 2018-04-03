@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <h3 style="padding-left: 20px;">操作日志查询条件</h3>
+  <div style="padding-left: 20px;">
+    <h4>操作日志查询条件</h4>
     <el-form ref="searchForm" :model="searchForm" label-width="130px" class="demo-ruleForm">
       <el-row :gutter="20">
         <el-col :span="7">
@@ -53,16 +53,17 @@
         </el-col>
       </el-row>
     </el-form>
-    <h3 style="padding-left: 20px;">操作日志列表</h3>
-    <el-table :data="list" v-loading.body="loading" element-loading-text="Loading" border stripe fit highlight-current-row style="padding-left:10px">
-      <el-table-column label='流水号' prop="id" width="100" align="center"></el-table-column>
-      <el-table-column label="操作门户" prop="system" :formatter="systemFormat" width="120" align="center"></el-table-column>
-      <el-table-column label="操作人账号" prop="loginName" width="150" align="center"></el-table-column>
-      <el-table-column label="操作模块" prop="moduleId" width="180" align="center"></el-table-column>
-      <el-table-column label="操作类型" prop="operType" width="120" align="center"></el-table-column>
-      <el-table-column label="耗时（毫秒）" prop="timed" width="120" align="center"></el-table-column>
-      <el-table-column label="创建时间" prop="createTime" width="180" align="center"></el-table-column>
-      <el-table-column label="操作" width="90" align="center">
+    <br/>
+    <div class="list">操作日志列表</div>    
+    <el-table :data="list" v-loading.body="loading" element-loading-text="Loading" border stripe fit highlight-current-row style="width:100%">
+      <el-table-column label='流水号' prop="id" align="center"></el-table-column>
+      <el-table-column label="操作门户" prop="system" :formatter="systemFormat" align="center"></el-table-column>
+      <el-table-column label="操作人账号" prop="loginName" align="center"></el-table-column>
+      <el-table-column label="操作模块" prop="moduleId" align="center"></el-table-column>
+      <el-table-column label="操作类型" prop="operType" align="center"></el-table-column>
+      <el-table-column label="耗时（毫秒）" prop="timed" align="center"></el-table-column>
+      <el-table-column label="创建时间" prop="createTime" align="center"></el-table-column>
+      <el-table-column label="操作" align="center">
         <template slot-scope="scope">
           <el-button @click="detail(scope.row)" type="text" size="small">详细</el-button>
         </template>
@@ -255,3 +256,15 @@
   }
 
 </script>
+
+<style scoped>
+  .list{
+    height: 30px;
+    line-height: 30px;
+    background: #6ebfec;
+    font-size: 14px;
+    color:#fff;
+    padding-left: 20px;
+    font-weight: bold;
+  }
+</style>

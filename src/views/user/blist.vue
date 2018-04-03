@@ -1,6 +1,6 @@
 <template>
   <div style="padding-left: 20px;">
-    <h3>人员查询条件</h3>
+    <h4>人员查询条件</h4>
     <el-form ref="searchForm" :model="searchForm" label-width="100px" class="demo-ruleForm">
       <el-row>
         <el-col :span="10">

@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <h3 class="title">新增角色</h3>
+    <h4 class="title">新增角色</h4>
     <el-form ref="roleForm" :model="roleForm" :rules="rules" label-width="120px">
       <el-form-item label="角色名称：" prop="rolename">
         <el-input v-model="roleForm.rolename" style="width: 400px;" placeholder="请输入角色名称"></el-input>
