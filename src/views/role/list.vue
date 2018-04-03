@@ -116,7 +116,7 @@
           this.loading = false
         }).catch(error => {
           this.loading = false
-          this.$message.error(error)
+          this.$message.error(error.msg)
         })
       },
       addRole() {
@@ -136,7 +136,7 @@
           this.loading = false
         }).catch(error => {
           this.loading = false
-          this.$message.error(error)
+          this.$message.error(error.msg)
         })
       },
       updateRole(role) {

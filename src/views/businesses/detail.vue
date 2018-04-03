@@ -651,7 +651,7 @@
                   this.$message.error(response.msg)
                 }
               }).catch(error => {
-                this.$message.error(error)
+                this.$message.error(error.msg)
               })
             }
             this.sellAddressListForm = response.data.sellAddresslist
@@ -668,7 +668,7 @@
                     this.$message.error(response.msg)
                   }
                 }).catch(error => {
-                  this.$message.error(error)
+                  this.$message.error(error.msg)
                 })
               })
             }
@@ -733,7 +733,7 @@
             this.$message.error(response.msg)
           }
         }).catch(error => {
-          this.$message.error(error)
+          this.$message.error(error.msg)
         })
       },
       handlePictureCardPreview(file) {

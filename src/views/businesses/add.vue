@@ -2,7 +2,7 @@
   <el-container>
     <el-container>
       <el-main>
-        <div style="width:1000px;margin:0 auto 20px;border:1px solid #000">
+        <div style="width:1000px;margin:0 auto 20px;border:1px solid #E6E6E6">
           <el-form ref="registerForm" :model="registerForm" :rules="registerRules" label-width="170px" style="margin:6px">
             <h5>企业基本信息</h5>
             <el-row :gutter="20">
@@ -1071,7 +1071,7 @@
             this.$message.error(response.msg)
           }
         }).catch(error => {
-          this.$message.error(error)
+          this.$message.error(error.msg)
         })
       }
     }

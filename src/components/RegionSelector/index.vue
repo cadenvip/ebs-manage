@@ -133,7 +133,7 @@
                     this.$message.error(response.msg)
                   }
                 }).catch(error => {
-                  this.$message.error(error)
+                  this.$message.error(error.msg)
                 })
                 break
               case 4:
@@ -146,7 +146,7 @@
                     this.$message.error(response.msg)
                   }
                 }).catch(error => {
-                  this.$message.error(error)
+                  this.$message.error(error.msg)
                 })
                 break
               case 3:
@@ -159,7 +159,7 @@
                     this.$message.error(response.msg)
                   }
                 }).catch(error => {
-                  this.$message.error(error)
+                  this.$message.error(error.msg)
                 })
                 break
               case 2:
@@ -172,7 +172,7 @@
                     this.$message.error(response.msg)
                   }
                 }).catch(error => {
-                  this.$message.error(error)
+                  this.$message.error(error.msg)
                 })
                 break
               case 1:
@@ -185,7 +185,7 @@
                     this.$message.error(response.msg)
                   }
                 }).catch(error => {
-                  this.$message.error(error)
+                  this.$message.error(error.msg)
                 })
                 break
               case 0:
@@ -197,7 +197,7 @@
                     this.$message.error(response.msg)
                   }
                 }).catch(error => {
-                  this.$message.error(error)
+                  this.$message.error(error.msg)
                 })
                 break
               default:
@@ -207,7 +207,7 @@
             this.$message.error(response.msg)
           }
         }).catch(error => {
-          this.$message.error(error)
+          this.$message.error(error.msg)
         })
       },
       getCountries() {
@@ -218,7 +218,7 @@
             this.$message.error(response.msg)
           }
         }).catch(error => {
-          this.$message.error(error)
+          this.$message.error(error.msg)
         })
       },
       getProvinces() {
@@ -229,7 +229,7 @@
             this.$message.error(response.msg)
           }
         }).catch(error => {
-          this.$message.error(error)
+          this.$message.error(error.msg)
         })
       },
       getCities() {
@@ -240,7 +240,7 @@
             this.$message.error(response.msg)
           }
         }).catch(error => {
-          this.$message.error(error)
+          this.$message.error(error.msg)
         })
       },
       getCounties() {
@@ -251,7 +251,7 @@
             this.$message.error(response.msg)
           }
         }).catch(error => {
-          this.$message.error(error)
+          this.$message.error(error.msg)
         })
       },
       getTowns() {
@@ -262,7 +262,7 @@
             this.$message.error(response.msg)
           }
         }).catch(error => {
-          this.$message.error(error)
+          this.$message.error(error.msg)
         })
       },
       getVillages() {
@@ -273,7 +273,7 @@
             this.$message.error(response.msg)
           }
         }).catch(error => {
-          this.$message.error(error)
+          this.$message.error(error.msg)
         })
       },
       countryChanged() {

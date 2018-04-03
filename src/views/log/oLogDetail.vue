@@ -158,7 +158,7 @@
             this.$message.error(response.msg)
           }
         }).catch(error => {
-          this.$message.error(error)
+          this.$message.error(error.msg)
         })
       },
       goBack() {

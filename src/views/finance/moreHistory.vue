@@ -48,7 +48,7 @@
           this.loading = false
         }).catch(error => {
           this.loading = false
-          this.$message.error(error)
+          this.$message.error(error.msg)
         })
         getHistoryBillsList().then(response => {
           if (response.status === 200) {
@@ -59,7 +59,7 @@
           this.loading = false
         }).catch(error => {
           this.loading = false
-          this.$message.error(error)
+          this.$message.error(error.msg)
         })
       },
       formatYearMonth(bill) {

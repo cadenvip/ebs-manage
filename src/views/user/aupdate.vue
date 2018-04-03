@@ -203,7 +203,7 @@
             this.$message.error(response.msg)
           }
         }).catch(error => {
-          this.$message.error(error)
+          this.$message.error(error.msg)
         })
       },
       getPwdInfo(data) {
@@ -218,7 +218,7 @@
             this.$message.error(response.msg)
           }
         }).catch(error => {
-          this.$message.error(error)
+          this.$message.error(error.msg)
         })
       },
       onSubmit() {
@@ -242,7 +242,7 @@
                 this.$message.error(response.msg)
               }
             }).catch(error => {
-              this.$message.error(error)
+              this.$message.error(error.msg)
             })
           } else {
             this.$message.error('error submit!!')

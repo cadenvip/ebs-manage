@@ -64,6 +64,7 @@ service.interceptors.response.use(response => {
         window.location.reload()
       })
     })
+    return Promise.reject('error')
   }
   return response.data
 },
@@ -82,14 +83,15 @@ error => {
         })
       })
     }
+    return Promise.reject(error.response.data)
   } else {
     Message({
       message: error.message,
       type: 'error',
       duration: 5 * 1000
     })
+    return Promise.reject(error)
   }
-  return Promise.reject(error)
 })
 
 export default service

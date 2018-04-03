@@ -334,7 +334,7 @@
           this.$message.error(response.msg)
         }
       }).catch(error => {
-        this.$message.error(error)
+        this.$message.error(error.msg)
       })
       getAllOperationList().then(response => {
         if (response.status === 200) {
@@ -343,7 +343,7 @@
           this.$message.error(response.msg)
         }
       }).catch(error => {
-        this.$message.error(error)
+        this.$message.error(error.msg)
       })
       getAllInterfaceList().then(response => {
         if (response.status === 200) {
@@ -352,7 +352,7 @@
           this.$message.error(response.msg)
         }
       }).catch(error => {
-        this.$message.error(error)
+        this.$message.error(error.msg)
       })
     },
     methods: {
@@ -387,7 +387,7 @@
             this.$message.error(response.msg)
           }
         }).catch(error => {
-          this.$message.error(error)
+          this.$message.error(error.msg)
         })
       },
       selectInterface() {
@@ -419,7 +419,7 @@
             this.$message.error(response.msg)
           }
         }).catch(error => {
-          this.$message.error(error)
+          this.$message.error(error.msg)
         })
       },
       queryOperation() {
@@ -430,7 +430,7 @@
             this.$message.error(response.msg)
           }
         }).catch(error => {
-          this.$message.error(error)
+          this.$message.error(error.msg)
         })
       },
       queryInterface() {
@@ -441,7 +441,7 @@
             this.$message.error(response.msg)
           }
         }).catch(error => {
-          this.$message.error(error)
+          this.$message.error(error.msg)
         })
       },
       opSelectionChange(val) {
@@ -513,7 +513,7 @@
                 this.$message.error(response.msg)
               }
             }).catch(error => {
-              this.$message.error(error)
+              this.$message.error(error.msg)
             })
           } else {
             this.$message.error('error submit!!')

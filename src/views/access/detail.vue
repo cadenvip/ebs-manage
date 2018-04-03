@@ -190,7 +190,7 @@
           this.$message.error(response.msg)
         }
       }).catch(error => {
-        this.$message.error(error)
+        this.$message.error(error.msg)
       })
       getChanelList().then(response => {
         if (response.status === 200) {
@@ -199,7 +199,7 @@
           this.$message.error(response.msg)
         }
       }).catch(error => {
-        this.$message.error(error)
+        this.$message.error(error.msg)
       })
       getAllOperationList().then(response => {
         if (response.status === 200) {
@@ -208,7 +208,7 @@
           this.$message.error(response.msg)
         }
       }).catch(error => {
-        this.$message.error(error)
+        this.$message.error(error.msg)
       })
       getAllInterfaceList().then(response => {
         if (response.status === 200) {
@@ -217,7 +217,7 @@
           this.$message.error(response.msg)
         }
       }).catch(error => {
-        this.$message.error(error)
+        this.$message.error(error.msg)
       })
     },
     methods: {

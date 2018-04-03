@@ -112,7 +112,7 @@
             this.$message.error(response.msg)
           }
         }).catch(error => {
-          this.$message.error(error)
+          this.$message.error(error.msg)
         })
       },
       getAllPermissions() {
@@ -161,7 +161,7 @@
           }
         }).catch(error => {
           this.loading = false
-          this.$message.error(error)
+          this.$message.error(error.msg)
         })
       },
       list2Tree(arr, options) {

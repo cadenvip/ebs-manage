@@ -11,7 +11,7 @@
         </el-steps>
       </el-header>
       <el-main>
-        <div style="border:1px solid #000">
+        <div style="border:1px solid #E6E6E6">
           <el-form ref="registerForm" :model="registerForm" :rules="registerRules" label-width="170px" style="margin:6px">
             <h5>企业基本信息</h5>
             <el-form-item label="企业名称：" prop="businessesName">

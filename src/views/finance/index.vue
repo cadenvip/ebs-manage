@@ -168,7 +168,7 @@
           }
         }).catch(error => {
           this.loading = false
-          this.$message.error(error)
+          this.$message.error(error.msg)
         })
         getThisMonthBill(params).then(response => {
           if (response.status === 200) {
@@ -178,7 +178,7 @@
           }
         }).catch(error => {
           this.loading = false
-          this.$message.error(error)
+          this.$message.error(error.msg)
         })
         getHistorySummary(params).then(response => {
           if (response.status === 200) {
@@ -188,7 +188,7 @@
           }
         }).catch(error => {
           this.loading = false
-          this.$message.error(error)
+          this.$message.error(error.msg)
         })
         getHistoryBill(params).then(response => {
           if (response.status === 200) {
@@ -198,7 +198,7 @@
           }
         }).catch(error => {
           this.loading = false
-          this.$message.error(error)
+          this.$message.error(error.msg)
         })
         getHistoryBillsList(params).then(response => {
           if (response.status === 200) {
@@ -208,7 +208,7 @@
           }
         }).catch(error => {
           this.loading = false
-          this.$message.error(error)
+          this.$message.error(error.msg)
         })
         this.loading = false
       },
@@ -260,7 +260,7 @@
               this.$message.error(response.msg)
             }
           }).catch(error => {
-            this.$message.error(error)
+            this.$message.error(error.msg)
           })
         } else {
           this.$message.error('暂无数据')
@@ -274,7 +274,7 @@
             this.$message.error(response.msg)
           }
         }).catch(error => {
-          this.$message.error(error)
+          this.$message.error(error.msg)
         })
       },
       downloadHistoryMonthBill(bill) {
@@ -285,7 +285,7 @@
             this.$message.error(response.msg)
           }
         }).catch(error => {
-          this.$message.error(error)
+          this.$message.error(error.msg)
         })
       },
       checkout() {
@@ -300,7 +300,7 @@
               this.$message.error(response.msg)
             }
           }).catch(error => {
-            this.$message.error(error)
+            this.$message.error(error.msg)
           })
         } else {
           this.$message.error('暂无数据')
@@ -329,7 +329,7 @@
               this.$message.error(response.msg)
             }
           }).catch(error => {
-            this.$message.error(error)
+            this.$message.error(error.msg)
           })
           this.dialogFormVisible = false
         }

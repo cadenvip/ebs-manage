@@ -234,7 +234,7 @@
           this.loading = false
         }).catch(error => {
           this.loading = false
-          this.$message.error(error)
+          this.$message.error(error.msg)
         })
         this.loading = false
       },
@@ -320,7 +320,7 @@
             this.$message.error(response.msg)
           }
         }).catch(error => {
-          this.$message.error(error)
+          this.$message.error(error.msg)
         })
       },
       checkout() {
@@ -334,7 +334,7 @@
             this.$message.error(response.msg)
           }
         }).catch(error => {
-          this.$message.error(error)
+          this.$message.error(error.msg)
         })
       },
       dispute() {
@@ -356,7 +356,7 @@
               this.$message.error(response.msg)
             }
           }).catch(error => {
-            this.$message.error(error)
+            this.$message.error(error.msg)
           })
           this.dialogFormVisible = false
         }

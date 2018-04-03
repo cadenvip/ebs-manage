@@ -120,7 +120,7 @@
           this.$message.error(response.msg)
         }
       }).catch(error => {
-        this.$message.error(error)
+        this.$message.error(error.msg)
       })
       getOperTypeList().then(response => {
         if (response.status === 200) {
@@ -134,7 +134,7 @@
           this.$message.error(response.msg)
         }
       }).catch(error => {
-        this.$message.error(error)
+        this.$message.error(error.msg)
       })
     },
     methods: {
@@ -156,7 +156,7 @@
           this.loading = false
         }).catch(error => {
           this.loading = false
-          this.$message.error(error)
+          this.$message.error(error.msg)
         })
       },
       initOLogList() {
@@ -177,7 +177,7 @@
           this.loading = false
         }).catch(error => {
           this.loading = false
-          this.$message.error(error)
+          this.$message.error(error.msg)
         })
       },
       systemChanged() {
@@ -197,7 +197,7 @@
             this.$message.error(response.msg)
           }
         }).catch(error => {
-          this.$message.error(error)
+          this.$message.error(error.msg)
         })
         getOperTypeList(params).then(response => {
           if (response.status === 200) {
@@ -212,7 +212,7 @@
             this.$message.error(response.msg)
           }
         }).catch(error => {
-          this.$message.error(error)
+          this.$message.error(error.msg)
         })
       },
       resetForm(formname) {

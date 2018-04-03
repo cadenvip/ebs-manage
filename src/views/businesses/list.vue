@@ -149,7 +149,7 @@ export default {
         this.loading = false
       }).catch(error => {
         this.loading = false
-        this.$message.error(error)
+        this.$message.error(error.msg)
       })
     },
     addBusinesses() {
@@ -167,7 +167,7 @@ export default {
         this.loading = false
       }).catch(error => {
         this.loading = false
-        this.$message.error(error)
+        this.$message.error(error.msg)
       })
     },
     resetForm(formname) {

@@ -112,7 +112,7 @@
                       this.$message.error(response.msg)
                     }
                   }).catch(error => {
-                    this.$message.error(error)
+                    this.$message.error(error.msg)
                   })
                   break
                 case 2:
@@ -125,7 +125,7 @@
                       this.$message.error(response.msg)
                     }
                   }).catch(error => {
-                    this.$message.error(error)
+                    this.$message.error(error.msg)
                   })
                   break
                 case 1:
@@ -138,7 +138,7 @@
                       this.$message.error(response.msg)
                     }
                   }).catch(error => {
-                    this.$message.error(error)
+                    this.$message.error(error.msg)
                   })
                   break
                 default:
@@ -149,7 +149,7 @@
             this.$message.error(response.msg)
           }
         }).catch(error => {
-          this.$message.error(error)
+          this.$message.error(error.msg)
         })
       },
       getProvinces() {
@@ -160,7 +160,7 @@
             this.$message.error(response.msg)
           }
         }).catch(error => {
-          this.$message.error(error)
+          this.$message.error(error.msg)
         })
       },
       getCities() {
@@ -171,7 +171,7 @@
             this.$message.error(response.msg)
           }
         }).catch(error => {
-          this.$message.error(error)
+          this.$message.error(error.msg)
         })
       },
       getCounties() {
@@ -182,7 +182,7 @@
             this.$message.error(response.msg)
           }
         }).catch(error => {
-          this.$message.error(error)
+          this.$message.error(error.msg)
         })
       },
       provinceChanged() {

@@ -140,7 +140,7 @@ export default {
         this.loading = false
       }).catch(error => {
         this.loading = false
-        this.$message.error(error)
+        this.$message.error(error.msg)
       })
     },
     addBusinesses() {
@@ -158,7 +158,7 @@ export default {
         this.loading = false
       }).catch(error => {
         this.loading = false
-        this.$message.error(error)
+        this.$message.error(error.msg)
       })
     },
     resetForm(formname) {
@@ -229,7 +229,7 @@ export default {
           this.$message.error(response.msg)
         }
       }).catch(error => {
-        this.$message.error(error)
+        this.$message.error(error.msg)
       })
     },
     audit(businesses) {

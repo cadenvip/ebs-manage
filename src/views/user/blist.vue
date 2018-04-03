@@ -110,7 +110,7 @@
           this.loading = false
         }).catch(error => {
           this.loading = false
-          this.$message.error(error)
+          this.$message.error(error.msg)
         })
       },
       addUser() {
@@ -130,7 +130,7 @@
           this.loading = false
         }).catch(error => {
           this.loading = false
-          this.$message.error(error)
+          this.$message.error(error.msg)
         })
       },
       lockedFormat(row, column, cellValue) {

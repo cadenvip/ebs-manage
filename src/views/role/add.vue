@@ -161,7 +161,7 @@
           }
         }).catch(error => {
           this.loading = false
-          this.$message.error(error)
+          this.$message.error(error.msg)
         })
       },
       compare(property) {
@@ -216,7 +216,7 @@
                 this.$message.error(response.msg)
               }
             }).catch(error => {
-              this.$message.error(error)
+              this.$message.error(error.msg)
             })
           } else {
             this.$message.error('error submit!!')

@@ -310,7 +310,7 @@
             this.$message.error(response.msg)
           }
         }).catch(error => {
-          this.$message.error(error)
+          this.$message.error(error.msg)
         })
       },
       queryBusinessesList() {
@@ -325,7 +325,7 @@
           this.loading = false
         }).catch(error => {
           this.loading = false
-          this.$message.error(error)
+          this.$message.error(error.msg)
         })
       },
       roletypeChanged() {
@@ -390,7 +390,7 @@
                 this.$message.error(response.msg)
               }
             }).catch(error => {
-              this.$message.error(error)
+              this.$message.error(error.msg)
             })
           } else {
             this.$message.error('error submit!!')

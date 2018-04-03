@@ -147,7 +147,7 @@
           }
         }).catch(error => {
           this.loading = false
-          this.$message.error(error)
+          this.$message.error(error.msg)
         })
       },
       getTowns() {
@@ -232,7 +232,7 @@
         //       this.$message.error(response.msg)
         //     }
         //   }).catch(error => {
-        //     this.$message.error(error)
+        //     this.$message.error(error.msg)
         //   })
         //   return resolve([])
         // }
@@ -255,7 +255,7 @@
               return resolve([])
             }
           }).catch(error => {
-            this.$message.error(error)
+            this.$message.error(error.msg)
           })
           return resolve([])
         }
@@ -278,7 +278,7 @@
               return resolve([])
             }
           }).catch(error => {
-            this.$message.error(error)
+            this.$message.error(error.msg)
           })
           return resolve([])
         }
@@ -301,7 +301,7 @@
               return resolve([])
             }
           }).catch(error => {
-            this.$message.error(error)
+            this.$message.error(error.msg)
           })
           return resolve([])
         }
@@ -324,7 +324,7 @@
               return resolve([])
             }
           }).catch(error => {
-            this.$message.error(error)
+            this.$message.error(error.msg)
           })
           return resolve([])
         }
@@ -347,7 +347,7 @@
               return resolve(arrVillages)
             }
           }).catch(error => {
-            this.$message.error(error)
+            this.$message.error(error.msg)
           })
           return resolve([])
         }

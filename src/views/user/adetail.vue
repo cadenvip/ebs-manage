@@ -139,23 +139,24 @@
     methods: {
       setRoles(roles) {
         var arrRoleNames = []
-        switch (roles[0].roletype) {
-          case '1':
-            this.roletypes = '移动人员'
-            break
-          case '2':
-            this.roletypes = '商家人员'
-            break
-          case '3':
-            this.roletypes = '商家人员'
-            break
-          default:
-            break
+        if (roles.length > 0) {
+          switch (roles[0].roletype) {
+            case '1':
+              this.roletypes = '移动人员'
+              break
+            case '2':
+              this.roletypes = '商家人员'
+              break
+            case '3':
+              this.roletypes = '商家人员'
+              break
+            default:
+              break
+          }
         }
         for (var i = 0; i < roles.length; i++) {
           arrRoleNames.push(roles[i].rolename)
         }
-
         this.rolenames = arrRoleNames.join()
       },
       getUserForm() {
@@ -167,11 +168,13 @@
             this.$message.error(response.msg)
           }
         }).catch(error => {
-          this.$message.error(error)
+          this.$message.error(error.msg)
         })
       },
       onCancel() {
-        this.$router.go(-1)
+        this.$router.push({
+          path: '/system/user/alist'
+        })
       }
     }
   }
