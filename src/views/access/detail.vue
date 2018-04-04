@@ -1,6 +1,7 @@
 <template>
-  <div class="app-container">
+  <div style="padding:20px">
     <h4 class="title">接入方详情</h4>
+    <h5 class="title">基本信息</h5>
     <div style="color: #606266;font-size:14px;width:960px;height:160px;overflow:auto;border:#E6E6E6 solid 1px;">
       <el-row :gutter="6" style="margin-left:0px;margin-right:0px;margin-top:20px;">
         <el-col :span="4" style="text-align:right">
@@ -103,25 +104,28 @@
         </el-col>
       </el-row>
     </div>
-    <hr style="height:1px;border:none;border-top:1px dashed #0066CC;" />
-    <h5>使用的业务</h5>
-    <el-table :data="selectedOpList" border stripe fit highlight-current-row style="padding-left:10px;margin-top:10px">
-      <el-table-column label='业务名称' prop="operationname" width="220" align="center"></el-table-column>
-      <el-table-column label="业务编号" prop="operationcode" width="180" align="center"></el-table-column>
-      <el-table-column label="业务启用时间" prop="startdate" width="240" align="center"></el-table-column>
-      <el-table-column label="业务到期时间" prop="enddate" width="240" align="center"></el-table-column>
-    </el-table>
-    <hr style="height:1px;border:none;border-top:1px dashed #0066CC;" />
-    <h5>接口列表</h5>
-    <el-table :data="selectedInList" border stripe fit highlight-current-row style="padding-left:10px;margin-top:10px">
-      <el-table-column label="接口名称" prop="inter_name" width="240" align="center"></el-table-column>
-      <el-table-column label="接口方法" prop="inter_method" width="240" align="center"></el-table-column>
-      <el-table-column label="版本" prop="inter_version" width="200" align="center"></el-table-column>
-      <el-table-column label="类型" prop="inter_type" width="200" align="center"></el-table-column>
-    </el-table>
+
+    <div style="width:960px;">
+      <h5>使用的业务</h5>
+      <el-table :data="selectedOpList" border stripe fit highlight-current-row style="width:100%">
+        <el-table-column label='业务名称' prop="operationname" align="center"></el-table-column>
+        <el-table-column label="业务编号" prop="operationcode" align="center"></el-table-column>
+        <el-table-column label="业务启用时间" prop="startdate" align="center"></el-table-column>
+        <el-table-column label="业务到期时间" prop="enddate" align="center"></el-table-column>
+      </el-table>
+    </div>
+    <div style="width:960px;">
+      <h5>接口列表</h5>
+      <el-table :data="selectedInList" border stripe fit highlight-current-row style="width:100%">
+        <el-table-column label="接口名称" prop="inter_name" align="center"></el-table-column>
+        <el-table-column label="接口方法" prop="inter_method" align="center"></el-table-column>
+        <el-table-column label="版本" prop="inter_version" align="center"></el-table-column>
+        <el-table-column label="类型" prop="inter_type" align="center"></el-table-column>
+      </el-table>
+    </div>
     <br/>
     <div style="text-align: center">
-      <el-button @click="onCancel">返回</el-button>
+      <el-button type="primary" @click="onCancel">返回</el-button>
     </div>
   </div>
 </template>
