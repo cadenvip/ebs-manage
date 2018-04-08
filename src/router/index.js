@@ -409,7 +409,7 @@ export const asyncRouterMap = [
         path: 'goodssearch',  // 商品搜索
         name: 'goodssearch',
         component: _import('goodsmanageAdmin/goodssearch/index'),
-        meta: { roles: ['1'], title: '商品查询', icon: 'goodsList' }
+        meta: { roles: ['1'], title: '商品列表', icon: 'goodslist2' }
       },
       {
         path: 'updownaudit',  // 上下架
@@ -582,6 +582,42 @@ export const asyncRouterMap = [
         hidden: true,
         component: _import('order/orderdetailB'),
         meta: { roles: ['2', '3'], title: '订单详情', icon: 'order' }
+      }
+    ]
+  },
+
+  {
+    path: '/trading',
+    redirect: '/trading/index',
+    component: Layout,
+    name: '交易管理',
+    meta: { roles: ['1'], title: '交易管理', icon: 'trading' },
+    children: [
+      {
+        path: 'index',
+        name: '交易查询',
+        component: _import('trading/index'),
+        meta: { roles: ['1'], title: '交易查询', icon: 'trading2' }
+      },
+      {
+        path: 'requests',
+        name: 'requests',
+        component: _import('trading/requests'),
+        meta: { roles: ['1'], title: '交易请求查询', icon: 'trading3' }
+      },
+      {
+        path: 'detail',
+        name: 'tradedetail',
+        component: _import('trading/detail'),
+        hidden: true,
+        meta: { roles: ['1'], title: '交易详情', icon: 'trading3' }
+      },
+      {
+        path: 'requestsdetail',
+        name: 'requestsdetail',
+        component: _import('trading/requestsdetail'),
+        hidden: true,
+        meta: { roles: ['1'], title: '交易请求详情', icon: 'trading3' }
       }
     ]
   },

@@ -195,6 +195,6 @@
     }
   }
 </script>
-<style>
+<style scoped>
 .el-cascader-menu{height: 350px;}
 </style>

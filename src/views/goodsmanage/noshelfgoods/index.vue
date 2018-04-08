@@ -413,7 +413,7 @@
     }
   }
 </script>
-<style>
+<style scoped>
 .price .el-input__inner {
   padding: 0 5px !important;
 }

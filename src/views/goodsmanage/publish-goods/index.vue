@@ -211,7 +211,7 @@
   }
 </script>
 
-<style>
+<style scoped>
 .rela{position: relative;}
 h4{margin-bottom: 0;}
 .bn_begina {background: url(./images/pd01.png) no-repeat;background-size: 100% 100%; height: 230px;width: 100%;position: relative;}

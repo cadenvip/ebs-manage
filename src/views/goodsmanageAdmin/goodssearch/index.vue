@@ -118,6 +118,7 @@
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">
               <el-button @click="goPreview(scope.row)" type="text" size="small">预览</el-button>
+              <el-button @click="edit(scope.row)" type="text" size="small">编辑</el-button>              
           </template>
         </el-table-column>
       </el-table>
@@ -161,17 +162,34 @@
         <el-button type="primary" @click="confirmDialog">确 定</el-button>
       </div>
     </el-dialog>
-    <div class="content">
-      
-    </div>
+    <el-dialog width="30%" center title="支付配置" :visible.sync="dialogVisible2">
+      <el-form :model="payForm">
+        <el-form-item label="是否支持支付宝：" label-width="150px">
+          <el-switch v-model="payForm.alipay"></el-switch>
+        </el-form-item>
+        <el-form-item label="支持货到付款：" label-width="150px">
+          <el-switch v-model="payForm.codpay"></el-switch>
+        </el-form-item>
+        <el-form-item label="支持联动支付：" label-width="150px">
+          <el-switch v-model="payForm.cmpay"></el-switch>
+        </el-form-item>
+        <el-form-item label="支持和包：" label-width="150px">
+          <el-switch v-model="payForm.umpay"></el-switch>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button size="mini" @click="dialogVisible2 = false">取 消</el-button>
+        <el-button size="mini" type="primary" @click="submitEdit">提 交</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
   import CollapseTransition from 'element-ui/lib/transitions/collapse-transition'
-  import { getGoodsType } from '@/api/goodsRelease'
+  import { getGoodsType, updatePayment } from '@/api/goodsRelease'
   import { parseTime } from '@/utils/index'
-  import { getBusiness } from '@/api/admin/onsalemodifyaudit.js'
+  import { getBusiness, getGoodsDetail } from '@/api/admin/onsalemodifyaudit.js'
   import { getGoods } from '@/api/onsale.js'
   export default {
     mounted () {
@@ -180,6 +198,14 @@
     },
     data() {
       return {
+        dialogVisible2: false,
+        payForm: {
+          goodsId: '',
+          alipay: false,
+          cmpay: false,
+          codpay: false,
+          umpay: false
+        },
         goodsType: '普通商品',
         selectedOptions3: [],
         goodsOptions: [], // 商品对象
@@ -395,6 +421,31 @@
       dialogSearch() {
         this.currentPage2 = 1
         this._getBusiness()
+      },
+      edit(row) {
+        getGoodsDetail(row.goodsId).then(res => {
+          if (res.status === 200) {
+            console.log(res.data)
+          } else {
+            this.$message.error(res.msg)
+          }
+        }).catch(err => {
+          this.$message.error(err)
+        })
+        this.payForm.goodsId = row.goodsId
+        this.dialogVisible2 = true
+      },
+      submitEdit() {
+        this.dialogVisible2 = false
+        updatePayment(this.payForm).then(res => {
+          if (res.status === 200) {
+            this.$message.success('支付方式更新成功！')
+          } else {
+            this.$message.error(res.msg)
+          }
+        }).catch(err => {
+          console.log(err)
+        })
       }
     },
     computed: {

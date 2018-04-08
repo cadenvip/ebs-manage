@@ -45,6 +45,14 @@ export function goodsRelease (params) {
     data: params
   })
 }
+// 更新支付方式
+export function updatePayment (params) {
+  return request({
+    url: '/goods/updatePayment',
+    method: 'post',
+    data: params
+  })
+}
 // 获取物流模板
 export function getLogisticsTemplate () {
   return request({

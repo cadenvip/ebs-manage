@@ -102,7 +102,7 @@
   }
 </script>
 
-<style>
+<style scoped>
   .through{text-decoration:line-through}
   .content{padding: 20px 2%;}
   .top-con>div{height: 300px;overflow: hidden;}
