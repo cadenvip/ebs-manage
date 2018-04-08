@@ -67,14 +67,14 @@
     <el-dialog title="修改密码" :visible.sync="dialogVisible">
       <el-form ref="modifyPwdForm" :model="modifyPwdForm" :rules="modifyPwdRules" label-width="120px">
         <el-form-item label="原密码：" prop="opassword">
-          <el-input type="password" v-model="modifyPwdForm.opassword" :minlength=8 style="width: 220px;" placeholder="请输入原密码"></el-input>
+          <el-input type="password" v-model="modifyPwdForm.opassword" :minlength=8 :maxlength=20 style="width: 220px;" placeholder="请输入原密码"></el-input>
         </el-form-item>
         <el-form-item label="新密码：" prop="password">
-          <el-input type="password" v-model="modifyPwdForm.password" :minlength=8 style="width: 220px;" placeholder="请输入新密码"></el-input>
+          <el-input type="password" v-model="modifyPwdForm.password" :minlength=8 :maxlength=20 style="width: 220px;" placeholder="请输入新密码"></el-input>
           <PasswordStrength :password="modifyPwdForm.password" @pwdInfo="getPwdInfo"></PasswordStrength>
         </el-form-item>
         <el-form-item label="确认新密码：" prop="repassword">
-          <el-input type="password" v-model="modifyPwdForm.repassword" :minlength=8 style="width: 220px;" placeholder="请再次输入新密码"></el-input>
+          <el-input type="password" v-model="modifyPwdForm.repassword" :minlength=8 :maxlength=20 style="width: 220px;" placeholder="请再次输入新密码"></el-input>
         </el-form-item>
       </el-form>
       <div style="text-align: center;font-family: 宋体, Arial, sans-serif;font-size: 12px;color: #f30">

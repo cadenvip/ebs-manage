@@ -60,10 +60,20 @@ export function getBillDetail(params) {
 }
 
 export function downloadBillList(params) {
-  return request({
-    url: '/statement/exportTotalBill',
-    method: 'get'
-  })
+  if (params !== undefined) {
+    // 下载月份表
+    return request({
+      url: '/statement/exportTotalBill',
+      method: 'get',
+      params: params
+    })
+  } else {
+    // 下载总表
+    return request({
+      url: '/statement/exportTotalBill',
+      method: 'get'
+    })
+  }
 }
 
 export function downloadBill(bill, thisyear) {
@@ -170,6 +180,23 @@ export function queryOrderList(params) {
 export function getDetailList(params) {
   return request({
     url: '/statement/getdetaillist',
+    method: 'post',
+    data: params
+  })
+}
+
+// 获取更多账单月份列表
+export function getHisBillYearmonthList() {
+  return request({
+    url: '/statement/getHisBillYearmonthList',
+    method: 'post'
+  })
+}
+
+// 管理员获取更多历时月账单列表
+export function adminGetMoreHisBillByYearmonth(params) {
+  return request({
+    url: '/statement/adminGetMoreHisBillByYearmonth',
     method: 'post',
     data: params
   })
