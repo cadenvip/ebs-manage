@@ -29,12 +29,22 @@ export const constantRouterMap = [
   {
     path: '/',
     component: Layout,
-    redirect: '/dashboard',
     name: 'Dashboard',
+    redirect: '/dashboard',
     hidden: true,
     children: [{
       path: 'dashboard',
       component: _import('dashboard/index')
+    }]
+  },
+  {
+    path: '/403',
+    component: Layout,
+    name: '403',
+    hidden: true,
+    children: [{
+      path: 'index',
+      component: _import('403')
     }]
   }
 ]
@@ -112,6 +122,26 @@ export const asyncRouterMap = [
         hidden: true,
         component: _import('user/adetail'),
         meta: { roles: ['1'], title: '人员详情', icon: 'user' }
+      },
+      {
+        path: 'user/plist',
+        name: 'userplist',
+        component: _import('user/plist'),
+        meta: { roles: ['1'], title: '代运营管理', icon: 'proxy' }
+      },
+      {
+        path: 'user/padd',
+        name: 'userpadd',
+        hidden: true,
+        component: _import('user/padd'),
+        meta: { roles: ['1'], title: '新增代运营人员', icon: 'proxy' }
+      },
+      {
+        path: 'user/passociate',
+        name: 'userpassociate',
+        hidden: true,
+        component: _import('user/passociate'),
+        meta: { roles: ['1'], title: '关联商家', icon: 'proxy' }
       },
       {
         path: 'role/list',

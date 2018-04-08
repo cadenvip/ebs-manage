@@ -88,3 +88,97 @@ export function encryptPassword(password) {
   }
   return encryptedPassword
 }
+
+// 手机号码脱敏
+export function phoneCutSensitive(phone) {
+  var result = ''
+  if (phone !== undefined && phone !== null && phone !== '') {
+    // TODO
+    result = phone.substr(0, 3)
+    result = result + '****'
+    result = result + phone.substr(phone.length - 4, 4)
+  } else {
+    console.log('phone is null.')
+  }
+  return result
+}
+
+// 身份证脱敏（15/18位）
+export function idcardCutSensitive(idCardNo) {
+  var result = ''
+  if (idCardNo !== undefined && idCardNo !== null && idCardNo !== '') {
+    if (idCardNo.length === 15) {
+      result = '***********' + idCardNo.substr(11, 4)
+    } else if (idCardNo.length === 18) {
+      result = '**************' + idCardNo.substr(14, 4)
+    } else {
+      result = idCardNo
+    }
+  } else {
+    console.log('idCardNo is null.')
+  }
+  return result
+}
+
+// 姓名脱敏
+export function nameCutSensitive(name) {
+  var result = ''
+  if (name !== undefined && name !== null && name !== '') {
+    switch (name.length) {
+      case 1:
+        result = name.substr(0, 1)
+        break
+      case 2:
+        result = name.substr(0, 1) + '*'
+        break
+      case 3:
+        result = name.substr(0, 1) + '*' + name.substr(2, 1)
+        break
+      case 4:
+        result = name.substr(0, 2) + '**'
+        break
+      default:
+        result = name.substr(0, 2) + '****'
+        break
+    }
+  } else {
+    console.log('name is null.')
+  }
+  return result
+}
+
+// 银行卡脱敏(13--19位)
+export function bankCardNoCutSensitive(bankCardNo) {
+  var result = ''
+  if (bankCardNo !== undefined && bankCardNo !== null && bankCardNo !== '') {
+    switch (bankCardNo.length) {
+      case 13:
+        result = '*********' + bankCardNo.substr(9, 4)
+        break
+      case 14:
+        result = '**********' + bankCardNo.substr(10, 4)
+        break
+      case 15:
+        result = '***********' + bankCardNo.substr(11, 4)
+        break
+      case 16:
+        result = '************' + bankCardNo.substr(12, 4)
+        break
+      case 17:
+        result = '*************' + bankCardNo.substr(13, 4)
+        break
+      case 18:
+        result = '**************' + bankCardNo.substr(14, 4)
+        break
+      case 19:
+        result = '***************' + bankCardNo.substr(15, 4)
+        break
+      default:
+        result = bankCardNo
+        break
+    }
+  } else {
+    console.log('bankCardNo is null.')
+  }
+  return result
+}

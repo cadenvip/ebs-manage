@@ -195,6 +195,7 @@
                 </template>
               </el-table-column>
             </el-table>
+            <!-- 
             <hr style="height:1px;border:none;border-top:1px dashed #0066CC;" />
             <h5>支付信息</h5>
             <el-form-item label="启用语音支付：" prop="merchantPayable">
@@ -281,6 +282,7 @@
             <el-form-item label="联动优势银行账号：" prop="umPayBankAccountNo">
               <el-input v-model="registerForm.umPayBankAccountNo" clearable style="width: 220px;" placeholder="联动优势银行账号" :disabled="!registerForm.umPayNoPayable"></el-input>
             </el-form-item>
+            -->
             <hr style="height:1px;border:none;border-top:1px dashed #0066CC;" />
             <h5>企业经营资质</h5>
             <el-form-item label="企业营业执照：" prop="businesslicenseNum">
@@ -476,6 +478,17 @@
           }
         }
       }
+      var validateSellAddressList = (rule, value, callback) => {
+        // if (this.sellAddressListForm.length === 0) {
+        //   callback(new Error('请至少填写一个售后处理点'))
+        // } else {
+        // if (!validateID(value.trim())) {
+        //   callback(new Error('请输入有效的身份证号码'))
+        // } else {
+        callback()
+        // }
+        // }
+      }
       return {
         dialogImageUrl: '',
         dialogVisible: false,
@@ -652,6 +665,7 @@
           sellAddressListForm: [{
             required: true,
             message: '请输入售后处理点',
+            validator: validateSellAddressList,
             trigger: 'blur'
           }],
           financePersonName: [{

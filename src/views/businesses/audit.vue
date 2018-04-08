@@ -148,7 +148,7 @@
         <div class="part">
           <h1>支付信息</h1>
           <div class="con-box">
-            <div class="clearfix tr-con">
+            <!-- <div class="clearfix tr-con">
               <div class="fl">
                 <el-row style="overflow: hidden;">
                   <el-col class="text-r" :span="10">
@@ -207,7 +207,7 @@
                   </el-col>
                 </el-row>
               </div>
-            </div>
+            </div> -->
             <div class="clearfix tr-con">
               <div class="fl">
                 <el-row style="overflow: hidden;">
