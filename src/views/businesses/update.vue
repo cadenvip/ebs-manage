@@ -197,13 +197,13 @@
             </el-table>
             <hr style="height:1px;border:none;border-top:1px dashed #0066CC;" />
             <h5>支付信息</h5>
-            <el-form-item label="启用语音支付：" prop="merchantPayable">
+            <!-- <el-form-item label="启用语音支付：" prop="merchantPayable">
               <el-checkbox v-model="registerForm.merchantPayable"></el-checkbox>
             </el-form-item>
             <el-form-item label="语音支付商户号：" prop="merchantNo">
               <el-input v-model="registerForm.merchantNo" clearable style="width: 220px;" placeholder="请输入语音支付商户号" :disabled="!registerForm.merchantPayable"></el-input>
-            </el-form-item>
-            <el-form-item label="启用话费支付：" prop="wirelesscitypayable">
+            </el-form-item> -->
+            <!-- <el-form-item label="启用话费支付：" prop="wirelesscitypayable">
               <el-checkbox v-model="registerForm.wirelesscitypayable"></el-checkbox>
             </el-form-item>
             <el-row :gutter="20">
@@ -217,8 +217,8 @@
                   <el-input v-model="registerForm.wirelesscityname" clearable style="width: 220px;" placeholder="请输入话费支付商户名称" :disabled="!registerForm.wirelesscitypayable"></el-input>
                 </el-form-item>
               </el-col>
-            </el-row>
-            <el-row :gutter="20">
+            </el-row> -->
+            <!-- <el-row :gutter="20">
               <el-col :span="12">
                 <el-form-item label="话费支付渠道编号：" prop="wirelesstpcode">
                   <el-input v-model="registerForm.wirelesstpcode" clearable style="width: 220px;" placeholder="请输入话费支付渠道编号" :disabled="!registerForm.wirelesscitypayable"></el-input>
@@ -229,7 +229,7 @@
                   <el-input v-model="registerForm.wirelesstpname" clearable style="width: 220px;" placeholder="请输入话费支付渠道名称" :disabled="!registerForm.wirelesscitypayable"></el-input>
                 </el-form-item>
               </el-col>
-            </el-row>
+            </el-row> -->
             <el-form-item label="启用支付宝支付：" prop="aliPayNoPayable">
               <el-checkbox v-model="registerForm.aliPayNoPayable"></el-checkbox>
             </el-form-item>
@@ -476,6 +476,17 @@
           }
         }
       }
+      var validateSellAddressList = (rule, value, callback) => {
+        // if (this.sellAddressListForm.length === 0) {
+        //   callback(new Error('请至少填写一个售后处理点'))
+        // } else {
+        // if (!validateID(value.trim())) {
+        //   callback(new Error('请输入有效的身份证号码'))
+        // } else {
+        callback()
+        // }
+        // }
+      }
       return {
         dialogImageUrl: '',
         dialogVisible: false,
@@ -651,6 +662,7 @@
           sellAddressListForm: [{
             required: true,
             message: '请输入售后处理点',
+            validator: validateSellAddressList,
             trigger: 'blur'
           }],
           financePersonName: [{

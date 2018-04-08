@@ -12,6 +12,9 @@ import {
   getSessionid
 } from '@/utils/auth'
 
+// import router from './router'
+import router from '@/router'
+
 // 创建axios实例
 const service = axios.create({
   baseURL: process.env.BASE_API, // api的base_url
@@ -58,51 +61,39 @@ service.interceptors.response.use(response => {
     return response
   }
   if (response.data.status === 401) {
-    // MessageBox('您已超时或被登出，可以取消继续留在该页面，或者重新登录', '确定登出', {
-    //   confirmButtonText: '重新登录',
-    //   cancelButtonText: '取消',
-    //   type: 'warning'
-    // }).then(() => {
-    // 前端登出（清除登录数据）
-    store.dispatch('FedLogOut').then(() => {
-      window.location.reload()
-    })
-    Message({
-      message: '您已超时，请重新登录!',
-      type: 'error',
-      duration: 5 * 1000
-    })
+    // store.dispatch('FedLogOut').then(() => {
+    //   window.location.reload()
     // })
-    // this.$router.push({
-    //   path: '/timeout'
+    // Message({
+    //   message: '您已超时，请重新登录!',
+    //   type: 'error',
+    //   duration: 5 * 1000
     // })
-    return Promise.reject('error')
+    router.push({
+      path: '/timeout'
+    })
+    return Promise.reject(response.data)
+  } else if (response.data.status === 403) {
+    router.push({
+      path: '/403/index'
+    })
+    return Promise.reject(response.data)
+  } else {
+    return response.data
   }
-  return response.data
 },
 error => {
   // 错误处理
   console.log('error', error)
   if (error.response !== undefined) {
     if (error.response.status === 401) {
-      // MessageBox('您已超时或被登出，可以取消继续留在该页面，或者重新登录', '确定登出', {
-      //   confirmButtonText: '重新登录',
-      //   cancelButtonText: '取消',
-      //   type: 'warning'
-      // }).then(() => {
-      // 前端登出（清除登录数据）
-      store.dispatch('FedLogOut').then(() => {
-        window.location.reload()
+      router.push({
+        path: '/timeout'
       })
-      Message({
-        message: '您已超时，请重新登录!',
-        type: 'error',
-        duration: 5 * 1000
+    } else if (error.response.status === 403) {
+      router.push({
+        path: '/403/index'
       })
-      // })
-      // this.$router.push({
-      //   path: '/timeout'
-      // })
     }
     return Promise.reject(error.response.data)
   } else {
