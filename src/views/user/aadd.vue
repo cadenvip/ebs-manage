@@ -98,6 +98,10 @@
     </el-form>
     <el-dialog title="请选择区域" :visible.sync="regionDialogVisible" width="40%">
       <LocationSelector @locationSelected="getLocationInfo"></LocationSelector>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="regionDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="confirmSelectedRegion">确 定</el-button>
+      </span>
     </el-dialog>
 
     <el-dialog title="请选择商家" :visible.sync="unitDialogVisible" width="770px">
@@ -254,7 +258,7 @@
           locationname: [{
             required: true,
             message: '请选择归属区域',
-            trigger: 'blur'
+            trigger: 'change'
           }],
           // unitname: [{ required: true, message: '请选择商家', trigger: 'blur' }],
           email: [{
@@ -268,6 +272,7 @@
             trigger: 'blur'
           }]
         },
+        locationInfo: {},
         regionDialogVisible: false,
         businessSearchForm: {
           businessesName: '',
@@ -295,8 +300,7 @@
     },
     methods: {
       getLocationInfo(data) {
-        this.userForm.locationid = data.id
-        this.userForm.locationname = data.label
+        this.locationInfo = data
       },
       getPwdInfo(data) {
         this.pwdInfo = data
@@ -342,6 +346,12 @@
       businessSelectionChange(val) {
         this.preSelectedBusiness = val
       },
+      confirmSelectedRegion() {
+        this.userForm.locationid = this.locationInfo.id
+        this.userForm.locationname = this.locationInfo.label
+        this.regionDialogVisible = false
+        this.locationInfo = {}
+      },
       confirmSelected() {
         this.userForm.unitid = this.preSelectedBusiness.id
         this.userForm.unitname = this.preSelectedBusiness.businessesName
@@ -368,6 +378,12 @@
                 undefined || this.userForm.unitname === '')) {
               this.$message.error('请选择商家')
               return
+            } else {
+              var userInfo = window.sessionStorage.getItem('userInfo')
+              if (userInfo !== undefined && userInfo !== '') {
+                userInfo = JSON.parse(userInfo)
+                this.userForm.unitid = userInfo.unitid
+              }
             }
             var params = {
               'loginname': `${this.userForm.loginname}`,

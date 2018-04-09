@@ -148,6 +148,13 @@
           if (response.status === 200) {
             this.userForm = response.data
             this.setRoles(this.userForm.role)
+            if (response.data.unitname === null) {
+              var userInfo = window.sessionStorage.getItem('userInfo')
+              if (userInfo !== undefined && userInfo !== '') {
+                userInfo = JSON.parse(userInfo)
+                this.userForm.unitname = userInfo.unitname
+              }
+            }
           } else {
             this.$message.error(response.msg)
           }

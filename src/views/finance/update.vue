@@ -448,20 +448,20 @@
           }
           getDetailList(params).then(response => {
             if (response.status === 200) {
+              if (response.data.length !== addedOrderCodeList.length) {
+                // 部分订单数据为空
+                this.$message.warning(response.msg)
+              }
               if (response.data.length > 0) {
                 response.data.forEach(v => {
-                  if (v !== null) {
-                    var i = 0
-                    for (; i < this.detailList.length; i++) {
-                      if (this.detailList[i].ordercode === v.ordercode) {
-                        break
-                      }
+                  var i = 0
+                  for (; i < this.detailList.length; i++) {
+                    if (this.detailList[i].ordercode === v.ordercode) {
+                      break
                     }
-                    if (i === this.detailList.length) {
-                      this.detailList.push(v)
-                    }
-                  } else {
-                    this.$message.error('订单数据为空！')
+                  }
+                  if (i === this.detailList.length) {
+                    this.detailList.push(v)
                   }
                 })
               }

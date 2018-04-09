@@ -183,6 +183,13 @@
             this.userForm.repassword = this.userForm.password
             this.pwdBack = response.data.password
             // this.userForm.roleids = response.data.roleIds
+            if (response.data.unitname === null) {
+              var userInfo = window.sessionStorage.getItem('userInfo')
+              if (userInfo !== undefined && userInfo !== '') {
+                userInfo = JSON.parse(userInfo)
+                this.userForm.unitname = userInfo.unitname
+              }
+            }
           } else {
             this.$message.error(response.msg)
           }

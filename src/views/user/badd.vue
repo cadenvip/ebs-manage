@@ -89,6 +89,10 @@
     </el-form>
     <el-dialog title="请选择区域" :visible.sync="regionDialogVisible" width="40%">
       <LocationSelector @locationSelected="getLocationInfo"></LocationSelector>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="regionDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="confirmSelectedRegion">确 定</el-button>
+      </span>
     </el-dialog>
   </div>
 </template>
@@ -198,7 +202,7 @@
           locationname: [{
             required: true,
             message: '请选择归属区域',
-            trigger: 'blur'
+            trigger: 'change'
           }],
           email: [{
             required: false,
@@ -212,6 +216,7 @@
           }]
         },
         regionDialogVisible: false,
+        locationInfo: {},
         pwdInfo: {}
       }
     },
@@ -224,8 +229,13 @@
     // },
     methods: {
       getLocationInfo(data) {
-        this.userForm.locationid = data.id
-        this.userForm.locationname = data.label
+        this.locationInfo = data
+      },
+      confirmSelectedRegion() {
+        this.userForm.locationid = this.locationInfo.id
+        this.userForm.locationname = this.locationInfo.label
+        this.regionDialogVisible = false
+        this.locationInfo = {}
       },
       getPwdInfo(data) {
         this.pwdInfo = data
