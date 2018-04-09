@@ -279,6 +279,12 @@
           case '32':
             type = '话费支付'
             break
+          case '33':
+            type = '联动支付'
+            break
+          case '34':
+            type = '和包支付'
+            break
           default:
             break
         }

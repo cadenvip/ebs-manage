@@ -13,7 +13,7 @@
             <p class="must"><span class="title" :class="{'modify':isModify('')}">送货时限:</span> <span>暂无</span></p>
             <p class="must"><span class="title" :class="{'modify':isModify('supplierName')}">供应商:</span> <span>{{gBean.supplierName}}</span></p>
             <p><span class="title" :class="{'modify':isModify('brand')}">品牌:</span> <span>{{gBean.brand}}</span></p>
-            <p class="must"><span class="title" :class="{'modify':isModify('')}">支付方式:</span> <span class="plr5" v-show="gBean.alipay==='0'">支付宝</span><span class="plr5" v-show="gBean.cmpay==='0'">手机支付</span><span class="plr5"v-show="gBean.unionpay==='0'">网银支付</span><span class="plr5"v-show="gBean.codpay==='0'">货到付款</span></p>
+            <p class="must"><span class="title" :class="{'modify':isModify('')}">支付方式:</span> <span class="plr5" v-show="gBean.alipay==='0'">支付宝</span><span class="plr5" v-show="gBean.cmpay==='0'">和包支付</span><span class="plr5"v-show="gBean.umpay==='0'">网银支付</span><span class="plr5"v-show="gBean.codpay==='0'">货到付款</span></p>
             <p class="must"><span class="title" :class="{'modify':isModify('placeofOriginName')}">物流:</span> <span v-show="gBean.logisticsTypes.toString().indexOf('1')>-1">自提</span> <span v-if="gBean.logisticsTypes.toString().indexOf('2')>-1">{{templateName + '有问题！！！！！！！！！'}}</span></p>
           </el-col>
           <el-col :span="12">

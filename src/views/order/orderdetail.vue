@@ -544,6 +544,12 @@ export default {
                 case '32':
                   this.payWay.push('话费支付')
                   break
+                case '33':
+                  this.payWay.push('联动支付')
+                  break
+                case '34':
+                  this.payWay.push('和包支付')
+                  break
                 default:break
               }
             }

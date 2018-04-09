@@ -326,12 +326,12 @@ export default {
         value: '23'
       },
       {
-        label: '手机支付',
-        value: '22'
+        label: '联动支付',
+        value: '33'
       },
       {
-        label: '网银支付',
-        value: '24'
+        label: '和包支付',
+        value: '34'
       },
       {
         label: '话费支付',

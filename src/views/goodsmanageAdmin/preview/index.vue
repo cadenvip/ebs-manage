@@ -67,8 +67,8 @@
               支持方式：
               <span>货到付款</span>
               <span v-if="goodsBean.alipay==='0'">支付宝</span>
-              <span v-if="goodsBean.cmpay==='0'">手机支付</span>
-              <span v-if="goodsBean.unionpay==='0'">银联支付</span>
+              <span v-if="goodsBean.cmpay==='0'">和包支付</span>
+              <span v-if="goodsBean.umpay==='0'">联动支付</span>
             </p>
             <p>
               视频地址：<span>{{format(goodsBean.videoUrl)}}</span>
