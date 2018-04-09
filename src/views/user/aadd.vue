@@ -26,7 +26,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="16" style="padding-top:8px">
-          <span style="font-family: 宋体, Arial, sans-serif;font-size: 12px;color: #999;">账号必须为1>账号必须为11位中国移动手机号码</span>
+          <span style="font-family: 宋体, Arial, sans-serif;font-size: 12px;color: #999;">账号必须为11位中国移动手机号码</span>
         </el-col>
       </el-row>
       <el-row :gutter="20">
