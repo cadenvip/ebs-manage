@@ -32,7 +32,7 @@
       <el-row :gutter="20">
         <el-col :span="8">
           <el-form-item label="密码：" prop="password">
-            <el-input type="password" v-model="userForm.password" :minlength=8 style="width: 220px;" placeholder="请输入密码"></el-input>
+            <el-input type="password" v-model="userForm.password" :minlength=8 :maxlength=20 style="width: 220px;" placeholder="请输入密码"></el-input>
             <PasswordStrength :password="userForm.password" @pwdInfo="getPwdInfo"></PasswordStrength>
           </el-form-item>
         </el-col>
@@ -43,7 +43,7 @@
       <el-row :gutter="20">
         <el-col :span="8">
           <el-form-item label="确认密码：" prop="repassword">
-            <el-input type="password" v-model="userForm.repassword" :minlength=8 style="width: 220px;" placeholder="请再次输入密码"></el-input>
+            <el-input type="password" v-model="userForm.repassword" :minlength=8 :maxlength=20 style="width: 220px;" placeholder="请再次输入密码"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="16" style="padding-top:8px">

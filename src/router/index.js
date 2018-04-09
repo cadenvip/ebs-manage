@@ -335,6 +335,13 @@ export const asyncRouterMap = [
         meta: { roles: ['1'], title: '调账', icon: 'finance' }
       },
       {
+        path: 'monthHistory',
+        hidden: true,
+        component: _import('finance/monthBillList'),
+        name: '月历史账单',
+        meta: { roles: ['1'], title: '月历史账单', icon: 'finance' }
+      },
+      {
         path: 'moreHistory',
         hidden: true,
         component: _import('finance/moreHistory'),
