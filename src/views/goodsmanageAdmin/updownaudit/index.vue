@@ -154,8 +154,8 @@
       <el-dialog title="审核商品" width="40%" :visible.sync="dialogFormVisible">
         <el-form :model="auditForm">
           <el-form-item label="审批状态:" label-width="120px">
-            <el-radio v-model="auditForm.auditStatus" label="1">是</el-radio>
-            <el-radio v-model="auditForm.auditStatus" label="0">否</el-radio>
+            <el-radio v-model="auditForm.auditStatus" label="1">通过</el-radio>
+            <el-radio v-model="auditForm.auditStatus" label="0">驳回</el-radio>
           </el-form-item>
           <el-form-item label="审批意见:" label-width="120px">
             <el-input
@@ -359,7 +359,9 @@
       _getSearches(obj) {
         this.tableData = []
         const params = Object.assign({
-          searchType: 4
+          searchType: 4,
+          order: 'asc',
+          sort: 'goodsCode'
         }, obj)
         this.loading = true
         getSearches(params).then(res => {
