@@ -4,13 +4,13 @@
       <el-row :gutter="20">
         <el-col :span="6">
           <el-form-item label="订单编号:" label-width="80px">
-            <el-input v-model.trim="searchForm.orderCode"></el-input>
+            <el-input size="medium" v-model.trim="searchForm.orderCode"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-col :span="12">
             <el-form-item label="下单开始时间:" label-width="100px">
-              <el-date-picker  style="width: 95%;"
+              <el-date-picker size="medium" style="width: 95%;"
                 v-model="searchForm.orderStartTime"
                 type="datetime"
                 placeholder="选择日期时间">
@@ -19,7 +19,7 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="下单结束时间:" label-width="100px">
-              <el-date-picker style="width: 95%;"
+              <el-date-picker size="medium" style="width: 95%;"
                 v-model="searchForm.orderEndTime"
                 type="datetime"
                 placeholder="选择日期时间">
@@ -41,12 +41,12 @@
             <el-row :gutter="20">
               <el-col :span="6">
                 <el-form-item label="订购人:" label-width="80px">
-                  <el-input v-model.trim="searchForm.userName"></el-input>
+                  <el-input size="medium" v-model.trim="searchForm.userName"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="6">
                 <el-form-item label="支付方式:" label-width="100px">
-                  <el-select v-model="searchForm.payType" placeholder="请选择">
+                  <el-select size="medium" v-model="searchForm.payType" placeholder="请选择">
                     <el-option
                       v-for="item in payOptions"
                       :key="item.value"
@@ -58,7 +58,7 @@
               </el-col>
               <el-col :span="6">
                 <el-form-item label="订单状态:" label-width="100px">
-                  <el-select v-model="searchForm.orderState" placeholder="请选择">
+                  <el-select size="medium" v-model="searchForm.orderState" placeholder="请选择">
                     <el-option
                       v-for="item in orderOptions"
                       :key="item.value"
@@ -78,9 +78,9 @@
           <el-table :data="tableData" style="width: 100%" border>
             <el-table-column prop="orderCode" label="订单编号" align="center">
             </el-table-column>
-            <el-table-column prop="userName" label="订购人姓名" align="center">
+            <el-table-column width="110" prop="userName" label="订购人姓名" align="center">
             </el-table-column>
-            <el-table-column prop="userPhone" label="订购人电话" align="center">
+            <el-table-column width="110" prop="userPhone" label="订购人电话" align="center">
             </el-table-column>
             <el-table-column prop="totalEccouponMoney" label="电子券金额(元)" align="center">
             </el-table-column>
@@ -107,9 +107,9 @@
           <el-table :data="tableData" style="width: 100%" border>
             <el-table-column prop="orderCode" label="订单编号" align="center">
             </el-table-column>
-            <el-table-column prop="userName" label="订购人姓名" align="center">
+            <el-table-column width="110" prop="userName" label="订购人姓名" align="center">
             </el-table-column>
-            <el-table-column prop="userPhone" label="订购人电话" align="center">
+            <el-table-column width="110" prop="userPhone" label="订购人电话" align="center">
             </el-table-column>
             <el-table-column prop="totalEccouponMoney" label="电子券金额(元)" align="center">
             </el-table-column>
@@ -137,9 +137,9 @@
           <el-table :data="tableData" style="width: 100%" border>
             <el-table-column prop="orderCode" label="订单编号" align="center">
             </el-table-column>
-            <el-table-column prop="userName" label="订购人姓名" align="center">
+            <el-table-column width="110" prop="userName" label="订购人姓名" align="center">
             </el-table-column>
-            <el-table-column prop="userPhone" label="订购人电话" align="center">
+            <el-table-column width="110" prop="userPhone" label="订购人电话" align="center">
             </el-table-column>
             <el-table-column prop="totalEccouponMoney" label="电子券金额(元)" align="center">
             </el-table-column>
@@ -167,9 +167,9 @@
           <el-table :data="tableData" style="width: 100%" border>
             <el-table-column prop="orderCode" label="订单编号" align="center">
             </el-table-column>
-            <el-table-column prop="userName" label="订购人姓名" align="center">
+            <el-table-column width="110" prop="userName" label="订购人姓名" align="center">
             </el-table-column>
-            <el-table-column prop="userPhone" label="订购人电话" align="center">
+            <el-table-column width="110" prop="userPhone" label="订购人电话" align="center">
             </el-table-column>
             <el-table-column prop="totalEccouponMoney" label="电子券金额(元)" align="center">
             </el-table-column>
@@ -197,9 +197,9 @@
           <el-table :data="tableData" style="width: 100%" border>
             <el-table-column prop="orderCode" label="订单编号" align="center">
             </el-table-column>
-            <el-table-column prop="userName" label="订购人姓名" align="center">
+            <el-table-column width="110" prop="userName" label="订购人姓名" align="center">
             </el-table-column>
-            <el-table-column prop="userPhone" label="订购人电话" align="center">
+            <el-table-column width="110" prop="userPhone" label="订购人电话" align="center">
             </el-table-column>
             <el-table-column prop="totalEccouponMoney" label="电子券金额(元)" align="center">
             </el-table-column>
@@ -226,9 +226,9 @@
           <el-table :data="tableData" style="width: 100%" border>
             <el-table-column prop="orderCode" label="订单编号" align="center">
             </el-table-column>
-            <el-table-column prop="userName" label="订购人姓名" align="center">
+            <el-table-column width="110" prop="userName" label="订购人姓名" align="center">
             </el-table-column>
-            <el-table-column prop="userPhone" label="订购人电话" align="center">
+            <el-table-column width="110" prop="userPhone" label="订购人电话" align="center">
             </el-table-column>
             <el-table-column prop="totalEccouponMoney" label="电子券金额(元)" align="center">
             </el-table-column>
@@ -255,9 +255,9 @@
           <el-table :data="tableData" style="width: 100%" border>
             <el-table-column prop="orderCode" label="订单编号" align="center">
             </el-table-column>
-            <el-table-column prop="userName" label="订购人姓名" align="center">
+            <el-table-column width="110" prop="userName" label="订购人姓名" align="center">
             </el-table-column>
-            <el-table-column prop="userPhone" label="订购人电话" align="center">
+            <el-table-column width="110" prop="userPhone" label="订购人电话" align="center">
             </el-table-column>
             <el-table-column prop="totalEccouponMoney" label="电子券金额(元)" align="center">
             </el-table-column>
@@ -287,9 +287,9 @@
                 <el-button @click="_getOrderDetail(scope.row)" type="text" size="small">{{scope.row.orderCode}}</el-button>
               </template>
             </el-table-column>
-            <el-table-column prop="userName" label="订购人姓名" align="center">
+            <el-table-column width="110" prop="userName" label="订购人姓名" align="center">
             </el-table-column>
-            <el-table-column prop="userPhone" label="订购人电话" align="center">
+            <el-table-column width="110" prop="userPhone" label="订购人电话" align="center">
             </el-table-column>
             <el-table-column prop="totalEccouponMoney" label="电子券金额(元)" align="center">
             </el-table-column>
@@ -386,16 +386,16 @@
           value: '11'
         },
         {
-          label: '手机支付',
-          value: '22'
-        },
-        {
           label: '支付宝支付',
           value: '23'
         },
         {
-          label: '网银支付',
-          value: '24'
+          label: '联动支付',
+          value: '33'
+        },
+        {
+          label: '和包支付',
+          value: '34'
         }],
         orderOptions: [{
           label: '待支付',
@@ -498,7 +498,9 @@
         const defaultParam = {
           searchType: this.searchType,
           page: this.currentPage,
-          pageSize: 10
+          pageSize: 10,
+          order: 'desc',
+          sort: 'orderCode'
         }
         const params = Object.assign(defaultParam, obj)
         getOrderList(params).then(res => {

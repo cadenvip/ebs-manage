@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="padding: 15px;">
     <el-tabs type="border-card">
       <el-tab-pane label="交易信息">
         <el-row class="content">
@@ -22,11 +22,11 @@
             </div>
             <div class="clearfix mt10">
               <p class="textr fl bold">成功：</p>
-              <p class="fl">不知道</p>
+              <p class="fl">否</p>
             </div>
             <div class="clearfix mt10">
               <p class="textr fl bold">返回状态：</p>
-              <p class="fl">不知道</p>
+              <p class="fl">{{bean.respState}}</p>
             </div>
             <div class="clearfix mt10">
               <p class="textr fl bold">回调地址：</p>
@@ -56,7 +56,7 @@
             </div>
             <div class="clearfix mt10">
               <p class="textr fl bold">请求类型：</p>
-              <p class="fl">不知道</p>
+              <p class="fl">{{bean.isRef==='1'?'退款':bean.isRef==='0'?'支付':'暂无'}}</p>
             </div>
             <div class="clearfix mt10">
               <p class="textr fl bold">商品名称：</p>
@@ -69,8 +69,22 @@
           </el-col>
         </el-row>
       </el-tab-pane>
-      <el-tab-pane label="交易日志"></el-tab-pane>
+      <el-tab-pane label="交易日志">
+        <el-table :data="bean.onlineTradeLogs" style="width: 100%;margin-top: 15px;" border>
+          <el-table-column width="180" align="center" prop="createDate" label="时间"></el-table-column>
+          <el-table-column width="100" align="center" prop="logType" label="类型"></el-table-column>
+          <el-table-column align="center" prop="logDesc" label="描述"></el-table-column>
+          <el-table-column width="100" align="center" prop="" label="报文内容">
+            <template slot-scope="scope">
+              <el-button @click="getMessage(scope.row)" type="text" size="mini">查看</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+      </el-tab-pane>
     </el-tabs>
+    <el-dialog title="报文内容" :visible.sync="dialogVisible" width="40%" center>
+      <p class="mt0" style="word-wrap: break-word;">{{baowen}}</p>
+    </el-dialog>
   </div>
 </template>
 
@@ -87,7 +101,17 @@ export default {
   },
   data() {
     return {
-      bean: {}
+      baowen: '',
+      dialogVisible: false,
+      bean: {
+        onlineTradeLogs: []
+      }
+    }
+  },
+  methods: {
+    getMessage(row) {
+      this.baowen = row.logContent
+      this.dialogVisible = true
     }
   }
 }

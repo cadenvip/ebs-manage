@@ -58,9 +58,9 @@
       <el-form-item style="display: block;" label="支付方式:" prop="zhifufs">
         <el-checkbox-group v-model="ruleForm.zhifufs">
           <el-checkbox :disabled="zfbDisable" @change="_checkPayWay(23, 1)" label="支付宝支付" name="zhifufs"></el-checkbox>
-          <el-checkbox :disabled="sjzfDisable" @change="_checkPayWay(22, 2)" label="手机支付" name="zhifufs"></el-checkbox>
+          <el-checkbox :disabled="sjzfDisable" @change="_checkPayWay(33, 2)" label="联动支付" name="zhifufs"></el-checkbox>
           <el-checkbox :checked=true disabled label="货到付款" name="zhifufs"></el-checkbox>
-          <el-checkbox :disabled="wyzjDisable" @change="_checkPayWay(24, 3)" label="网银支付" name="zhifufs"></el-checkbox>
+          <el-checkbox :disabled="wyzjDisable" @change="_checkPayWay(34, 3)" label="和包支付" name="zhifufs"></el-checkbox>
           <el-alert title="温馨提示：在线支付将由支付渠道收取交易手续费，由商户承担，支付宝0.5%，手机支付0.3%。" type="error" :closable="false"></el-alert>
         </el-checkbox-group>
       </el-form-item>
@@ -339,10 +339,10 @@
               this.ruleForm.zhifufs.push('支付宝支付')
             }
             if (this.goodsBean.cmpay === '0') {
-              this.ruleForm.zhifufs.push('手机支付')
+              this.ruleForm.zhifufs.push('和包支付')
             }
-            if (this.goodsBean.unionpay === '0') {
-              this.ruleForm.zhifufs.push('网银支付')
+            if (this.goodsBean.umpay === '0') {
+              this.ruleForm.zhifufs.push('联动支付')
             }
             // 阶梯价格
             if (this.goodsBean.gradientPriceFlag === '1') {
@@ -592,8 +592,8 @@
               stockAlarm: this.ruleForm.kucuntx ? this.ruleForm.kucuntxNum : '',
               alipay: this.ruleForm.zhifufs.indexOf('支付宝支付') > -1 ? 0 : 1,
               codpay: 0,
-              cmpay: this.ruleForm.zhifufs.indexOf('手机支付') > -1 ? 0 : 1,
-              unionpay: this.ruleForm.zhifufs.indexOf('网银支付') > -1 ? 0 : 1,
+              cmpay: this.ruleForm.zhifufs.indexOf('和包支付') > -1 ? 0 : 1,
+              umpay: this.ruleForm.zhifufs.indexOf('联动支付') > -1 ? 0 : 1,
               imageList: ['http://image1.qianqianhua.com/uploads/20171227/14/1514356264-OpIVSzBPAM.jpg'],
               gradientPriceFlag: this.ruleForm.jietiFlag ? 1 : 0,  // true or false  this.ruleForm.Jieti
               gradientNumber: this.convertJTnums,
@@ -704,6 +704,7 @@
         const params = { payAccountType: val }
         checkPayWay(params).then((res) => {
           if (res.status === 200) {
+            console.log(res)
             if (res.data === '1') {
               return false
             } else {
@@ -712,10 +713,10 @@
                 this.deleArrElement(this.ruleForm.zhifufs, '支付宝支付')
               } else if (index === 2) {
                 this.sjzfDisable = true
-                this.deleArrElement(this.ruleForm.zhifufs, '手机支付')
+                this.deleArrElement(this.ruleForm.zhifufs, '联动支付')
               } else if (index === 3) {
                 this.wyzjDisable = true
-                this.deleArrElement(this.ruleForm.zhifufs, '网银支付')
+                this.deleArrElement(this.ruleForm.zhifufs, '和包支付')
               }
               this.$message.error('商家不支持该付款方式！')
             }
