@@ -44,8 +44,7 @@
             </span>
           </el-col>
           <el-col :span="8">
-            <span>
-              {{ thisMonthDetail.bill.dealusername !== null ? thisMonthDetail.bill.dealusername : '&nbsp;' }}
+            <span v-html="dealusernameFormat">
             </span>
           </el-col>
           <el-col :span="4" style="text-align:right">
@@ -55,7 +54,7 @@
           </el-col>
           <el-col :span="8">
             <span>
-              {{ thisMonthDetail.bill.dealuserphone !== null ? thisMonthDetail.bill.dealuserphone : '&nbsp;' }}
+              {{ dealuserphoneFormat }}
             </span>
           </el-col>
         </el-row>
@@ -155,6 +154,10 @@
     businessDealBill,
     submitDispute
   } from '@/api/finance'
+  import {
+    phoneCutSensitive,
+    nameCutSensitive
+  } from '@/utils/index'
 
   export default {
     data() {
@@ -210,6 +213,14 @@
         } else {
           return ''
         }
+      },
+      dealusernameFormat: function() {
+        var name = nameCutSensitive(this.thisMonthDetail.bill.dealusername)
+        return name !== '' ? name : '&nbsp;'
+      },
+      dealuserphoneFormat: function() {
+        var phone = phoneCutSensitive(this.thisMonthDetail.bill.dealuserphone)
+        return phone !== '' ? phone : '&nbsp;'
       },
       getContentLen() {
         if (this.content) {

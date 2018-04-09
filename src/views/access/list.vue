@@ -34,8 +34,8 @@
       <el-table-column label="接入类别" prop="si_type" :formatter="typeFormat"align="center"></el-table-column>
       <el-table-column label="开始时间" prop="begin_time" align="center"></el-table-column>
       <el-table-column label="到期时间" prop="end_time" align="center"></el-table-column>
-      <el-table-column label="联系人" prop="si_person" align="center"></el-table-column>
-      <el-table-column label="联系电话" prop="si_phone" align="center"></el-table-column>
+      <el-table-column label="联系人" prop="si_person" :formatter="si_nameFormat" align="center"></el-table-column>
+      <el-table-column label="联系电话" prop="si_phone" :formatter="si_phoneFormat" align="center"></el-table-column>
       <el-table-column label="操作" align="center">
         <template slot-scope="scope">
           <el-button @click="detail(scope.row)" type="text" size="small">详细</el-button>
@@ -56,6 +56,10 @@
     getAllAccesss,
     getAccessList
   } from '@/api/access'
+  import {
+    phoneCutSensitive,
+    nameCutSensitive
+  } from '@/utils/index'
 
   export default {
     data() {
@@ -147,6 +151,12 @@
         } else {
           return '未知'
         }
+      },
+      si_nameFormat(row, column, cellValue) {
+        return nameCutSensitive(cellValue)
+      },
+      si_phoneFormat(row, column, cellValue) {
+        return phoneCutSensitive(cellValue)
       }
     }
   }

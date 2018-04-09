@@ -42,8 +42,8 @@
     <div class="list">人员列表</div>
     <el-table :data="list" v-loading.body="loading" element-loading-text="Loading" border stripe fit highlight-current-row style="width:100%">
       <el-table-column label='账号' prop="loginname" align="center"></el-table-column>
-      <el-table-column label="姓名" prop="name" align="center"></el-table-column>
-      <el-table-column label="手机号码" prop="phoneno" align="center"></el-table-column>
+      <el-table-column label="姓名" prop="name" :formatter="nameFormat" align="center"></el-table-column>
+      <el-table-column label="手机号码" prop="phoneno" :formatter="phonenoFormat" align="center"></el-table-column>
       <el-table-column label="归属区域" prop="locationname" align="center"></el-table-column>
       <el-table-column label="商家" prop="unitname" align="center"></el-table-column>
       <el-table-column label="状态" prop="locked" :formatter="lockedFormat" align="center"></el-table-column>
@@ -71,6 +71,10 @@
     resetBusinessUserPassword
   } from '@/api/user'
   import locationselector from '@/components/LocationSelector/index'
+  import {
+    phoneCutSensitive,
+    nameCutSensitive
+  } from '@/utils/index'
 
   export default {
     data() {
@@ -132,6 +136,12 @@
           this.loading = false
           this.$message.error(error.msg)
         })
+      },
+      nameFormat(row, column, cellValue) {
+        return nameCutSensitive(cellValue)
+      },
+      phonenoFormat(row, column, cellValue) {
+        return phoneCutSensitive(cellValue)
       },
       lockedFormat(row, column, cellValue) {
         var lockStatus = ''

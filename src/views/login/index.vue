@@ -129,7 +129,7 @@
               'loginname': this.loginForm.loginname,
               'password': encryptPassword(this.loginForm.password),
               'unitid': this.loginForm.unitid,
-              'vercode': '123456'
+              'vercode': this.loginForm.vercode
             }
             this.$store.dispatch('Login', loginParams).then(response => {
               // 根据角色进入相应的首页

@@ -20,7 +20,7 @@
         </el-col>
         <el-col :span="8">
           <span>
-            {{ userForm.name }}
+            {{ nameFormat }}
           </span>
         </el-col>
       </el-row>
@@ -32,7 +32,7 @@
         </el-col>
         <el-col :span="8">
           <span>
-            {{ userForm.loginname }}
+            {{ phonenoFormat }}
           </span>
         </el-col>
         <el-col :span="4" style="text-align:right">
@@ -124,6 +124,10 @@
   import {
     getBusinessUserDetail
   } from '@/api/user'
+  import {
+    phoneCutSensitive,
+    nameCutSensitive
+  } from '@/utils/index'
 
   export default {
     data() {
@@ -134,6 +138,14 @@
     },
     created() {
       this.getUserForm()
+    },
+    computed: {
+      phonenoFormat: function() {
+        return phoneCutSensitive(this.userForm.phoneno)
+      },
+      nameFormat: function() {
+        return nameCutSensitive(this.userForm.name)
+      }
     },
     methods: {
       setRoles(roles) {

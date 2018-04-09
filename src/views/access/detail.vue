@@ -21,7 +21,7 @@
         </el-col>
         <el-col :span="8">
           <span>
-            {{ accessBean.si_phone }}
+            {{ si_phoneFormat }}
           </span>
         </el-col>
       </el-row>
@@ -76,8 +76,7 @@
           </span>
         </el-col>
         <el-col :span="8">
-          <span>
-            {{ accessBean.si_person !== null ? accessBean.si_person : '&nbsp;' }}
+          <span v-html="si_personFormat">
           </span>
         </el-col>
         <el-col :span="4" style="text-align:right">
@@ -137,6 +136,10 @@
     getAllOperationList,
     getAllInterfaceList
   } from '@/api/access'
+  import {
+    phoneCutSensitive,
+    nameCutSensitive
+  } from '@/utils/index'
 
   export default {
     data() {
@@ -182,6 +185,13 @@
           }
         }
         return ''
+      },
+      si_personFormat: function() {
+        var name = nameCutSensitive(this.accessBean.si_person)
+        return name !== '' ? name : '&nbsp;'
+      },
+      si_phoneFormat: function() {
+        return phoneCutSensitive(this.accessBean.si_phone)
       }
     },
     created() {

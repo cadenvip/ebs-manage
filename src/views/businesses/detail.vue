@@ -33,7 +33,7 @@
                   <el-col class="text-l" :span="16">
                     <p>{{ registerForm.locationName ? registerForm.locationName : '&nbsp;' }}</p>
                     <p>{{ registerForm.address ? registerForm.address : '&nbsp;' }}</p>
-                    <p>{{ registerForm.legalName ? registerForm.legalName : '&nbsp' }}</p>
+                    <p>{{ legalNameFormat }}</p>
                     <p>{{ registerForm.legalPaperType === '1' ? '身份证' : registerForm.editApproveStatus === '2' ? '户口本' : registerForm.editApproveStatus
                       === '3' ? '驾驶本' : '&nbsp;' }}</p>
                   </el-col>
@@ -48,9 +48,9 @@
                     <p>业务联系人邮箱:</p>
                   </el-col>
                   <el-col class="text-l" :span="12">
-                    <p>{{ registerForm.legalPaperNumber ? registerForm.legalPaperNumber : '&nbsp;'}}</p>
-                    <p>{{ registerForm.relationPerson ? registerForm.relationPerson : '&nbsp;'}}</p>
-                    <p>{{ registerForm.relationPhone ? registerForm.relationPhone : '&nbsp;'}}</p>
+                    <p>{{ legalPaperNumberFormat }}</p>
+                    <p>{{ relationPersonFormat }}</p>
+                    <p>{{ relationPhoneFormat }}</p>
                     <p>{{ registerForm.relationEmail ? registerForm.relationEmail : '&nbsp;'}}</p>
                   </el-col>
                 </el-row>
@@ -62,16 +62,14 @@
         <div class="part">
           <h1>售后信息</h1>
           <div class="con-box">
-            <div class="clearfix tr-con">
+            <div class="clearfix tr-con tr-con2">
               <div class="fl">
                 <el-row style="overflow: hidden;">
                   <el-col class="text-r" :span="8">
                     <p>售后联系人:</p>
-                    <p>售后处理点:</p>
                   </el-col>
                   <el-col class="text-l" :span="16">
-                    <p>{{ registerForm.sellPersonName }}</p>
-                    <p v-for="(item, index) in sellAddressListForm" :key="item.id">{{ item.locationName }} {{ item.selladdress }}</p>
+                    <p>{{ sellPersonNameFormat }}</p>
                   </el-col>
                 </el-row>
               </div>
@@ -81,11 +79,13 @@
                     <p>售后电话:</p>
                   </el-col>
                   <el-col class="text-l" :span="16">
-                    <p>{{ registerForm.sellPersonMobile }}</p>
+                    <p>{{ sellPersonMobileFormat }}</p>
                   </el-col>
                 </el-row>
               </div>
             </div>
+            <p class="bt-info" style="display:inline-block;">售后处理点:</p>
+            <p v-for="(item, index) in sellAddressListForm" :key="item.id" style="display:inline-block; margin-left:25px;color: #787878;font-size: 12px;line-height: 20px;font-weight: bold;">{{ item.locationName }} {{ item.selladdress }}</p>
           </div>
         </div>
 
@@ -100,8 +100,8 @@
                     <p>财务手机:</p>
                   </el-col>
                   <el-col class="text-l" :span="16">
-                    <p>{{ registerForm.financePersonName ? registerForm.financePersonName : '&nbsp;' }}</p>
-                    <p>{{ registerForm.financePersonMobile }}</p>
+                    <p>{{ financePersonNameFormat }}</p>
+                    <p>{{ financePersonMobileFormat }}</p>
                   </el-col>
                 </el-row>
               </div>
@@ -124,7 +124,7 @@
                     <p>能否开具发票:</p>
                   </el-col>
                   <el-col class="text-l" :span="12">
-                    <p>{{ registerForm.financePersonPhone ? registerForm.financePersonPhone : '&nbsp;' }}</p>
+                    <p v-html="financePersonPhoneFormat"></p>
                     <p>{{ registerForm.isInvoice === '1' ? '能' : registerForm.isInvoice === '0' ? '不能' : '&nbsp;' }}</p>
                   </el-col>
                 </el-row>
@@ -211,7 +211,7 @@
                 </el-row>
               </div>
             </div> -->
-            <div class="clearfix tr-con">
+            <div class="clearfix tr-con tr-con2">
               <div class="fl">
                 <el-row style="overflow: hidden;">
                   <el-col class="text-r" :span="10">
@@ -220,8 +220,9 @@
                   </el-col>
                   <el-col class="text-l" :span="14">
                     <p>{{ registerForm.aliPayNoPayable === '1' ? '启用' : registerForm.aliPayNoPayable === '0' ? '未启用' : '&nbsp;'
-                      }}</p>
-                    <p>{{ registerForm.aliPaySellerAccountName }}</p>
+                      }}
+                    </p>
+                    <p>{{ aliPaySellerAccountNameFormat }}</p>
                   </el-col>
                 </el-row>
               </div>
@@ -254,7 +255,8 @@
                   </el-col>
                   <el-col class="text-l" :span="14">
                     <p>{{ registerForm.cmPayNoPayable === '1' ? '启用' : registerForm.cmPayNoPayable === '0' ? '未启用' : '&nbsp;'
-                      }}</p>
+                      }}
+                    </p>
                   </el-col>
                 </el-row>
               </div>
@@ -288,8 +290,9 @@
                   </el-col>
                   <el-col class="text-l" :span="14">
                     <p>{{ registerForm.umPayNoPayable === '1' ? '启用' : registerForm.umPayNoPayable === '0' ? '未启用' : '&nbsp;'
-                      }}</p>
-                    <p>{{ registerForm.umPayBankAccountNo }}</p>
+                      }}
+                    </p>
+                    <p>{{ umPayBankAccountNoFormat }}</p>
                   </el-col>
                 </el-row>
               </div>
@@ -328,7 +331,7 @@
                     <p>企业营业执照:</p>
                   </el-col>
                   <el-col class="text-l" :span="16">
-                    <p>{{ registerForm.operatoridnum }}</p>
+                    <p>{{ operatoridnumFormat }}</p>
                     <p>{{ registerForm.businesslicenseNum }}</p>
                   </el-col>
                 </el-row>
@@ -371,7 +374,7 @@
         <div class="part">
           <h1>产品经营许可</h1>
           <div class="con-box">
-            <div class="clearfix tr-con">
+            <div class="clearfix tr-con tr-con2">
               <div class="fl">
                 <el-row style="overflow: hidden;">
                   <el-col class="text-r" :span="8">
@@ -453,7 +456,7 @@
                     <p>雇员数量:</p>
                   </el-col>
                   <el-col class="text-l" :span="16">
-                    <p>{{ registerForm.officePhone ? registerForm.officePhone : '&nbsp;' }}</p>
+                    <p v-html="officePhoneFormat"></p>
                     <p>{{ registerForm.operateHours ? registerForm.operateHours : '&nbsp;' }}</p>
                     <p>{{ registerForm.employeesNum ? registerForm.employeesNum : '&nbsp' }}</p>
                   </el-col>
@@ -497,6 +500,12 @@
   import {
     getLocationInfoById
   } from '@/api/regionselecter'
+  import {
+    phoneCutSensitive,
+    nameCutSensitive,
+    idcardCutSensitive,
+    bankCardNoCutSensitive
+  } from '@/utils/index'
 
   export default {
     data() {
@@ -619,6 +628,49 @@
     },
     created() {
       this.getBusinessesInfo()
+    },
+    computed: {
+      legalNameFormat: function () {
+        return nameCutSensitive(this.registerForm.legalName)
+      },
+      legalPaperNumberFormat: function () {
+        return idcardCutSensitive(this.registerForm.legalPaperNumber)
+      },
+      relationPersonFormat: function () {
+        return nameCutSensitive(this.registerForm.relationPerson)
+      },
+      relationPhoneFormat: function () {
+        return phoneCutSensitive(this.registerForm.relationPhone)
+      },
+      sellPersonNameFormat: function () {
+        return nameCutSensitive(this.registerForm.sellPersonName)
+      },
+      sellPersonMobileFormat: function () {
+        return phoneCutSensitive(this.registerForm.sellPersonMobile)
+      },
+      financePersonNameFormat: function () {
+        return nameCutSensitive(this.registerForm.financePersonName)
+      },
+      financePersonMobileFormat: function () {
+        return phoneCutSensitive(this.registerForm.financePersonMobile)
+      },
+      financePersonPhoneFormat: function () {
+        var phone = phoneCutSensitive(this.registerForm.financePersonPhone)
+        return phone !== '' ? phone : '&nbsp;'
+      },
+      aliPaySellerAccountNameFormat: function () {
+        return nameCutSensitive(this.registerForm.aliPaySellerAccountName)
+      },
+      umPayBankAccountNoFormat: function () {
+        return bankCardNoCutSensitive(this.registerForm.umPayBankAccountNo)
+      },
+      operatoridnumFormat: function () {
+        return idcardCutSensitive(this.registerForm.operatoridnum)
+      },
+      officePhoneFormat: function () {
+        var phone = phoneCutSensitive(this.registerForm.officePhone)
+        return phone !== '' ? phone : '&nbsp;'
+      }
     },
     methods: {
       getItem(arr, val) {
@@ -783,7 +835,7 @@
     width: 960px;
   }
 
-  .tr-con {
+  .tr-con2 {
     border-bottom: 1px solid #E6E6E6;
     padding-bottom: 12px;
   }
@@ -804,7 +856,7 @@
     font-weight: bold;
   }
 
-  .bt-info{
+  .bt-info {
     color: #787878;
     font-size: 12px;
     line-height: 20px;
