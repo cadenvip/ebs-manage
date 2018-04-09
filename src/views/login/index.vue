@@ -6,7 +6,7 @@
         <span class="svg-container svg-container_login">
           <svg-icon icon-class="user" />
         </span>
-        <el-input name="loginname" type="text" v-model="loginForm.loginname" placeholder="请输入账号" clearable v-on:blur="getUnitids" />
+        <el-input name="loginname" type="text" v-model="loginForm.loginname" :maxlength=16 placeholder="请输入账号" clearable v-on:blur="getUnitids" />
       </el-form-item>
       <el-form-item prop="unitid">
         <span class="svg-container svg-container_login">
@@ -20,7 +20,7 @@
         <span class="svg-container">
           <svg-icon icon-class="password"></svg-icon>
         </span>
-        <el-input name="password" :type="pwdType" @keyup.enter.native="handleLogin" clearable v-model="loginForm.password" placeholder="请输入密码"></el-input>
+        <el-input name="password" :type="pwdType" @keyup.enter.native="handleLogin" :maxlength=20 clearable v-model="loginForm.password" placeholder="请输入密码"></el-input>
         <span class="show-pwd" @click="showPwd">
           <svg-icon icon-class="eye" />
         </span>
@@ -29,7 +29,7 @@
         <span class="svg-container svg-container_login">
           <svg-icon icon-class="verifycode" />
         </span>
-        <el-input name="vercode" type="text" v-model="loginForm.vercode" placeholder="请输入验证码" style="width:50%;display:inline-block;" />
+        <el-input name="vercode" type="text" v-model="loginForm.vercode" :maxlength=6 placeholder="请输入验证码" style="width:50%;display:inline-block;" />
         <el-button type="text" style="margin-top:6px;margin-left: 50px;" @click.native.prevent="getVercode" :disabled="disableBtn">
           获取验证码
         </el-button>

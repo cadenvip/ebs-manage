@@ -17,7 +17,7 @@
         </el-select>
       </el-col>
       <el-col :span="10">
-        <el-input v-model="town_village" clearable placeholder="请输入详细地址" @blur="town_villageChanged"></el-input>
+        <el-input v-model="town_village" clearable :maxlength=32 placeholder="请输入详细地址" @blur="town_villageChanged"></el-input>
       </el-col>
     </el-row>
   </div>

@@ -15,18 +15,18 @@
           <el-form ref="registerForm" :model="registerForm" :rules="registerRules" label-width="170px" style="margin:6px">
             <h5>企业基本信息</h5>
             <el-form-item label="企业名称：" prop="businessesName">
-              <el-input v-model="registerForm.businessesName" clearable style="width: 220px;" placeholder="请输入企业名称"></el-input>
+              <el-input v-model="registerForm.businessesName" :maxlength=16 clearable style="width: 220px;" placeholder="请输入企业名称"></el-input>
             </el-form-item>
             <el-form-item label="企业地址：" prop="locationCode">
               <RegionSelector v-model="registerForm.locationCode" :grade="4" :showCountry="false" @locationChanged="getLocationCode" :locationId="registerForm.locationCode"></RegionSelector>
             </el-form-item>
             <el-form-item label="详细地址：" prop="address">
-              <el-input v-model="registerForm.address" clearable style="width: 400px;" placeholder="请输入企业详细地址"></el-input>
+              <el-input v-model="registerForm.address" :maxlength=32 clearable style="width: 400px;" placeholder="请输入企业详细地址"></el-input>
             </el-form-item>
             <el-row :gutter="20">
               <el-col :span="10">
                 <el-form-item label="业务联系人：" prop="relationPerson">
-                  <el-input v-model="registerForm.relationPerson" clearable style="width: 220px;" placeholder="请输入业务联系人"></el-input>
+                  <el-input v-model="registerForm.relationPerson" :maxlength=16 clearable style="width: 220px;" placeholder="请输入业务联系人"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="14" style="padding-top:8px">
@@ -46,7 +46,7 @@
             <el-row :gutter="20">
               <el-col :span="10">
                 <el-form-item label="售后联系人：" prop="sellPersonName">
-                  <el-input v-model="registerForm.sellPersonName" clearable style="width: 220px;" placeholder="请输入售后联系人"></el-input>
+                  <el-input v-model="registerForm.sellPersonName" :maxlength=16 clearable style="width: 220px;" placeholder="请输入售后联系人"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="14" style="padding-top:8px">
@@ -63,7 +63,7 @@
             <el-row :gutter="20">
               <el-col :span="10">
                 <el-form-item label="财务联系人：" prop="financePersonName">
-                  <el-input v-model="registerForm.financePersonName" clearable style="width: 220px;" placeholder="请输入财务联系人"></el-input>
+                  <el-input v-model="registerForm.financePersonName" :maxlength=16 clearable style="width: 220px;" placeholder="请输入财务联系人"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="14" style="padding-top:8px">
@@ -89,33 +89,33 @@
               <el-table-column property="num" label="编号" width="50"></el-table-column>
               <el-table-column property="name" label="商品名称" width="120">
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.name" placeholder="请输入名称"></el-input>
+                  <el-input v-model="scope.row.name" :maxlength=16 placeholder="请输入名称"></el-input>
                 </template>
               </el-table-column>
               <el-table-column property="unit" label="商品规格" width="90">
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.unit" placeholder="请输入规格"></el-input>
+                  <el-input v-model="scope.row.unit" :maxlength=8 placeholder="请输入规格"></el-input>
                 </template>
               </el-table-column>
               <el-table-column property="origin" label="商品产地" width="120">
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.origin" placeholder="请输入产地"></el-input>
+                  <el-input v-model="scope.row.origin" :maxlength=16 placeholder="请输入产地"></el-input>
                 </template>
               </el-table-column>
               <el-table-column property="price" label="市场价格(元)" width="110">
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.price" placeholder="请输入价格">
+                  <el-input v-model="scope.row.price" :maxlength=16 placeholder="请输入价格">
                   </el-input>
                 </template>
               </el-table-column>
               <el-table-column property="description" label="商品特色" width="240">
                 <template slot-scope="scope">
-                  <el-input type="textarea" v-model="scope.row.description" placeholder="请输入特色"></el-input>
+                  <el-input type="textarea" v-model="scope.row.description" :maxlength=32 placeholder="请输入特色"></el-input>
                 </template>
               </el-table-column>
               <el-table-column property="url" label="介绍链接" width="200">
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.url" placeholder="请输入介绍链接"></el-input>
+                  <el-input v-model="scope.row.url" :maxlength=200 placeholder="请输入介绍链接"></el-input>
                 </template>
               </el-table-column>
             </el-table>

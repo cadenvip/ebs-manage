@@ -3,7 +3,7 @@
     <h4 class="title">新增敏感词</h4>
     <el-form ref="sensitiveForm" :model="sensitiveForm" :rules="rules" label-width="120px">
       <el-form-item label="敏感词：" prop="word">
-        <el-input v-model="sensitiveForm.word" style="width: 300px;" placeholder="请输入账号"></el-input>
+        <el-input v-model="sensitiveForm.word" :maxlength=16 style="width: 300px;" placeholder="请输入账号"></el-input>
       </el-form-item>
       <br/>
       <div style="text-align: center">

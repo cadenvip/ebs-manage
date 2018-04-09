@@ -8,12 +8,12 @@
             <el-row :gutter="20">
               <el-col :span="12">
                 <el-form-item label="企业名称：" prop="businessesName">
-                  <el-input v-model="registerForm.businessesName" clearable style="width: 220px;" placeholder="请输入企业名称"></el-input>
+                  <el-input v-model="registerForm.businessesName" :maxlength=16 clearable style="width: 220px;" placeholder="请输入企业名称"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="12">
                 <el-form-item label="企业简称：" prop="businessesShortName">
-                  <el-input v-model="registerForm.businessesShortName" clearable style="width: 220px;" placeholder="请输入企业简称"></el-input>
+                  <el-input v-model="registerForm.businessesShortName" :maxlength=16 clearable style="width: 220px;" placeholder="请输入企业简称"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -37,10 +37,10 @@
               <RegionSelector v-model="registerForm.locationCode" :grade="4" :showCountry="false" @locationChanged="getLocationCode" :locationId="registerForm.locationCode"></RegionSelector>
             </el-form-item>
             <el-form-item label="详细地址：" prop="address">
-              <el-input v-model="registerForm.address" clearable style="width: 400px;" placeholder="请输入企业详细地址"></el-input>
+              <el-input v-model="registerForm.address" :maxlength=32 clearable style="width: 400px;" placeholder="请输入企业详细地址"></el-input>
             </el-form-item>
             <el-form-item label="法人姓名：" prop="legalName">
-              <el-input v-model="registerForm.legalName" clearable style="width: 220px;" placeholder="请输入法人姓名"></el-input>
+              <el-input v-model="registerForm.legalName" :maxlength=16 clearable style="width: 220px;" placeholder="请输入法人姓名"></el-input>
             </el-form-item>
             <el-row :gutter="20">
               <el-col :span="12">
@@ -54,14 +54,14 @@
               </el-col>
               <el-col :span="12">
                 <el-form-item label="法人证件号码：" prop="legalPaperNumber">
-                  <el-input v-model="registerForm.legalPaperNumber" clearable style="width: 220px;" placeholder="请输入法人证件号码"></el-input>
+                  <el-input v-model="registerForm.legalPaperNumber" :maxlength=18 clearable style="width: 220px;" placeholder="请输入法人证件号码"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
             <el-row :gutter="20">
               <el-col :span="9">
                 <el-form-item label="业务联系人：" prop="relationPerson">
-                  <el-input v-model="registerForm.relationPerson" clearable style="width: 220px;" placeholder="请输入业务联系人"></el-input>
+                  <el-input v-model="registerForm.relationPerson" :maxlength=16 clearable style="width: 220px;" placeholder="请输入业务联系人"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="15" style="padding-top:8px;padding-left:30px">
@@ -79,14 +79,14 @@
               </el-col>
             </el-row>
             <el-form-item label="业务联系人邮箱：" prop="relationEmail">
-              <el-input v-model="registerForm.relationEmail" clearable style="width: 220px;" placeholder="请输入业务联系人邮箱"></el-input>
+              <el-input v-model="registerForm.relationEmail" :maxlength=32 clearable style="width: 220px;" placeholder="请输入业务联系人邮箱"></el-input>
             </el-form-item>
             <hr style="height:1px;border:none;border-top:1px dashed #0066CC;" />
             <h5>售后信息</h5>
             <el-row :gutter="20">
               <el-col :span="9">
                 <el-form-item label="售后联系人：" prop="sellPersonName">
-                  <el-input v-model="registerForm.sellPersonName" clearable style="width: 220px;" placeholder="请输入售后联系人"></el-input>
+                  <el-input v-model="registerForm.sellPersonName" :maxlength=16 clearable style="width: 220px;" placeholder="请输入售后联系人"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="15" style="padding-top:8px;padding-left:30px">
@@ -118,7 +118,7 @@
             <el-row :gutter="20">
               <el-col :span="9">
                 <el-form-item label="财务联系人：" prop="financePersonName">
-                  <el-input v-model="registerForm.financePersonName" clearable style="width: 220px;" placeholder="请输入财务联系人"></el-input>
+                  <el-input v-model="registerForm.financePersonName" :maxlength=16 clearable style="width: 220px;" placeholder="请输入财务联系人"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="15" style="padding-top:8px;padding-left:30px">
@@ -133,19 +133,19 @@
               </el-col>
               <el-col :span="12">
                 <el-form-item label="财务联系人电话：" prop="financePersonPhone">
-                  <el-input v-model="registerForm.financePersonPhone" clearable style="width: 220px;" placeholder="请输入财务联系人电话"></el-input>
+                  <el-input v-model="registerForm.financePersonPhone" :maxlength=16 clearable style="width: 220px;" placeholder="请输入财务联系人电话"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
             <el-row :gutter="20">
               <el-col :span="12">
                 <el-form-item label="财务邮箱：" prop="financePersonEmail">
-                  <el-input v-model="registerForm.financePersonEmail" clearable style="width: 220px;" placeholder="请输入财务邮箱"></el-input>
+                  <el-input v-model="registerForm.financePersonEmail" :maxlength=32 clearable style="width: 220px;" placeholder="请输入财务邮箱"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="12">
                 <el-form-item label="财务通信地址：" prop="financePersonAddress">
-                  <el-input v-model="registerForm.financePersonAddress" clearable style="width: 220px;" placeholder="请输入通信地址"></el-input>
+                  <el-input v-model="registerForm.financePersonAddress" :maxlength=32 clearable style="width: 220px;" placeholder="请输入通信地址"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -165,33 +165,33 @@
               <el-table-column property="num" label="编号" width="50"></el-table-column>
               <el-table-column property="name" label="商品名称" width="120">
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.name" placeholder="请输入名称"></el-input>
+                  <el-input v-model="scope.row.name" :maxlength=16 placeholder="请输入名称"></el-input>
                 </template>
               </el-table-column>
               <el-table-column property="unit" label="商品规格" width="90">
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.unit" placeholder="请输入规格"></el-input>
+                  <el-input v-model="scope.row.unit" :maxlength=8 placeholder="请输入规格"></el-input>
                 </template>
               </el-table-column>
               <el-table-column property="origin" label="商品产地" width="120">
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.origin" placeholder="请输入产地"></el-input>
+                  <el-input v-model="scope.row.origin" :maxlength=16 placeholder="请输入产地"></el-input>
                 </template>
               </el-table-column>
               <el-table-column property="price" label="市场价格(元)" width="110">
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.price" placeholder="请输入价格">
+                  <el-input v-model="scope.row.price" :maxlength=16 placeholder="请输入价格">
                   </el-input>
                 </template>
               </el-table-column>
               <el-table-column property="description" label="商品特色" width="240">
                 <template slot-scope="scope">
-                  <el-input type="textarea" v-model="scope.row.description" placeholder="请输入特色"></el-input>
+                  <el-input type="textarea" v-model="scope.row.description" :maxlength=32 placeholder="请输入特色"></el-input>
                 </template>
               </el-table-column>
               <el-table-column property="url" label="介绍链接" width="200">
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.url" placeholder="请输入介绍链接"></el-input>
+                  <el-input v-model="scope.row.url" :maxlength=200 placeholder="请输入介绍链接"></el-input>
                 </template>
               </el-table-column>
             </el-table>
@@ -236,17 +236,17 @@
             <el-row :gutter="20">
               <el-col :span="12">
                 <el-form-item label="支付宝卖家账号：" prop="aliPayAccount">
-                  <el-input v-model="registerForm.aliPayAccount" clearable style="width: 220px;" placeholder="请输入支付宝卖家账号" :disabled="!registerForm.aliPayNoPayable"></el-input>
+                  <el-input v-model="registerForm.aliPayAccount" :maxlength=16 clearable style="width: 220px;" placeholder="请输入支付宝卖家账号" :disabled="!registerForm.aliPayNoPayable"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="12">
                 <el-form-item label="支付宝平台签名Key：" prop="aliPaySignKey">
-                  <el-input v-model="registerForm.aliPaySignKey" clearable style="width: 220px;" placeholder="请输入支付宝平台签名Key" :disabled="!registerForm.aliPayNoPayable"></el-input>
+                  <el-input v-model="registerForm.aliPaySignKey" :maxlength=16 clearable style="width: 220px;" placeholder="请输入支付宝平台签名Key" :disabled="!registerForm.aliPayNoPayable"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
             <el-form-item label="支付宝卖家名字：" prop="aliPaySellerAccountName">
-              <el-input v-model="registerForm.aliPaySellerAccountName" clearable style="width: 220px;" placeholder="请输入支付宝卖家名字" :disabled="!registerForm.aliPayNoPayable"></el-input>
+              <el-input v-model="registerForm.aliPaySellerAccountName" :maxlength=16 clearable style="width: 220px;" placeholder="请输入支付宝卖家名字" :disabled="!registerForm.aliPayNoPayable"></el-input>
             </el-form-item>
             <el-form-item label="启用手机和包支付：" prop="cmPayNoPayable">
               <el-checkbox v-model="registerForm.cmPayNoPayable"></el-checkbox>
@@ -254,12 +254,12 @@
             <el-row :gutter="20">
               <el-col :span="12">
                 <el-form-item label="和包支付平台商家ID：" prop="cmPayMerchantId">
-                  <el-input v-model="registerForm.cmPayMerchantId" clearable style="width: 220px;" placeholder="请输入和包支付平台商家ID" :disabled="!registerForm.cmPayNoPayable"></el-input>
+                  <el-input v-model="registerForm.cmPayMerchantId" :maxlength=16 clearable style="width: 220px;" placeholder="请输入和包支付平台商家ID" :disabled="!registerForm.cmPayNoPayable"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="12">
                 <el-form-item label="和包支付平台签名KEY：" prop="cmPaySignKey">
-                  <el-input v-model="registerForm.cmPaySignKey" clearable style="width: 220px;" placeholder="请输入和包支付平台签名KEY" :disabled="!registerForm.cmPayNoPayable"></el-input>
+                  <el-input v-model="registerForm.cmPaySignKey" :maxlength=16 clearable style="width: 220px;" placeholder="请输入和包支付平台签名KEY" :disabled="!registerForm.cmPayNoPayable"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -269,22 +269,22 @@
             <el-row :gutter="20">
               <el-col :span="12">
                 <el-form-item label="联动优势平台商家ID：" prop="umPayMerchantId">
-                  <el-input v-model="registerForm.umPayMerchantId" clearable style="width: 220px;" placeholder="请输入联动优势平台商家ID" :disabled="!registerForm.umPayNoPayable"></el-input>
+                  <el-input v-model="registerForm.umPayMerchantId" :maxlength=16 clearable style="width: 220px;" placeholder="请输入联动优势平台商家ID" :disabled="!registerForm.umPayNoPayable"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="12">
                 <el-form-item label="联动优势银行账号名：" prop="umPayBankAccountName">
-                  <el-input v-model="registerForm.umPayBankAccountName" clearable style="width: 220px;" placeholder="请输入联动优势银行账号名" :disabled="!registerForm.umPayNoPayable"></el-input>
+                  <el-input v-model="registerForm.umPayBankAccountName" :maxlength=16 clearable style="width: 220px;" placeholder="请输入联动优势银行账号名" :disabled="!registerForm.umPayNoPayable"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
             <el-form-item label="联动优势银行账号：" prop="umPayBankAccountNo">
-              <el-input v-model="registerForm.umPayBankAccountNo" clearable style="width: 220px;" placeholder="联动优势银行账号" :disabled="!registerForm.umPayNoPayable"></el-input>
+              <el-input v-model="registerForm.umPayBankAccountNo" :maxlength=20 clearable style="width: 220px;" placeholder="联动优势银行账号" :disabled="!registerForm.umPayNoPayable"></el-input>
             </el-form-item>
             <hr style="height:1px;border:none;border-top:1px dashed #0066CC;" />
             <h5>企业经营资质</h5>
             <el-form-item label="企业营业执照：" prop="businesslicenseNum">
-              <el-input v-model="registerForm.businesslicenseNum" clearable style="width: 270px;" placeholder="请输入营业执照号码"></el-input>
+              <el-input v-model="registerForm.businesslicenseNum" :maxlength=32 clearable style="width: 270px;" placeholder="请输入营业执照号码"></el-input>
             </el-form-item>
             <el-form-item label="营业执照：" prop="licencepicpath">
               <el-upload action="http://10.189.13.151:8080/ebs/common/upload" list-type="text" :show-file-list="false" :on-success="handleLicenceSuccess"
@@ -349,55 +349,55 @@
             <el-row :gutter="20">
               <el-col :span="12">
                 <el-form-item label="注册资金：" prop="registerMoney">
-                  <el-input v-model="registerForm.registerMoney" clearable style="width: 220px;" placeholder="请输入注册资金"></el-input>
+                  <el-input v-model="registerForm.registerMoney" :maxlength=16 clearable style="width: 220px;" placeholder="请输入注册资金"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="12">
                 <el-form-item label="保证金：" prop="margin">
-                  <el-input v-model="registerForm.margin" clearable style="width: 220px;" placeholder="请输入保证金"></el-input>
+                  <el-input v-model="registerForm.margin" :maxlength=16 clearable style="width: 220px;" placeholder="请输入保证金"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
             <el-row :gutter="20">
               <el-col :span="12">
                 <el-form-item label="违约金：" prop="liquidatedDamages">
-                  <el-input v-model="registerForm.liquidatedDamages" clearable style="width: 220px;" placeholder="请输入违约金"></el-input>
+                  <el-input v-model="registerForm.liquidatedDamages" :maxlength=16 clearable style="width: 220px;" placeholder="请输入违约金"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="12">
                 <el-form-item label="税务登记号：" prop="taxRegistrationNum">
-                  <el-input v-model="registerForm.taxRegistrationNum" clearable style="width: 220px;" placeholder="请输入税务登记号"></el-input>
+                  <el-input v-model="registerForm.taxRegistrationNum" :maxlength=16 clearable style="width: 220px;" placeholder="请输入税务登记号"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
             <el-row :gutter="20">
               <el-col :span="12">
                 <el-form-item label="办公室电话：" prop="officePhone">
-                  <el-input v-model="registerForm.officePhone" clearable style="width: 220px;" placeholder="请输入办公室电话"></el-input>
+                  <el-input v-model="registerForm.officePhone" :maxlength=16 clearable style="width: 220px;" placeholder="请输入办公室电话"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="12">
                 <el-form-item label="营业时间：" prop="operateHours">
-                  <el-input v-model="registerForm.operateHours" clearable style="width: 220px;" placeholder="请输入营业时间"></el-input>
+                  <el-input v-model="registerForm.operateHours" :maxlength=16 clearable style="width: 220px;" placeholder="请输入营业时间"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
             <el-row :gutter="20">
               <el-col :span="12">
                 <el-form-item label="雇员数量：" prop="employeesNum">
-                  <el-input v-model="registerForm.employeesNum" clearable style="width: 220px;" placeholder="请输入雇员数量"></el-input>
+                  <el-input v-model="registerForm.employeesNum" :maxlength=16 clearable style="width: 220px;" placeholder="请输入雇员数量"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="12">
                 <el-form-item label="传真：" prop="fax">
-                  <el-input v-model="registerForm.fax" clearable style="width: 220px;" placeholder="请输入传真号码"></el-input>
+                  <el-input v-model="registerForm.fax" :maxlength=16 clearable style="width: 220px;" placeholder="请输入传真号码"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
             <el-row :gutter="20">
               <el-col :span="12">
                 <el-form-item label="邮编：" prop="zipCode">
-                  <el-input v-model="registerForm.zipCode" clearable style="width: 220px;" placeholder="请输入邮编"></el-input>
+                  <el-input v-model="registerForm.zipCode" :maxlength=6 clearable style="width: 220px;" placeholder="请输入邮编"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="12">

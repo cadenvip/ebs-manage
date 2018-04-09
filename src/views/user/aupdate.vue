@@ -14,7 +14,7 @@
         </el-checkbox-group>
       </el-form-item>
       <el-form-item label="账号：" prop="loginname">
-        <el-input v-model="userForm.loginname" :maxlength=11 style="width: 220px;" placeholder="请输入账号" disabled></el-input>
+        <el-input v-model="userForm.loginname" :maxlength=16 style="width: 220px;" placeholder="请输入账号" disabled></el-input>
       </el-form-item>
       <el-row :gutter="20">
         <el-col :span="8">
@@ -29,7 +29,7 @@
       <el-row :gutter="20">
         <el-col :span="8">
           <el-form-item label="姓名：" prop="name">
-            <el-input v-model="userForm.name" style="width: 220px;" placeholder="请输入姓名"></el-input>
+            <el-input v-model="userForm.name" :maxlength=16 style="width: 220px;" placeholder="请输入姓名"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="16" style="padding-top:8px">
@@ -46,14 +46,14 @@
       <el-row :gutter="20">
         <el-col :span="8">
           <el-form-item label="单位：" prop="unitname">
-            <el-input v-model="userForm.unitname" style="width: 220px;" :disabled="true"></el-input>
+            <el-input v-model="userForm.unitname" :maxlength=16 style="width: 220px;" :disabled="true"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
       <el-row :gutter="20">
         <el-col :span="8">
           <el-form-item label="邮件：" prop="email">
-            <el-input v-model="userForm.email" style="width: 220px;" placeholder="请输入邮件"></el-input>
+            <el-input v-model="userForm.email" :maxlength=32 style="width: 220px;" placeholder="请输入邮件"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="16" style="padding-top:8px">
@@ -63,7 +63,7 @@
       <el-row :gutter="20">
         <el-col :span="8">
           <el-form-item label="地址：" prop="address">
-            <el-input v-model="userForm.address" style="width: 220px;" placeholder="请输入地址"></el-input>
+            <el-input v-model="userForm.address" :maxlength=32 style="width: 220px;" placeholder="请输入地址"></el-input>
           </el-form-item>
         </el-col>
       </el-row>

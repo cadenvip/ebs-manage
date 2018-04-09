@@ -7,25 +7,25 @@
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item label="接入码：" prop="code">
-              <el-input v-model="accessBean.code" style="width: 300px;" placeholder="请输入接入码"></el-input>
+              <el-input v-model="accessBean.code" style="width: 300px;" :maxlength=16 placeholder="请输入接入码"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="接入方名称：" prop="si_name">
-              <el-input v-model="accessBean.si_name" style="width: 300px;" placeholder="请输入接入名称"></el-input>
+              <el-input v-model="accessBean.si_name" style="width: 300px;" :maxlength=16 placeholder="请输入接入名称"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item label="密码：" prop="password">
-              <el-input type="password" v-model="accessBean.password" style="width: 300px;" placeholder="请输入密码"></el-input>
+              <el-input type="password" v-model="accessBean.password" :maxlength=16 style="width: 300px;" placeholder="请输入密码"></el-input>
               <PasswordStrength :password="accessBean.password" @pwdInfo="getPwdInfo"></PasswordStrength>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="确认密码：" prop="repassword">
-              <el-input type="password" v-model="accessBean.repassword" style="width: 300px;" placeholder="请再次输入密码"></el-input>
+              <el-input type="password" v-model="accessBean.repassword" :maxlength=16 style="width: 300px;" placeholder="请再次输入密码"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -47,17 +47,17 @@
           </el-col>
         </el-row>
         <el-form-item label="系统地址：" prop="si_url">
-          <el-input v-model="accessBean.si_url" style="width: 700px;" placeholder="请输入系统地址url"></el-input>
+          <el-input v-model="accessBean.si_url" style="width: 700px;" :maxlength=200 placeholder="请输入系统地址url"></el-input>
         </el-form-item>
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item label="联系人：" prop="si_person">
-              <el-input v-model="accessBean.si_person" style="width: 300px;" placeholder="请输入联系人"></el-input>
+              <el-input v-model="accessBean.si_person" style="width: 300px;" :maxlength=16 placeholder="请输入联系人"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="联系电话：" prop="si_phone">
-              <el-input v-model="accessBean.si_phone" style="width: 300px;" :maxlength="13" placeholder="请输入联系电话"></el-input>
+              <el-input v-model="accessBean.si_phone" style="width: 300px;" :maxlength=16 placeholder="请输入联系电话"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -78,7 +78,7 @@
           </el-col>
         </el-row>
         <el-form-item label="备注：" prop="remark">
-          <el-input v-model="accessBean.remark" type="textarea" style="width:700px;min-heigh:100px" placeholder="请输入备注"></el-input>
+          <el-input v-model="accessBean.remark" type="textarea" :maxlength=200 style="width:700px;min-heigh:100px" placeholder="请输入备注"></el-input>
         </el-form-item>
       </el-form>
     </div>
@@ -130,7 +130,7 @@
       </el-form>
       <br/>
       <el-table :data="operationList" ref="operationTable" :row-key="getOpRowKey" tooltip-effect="dark" @selection-change="opSelectionChange" border stripe fit highlight-current-row style="width:100%">
-        <el-table-column type="selection" :reserve-selection="true" ></el-table-column>
+        <el-table-column type="selection" :reserve-selection="true"></el-table-column>
         <el-table-column label='业务名称' prop="operationname" align="center"></el-table-column>
         <el-table-column label="业务编号" prop="operationcode" align="center"></el-table-column>
         <el-table-column label="业务启用时间" prop="startdate" align="center"></el-table-column>
@@ -160,8 +160,8 @@
         </el-row>
       </el-form>
       <br/>
-      <el-table :data="interfaceList" ref="interfaceTable" :row-key="getInRowKey" tooltip-effect="dark" @selection-change="inSelectionChange" border stripe fit highlight-current-row style="width:100%">
-        <el-table-column type="selection" :reserve-selection="true" ></el-table-column>
+      <el-table :data="interfaceList" ref="interfaceTable" :row-key="getInRowKey" tooltip-effect="dark" @selection-change="inSelectionChange" border stripe fit highlight-current-row style="width:100%;">
+        <el-table-column type="selection" :reserve-selection="true"></el-table-column>
         <el-table-column label="接口名称" prop="inter_name" align="center"></el-table-column>
         <el-table-column label="接口方法" prop="inter_method" align="center"></el-table-column>
         <el-table-column label="版本" prop="inter_version" align="center"></el-table-column>

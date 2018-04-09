@@ -16,7 +16,7 @@
             <h5>企业经营资质</h5>
             <hr style="height:1px;border:none;border-top:1px dashed #0066CC;" />
             <el-form-item label="企业营业执照：" prop="businesslicenseNum">
-              <el-input v-model="registerForm.businesslicenseNum" clearable style="width: 270px;" placeholder="请输入营业执照号码"></el-input>
+              <el-input v-model="registerForm.businesslicenseNum" :maxlength=32 clearable style="width: 270px;" placeholder="请输入营业执照号码"></el-input>
             </el-form-item>
             <el-form-item label="营业执照：" prop="licencepicpath">
               <el-upload action="http://183.230.100.168/upload" list-type="text" :show-file-list="false" :on-success="handleLicenceSuccess"
