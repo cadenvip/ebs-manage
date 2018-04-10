@@ -2,7 +2,7 @@
   <div class="LocationSelector">
     <el-row :gutter="6">
       <el-col :span="10" :offset="6">
-        <el-input placeholder="输入关键字进行过滤" v-model="filterText"></el-input>
+        <el-input v-model="filterText" clearable placeholder="输入关键字进行过滤"></el-input>
       </el-col>
       <el-col :span="2">
         <el-button type="primary" @click.native.prevent="queryLocationName">查询</el-button>
@@ -53,6 +53,13 @@
           locationLevel: ''
         },
         loading: false
+      }
+    },
+    watch: {
+      filterText: function() {
+        if (this.filterText === '') {
+          this.queryLocationName()
+        }
       }
     },
     methods: {

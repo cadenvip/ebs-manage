@@ -93,18 +93,32 @@
 <script>
   import {
     updateUser,
+    updateBusinessUser,
     modifyPassword
   } from '@/api/user'
   import {
+    validateMobilePhone,
     validateEmail
   } from '@/utils/validate'
   import PasswordStrength from '@/components/PasswordStrength/index'
   import {
     encryptPassword
   } from '@/utils/index'
-
+  import {
+    getRoleType
+  } from '@/utils/auth'
   export default {
     data() {
+      var validateCellphone = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('请输入手机号码'))
+        } else {
+          if (!validateMobilePhone(value.trim())) {
+            callback(new Error('请输入有效的手机号码'))
+          }
+          callback()
+        }
+      }
       var validatePass = (rule, value, callback) => {
         if (value === '') {
           callback(new Error('请输入密码'))
@@ -144,8 +158,10 @@
           id: '',
           loginname: '',
           name: '',
+          locationid: '',
           locationname: '',
           phoneno: '',
+          unitid: '',
           unitname: '',
           email: '',
           address: ''
@@ -161,6 +177,11 @@
             required: true,
             message: '请输入名称',
             trigger: 'blur'
+          }],
+          phoneno: [{
+            required: true,
+            trigger: 'blur',
+            validator: validateCellphone
           }],
           locationname: [{
             required: true,
@@ -227,15 +248,40 @@
           this.$message.error('请输入姓名！')
           return
         }
-        updateUser(this.userForm).then(response => {
-          if (response.status === 200) {
-            this.$message.success('修改个人信息成功！')
-          } else {
-            this.$message.error(response.msg)
-          }
-        }).catch(error => {
-          this.$message.error(error.msg)
-        })
+        var params = {
+          'id': `${this.userForm.id}`,
+          'loginname': this.userForm.loginname,
+          'name': this.userForm.name,
+          'locationid': this.userForm.locationid,
+          'phoneno': this.userForm.phoneno,
+          'unitid': this.userForm.unitid,
+          'email': this.userForm.email !== null ? this.userForm.email : '',
+          'address': this.userForm.address !== null ? this.userForm.address : ''
+        }
+        var roletype = getRoleType()
+        if (roletype !== '1') {
+          // 商家
+          updateBusinessUser(params).then(response => {
+            if (response.status === 200) {
+              this.$message.success('修改个人信息成功，重新登录后生效！')
+            } else {
+              this.$message.error(response.msg)
+            }
+          }).catch(error => {
+            this.$message.error(error.msg)
+          })
+        } else {
+          // 管理员
+          updateUser(params).then(response => {
+            if (response.status === 200) {
+              this.$message.success('修改个人信息成功，重新登录后生效！')
+            } else {
+              this.$message.error(response.msg)
+            }
+          }).catch(error => {
+            this.$message.error(error.msg)
+          })
+        }
       },
       modifyPwd() {
         this.dialogVisible = true
@@ -251,8 +297,19 @@
         }
         modifyPassword(params).then(response => {
           if (response.status === 200) {
-            this.$message.success('修改密码成功！')
+            // this.$message.success('修改密码成功！')
             this.dialogVisible = false
+            this.$confirm(`修改密码成功！是否重新登录?`, '提示', {
+              confirmButtonText: '是',
+              cancelButtonText: '否',
+              type: 'warning'
+            }).then(() => {
+              this.$router.push({
+                path: '/login'
+              })
+            }).catch(() => {
+              console.log('未重新登录')
+            })
           } else {
             this.$message.error(response.msg)
           }

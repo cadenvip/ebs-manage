@@ -10,7 +10,7 @@
         </el-col>
         <el-col :span="10">
           <el-form-item label="所属区域：">
-            <el-input v-model="searchForm.locationname" clearable style="width: 300px;" @focus="handleLocationFocus" placeholder="请选择归属区域"></el-input>
+            <el-input v-model="searchForm.locationname" style="width: 300px;" @focus="handleLocationFocus" placeholder="请选择归属区域"></el-input>
           </el-form-item>  
         </el-col>
       </el-row>

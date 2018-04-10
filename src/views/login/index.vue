@@ -220,9 +220,10 @@
           'password': encryptPassword(this.loginForm.password),
           'unitid': this.loginForm.unitid
         }
+        this.disableBtn = true
         getVercode(params).then(response => {
           if (response.status === 200) {
-            const TIME_COUNT = 60
+            const TIME_COUNT = 300
             if (!this.timer) {
               this.count = TIME_COUNT
               this.disableBtn = false
@@ -240,9 +241,11 @@
             }
           } else {
             this.$message.error(response.msg)
+            this.disableBtn = false
           }
         }).catch(error => {
           this.$message.error(error.msg)
+          this.disableBtn = false
         })
       },
       handleRegist() {
