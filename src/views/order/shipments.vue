@@ -1,12 +1,9 @@
 <template>
   <div style="padding: 20px;">
-    <iframe v-html="html">
-      {{html}}
-    </iframe>
     <h1>请填写发货信息</h1>
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="140px" class="demo-ruleForm">
       <el-form-item label="订单编号：" style="margin-bottom: 0;">
-        <span>{{ruleForm.orderId}}</span>
+        <span>{{ruleForm.oid}}</span>
       </el-form-item>
       <el-form-item label="快递方式：" prop="kdfs">
         <el-select size="mini" v-model="ruleForm.kdfs" placeholder="请选择快递方式">
@@ -14,8 +11,8 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="快递公司名称：" prop="kdgsmc">
-        <el-select @focus="getCompanies" size="mini" v-model="ruleForm.kdgsmc" placeholder="请选择快递公司">
+      <el-form-item label="快递公司名称：" prop="kdgsmcbm">
+        <el-select @change="changeKDGS" @focus="getCompanies" size="mini" v-model="ruleForm.kdgsmcbm" placeholder="请选择快递公司">
           <el-option v-for="item in KDGSoptions" :key="item.value" :label="item.label" :value="item.value">
           </el-option>
         </el-select>
@@ -40,11 +37,10 @@
 
 <script>
   import { validateMobilePhone } from '@/utils/validate'
-  import { getSessionid } from '@/utils/auth'
   import { getCompanies, sendGoods } from '@/api/order/index'
   export default {
     created() {
-      this.ruleForm.orderId = this.$route.query.oid
+      this.ruleForm.oid = this.$route.query.oid
     },
     data() {
       var validateMobile = (rule, value, callback) => {
@@ -60,8 +56,9 @@
       return {
         html: '',
         ruleForm: {
-          orderId: '',
+          oid: '',
           kdfs: '',
+          kdgsmcbm: '',
           kdgsmc: '',
           kddh: '',
           ydh: '',
@@ -89,18 +86,35 @@
       }
     },
     methods: {
+      changeKDGS(val) {
+        for (var i in this.KDGSoptions) {
+          if (this.KDGSoptions[i].value === val) {
+            this.ruleForm.kdgsmc = this.KDGSoptions[i].label
+            return
+          }
+        }
+      },
       submitForm(formName) {
-        var url = process.env.BASE_API + 'order/toSendGoods?JSESSIONID=' + getSessionid() + '&orderId=' + this.$route.query.oid
-        window.open(url)
+        // var url = process.env.BASE_API + 'order/toSendGoods?JSESSIONID=' + getSessionid() + '&orderId=' + this.$route.query.oid
+        // window.open(url)
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            if (this.$route.query.oid) {
-              sendGoods({ orderId: this.$route.query.oid }).then(res => {
-                this.html = res
-              }).catch(err => {
-                this.$message.error(err)
-              })
+            var params = {
+              oid: this.ruleForm.oid,
+              logisticsName: this.ruleForm.kdgsmc,   // 快递公司名称
+              logisticNo: this.ruleForm.ydh,         // 运单号
+              transportType: 'EXPRESS',             // 默认EXPRESS 有问题
+              sendCompanyCode: this.ruleForm.kdgsmcbm, // 快递公司名称编码
+              sendExpTel: this.ruleForm.kddh,       // 快递电话
+              sendExpType: this.ruleForm.kdfs,      // 快递方式
+              sendRemark: this.ruleForm.bz
             }
+            console.log(params)
+            sendGoods(params).then(res => {
+              console.log(res)
+            }).catch(err => {
+              this.$message.error(err)
+            })
           } else {
             console.log('error submit!!')
             return false

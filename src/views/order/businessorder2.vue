@@ -210,7 +210,7 @@
 </template>
 
 <script>
-import { getOrderList } from '@/api/order/index.js'
+import { getOrderList, orderRefuse } from '@/api/order/index.js'
 import CollapseTransition from 'element-ui/lib/transitions/collapse-transition'
 import { parseTime } from '@/utils/index'
 export default {
@@ -411,6 +411,14 @@ export default {
         this.searchForm.orderEndTime = parseTime(this.searchForm.orderEndTime)
       }
       this._getOrderList(this.searchForm)
+    },
+    _userReject(row) {
+      console.log(row)
+      orderRefuse(row.orderCode).then(res => {
+        console.log(res)
+      }).catch(err => {
+        this.$message.error(err)
+      })
     },
     resetForm() {
       this.searchForm = {

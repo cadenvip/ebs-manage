@@ -400,7 +400,7 @@
   import CollapseTransition from 'element-ui/lib/transitions/collapse-transition'
   import LocationSelector from '@/components/LocationSelector/index'
   import { parseTime } from '@/utils/index'
-  import { getOrderList, getDeleveryDetail, orderExport } from '@/api/order/index.js'
+  import { getOrderList, getDeleveryDetail, orderExport, orderRefuse } from '@/api/order/index.js'
   export default {
     created () {
       this.tabName = this.$route.query.tab
@@ -517,9 +517,17 @@
         this.$router.push({ name: 'orderdetailB', query: { oid: row.orderCode, timeType: '1' }})
       },
       _shipments(row) {
-        // this.$router.push({ name: 'shipments', query: { oid: row.orderCode }})
-        var url = 'http://183.230.101.151:8380/ebs/mallorder-web/mallOrderAjax!sendGoods.action?codes=' + row.orderCode
-        window.open(url)
+        this.$router.push({ name: 'shipments', query: { oid: row.orderCode }})
+        // var url = 'http://183.230.101.151:8380/ebs/mallorder-web/mallOrderAjax!sendGoods.action?codes=' + row.orderCode
+        // window.open(url)
+      },
+      _userReject(row) {
+        console.log(row)
+        orderRefuse(row.orderCode).then(res => {
+          console.log(res)
+        }).catch(err => {
+          this.$message.error(err)
+        })
       },
       _returnAudit() {
 

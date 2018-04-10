@@ -618,7 +618,7 @@ export const asyncRouterMap = [
         name: 'shipments',
         hidden: true,
         component: _import('order/shipments'),
-        meta: { roles: ['1'], title: '订单发货', icon: 'order' }
+        meta: { roles: ['1', '2', '3'], title: '订单发货', icon: 'order' }
       },
       {
         path: 'orderdetailB',

@@ -39,11 +39,18 @@ export function getCompanies (params) {
     params: params
   })
 }
-// 发货
+// 订单发货
 export function sendGoods (params) {
   return request({
-    url: '/order/toSendGoods',
-    method: 'get',
-    params: params
+    url: '/order/sendGoods/',
+    method: 'post',
+    data: params
+  })
+}
+// 用户拒收
+export function orderRefuse (oid) {
+  return request({
+    url: '/order/rejectGoods/' + oid,
+    method: 'post'
   })
 }
