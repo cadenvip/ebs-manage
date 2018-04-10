@@ -171,7 +171,7 @@
           if (this.userForm.password.length < 8) {
             callback(new Error('请密码长度不足8位'))
           } else if (this.pwdInfo.score < 4) {
-            callback(new Error('请密码强度不够'))
+            callback(new Error('密码强度不够'))
           } else if (this.userForm.repassword !== '') {
             this.$refs.userForm.validateField('repassword')
             callback()

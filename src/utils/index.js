@@ -1,4 +1,5 @@
 import JSEncrypt from 'jsencrypt'
+import CryptoJS from 'crypto-js'
 
 export function parseTime(time, cFormat) {
   if (arguments.length === 0) {
@@ -87,6 +88,14 @@ export function encryptPassword(password) {
     console.log('password is null.')
   }
   return encryptedPassword
+}
+
+const praviteKey = 'abcdefgabcdefg12'
+export function decryptStr(encryptedStr) {
+  var key = CryptoJS.enc.Utf8.parse(praviteKey)
+  var bytes = CryptoJS.AES.decrypt(encryptedStr, key, { mode: CryptoJS.mode.ECB, padding: CryptoJS.pad.Pkcs7 })
+  var decrypt = JSON.parse(bytes.toString(CryptoJS.enc.Utf8))
+  return decrypt
 }
 
 // 手机号码脱敏
