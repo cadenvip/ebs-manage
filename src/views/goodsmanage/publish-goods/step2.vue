@@ -252,17 +252,29 @@
               <el-input style="width: 70%;" type="textarea" placeholder="请输入内容" v-model="ruleForm.shangpqd"></el-input>
             </div>
             <div class="transition-box" style="margin-top: 20px;">
-              <el-form-item label="wappush内容:">
+              <el-form-item label="wappush内容:" label-width="120px">
                 <el-input placeholder="请输入内容" v-model="ruleForm.wappushnr"></el-input>
               </el-form-item>
-              <el-form-item label="wappush链接:">
+              <el-form-item label="wappush链接:" label-width="120px">
                 <el-input placeholder="请输入内容" v-model="ruleForm.wappushlj"></el-input>
               </el-form-item>
             </div>
           </div>
         </el-collapse-transition>
       </div>    
-      <!-- <h2 style="padding-left: 20px;">商品描述详情</h2>   -->
+      <h2 style="padding-left: 20px;">商品描述详情</h2>  
+      <el-row>
+        <p style="text-align:center;font-weight: bold;">手机端编辑</p>
+        <div style="padding: 0 20px 40px 20px;">
+          <quill-editor ref="myTextEditor"
+            v-model="content"
+            :options="editorOption"
+            @blur="onEditorBlur($event)"
+            @focus="onEditorFocus($event)"
+            @ready="onEditorReady($event)">
+          </quill-editor>
+        </div>
+      </el-row>
       <div style="text-align: center;margin-top: 20px;">
         <el-form-item>
           <el-button @click="goBack">返回上一步</el-button>
@@ -293,6 +305,10 @@
   import { mapGetters } from 'vuex'
   import { getGoodsDetail } from '@/api/noshelfgoods'
   import locationselector from '@/components/LocationSelector/index'
+  import 'quill/dist/quill.core.css'
+  import 'quill/dist/quill.snow.css'
+  import 'quill/dist/quill.bubble.css'
+  import { quillEditor } from 'vue-quill-editor'
   export default {
     mounted() {
       // 计量单位
@@ -418,6 +434,10 @@
     },
     data() {
       return {
+        content: '',
+        editorOption: {
+          // something config
+        },
         gFlag: false,     // 放弃按钮
         immediate: true,    // 在售商品修改 立即生效字段
         immediateTime: '',
@@ -554,6 +574,19 @@
       }
     },
     methods: {
+      onEditorBlur(editor) {
+        console.log('editor blur!', this.content)
+      },
+      onEditorFocus(editor) {
+        console.log('editor focus!', editor)
+      },
+      onEditorReady(editor) {
+        console.log('editor ready!', editor)
+      },
+      onEditorChange({ editor, html, text }) {
+        // console.log('editor change!', editor, html, text)
+        this.content = html
+      },
       // 提交
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
@@ -824,6 +857,7 @@
       ])
     },
     components: {
+      quillEditor,
       Jieti,
       CollapseTransition,
       locationselector
@@ -878,5 +912,11 @@
     max-height: 300px;
     width: 100%;
     overflow-y: scroll;
+  }
+  .quill-editor {
+    height: 200px;
+  }
+  .ql-container {
+    height: 200px;
   }
 </style>

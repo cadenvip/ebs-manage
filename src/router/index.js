@@ -423,6 +423,13 @@ export const asyncRouterMap = [
         meta: { roles: ['2', '3'], title: '提交入库' }
       },
       {
+        path: 'publishstep4',
+        name: 'publishstep4',
+        hidden: true,
+        component: _import('goodsmanage/publish-goods/step4'),
+        meta: { roles: ['2', '3'], title: 'test4' }
+      },
+      {
         path: 'onsalegoods',
         name: 'onsalegoods',
         component: _import('goodsmanage/onsalegoods/index'),

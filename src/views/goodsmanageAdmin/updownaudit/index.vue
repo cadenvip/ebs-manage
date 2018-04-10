@@ -360,8 +360,8 @@
         this.tableData = []
         const params = Object.assign({
           searchType: 4,
-          order: 'asc',
-          sort: 'goodsCode'
+          order: 'desc',
+          sort: 'createTime'
         }, obj)
         this.loading = true
         getSearches(params).then(res => {
