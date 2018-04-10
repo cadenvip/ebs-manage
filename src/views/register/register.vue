@@ -11,18 +11,18 @@
         </el-steps>
       </el-header>
       <el-container>
-        <el-aside style="width:180px; margin-left:20px">
-          <a href="#one" style="margin-left:10px">主协议</a>
+        <el-aside style="width:180px; margin-left:20px;margin-top:30px">
+          <a href="#one" style="margin-left:10px;font-size:15px">主协议</a>
           <hr style="height:1px;border:none;border-top:1px dashed #0066CC;" />
-          <a href="#two" style="margin-left:10px">消费者权益保障服务</a>
+          <a href="#two" style="margin-left:10px;font-size:15px">消费者权益保障服务</a>
           <hr style="height:1px;border:none;border-top:1px dashed #0066CC;" />
-          <a href="#three" style="margin-left:10px">反商业贿赂条款</a>
+          <a href="#three" style="margin-left:10px;font-size:15px">反商业贿赂条款</a>
           <hr style="height:1px;border:none;border-top:1px dashed #0066CC;" />
-          <a href="#four" style="margin-left:10px">保密协议</a>
+          <a href="#four" style="margin-left:10px;font-size:15px">保密协议</a>
           <hr style="height:1px;border:none;border-top:1px dashed #0066CC;" />
-          <a href="#five" style="margin-left:10px">信息安全承诺责任书</a>
+          <a href="#five" style="margin-left:10px;font-size:15px">信息安全承诺责任书</a>
           <hr style="height:1px;border:none;border-top:1px dashed #0066CC;" />
-          <a href="#six" style="margin-left:10px">附属协议</a>
+          <a href="#six" style="margin-left:10px;font-size:15px">附属协议</a>
           <hr style="height:1px;border:none;border-top:1px dashed #0066CC;" />
         </el-aside>
         <el-main>

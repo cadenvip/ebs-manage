@@ -91,8 +91,7 @@
     <el-dialog
       title="请选择区域"
       :visible.sync="regionVisible"
-      width="20%"
-      :before-close="handleClose">
+      width="20%">
       <location-selector @locationSelected="getLocationInfo"></location-selector>
       <span slot="footer" class="dialog-footer" style="text-align: center;">
         <el-button type="primary" size="mini" @click="regionVisible = false">确 定</el-button>
@@ -316,9 +315,6 @@
           }
           this.goodsOptions.push(this.goodsOptions2)
         }
-      },
-      handleClose(done) {
-        done()
       },
       resetForm(formName) {
         this.searchForm = {

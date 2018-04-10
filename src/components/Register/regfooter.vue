@@ -25,6 +25,7 @@
     left: left;
     bottom: bottom;
     height: 50px;
+    font-size: 14px;
     border-top: #ebebeb solid 1px;
   }
 

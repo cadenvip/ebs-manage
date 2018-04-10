@@ -10,7 +10,7 @@
         </el-col>
         <el-col :span="8">
           <el-form-item label="归属区域：">
-            <el-input v-model="searchForm.locationname" clearable style="width: 180px;" @focus="handleLocationFocus" placeholder="请选择所属区域"></el-input>
+            <el-input v-model="searchForm.locationname" style="width: 180px;" @focus="handleLocationFocus" placeholder="请选择所属区域"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="8">
@@ -85,6 +85,10 @@
     </el-row>
     <el-dialog title="请选择区域" :visible.sync="dialogVisible" width="440px">
       <locationselector @locationSelected="getLocationInfo"></locationselector>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="confirmSelectedRegion">确 定</el-button>
+      </span>      
     </el-dialog>
   </div>
 </template>
@@ -116,7 +120,8 @@
         currentPage: 1,
         total: 0,
         dialogVisible: false,
-        loading: true
+        loading: true,
+        locationInfo: {}
       }
     },
     created() {
@@ -157,8 +162,13 @@
         })
       },
       getLocationInfo: function (data) {
-        this.searchForm.locationcode = data.locationCode
-        this.searchForm.locationname = data.label
+        this.locationInfo = data
+      },
+      confirmSelectedRegion() {
+        this.searchForm.locationcode = this.locationInfo.locationCode
+        this.searchForm.locationname = this.locationInfo.label
+        this.dialogVisible = false
+        this.locationInfo = {}
       },
       resetForm(formname) {
         this.searchForm.merchantname = ''

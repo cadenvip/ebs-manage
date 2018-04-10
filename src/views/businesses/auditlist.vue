@@ -10,7 +10,7 @@
         </el-col>
         <el-col :span="10">
           <el-form-item label="所属区域：">
-            <el-input v-model="searchForm.locationname" clearable style="width: 300px;" @focus="handleLocationFocus" placeholder="请选择所属区域"></el-input>
+            <el-input v-model="searchForm.locationname" style="width: 300px;" @focus="handleLocationFocus" placeholder="请选择所属区域"></el-input>
           </el-form-item>  
         </el-col>
       </el-row>
@@ -39,12 +39,12 @@
         </el-col>
       </el-row>
     </el-form>
-    <el-dialog
-      title="请选择区域"
-      :visible.sync="dialogVisible"
-      width="440px"
-      :before-close="handleClose">
+    <el-dialog title="请选择区域" :visible.sync="dialogVisible" width="440px">
       <locationselector @locationSelected="getLocationInfo"></locationselector>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="confirmSelectedRegion">确 定</el-button>
+      </span>
     </el-dialog>
     <br/>
     <div class="list">企业列表</div>
@@ -99,7 +99,8 @@ export default {
       currentPage: 1,
       total: 0,
       dialogVisible: false,
-      loading: true
+      loading: true,
+      locationInfo: {}
     }
   },
   components: {
@@ -119,14 +120,14 @@ export default {
       this.searchForm.locationid = ''
       this.searchForm.locationname = ''
     },
-    handleClose(done) {
-      // this.$confirm('确认关闭？').then(_ => {
-      done()
-      // }).catch(_ => {})
+    getLocationInfo: function (data) {
+      this.locationInfo = data
     },
-    getLocationInfo: function(data) {
-      this.searchForm.locationCode = data.id
-      this.searchForm.locationname = data.label
+    confirmSelectedRegion() {
+      this.searchForm.locationCode = this.locationInfo.id
+      this.searchForm.locationname = this.locationInfo.label
+      this.dialogVisible = false
+      this.locationInfo = {}
     },
     queryBusinessesList() {
       this.loading = true

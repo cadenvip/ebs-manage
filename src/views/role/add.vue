@@ -3,7 +3,7 @@
     <h4 class="title">新增角色</h4>
     <el-form ref="roleForm" :model="roleForm" :rules="rules" label-width="120px">
       <el-form-item label="角色名称：" prop="rolename">
-        <el-input v-model="roleForm.rolename" :maxlength=16 style="width: 400px;" placeholder="请输入角色名称"></el-input>
+        <el-input v-model="roleForm.rolename" :maxlength=16 clearable style="width: 400px;" placeholder="请输入角色名称"></el-input>
       </el-form-item>
       <el-form-item label="角色类型：" prop="roletype">
         <el-select v-model="roleForm.roletype" clearable placeholder="请选择" @change="getAllPermissions" style="width: 200px;">

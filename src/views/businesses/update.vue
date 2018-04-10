@@ -101,14 +101,14 @@
               </el-col>
             </el-row>
             <el-form-item label="售后处理点：" prop="sellAddressListForm">
-              <el-button size="mini" @click="addSellAddress">新增</el-button>
+              <el-button type="primary" size="mini" @click="addSellAddress">新增</el-button>
               <div v-for="(item,index) in sellAddressListForm" v-show="item.valid" style="margin-top:10px">
                 <el-row>
                   <el-col :span="20">
                     <AddressSelector :locationId="item.locationcode" :detailAddress="item.selladdress" :index="index" @addressChanged="getAddressInfo"></AddressSelector>
                   </el-col>
                   <el-col :span="4">
-                    <el-button size="mini" @click="deleteSellAddress(item)">删除</el-button>
+                    <el-button type="primary" size="mini" @click="deleteSellAddress(item)">删除</el-button>
                   </el-col>
                 </el-row>
               </div>
@@ -437,7 +437,9 @@
   import {
     validateMobilePhone,
     validateEmail,
-    validateID
+    validateID,
+    validatePostcode,
+    validateDigit
   } from '@/utils/validate'
 
   export default {
@@ -474,6 +476,28 @@
           } else {
             callback()
           }
+        }
+      }
+      var validateZipCode = (rule, value, callback) => {
+        if (value !== null && value !== '') {
+          if (!validatePostcode(value.trim())) {
+            callback(new Error('请输入有效的邮编'))
+          } else {
+            callback()
+          }
+        } else {
+          callback()
+        }
+      }
+      var validateNumber = (rule, value, callback) => {
+        if (value !== null && value !== '') {
+          if (!validateDigit(value.trim())) {
+            callback(new Error('请输入数字'))
+          } else {
+            callback()
+          }
+        } else {
+          callback()
         }
       }
       var validateSellAddressList = (rule, value, callback) => {
@@ -714,6 +738,16 @@
             required: true,
             message: '请上传代理授权证明',
             trigger: 'change'
+          }],
+          employeesNum: [{
+            required: false,
+            validator: validateNumber,
+            trigger: 'change'
+          }],
+          zipCode: [{
+            required: false,
+            validator: validateZipCode,
+            trigger: 'blur'
           }]
         }
       }

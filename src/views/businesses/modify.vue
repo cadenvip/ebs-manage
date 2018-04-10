@@ -439,7 +439,9 @@
   import {
     validateMobilePhone,
     validateEmail,
-    validateID
+    validateID,
+    validatePostcode,
+    validateDigit
   } from '@/utils/validate'
 
   export default {
@@ -476,6 +478,28 @@
           } else {
             callback()
           }
+        }
+      }
+      var validateZipCode = (rule, value, callback) => {
+        if (value !== null && value !== '') {
+          if (!validatePostcode(value.trim())) {
+            callback(new Error('请输入有效的邮编'))
+          } else {
+            callback()
+          }
+        } else {
+          callback()
+        }
+      }
+      var validateNumber = (rule, value, callback) => {
+        if (value !== null && value !== '') {
+          if (!validateDigit(value.trim())) {
+            callback(new Error('请输入数字'))
+          } else {
+            callback()
+          }
+        } else {
+          callback()
         }
       }
       var validateSellAddressList = (rule, value, callback) => {
@@ -717,6 +741,16 @@
             required: true,
             message: '请上传代理授权证明',
             trigger: 'change'
+          }],
+          employeesNum: [{
+            required: false,
+            validator: validateNumber,
+            trigger: 'change'
+          }],
+          zipCode: [{
+            required: false,
+            validator: validateZipCode,
+            trigger: 'blur'
           }]
         }
       }

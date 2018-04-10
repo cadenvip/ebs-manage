@@ -287,8 +287,7 @@
     <el-dialog
       title="请选择区域"
       :visible.sync="regionVisible"
-      width="40%"
-      :before-close="handleClose">
+      width="40%">
       <locationselector @locationSelected="getLocationInfo"></locationselector>
       <span slot="footer" class="dialog-footer" style="text-align: center;">
         <el-button type="primary" size="mini" @click="regionVisible = false">确 定</el-button>
@@ -694,9 +693,6 @@
       },
       resetForm(formName) {
         this.$refs[formName].resetFields()
-      },
-      handleClose(done) {
-        done()
       },
       getLocationInfo(data) {
         this.ruleForm.spcd = data.label

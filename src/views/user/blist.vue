@@ -37,6 +37,10 @@
     </el-form>
     <el-dialog title="请选择区域" :visible.sync="dialogVisible" width="440px">
       <locationselector @locationSelected="getLocationInfo"></locationselector>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="confirmSelectedRegion">确 定</el-button>
+      </span>
     </el-dialog>
     <br/>
     <div class="list">人员列表</div>
@@ -92,7 +96,8 @@
         currentPage: 1,
         total: 0,
         loading: true,
-        dialogVisible: false
+        dialogVisible: false,
+        locationInfo: {}
       }
     },
     components: {
@@ -201,8 +206,13 @@
         this.queryUserList()
       },
       getLocationInfo: function (data) {
-        this.searchForm.locationid = data.id
-        this.searchForm.locationname = data.label
+        this.locationInfo = data
+      },
+      confirmSelectedRegion() {
+        this.searchForm.locationid = this.locationInfo.id
+        this.searchForm.locationname = this.locationInfo.label
+        this.dialogVisible = false
+        this.locationInfo = {}
       },
       handleLocationFocus() {
         this.dialogVisible = true

@@ -17,12 +17,12 @@
         </el-checkbox-group>
       </el-form-item>
       <el-form-item label="账号：" prop="loginname">
-        <el-input v-model="userForm.loginname" :maxlength=16 style="width: 220px;" placeholder="请输入账号"></el-input>
+        <el-input v-model="userForm.loginname" :maxlength=16 clearable style="width: 220px;" placeholder="请输入账号"></el-input>
       </el-form-item>
       <el-row :gutter="20">
         <el-col :span="8">
           <el-form-item label="手机号：" prop="phoneno">
-            <el-input v-model="userForm.phoneno" :maxlength=11 style="width: 220px;" placeholder="请输入手机号"></el-input>
+            <el-input v-model="userForm.phoneno" :maxlength=11 clearable style="width: 220px;" placeholder="请输入手机号"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="16" style="padding-top:8px">
@@ -32,7 +32,7 @@
       <el-row :gutter="20">
         <el-col :span="8">
           <el-form-item label="密码：" prop="password">
-            <el-input type="password" v-model="userForm.password" :minlength=8 :maxlength=20 style="width: 220px;" placeholder="请输入密码"></el-input>
+            <el-input type="password" v-model="userForm.password" :minlength=8 :maxlength=20 clearable style="width: 220px;" placeholder="请输入密码"></el-input>
             <PasswordStrength :password="userForm.password" @pwdInfo="getPwdInfo"></PasswordStrength>
           </el-form-item>
         </el-col>
@@ -43,7 +43,7 @@
       <el-row :gutter="20">
         <el-col :span="8">
           <el-form-item label="确认密码：" prop="repassword">
-            <el-input type="password" v-model="userForm.repassword" :minlength=8 :maxlength=20 style="width: 220px;" placeholder="请再次输入密码"></el-input>
+            <el-input type="password" v-model="userForm.repassword" :minlength=8 :maxlength=20 clearable style="width: 220px;" placeholder="请再次输入密码"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="16" style="padding-top:8px">
@@ -53,7 +53,7 @@
       <el-row :gutter="20">
         <el-col :span="8">
           <el-form-item label="姓名：" prop="name">
-            <el-input v-model="userForm.name" :maxlength=16 style="width: 220px;" placeholder="请输入姓名"></el-input>
+            <el-input v-model="userForm.name" :maxlength=16 clearable style="width: 220px;" placeholder="请输入姓名"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="16" style="padding-top:8px">
@@ -70,7 +70,7 @@
       <el-row :gutter="20">
         <el-col :span="8">
           <el-form-item label="邮件：" prop="email">
-            <el-input v-model="userForm.email" :maxlength=32 style="width: 220px;" placeholder="请输入邮件"></el-input>
+            <el-input v-model="userForm.email" :maxlength=32 clearable style="width: 220px;" placeholder="请输入邮件"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="16" style="padding-top:8px">
@@ -80,7 +80,7 @@
       <el-row :gutter="20">
         <el-col :span="8">
           <el-form-item label="地址：" prop="address">
-            <el-input v-model="userForm.address" :maxlength=32 style="width: 220px;" placeholder="请输入地址"></el-input>
+            <el-input v-model="userForm.address" :maxlength=32 clearable style="width: 220px;" placeholder="请输入地址"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -98,6 +98,10 @@
     </el-form>
     <el-dialog title="请选择区域" :visible.sync="regionDialogVisible" width="40%">
       <LocationSelector @locationSelected="getLocationInfo"></LocationSelector>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="regionDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="confirmSelectedRegion">确 定</el-button>
+      </span>
     </el-dialog>
 
     <el-dialog title="请选择商家" :visible.sync="unitDialogVisible" width="770px">
@@ -254,7 +258,7 @@
           locationname: [{
             required: true,
             message: '请选择归属区域',
-            trigger: 'blur'
+            trigger: 'change'
           }],
           // unitname: [{ required: true, message: '请选择商家', trigger: 'blur' }],
           email: [{
@@ -268,6 +272,7 @@
             trigger: 'blur'
           }]
         },
+        locationInfo: {},
         regionDialogVisible: false,
         businessSearchForm: {
           businessesName: '',
@@ -295,8 +300,7 @@
     },
     methods: {
       getLocationInfo(data) {
-        this.userForm.locationid = data.id
-        this.userForm.locationname = data.label
+        this.locationInfo = data
       },
       getPwdInfo(data) {
         this.pwdInfo = data
@@ -342,6 +346,12 @@
       businessSelectionChange(val) {
         this.preSelectedBusiness = val
       },
+      confirmSelectedRegion() {
+        this.userForm.locationid = this.locationInfo.id
+        this.userForm.locationname = this.locationInfo.label
+        this.regionDialogVisible = false
+        this.locationInfo = {}
+      },
       confirmSelected() {
         this.userForm.unitid = this.preSelectedBusiness.id
         this.userForm.unitname = this.preSelectedBusiness.businessesName
@@ -368,6 +378,12 @@
                 undefined || this.userForm.unitname === '')) {
               this.$message.error('请选择商家')
               return
+            } else {
+              var userInfo = window.sessionStorage.getItem('userInfo')
+              if (userInfo !== undefined && userInfo !== '') {
+                userInfo = JSON.parse(userInfo)
+                this.userForm.unitid = userInfo.unitid
+              }
             }
             var params = {
               'loginname': `${this.userForm.loginname}`,
