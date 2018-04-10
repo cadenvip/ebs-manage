@@ -33,7 +33,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="16" style="padding-top:8px">
-          <span style="font-family: 宋体, Arial, sans-serif;font-size: 12px;color: #999;">姓名必须为4-20位，可以是字母或中文</span>
+          <span style="font-family: 宋体, Arial, sans-serif;font-size: 12px;color: #999;">姓名必须为1-20位，可以是字母或中文</span>
         </el-col>
       </el-row>
       <el-row :gutter="20">

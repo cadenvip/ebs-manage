@@ -104,7 +104,9 @@
             this.roleForm.rolename = response.data.rolename
             this.roleForm.roletype = response.data.roletype
             this.roleForm.description = response.data.description
-            this.roleForm.resourceids = response.data.resourceids.split(',')
+            if (response.data.resourceids !== null && response.data.resourceids !== '') {
+              this.roleForm.resourceids = response.data.resourceids.split(',')
+            }
             this.getAllPermissions()
           } else {
             this.$message.error(response.msg)
@@ -224,7 +226,9 @@
           if (valid) {
             var checkedKeys = this.$refs.tree.getCheckedKeys()
             this.roleForm.resourceids = checkedKeys.join(',')
-
+            if (this.roleForm.description === null) {
+              this.roleForm.description = ''
+            }
             updateRole(this.roleForm).then(response => {
               if (response.status === 200) {
                 this.$message.success('更新角色成功！')

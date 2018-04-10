@@ -436,11 +436,25 @@
   import {
     validateMobilePhone,
     validateEmail,
-    validateID
+    validateID,
+    containSymbol
   } from '@/utils/validate'
 
   export default {
     data() {
+      var validateBusinessName = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('请输入企业名称'))
+        } else {
+          if (value.indexOf(' ') >= 0) {
+            callback(new Error('企业名称不能包含空格'))
+          } else if (containSymbol(value)) {
+            callback(new Error('企业名称不能包含特殊字符'))
+          } else {
+            callback()
+          }
+        }
+      }
       // 校验手机号
       var validateMobile = (rule, value, callback) => {
         if (value === '') {
@@ -604,8 +618,8 @@
         registerRules: {
           businessesName: [{
             required: true,
-            message: '请输入企业名称',
-            trigger: 'blur'
+            validator: validateBusinessName,
+            trigger: 'change'
           }],
           locationCode: [{
             required: true,
@@ -802,6 +816,20 @@
             message: '请输入企业名称'
           })
           return
+        } else {
+          if (this.registerForm.businessesName.indexOf(' ') >= 0) {
+            this.$message({
+              type: 'warning',
+              message: '企业名称不能包含空格'
+            })
+            return
+          } else if (containSymbol(this.registerForm.businessesName)) {
+            this.$message({
+              type: 'warning',
+              message: '企业名称不能包含特殊字符'
+            })
+            return
+          }
         }
         if (this.registerForm.locationCode === '') {
           this.$message({
@@ -1024,22 +1052,22 @@
             'fax': `${this.registerForm.fax}`,
             'zipCode': `${this.registerForm.zipCode}`,
             'ownershipType': `${this.registerForm.ownershipType}`,
-            'merchantPayable': `${this.registerForm.merchantPayable}`,
+            'merchantPayable': `${this.registerForm.merchantPayable ? '1' : '0'}`,
             'merchantNo': `${this.registerForm.merchantNo}`,
-            'aliPayNoPayable': `${this.registerForm.aliPayNoPayable}`,
+            'aliPayNoPayable': `${this.registerForm.aliPayNoPayable ? '1' : '0'}`,
             'aliPayAccount': `${this.registerForm.aliPayAccount}`,
             'aliPaySignKey': `${this.registerForm.aliPaySignKey}`,
             'aliPaySellerAccountName': `${this.registerForm.aliPaySellerAccountName}`,
-            'cmPayNoPayable': `${this.registerForm.cmPayNoPayable}1`,
+            'cmPayNoPayable': `${this.registerForm.cmPayNoPayable ? '1' : '0'}`,
             'cmPayMerchantId': `${this.registerForm.cmPayMerchantId}`,
             'cmPaySignKey': `${this.registerForm.cmPaySignKey}`,
-            'umPayNoPayable': `${this.registerForm.umPayNoPayable}`,
+            'umPayNoPayable': `${this.registerForm.umPayNoPayable ? '1' : '0'}`,
             'umPayMerchantId': `${this.registerForm.umPayMerchantId}`,
             'umPayBankAccountName': `${this.registerForm.umPayBankAccountName}`,
             'umPayBankAccountNo': `${this.registerForm.umPayBankAccountNo}`,
             'wirelesscityno': `${this.registerForm.wirelesscityno}`,
             'wirelesscityname': `${this.registerForm.wirelesscityname}`,
-            'wirelesscitypayable': `${this.registerForm.wirelesscitypayable}`,
+            'wirelesscitypayable': `${this.registerForm.wirelesscitypayable ? '1' : '0'}`,
             'wirelesstpcode': `${this.registerForm.wirelesstpcode}`,
             'wirelesstpname': `${this.registerForm.wirelesstpname}`,
             'validdate_str': `${this.registerForm.validdate_str}`

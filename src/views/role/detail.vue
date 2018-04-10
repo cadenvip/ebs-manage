@@ -103,10 +103,13 @@
       getRoleInfo() {
         getRoleDetail(this.$route.query.id).then(response => {
           if (response.status === 200) {
+            // debugger
             this.roleForm.rolename = response.data.rolename
             this.roleForm.roletype = response.data.roletype
             this.roleForm.description = response.data.description
-            this.roleForm.resourceids = response.data.resourceids.split(',')
+            if (response.data.resourceids !== null && response.data.resourceids !== '') {
+              this.roleForm.resourceids = response.data.resourceids.split(',')
+            }
             this.getAllPermissions()
           } else {
             this.$message.error(response.msg)

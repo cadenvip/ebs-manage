@@ -1191,7 +1191,7 @@
             'businessesName': `${this.registerForm.businessesName}`, // 企业名称
             'locationCode': `${this.registerForm.locationCode}`, // 归属区域ID
             'businesslicenseNum': `${this.registerForm.businesslicenseNum}`, // 企业营业执照号码
-            'merchantKind': `${this.registerForm.merchantKind}`,
+            'merchantKind': `${this.registerForm.merchantKind !== null ? this.registerForm.merchantKind : ''}`,
             'address': `${this.registerForm.address}`, // 详细地址
             'relationPerson': `${this.registerForm.relationPerson}`, // 联系人姓名
             'relationPhone': `${this.registerForm.relationPhone}`, // 联系人电话，用于登陆，初始密码123456
@@ -1201,7 +1201,7 @@
             'financePersonMobile': `${this.registerForm.financePersonMobile}`, // 财务联系人手机
             'operatoridnum': `${this.registerForm.operatoridnum}`, // 经办人身份证
             'isInvoice': `${this.registerForm.isInvoice}`, // 是否可开发票，0:不开，1：可以开发票
-            'businessesShortName': `${this.registerForm.businessesShortName}`, // 企业简称
+            'businessesShortName': `${this.registerForm.businessesShortName !== null ? this.registerForm.businessesShortName : ''}`, // 企业简称
             'businessType': `${this.registerForm.businessType}`, // 合作商家
             'legalName': `${this.registerForm.legalName}`, // 法人姓名
             'legalPaperType': `${this.registerForm.legalPaperType}`, // 法人证件类型

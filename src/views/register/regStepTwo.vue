@@ -140,12 +140,26 @@
   import RegionSelector from '@/components/RegionSelector/index'
   import AddressSelector from '@/components/AddressSelector/index'
   import {
-    validateMobilePhone
+    validateMobilePhone,
+    containSymbol
   } from '@/utils/validate'
   // import { validateMobilePhone, validateTelephone } from '@/utils/validate'
 
   export default {
     data() {
+      var validateBusinessName = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('请输入企业名称'))
+        } else {
+          if (value.indexOf(' ') >= 0) {
+            callback(new Error('企业名称不能包含空格'))
+          } else if (containSymbol(value)) {
+            callback(new Error('企业名称不能包含特殊字符'))
+          } else {
+            callback()
+          }
+        }
+      }
       // 校验手机号
       var validateMobile = (rule, value, callback) => {
         if (value === '') {
@@ -153,8 +167,9 @@
         } else {
           if (!validateMobilePhone(value.trim())) {
             callback(new Error('请输入有效的手机号码'))
+          } else {
+            callback()
           }
-          callback()
         }
       }
       // // 校验电话号码（包括手机号码、座机号码）
@@ -245,8 +260,8 @@
         registerRules: {
           businessesName: [{
             required: true,
-            message: '请输入企业名称',
-            trigger: 'blur'
+            validator: validateBusinessName,
+            trigger: 'change'
           }],
           locationCode: [{
             required: true,
@@ -331,7 +346,22 @@
             message: '请输入企业名称'
           })
           return
+        } else {
+          if (this.registerForm.businessesName.indexOf(' ') >= 0) {
+            this.$message({
+              type: 'warning',
+              message: '企业名称不能包含空格'
+            })
+            return
+          } else if (containSymbol(this.registerForm.businessesName)) {
+            this.$message({
+              type: 'warning',
+              message: '企业名称不能包含特殊字符'
+            })
+            return
+          }
         }
+  
         if (this.registerForm.locationCode === '') {
           this.$message({
             type: 'warning',

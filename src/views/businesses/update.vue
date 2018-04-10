@@ -1179,7 +1179,7 @@
             'businessesName': `${this.registerForm.businessesName}`, // 企业名称
             'locationCode': `${this.registerForm.locationCode}`, // 归属区域ID
             'businesslicenseNum': `${this.registerForm.businesslicenseNum}`, // 企业营业执照号码
-            'merchantKind': `${this.registerForm.merchantKind}`,
+            'merchantKind': `${this.registerForm.merchantKind !== null ? this.registerForm.merchantKind : ''}`,
             'address': `${this.registerForm.address}`, // 详细地址
             'relationPerson': `${this.registerForm.relationPerson}`, // 联系人姓名
             'relationPhone': `${this.registerForm.relationPhone}`, // 联系人电话，用于登陆，初始密码123456
@@ -1189,7 +1189,7 @@
             'financePersonMobile': `${this.registerForm.financePersonMobile}`, // 财务联系人手机
             'operatoridnum': `${this.registerForm.operatoridnum}`, // 经办人身份证
             'isInvoice': `${this.registerForm.isInvoice}`, // 是否可开发票，0:不开，1：可以开发票
-            'businessesShortName': `${this.registerForm.businessesShortName}`, // 企业简称
+            'businessesShortName': `${this.registerForm.businessesShortName !== null ? this.registerForm.businessesShortName : ''}`, // 企业简称
             'businessType': `${this.registerForm.businessType}`, // 合作商家
             'legalName': `${this.registerForm.legalName}`, // 法人姓名
             'legalPaperType': `${this.registerForm.legalPaperType}`, // 法人证件类型
@@ -1208,22 +1208,22 @@
             'fax': `${this.registerForm.fax !== null ? this.registerForm.fax : ''}`,
             'zipCode': `${this.registerForm.zipCode !== null ? this.registerForm.zipCode : ''}`,
             'ownershipType': `${this.registerForm.ownershipType !== null ? this.registerForm.ownershipType : ''}`,
-            'merchantPayable': `${this.registerForm.merchantPayable !== null ? this.registerForm.merchantPayable : ''}`,
+            'merchantPayable': `${this.registerForm.merchantPayable === null ? '' : this.registerForm.merchantPayable === true ? '1' : '0'}`,
             'merchantNo': `${this.registerForm.merchantNo !== null ? this.registerForm.merchantNo : ''}`,
-            'aliPayNoPayable': `${this.registerForm.aliPayNoPayable !== null ? this.registerForm.aliPayNoPayable : ''}`,
+            'aliPayNoPayable': `${this.registerForm.aliPayNoPayable === null ? '' : this.registerForm.aliPayNoPayable === true ? '1' : '0'}`,
             'aliPayAccount': `${this.registerForm.aliPayAccount !== null ? this.registerForm.aliPayAccount : ''}`,
             'aliPaySignKey': `${this.registerForm.aliPaySignKey !== null ? this.registerForm.aliPaySignKey : ''}`,
             'aliPaySellerAccountName': `${this.registerForm.aliPaySellerAccountName !== null ? this.registerForm.aliPaySellerAccountName : ''}`,
-            'cmPayNoPayable': `${this.registerForm.cmPayNoPayable !== null ? this.registerForm.cmPayNoPayable : ''}`,
+            'cmPayNoPayable': `${this.registerForm.cmPayNoPayable === null ? '' : this.registerForm.cmPayNoPayable === true ? '1' : '0'}`,
             'cmPayMerchantId': `${this.registerForm.cmPayMerchantId !== null ? this.registerForm.cmPayMerchantId : ''}`,
             'cmPaySignKey': `${this.registerForm.cmPaySignKey !== null ? this.registerForm.cmPaySignKey : ''}`,
-            'umPayNoPayable': `${this.registerForm.umPayNoPayable !== null ? this.registerForm.umPayNoPayable : ''}`,
+            'umPayNoPayable': `${this.registerForm.umPayNoPayable === null ? '' : this.registerForm.umPayNoPayable === true ? '1' : '0'}`,
             'umPayMerchantId': `${this.registerForm.umPayMerchantId !== null ? this.registerForm.umPayMerchantId : ''}`,
             'umPayBankAccountName': `${this.registerForm.umPayBankAccountName !== null ? this.registerForm.umPayBankAccountName : ''}`,
             'umPayBankAccountNo': `${this.registerForm.umPayBankAccountNo !== null ? this.registerForm.umPayBankAccountNo : ''}`,
             'wirelesscityno': `${this.registerForm.wirelesscityno !== null ? this.registerForm.wirelesscityno : ''}`,
             'wirelesscityname': `${this.registerForm.wirelesscityname !== null ? this.registerForm.wirelesscityname : ''}`,
-            'wirelesscitypayable': `${this.registerForm.wirelesscitypayable !== null ? this.registerForm.wirelesscitypayable : ''}`,
+            'wirelesscitypayable': `${this.registerForm.wirelesscitypayable === null ? '' : this.registerForm.wirelesscitypayable === true ? '1' : '0'}`,
             'wirelesstpcode': `${this.registerForm.wirelesstpcode !== null ? this.registerForm.wirelesstpcode : ''}`,
             'wirelesstpname': `${this.registerForm.wirelesstpname !== null ? this.registerForm.wirelesstpname : ''}`,
             'validdate_str': `${this.registerForm.validdate_str !== null ? this.registerForm.validdate_str : ''}`
