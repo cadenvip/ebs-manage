@@ -1,6 +1,24 @@
-import { login, logout, getInfo } from '@/api/login'
-import { getToken, setToken, removeToken, getUserId, setUserId, removeUserId, getSessionid, setSessionid, removeSessionid } from '@/utils/auth'
-import { Message } from 'element-ui'
+import {
+  login,
+  logout,
+  getInfo
+} from '@/api/login'
+import {
+  getToken,
+  setToken,
+  removeToken,
+  getUserId,
+  setUserId,
+  removeUserId,
+  getSessionid,
+  setSessionid,
+  removeSessionid,
+  setRoleType,
+  removeRoleType
+} from '@/utils/auth'
+import {
+  Message
+} from 'element-ui'
 
 const user = {
   state: {
@@ -35,7 +53,9 @@ const user = {
 
   actions: {
     // 登录
-    Login({ commit }, loginInfo) {
+    Login({
+      commit
+    }, loginInfo) {
       return new Promise((resolve, reject) => {
         login(loginInfo).then(response => {
           if (response.status === 200) {
@@ -50,10 +70,10 @@ const user = {
             commit('SET_NAME', data.loginname)
             commit('SET_AVATAR', data.avatar)
             var roles = []
-            data.role.forEach(function(v) {
+            data.role.forEach(function (v) {
               roles.push(v.roletype)
             })
-            // setRoleType(roles.join(','))
+            setRoleType(roles[0])
             // commit('SET_ROLES', roles)
             window.sessionStorage.setItem('userInfo', JSON.stringify(data))
             resolve(response)
@@ -66,13 +86,16 @@ const user = {
       })
     },
     // 获取用户信息
-    GetInfo({ commit, state }) {
+    GetInfo({
+      commit,
+      state
+    }) {
       return new Promise((resolve, reject) => {
         var userInfo = window.sessionStorage.getItem('userInfo')
         if (userInfo !== undefined && userInfo !== '') {
           userInfo = JSON.parse(userInfo)
           var roles = []
-          userInfo.role.forEach(function(v) {
+          userInfo.role.forEach(function (v) {
             roles.push(v.roletype)
           })
           commit('SET_ROLES', roles)
@@ -85,10 +108,10 @@ const user = {
               commit('SET_NAME', data.loginname)
               commit('SET_AVATAR', data.avatar)
               var roles = []
-              data.role.forEach(function(v) {
+              data.role.forEach(function (v) {
                 roles.push(v.roletype)
               })
-              // setRoleType(roles.join(','))
+              setRoleType(roles[0])
               commit('SET_ROLES', roles)
               window.sessionStorage.setItem('userInfo', JSON.stringify(data))
               resolve(response)
@@ -103,7 +126,10 @@ const user = {
     },
 
     // 登出
-    LogOut({ commit, state }) {
+    LogOut({
+      commit,
+      state
+    }) {
       return new Promise((resolve, reject) => {
         logout(state.token).then(response => {
           commit('SET_TOKEN', '')
@@ -115,6 +141,7 @@ const user = {
           removeToken()
           removeSessionid()
           removeUserId()
+          removeRoleType()
           window.sessionStorage.removeItem('userInfo')
           if (response.status === 200) {
             resolve(response)
@@ -132,6 +159,7 @@ const user = {
           removeToken()
           removeSessionid()
           removeUserId()
+          removeRoleType()
           window.sessionStorage.removeItem('userInfo')
           reject(error)
         })
@@ -139,7 +167,9 @@ const user = {
     },
 
     // 前端 登出
-    FedLogOut({ commit }) {
+    FedLogOut({
+      commit
+    }) {
       return new Promise(resolve => {
         commit('SET_TOKEN', '')
         commit('SET_SESSIONID', '')
@@ -150,6 +180,7 @@ const user = {
         removeToken()
         removeSessionid()
         removeUserId()
+        removeRoleType()
         window.sessionStorage.removeItem('userInfo')
         resolve()
       })
