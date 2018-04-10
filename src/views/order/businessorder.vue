@@ -548,7 +548,7 @@
           page: this.currentPage,
           pageSize: 10,
           order: 'desc',
-          sort: 'createTime'
+          sort: 'orderValidDate'
         }
         const params = Object.assign(defaultParam, obj)
         getOrderList(params).then(res => {

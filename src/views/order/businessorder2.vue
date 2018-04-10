@@ -380,7 +380,9 @@ export default {
       var defaultParam = {
         page: this.currentPage,
         pageSize: 10,
-        searchType: 1
+        searchType: 1,
+        order: 'desc',
+        sort: 'orderValidDate'
       }
       var params = Object.assign(defaultParam, obj)
       getOrderList(params).then(res => {
