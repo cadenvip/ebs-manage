@@ -259,12 +259,11 @@
           'address': this.userForm.address !== null ? this.userForm.address : ''
         }
         var roletype = getRoleType()
-        debugger
         if (roletype !== '1') {
           // 商家
           updateBusinessUser(params).then(response => {
             if (response.status === 200) {
-              this.$message.success('修改个人信息成功！')
+              this.$message.success('修改个人信息成功，重新登录后生效！')
             } else {
               this.$message.error(response.msg)
             }
@@ -275,7 +274,7 @@
           // 管理员
           updateUser(params).then(response => {
             if (response.status === 200) {
-              this.$message.success('修改个人信息成功！')
+              this.$message.success('修改个人信息成功，重新登录后生效！')
             } else {
               this.$message.error(response.msg)
             }
@@ -298,8 +297,19 @@
         }
         modifyPassword(params).then(response => {
           if (response.status === 200) {
-            this.$message.success('修改密码成功！')
+            // this.$message.success('修改密码成功！')
             this.dialogVisible = false
+            this.$confirm(`修改密码成功！是否重新登录?`, '提示', {
+              confirmButtonText: '是',
+              cancelButtonText: '否',
+              type: 'warning'
+            }).then(() => {
+              this.$router.push({
+                path: '/login'
+              })
+            }).catch(() => {
+              console.log('未重新登录')
+            })
           } else {
             this.$message.error(response.msg)
           }

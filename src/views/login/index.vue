@@ -223,7 +223,7 @@
         this.disableBtn = true
         getVercode(params).then(response => {
           if (response.status === 200) {
-            const TIME_COUNT = 60
+            const TIME_COUNT = 300
             if (!this.timer) {
               this.count = TIME_COUNT
               this.disableBtn = false
@@ -231,6 +231,7 @@
                 if (this.count > 0 && this.count <= TIME_COUNT) {
                   this.timerCodeMsg = `验证码发送成功，${this.count}秒后可重发验证码。`
                   this.count--
+                  this.disableBtn = true
                 } else {
                   this.disableBtn = false
                   clearInterval(this.timer)
