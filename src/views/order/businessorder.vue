@@ -385,9 +385,9 @@
         :visible.sync="dialogVisible"
         width="30%"
         center>
-        <p>物流方式: 快递</p>
-        <p>物流公司: 中通快递</p>
-        <p>运单号码: 121323</p>
+        <p>物流方式: {{getLogisticWay}}</p>
+        <p>物流公司: {{logisticsBean.orderDeliveryBean.logisticName?logisticsBean.orderDeliveryBean.logisticName:'暂无'}}</p>
+        <p>运单号码: {{logisticsBean.orderDeliveryBean.logisticNo?logisticsBean.orderDeliveryBean.logisticNo:'暂无'}}</p>
         <span slot="footer" class="dialog-footer">
           <el-button @click="dialogVisible = false">取 消</el-button>
           <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
@@ -412,6 +412,9 @@
     },
     data() {
       return {
+        logisticsBean: {
+          orderDeliveryBean: {}
+        },
         dialogVisible: false,
         tableData: [],
         currentPage: 1,
@@ -499,12 +502,14 @@
     },
     methods: {
       _getDeleveryDetail(row) {
-        console.log(row)
+        this.logisticsBean = {
+          orderDeliveryBean: {}
+        }
         if (row) {
           getDeleveryDetail({ orderId: row.orderCode }).then(res => {
             if (res.status === 200) {
-              console.log(res.data)
               this.dialogVisible = true
+              this.logisticsBean = res.data
             } else {
               this.$message.error(res.msg)
             }
@@ -522,9 +527,14 @@
         // window.open(url)
       },
       _userReject(row) {
-        console.log(row)
         orderRefuse(row.orderCode).then(res => {
-          console.log(res)
+          if (res.status === 200) {
+            this.$message.success(res.msg)
+            this._getOrderList()
+          } else {
+            this.$message.error(res.msg)
+            this._getOrderList()
+          }
         }).catch(err => {
           this.$message.error(err)
         })
@@ -639,6 +649,40 @@
           this.searchForm.orderEndTime = parseTime(this.searchForm.orderEndTime)
         }
         this._getOrderList(this.searchForm)
+      }
+    },
+    computed: {
+      getLogisticWay () {
+        var flag = this.logisticsBean.orderDeliveryBean.transportType
+        if (flag === '0') {
+          return '自提'
+        } else if (flag === '1') {
+          return '商家送货上门'
+        } else if (flag === '2') {
+          return 'EMS'
+        } else if (flag === '3') {
+          return '顺丰'
+        } else if (flag === '4') {
+          return '圆通'
+        } else if (flag === '5') {
+          return '申通'
+        } else if (flag === '6') {
+          return '中通'
+        } else if (flag === '7') {
+          return '韵达'
+        } else if (flag === '8') {
+          return '汇通'
+        } else if (flag === '9') {
+          return '宅急送'
+        } else if (flag === '20') {
+          return 'EMAIL'
+        } else if (flag === '21') {
+          return 'FAX'
+        } else if (flag === '99') {
+          return '其它快递'
+        } else {
+          return ''
+        }
       }
     },
     components: {
