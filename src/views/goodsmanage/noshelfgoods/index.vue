@@ -230,11 +230,11 @@
         }
         if (this.cgxflag === true && tab.name === 'second') {
           this.cgxflag = false
-          alert('request')
+          console.log('request')
         }
         if (this.lsspflag === true && tab.name === 'third') {
           this.lsspflag = false
-          alert('request')
+          console.log('request')
         }
         console.log(tab)
       },
