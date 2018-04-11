@@ -789,8 +789,6 @@
           if (response.status === 200) {
             this.registerForm = response.data.businesses
             this.registerForm.locationCode = response.data.businesses.locationCode.toString()
-            this.sellAddressListForm = response.data.sellAddresslist
-            response.data.sellAddresslist
             response.data.sellAddresslist.forEach(element => {
               element.valid = true
               this.sellAddressListForm.push(element)

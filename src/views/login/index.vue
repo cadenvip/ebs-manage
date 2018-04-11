@@ -60,7 +60,7 @@
   import {
     encryptPassword
   } from '@/utils/index'
-  // import { downloadBillList } from '@/api/finance'
+  // import { testOption } from '@/api/login'
 
   export default {
     data() {
@@ -252,9 +252,9 @@
         this.$router.push({
           path: '/register'
         })
-      }
+      }// ,
       // Test () {
-      //   downloadBillList().then(response => {
+      //   testOption().then(response => {
       //     console.log('246', response)
       //   }).catch(error => {
       //     console.log(error)

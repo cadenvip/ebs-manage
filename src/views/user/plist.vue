@@ -27,8 +27,11 @@
         </el-col>
       </el-row>
       <el-row>
-        <el-col :span="2" :offset="16">
+        <el-col :span="2" :offset="14">
           <el-button type="primary" @click.native.prevent="queryUserList">查询</el-button>
+        </el-col>
+        <el-col :span="2">
+          <el-button type="primary" @click="resetForm('searchForm')">重置</el-button>
         </el-col>
         <el-col :span="2">
           <el-button type="primary" @click.native.prevent="addUser">新增</el-button>
@@ -217,6 +220,13 @@
             id: user.id
           }
         })
+      },
+      resetForm(formname) {
+        this.searchForm.loginname = ''
+        this.searchForm.phoneno = ''
+        this.searchForm.name = ''
+        this.searchForm.locationid = ''
+        this.searchForm.locationname = ''
       },
       handleSizeChange(val) {
         this.pagesize = val

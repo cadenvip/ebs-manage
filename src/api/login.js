@@ -50,3 +50,12 @@ export function getUnits() {
     method: 'get'
   })
 }
+
+export function testOption() {
+  return request({
+    url: '/test/encodetest',
+    method: 'post'
+  })
+}
+
+
