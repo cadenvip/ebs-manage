@@ -284,7 +284,9 @@
       _getGoods(obj) {
         var defaultParam = {
           page: this.currentPage,
-          searchType: '5'
+          searchType: '5',
+          order: 'desc',
+          sort: 'createTime'
         }
         var params = Object.assign(defaultParam, obj)
         this.tableData = []
