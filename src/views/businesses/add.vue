@@ -725,6 +725,11 @@
             trigger: 'blur',
             validator: validateMobile
           }],
+          financePersonPhone: [{
+            required: false,
+            trigger: 'blur',
+            validator: validateMobile
+          }],
           financePersonEmail: [{
             required: false,
             validator: validateMail,

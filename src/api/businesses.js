@@ -83,3 +83,12 @@ export function auditBusinesses(params) {
     }
   })
 }
+
+// 暂停或者激活企业
+export function enableOrPauseBusiness(params) {
+  return request({
+    url: '/businesses/enableOrPauseBus',
+    method: 'post',
+    data: params
+  })
+}

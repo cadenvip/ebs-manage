@@ -31,6 +31,7 @@
               <el-option label="待审核" value="0"></el-option>
               <el-option label="正常" value="1"></el-option>
               <el-option label="驳回" value="2"></el-option>
+              <el-option label="暂停" value="3"></el-option>
               <!-- <el-option label="停用" value="3"></el-option>
               <el-option label="过期" value="4"></el-option>
               <el-option label="网店待审核" value="5"></el-option>
@@ -74,7 +75,9 @@
       <el-table-column label="操作" align="center">
         <template slot-scope="scope">
           <el-button @click="detail(scope.row)" type="text" size="small">详细</el-button>
-          <el-button @click="updateBusinesses(scope.row)" type="text" size="small">修改</el-button>
+          <el-button @click="updateBusinesse(scope.row)" type="text" size="small">修改</el-button>
+          <el-button @click="disableBusiness(scope.row)" v-if="scope.row.state === '1'" type="text" size="small">暂停</el-button>
+          <el-button @click="enableBusinesse(scope.row)" v-if="scope.row.state === '3'" type="text" size="small">激活</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -94,7 +97,7 @@
 
 <script>
 
-import { getAllBusinesses, getBusinessesList } from '@/api/businesses'
+import { getAllBusinesses, getBusinessesList, enableOrPauseBusiness } from '@/api/businesses'
 import locationselector from '@/components/LocationSelector/index'
 
 export default {
@@ -199,9 +202,9 @@ export default {
         case '2':
           state = '驳回'
           break
-        // case '3':
-        //   state = '停用'
-        //   break
+        case '3':
+          state = '暂停'
+          break
         // case '4':
         //   state = '过期'
         //   break
@@ -234,8 +237,38 @@ export default {
     detail(businesses) {
       this.$router.push({ path: '/businesses/detail', query: { id: businesses.id }})
     },
-    updateBusinesses(businesses) {
+    updateBusinesse(businesses) {
       this.$router.push({ path: '/businesses/update', query: { id: businesses.id }})
+    },
+    disableBusiness(businesses) {
+      var params = {
+        'businessesid': `${businesses.id}`,
+        'state': '3'
+      }
+      enableOrPauseBusiness(params).then(response => {
+        if (response.status === 200) {
+          this.$message.success('暂停企业成功')
+        } else {
+          this.$message.error(response.msg)
+        }
+      }).catch(error => {
+        this.$message.error(error.msg)
+      })
+    },
+    enableBusiness(businesses) {
+      var params = {
+        'businessesid': `${businesses.id}`,
+        'state': '3'
+      }
+      enableOrPauseBusiness(params).then(response => {
+        if (response.status === 200) {
+          this.$message.success('激活企业成功')
+        } else {
+          this.$message.error(response.msg)
+        }
+      }).catch(error => {
+        this.$message.error(error.msg)
+      })
     },
     handleSizeChange(val) {
       this.pagesize = val

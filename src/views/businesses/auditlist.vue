@@ -21,6 +21,7 @@
             <el-option label="待审核" value="0"></el-option>
             <el-option label="正常" value="1"></el-option>
             <el-option label="驳回" value="2"></el-option>
+            <el-option label="暂停" value="3"></el-option>
             <!-- <el-option label="停用" value="3"></el-option>
             <el-option label="过期" value="4"></el-option>
             <el-option label="网店待审核" value="5"></el-option>
@@ -189,9 +190,9 @@ export default {
         case '2':
           state = '驳回'
           break
-        // case '3':
-        //   state = '停用'
-        //   break
+        case '3':
+          state = '暂停'
+          break
         // case '4':
         //   state = '过期'
         //   break

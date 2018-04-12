@@ -20,6 +20,7 @@ import Layout from '../views/layout/Layout'
 **/
 export const constantRouterMap = [
   { path: '/login', component: _import('login/index'), hidden: true },
+  { path: '/404', component: _import('404'), hidden: true },
   { path: '/timeout', component: _import('timeout'), hidden: true },
   { path: '/register', component: _import('register/register'), hidden: true },
   { path: '/regStepTwo', component: _import('register/regStepTwo'), hidden: true },

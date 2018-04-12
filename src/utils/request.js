@@ -3,9 +3,9 @@ import axios from 'axios'
 //   Message,
 //   MessageBox
 // } from 'element-ui'
-import {
-  Message
-} from 'element-ui'
+// import {
+//   Message
+// } from 'element-ui'
 import store from '../store'
 import {
   getToken,
@@ -14,12 +14,12 @@ import {
 
 // import router from './router'
 import router from '@/router'
-// import { decryptStr } from '@/utils/index'
+import { decryptStr } from '@/utils/index'
 
 // 创建axios实例
 const service = axios.create({
   baseURL: process.env.BASE_API, // api的base_url
-  timeout: 60000 // 请求超时时间
+  timeout: 30000 // 请求超时时间
 })
 
 // request拦截器
@@ -61,10 +61,10 @@ service.interceptors.response.use(response => {
     return response
   }
   var responseData = response.data
-  // console.log('response.data解密前', responseData)
-  // responseData.data = decryptStr(responseData.data)
-  // console.log('response.data解密后', responseData.data)
-  if (responseData.status === 401) {
+  console.log('response.data解密前', responseData)
+  responseData = decryptStr(responseData)
+  console.log('response.data解密后', responseData)
+  if (responseData.status === 408) {
     router.push({
       path: '/timeout'
     })
@@ -82,7 +82,11 @@ error => {
   // 错误处理
   console.log('error', error)
   if (error.response !== undefined) {
-    if (error.response.status === 401) {
+    var responseData = error.response.data
+    console.log('error.response.data解密前', responseData)
+    responseData = decryptStr(responseData)
+    console.log('error.response.data解密后', responseData)
+    if (error.response.status === 408) {
       router.push({
         path: '/timeout'
       })
@@ -97,11 +101,11 @@ error => {
     }
     return Promise.reject(error.response.data)
   } else {
-    Message({
-      message: error.message,
-      type: 'error',
-      duration: 5 * 1000
-    })
+    // Message({
+    //   message: error.message,
+    //   type: 'error',
+    //   duration: 5 * 1000
+    // })
     router.push({
       path: '/404'
     })

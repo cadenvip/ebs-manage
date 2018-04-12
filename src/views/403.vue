@@ -13,7 +13,8 @@
     },
     methods: {
       goback() {
-        this.$router.go(-1)
+        // 退一步海阔天空，退两步刚刚合适
+        this.$router.go(-2)
       }
     }
   }
