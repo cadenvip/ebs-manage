@@ -86,20 +86,20 @@ error => {
     console.log('error.response.data解密前', responseData)
     responseData = decryptStr(responseData)
     console.log('error.response.data解密后', responseData)
-    if (error.response.status === 408) {
+    if (responseData.status === 408) {
       router.push({
         path: '/timeout'
       })
-    } else if (error.response.status === 403) {
+    } else if (responseData.status === 403) {
       router.push({
         path: '/403/index'
       })
-    } else if (error.response.status === 404) {
+    } else if (responseData.status === 404) {
       router.push({
         path: '/404'
       })
     }
-    return Promise.reject(error.response.data)
+    return Promise.reject(responseData)
   } else {
     // Message({
     //   message: error.message,
