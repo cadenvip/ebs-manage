@@ -244,6 +244,11 @@
         this.pwdInfo = data
       },
       onSubmit() {
+        console.log(this.userInfo)
+        if (window.sessionStorage.getItem('userInfo') === JSON.stringify(this.userForm)) {
+          this.$message.warning('未做任何修改！')
+          return
+        }
         if (this.userForm.name === undefined || this.userForm.name === null || this.userForm.name === '') {
           this.$message.error('请输入姓名！')
           return
@@ -263,7 +268,8 @@
           // 商家
           updateBusinessUser(params).then(response => {
             if (response.status === 200) {
-              this.$message.success('修改个人信息成功，重新登录后生效！')
+              this.$message.success('修改个人信息成功！')
+              window.sessionStorage.setItem('userInfo', JSON.stringify(this.userForm))
             } else {
               this.$message.error(response.msg)
             }
@@ -274,7 +280,8 @@
           // 管理员
           updateUser(params).then(response => {
             if (response.status === 200) {
-              this.$message.success('修改个人信息成功，重新登录后生效！')
+              this.$message.success('修改个人信息成功！')
+              window.sessionStorage.setItem('userInfo', JSON.stringify(this.userForm))
             } else {
               this.$message.error(response.msg)
             }
