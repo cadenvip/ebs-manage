@@ -248,7 +248,6 @@ export default {
   .pl10{padding-left: 10px;}
   .mt10{margin-top: 10px;}
   .title{font-weight: bold;font-size: 13px;color: #5e5e66;}
-  .modify{}
   .part{
     width: 80%;
     overflow: hidden;
