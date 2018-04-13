@@ -632,6 +632,11 @@
             message: '请输入企业名称',
             trigger: 'blur'
           }],
+          validdate_str: [{
+            required: true,
+            message: '请选择有效时间',
+            trigger: 'blur'
+          }],
           locationCode: [{
             required: true,
             message: '请选择地址',
@@ -1021,6 +1026,13 @@
           this.$message({
             type: 'warning',
             message: '请输入企业名称'
+          })
+          return
+        }
+        if (this.registerForm.validdate_str === null || this.registerForm.validdate_str === '') {
+          this.$message({
+            type: 'warning',
+            message: '请选择有效时间'
           })
           return
         }

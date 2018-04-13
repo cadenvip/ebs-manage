@@ -77,7 +77,7 @@
           <el-button @click="detail(scope.row)" type="text" size="small">详细</el-button>
           <el-button @click="updateBusinesse(scope.row)" type="text" size="small">修改</el-button>
           <el-button @click="disableBusiness(scope.row)" v-if="scope.row.state === '1'" type="text" size="small">暂停</el-button>
-          <el-button @click="enableBusinesse(scope.row)" v-if="scope.row.state === '3'" type="text" size="small">激活</el-button>
+          <el-button @click="enableBusiness(scope.row)" v-if="scope.row.state === '3'" type="text" size="small">激活</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -248,6 +248,7 @@ export default {
       enableOrPauseBusiness(params).then(response => {
         if (response.status === 200) {
           this.$message.success('暂停企业成功')
+          businesses.state = '3'
         } else {
           this.$message.error(response.msg)
         }
@@ -258,11 +259,12 @@ export default {
     enableBusiness(businesses) {
       var params = {
         'businessesid': `${businesses.id}`,
-        'state': '3'
+        'state': '1'
       }
       enableOrPauseBusiness(params).then(response => {
         if (response.status === 200) {
           this.$message.success('激活企业成功')
+          businesses.state = '1'
         } else {
           this.$message.error(response.msg)
         }

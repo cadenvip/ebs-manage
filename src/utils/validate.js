@@ -40,22 +40,50 @@ export function validateSymbol(str) {
   return reg.test(str)
 }
 
+/**
+   * 正则：手机号（精确）
+   * <p>移动：134(0-8)、135、136、137、138、139、147、150、151、152、157、158、159、178、182、183、184、187、188、198</p>
+   * <p>联通：130、131、132、145、155、156、175、176、185、186、166</p>
+   * <p>电信：133、153、173、177、180、181、189、199</p>
+   * <p>全球星：1349</p>
+   * <p>虚拟运营商：170</p>
+   */
+
+/* 校验移动手机号*/
+export function validateCMMobilePhone(str) {
+  const reg = /^(134|135|136|137|138|139|147|150|151|152|157|158|159|170|178|182|183|184|187|188|198)[0-9]{8}$/
+  return reg.test(str)
+}
+
+/* 校验联通手机号*/
+export function validateCUMobilePhone(str) {
+  const reg = /^(130|131|132|145|155|156|175|176|185|186|166)[0-9]{8}$/
+  return reg.test(str)
+}
+
+/* 校验电信手机号*/
+export function validateCTMobilePhone(str) {
+  const reg = /^(133|153|173|177|180|181|189|199)[0-9]{8}$/
+  return reg.test(str)
+}
+
 /* 校验手机号*/
 export function validateMobilePhone(str) {
-  const reg = /^[1][3,4,5,6,7,8,9][0-9]{9}$/
+  const reg = /^((13[0-9])|(14[5,7])|(15[0-3,5-9])|(17[0,3,5-8])|(18[0-9])|166|198|199|(147))[0-9]{8}$/
   return reg.test(str)
 }
 
 /* 校验座机*/
 export function validateTelephone(str) {
-  const reg = /^(0\\d{2}- \\d{8}(-\\d{1,4})?)|(0\\d{3}- \\d{7,8}(-\\d{1,4})?)$/
+  const reg = /^0\d{2,3}[- _]?\d{7,8}$/
   return reg.test(str)
 }
 
 /* 校验电话*/
 export function validatePhone(str) {
-  const reg = /(^[1][3,4,5,6,7,8,9][0-9]{9}$)|(^(0\\d{2}-\\d{8}(-\\d{1,4})?)|(0\\d{3}-\\d{7,8}(-\\d{1,4})?)$)/
-  return reg.test(str)
+  var isMobilePhone = validateMobilePhone(str)
+  var isTelephone = validateMobilePhone(str)
+  return (isMobilePhone || isTelephone)
 }
 
 /* 校验身份证*/

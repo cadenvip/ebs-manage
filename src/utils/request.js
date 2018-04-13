@@ -8,7 +8,7 @@ import axios from 'axios'
 // } from 'element-ui'
 import store from '../store'
 import {
-  getToken,
+  // getToken,
   getSessionid
 } from '@/utils/auth'
 
@@ -24,11 +24,11 @@ const service = axios.create({
 
 // request拦截器
 service.interceptors.request.use(config => {
-  if (store.getters.token) {
-    // config.headers['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8'
-    // config.headers['Content-Type'] = 'application/json;charset=UTF-8'
-    config.headers['X-Token'] = getToken() // 让每个请求携带自定义token 请根据实际情况自行修改
-  }
+  // if (store.getters.token) {
+  //   // config.headers['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8'
+  //   // config.headers['Content-Type'] = 'application/json;charset=UTF-8'
+  //   config.headers['X-Token'] = getToken() // 让每个请求携带自定义token 请根据实际情况自行修改
+  // }
   // 登录成功后，将JSESSIONID上传以鉴权
   if (store.getters.sessionid !== undefined && store.getters.sessionid !== '') {
     // config['url'] = config.url + `?JSESSIONID=${store.getters.sessionid}`
