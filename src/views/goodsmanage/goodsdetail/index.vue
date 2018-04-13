@@ -14,7 +14,7 @@
         <p>销售价格：<span style="color: #FF3300;font-size:30px;font-weight: bold;">￥{{goodsBean.price}}</span></p>
         <p>商品编码：<span>{{format(goodsBean.goodsCode)}}</span></p>
         <p>商品重量：<span>{{goodsBean.weight}} {{goodsBean.weightUnit === '1'?'克':'千克'}}</span></p>
-        <p>使用物流：<span v-if="goodsBean.logisticsTypes">{{goodsBean.logisticsTypes.indexOf('1') > -1 ? '自提' : ''}} {{goodsBean.logisticsTypes.indexOf('2')>-1 ? '物流' : ''}} {{goodsBean.logisticsTypes.indexOf('2')>-1 ? '物流模板：'+goodsBean.logisticsTemplateCode : ''}}</span></p>
+        <p>使用物流：<span v-if="goodsBean.logisticsTypes">{{goodsBean.logisticsTypes.indexOf('1') > -1 ? '自提' : ''}} {{goodsBean.logisticsTypes.indexOf('2')>-1 ? '快递' : ''}} <span v-if="templateName">{{templateName}}</span></span></p>
         <p class="payway">支付方式：
           <span>货到付款</span>
           <span v-if="goodsBean.alipay==='0'">支付宝</span>
@@ -27,9 +27,9 @@
       <p class="pad-title">
         生产日期：<span>{{!goodsBean.produceDate ? '无' : goodsBean.produceDate}}</span> | 
         保质期：<span>{{goodsBean.shelfLife}}{{goodsBean.shelfLifeUnit === '1'?'天':goodsBean.shelfLifeUnit==='2'?'月':'年'}}</span> | 
-        推荐：<span>{{goodsBean.isPromote?'否':'是'}}</span> | 
-        支持退货：<span>{{goodsBean.isReturn?'不支持':'支持'}}</span> | 
-        支持换货：<span>{{goodsBean.isexchange?'不支持':'支持'}}</span>
+        推荐：<span>{{goodsBean.isPromote==='1'?'否':'是'}}</span> | 
+        支持退货：<span>{{goodsBean.isReturn==='1'?'否':'是'}}</span> | 
+        支持换货：<span>{{goodsBean.isexchange==='1'?'否':'是'}}</span>
       </p>
       <p>促销信息：{{format(goodsBean.promotionInfo)}}</p>
       <p>特色卖点：{{format(goodsBean.features)}}</p>
@@ -38,21 +38,24 @@
       <p>wappush内容：{{format(goodsBean.wapUrl)}}</p>
       <p>wappush链接：{{format(goodsBean.wapInfo)}}</p>
       <p>视频地址：{{format(goodsBean.videoUrl)}}</p>
-      <p>上架提醒：{{!goodsBean.isEmail?'邮件':''}} {{!goodsBean.isSms?'短信':''}}</p>
+      <p>上架提醒：<span v-show="goodsBean.isEmail==='0'">邮件</span>  <span v-show="goodsBean.isSms==='0'">短信</span></p>
       <p>发布渠道：{{goodsBean.website==='0'?'12582网站': ''}} {{goodsBean.hotline==='0'?'12582热线':''}} {{goodsBean.wapsite==='0'?'WAP':''}} {{goodsBean.phoneline==='0'?'手机客户端':''}} {{goodsBean.agriculturalmall==='0'?'农资商城':''}}</p>
-      <p>商品简述：{{format(goodsBean.description)}}</p>
+      <p>商品简述：{{format(goodsBean.goodsDesc)}}</p>
       <p>推介短信：{{format(goodsBean.smsInfo)}}</p>
       <p>商品清单：{{format(goodsBean.itemsList)}}</p>
-      <p>彩信文件：暂无信息</p>
+      <p>彩信文件：{{goodsBean.mmsInfo}}</p>
       <p>商品规格：包装：{{goodsBean.orderGoodsSpec1}}</p>
-      <div>商品阶梯价：<span v-if="goodsBean.gradientPriceFlag">暂无信息</span>
+      <div>商品阶梯价：<span v-if="!goodsBean.gradientPriceFlag">暂无信息</span>
         <div v-else>
           <p v-for="(item,index) in goodsBean.gradientNumber" :key="index">
-            一次性购买{{item}}件，商品价格优惠为{{goodsBean.gradientPrice[index]}}元
-          </p>
+              订购满:{{item}}{{actualUnit}}，商品价格:{{goodsBean.gradientPrice[index]}}/{{actualUnit}}
+            </p>
         </div>
       </div>
       <p>库存预警：{{goodsBean.stockAlarm}}</p>
+    </div>
+    <div>
+      <p>手机端描述:{{goodsBean.h5content}}</p>
     </div>
     <div style="text-align: center; margin-top:20px;">
       <el-button size="medium" type="primary" @click="goBack">返回</el-button>
@@ -62,7 +65,12 @@
 
 <script>
   import { getGoodsDetail } from '@/api/noshelfgoods'
+  import { getUnitsOptions } from '@/utils/index'
+  import { getTemplateDetail } from '@/api/addrmanage.js'
   export default {
+    created() {
+      this.unitsOptions = getUnitsOptions()
+    },
     mounted () {
       if (!this.$route.query.goodsId) {
         this.$message.error('未获取到商品id！')
@@ -73,7 +81,9 @@
     data() {
       return {
         loading: false,
-        goodsBean: {}
+        goodsBean: {},
+        actualUnit: '',
+        templateName: ''
       }
     },
     methods: {
@@ -83,6 +93,26 @@
           this.loading = false
           if (res.status === 200) {
             this.goodsBean = res.data.goodsBean
+            for (var i in this.unitsOptions) {
+              if (this.unitsOptions[i].value === this.goodsBean.quantityUnits) {
+                this.actualUnit = this.unitsOptions[i].label
+              }
+            }
+            if (this.goodsBean.logisticsTemplateCode) {
+              this._getTemplateDetail(this.goodsBean.logisticsTemplateCode)
+            }
+            console.log(this.goodsBean)
+          } else {
+            this.$message.error(res.msg)
+          }
+        }).catch(err => {
+          this.$message.error(err)
+        })
+      },
+      _getTemplateDetail(tid) {
+        getTemplateDetail(tid).then(res => {
+          if (res.status === 200) {
+            this.templateName = res.data.template.templateName
           } else {
             this.$message.error(res.msg)
           }

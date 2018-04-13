@@ -110,7 +110,7 @@
               sendRemark: this.ruleForm.bz
             }
             console.log(params)
-            sendGoods(params).then(res => {
+            sendGoods(this.ruleForm.oid, params).then(res => {
               console.log(res)
             }).catch(err => {
               this.$message.error(err)

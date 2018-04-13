@@ -40,9 +40,9 @@ export function getCompanies (params) {
   })
 }
 // 订单发货
-export function sendGoods (params) {
+export function sendGoods (id, params) {
   return request({
-    url: '/order/sendGoods/',
+    url: '/order/sendGoods/' + id,
     method: 'post',
     data: params
   })

@@ -22,21 +22,21 @@
               特色卖点：<span>{{format(goodsBean.features)}}</span>
             </p>
             <p>
-              剩余库存：<span>{{goodsBean.stock}} 计量单位待改</span>
+              剩余库存：<span>{{goodsBean.stock}}{{actualUnit}}</span>
             </p>
             <p>
-              支持换货：<span>{{goodsBean.isexchange?'不支持':'支持'}}</span>
+              支持换货：<span>{{goodsBean.isexchange==='1'?'否':'是'}}</span>
             </p>
             <p>
-              物流方式：<span v-if="goodsBean.logisticsTypes">{{goodsBean.logisticsTypes.indexOf('1') > -1 ? '自提' : ''}} {{goodsBean.logisticsTypes.indexOf('2')>-1 ? '物流' : ''}} {{goodsBean.logisticsTypes.indexOf('2')>-1 ? '物流模板：'+goodsBean.logisticsTemplateCode : ''}}</span>
+              物流方式：<span v-if="goodsBean.logisticsTypes">{{goodsBean.logisticsTypes.indexOf('1') > -1 ? '自提' : ''}} {{goodsBean.logisticsTypes.indexOf('2')>-1 ? '快递' : ''}}{{goodsBean.logisticsTypes.indexOf('3')>-1 ? '免邮' : ''}}{{goodsBean.logisticsTypes.indexOf('20')>-1 ? 'EMAIL' : ''}}{{goodsBean.logisticsTypes.indexOf('21')>-1 ? 'FAX' : ''}}</span>
             </p>
-            <p>
+            <!-- <p>
               物流费用：<span v-if="transportList">{{transportList.shipAreaLocationName}}至{{transportList.arrivalLocationName}} <el-button size="mini">选择区域</el-button> 快递：￥{{transportList.defaultMoney}}</span>
-            </p>
-            <div style="font-size: 12px;color:grey;">商品阶梯价：<span class="corange" v-if="goodsBean.gradientPriceFlag">暂无信息</span>
+            </p> -->
+            <div style="font-size: 12px;color:grey;">商品阶梯价：<span class="corange" v-if="!goodsBean.gradientPriceFlag">暂无信息</span>
               <div v-else>
                 <p v-for="(item,index) in goodsBean.gradientNumber" :key="index">
-                  一次性购买{{item}}件，商品价格优惠为{{goodsBean.gradientPrice[index]}}元
+                  订购满:{{item}}{{actualUnit}}，商品价格:{{goodsBean.gradientPrice[index]}}/{{actualUnit}}
                 </p>
               </div>
             </div>
@@ -46,13 +46,13 @@
               商品编号：<span>{{format(goodsBean.goodsCode)}}</span>
             </p>
             <p>
-              支持退货：<span>{{goodsBean.isReturn?'不支持':'支持'}}</span>
+              支持退货：<span>{{goodsBean.isReturn==='1'?'否':'是'}}</span>
             </p>
             <p>
               商品品牌：<span>{{format(goodsBean.brand)}}</span>
             </p>
             <p>
-              推荐商品：<span>{{goodsBean.isPromote?'否':'是'}}</span>
+              推荐商品：<span>{{goodsBean.isPromote==='1'?'否':'是'}}</span>
             </p>
             <p>
               是否预警：<span>{{goodsBean.stockAlarmFlag?'是':'否'}}</span>
@@ -79,14 +79,48 @@
     </div>
     <div class="content">
       <el-tabs v-model="activeTab" type="border-card" @tab-click="handleTabClick">
-        <el-tab-pane label="商品简述" name="first">商品简述</el-tab-pane>
-        <el-tab-pane label="配置管理" name="second">配置管理</el-tab-pane>
-        <el-tab-pane label="商品描述" name="third">商品描述</el-tab-pane>
-        <el-tab-pane label="规格参数" name="fourth">规格参数</el-tab-pane>
-        <el-tab-pane label="商品属性" name="fifth">商品属性</el-tab-pane>
-        <el-tab-pane label="商品资质" name="sixth">商品资质</el-tab-pane>
-        <el-tab-pane label="关联商品" name="seventh">关联商品</el-tab-pane>
-        <el-tab-pane label="手机端描述" name="eighth">手机端描述</el-tab-pane>
+        <el-tab-pane label="商品信息" name="first">
+          <el-row>
+            <el-col :span="12" style="border-right: 1px solid #999;">
+              <div class="clearfix mt10">
+                <p class="fl pleft">商品名称：</p> <p class="fl pright">{{goodsBean.name}}</p>
+              </div>
+              <div class="clearfix mt10">
+                <p class="fl pleft">商品重量：</p> <p class="fl pright">{{goodsBean.weight}}克(g)</p>
+              </div>
+              <div class="clearfix mt10">
+                <p class="fl pleft">供应商：</p> <p class="fl pright">{{goodsBean.supplierName}}</p>
+              </div>
+              <div class="clearfix mt10">
+                <p class="fl pleft">推介短信：</p> <p class="fl pright">{{goodsBean.smsInfo}}</p>
+              </div>
+            </el-col>
+            <el-col :span="12">
+              <div class="clearfix mt10">
+                <p class="fl pleft">商家名称：</p> <p class="fl pright">{{goodsBean.shopName}}</p>
+              </div>
+              <div class="clearfix mt10">
+                <p class="fl pleft">商品产地：</p> <p class="fl pright">{{goodsBean.placeofOriginName}}</p>
+              </div>
+              <div class="clearfix mt10">
+                <p class="fl pleft">商品分类信息：</p> <p class="fl pright">{{goodsBean.typeCodeName}}</p>
+              </div>
+              <div class="clearfix mt10">
+                <p class="fl pleft">商品清单：</p> <p class="fl pright">{{goodsBean.itemList?goodsBean.itemList:''}}</p>
+              </div>
+            </el-col>
+          </el-row>
+        </el-tab-pane>
+        <el-tab-pane label="商品简述" name="third"><p style="color:grey;font-size:13px;">{{goodsBean.goodsDesc}}</p></el-tab-pane>
+        <el-tab-pane label="规格参数" name="fourth">
+          <p style="color:grey;font-size:13px;" v-show="goodsBean.orderGoodsSpec1">包装：{{goodsBean.orderGoodsSpec1}}</p>
+          <p style="color:grey;font-size:13px;margin-top:10px;" v-show="goodsBean.orderGoodsSpec2">长度：{{goodsBean.orderGoodsSpec2}}</p>
+        </el-tab-pane>
+        <el-tab-pane label="手机端描述" name="eighth">
+          <p style="color:grey;font-size:13px;">
+            {{goodsBean.h5content}}
+          </p>
+        </el-tab-pane>
       </el-tabs>    
     </div>
     <div style="text-align: center; margin-top: 20px;">
@@ -101,7 +135,7 @@
   import { getUnitsOptions } from '@/utils/index'
   export default {
     mounted () {
-      getUnitsOptions()
+      this.unitsOptions = getUnitsOptions()
       if (!this.$route.query.goodsId) {
         this.$message.error('未获取到商品id！')
       } else {
@@ -110,6 +144,8 @@
     },
     data() {
       return {
+        unitsOptions: [],
+        actualUnit: '',
         activeTab: 'first',
         templateName: '',   // 物流模板名称
         transportList: [],
@@ -125,6 +161,12 @@
             this.loading = false
             if (res.status === 200) {
               this.goodsBean = res.data.goodsBean
+              console.log('222', this.goodsBean)
+              for (var i in this.unitsOptions) {
+                if (this.unitsOptions[i].value === this.goodsBean.quantityUnits) {
+                  this.actualUnit = this.unitsOptions[i].label
+                }
+              }
               if (this.goodsBean.logisticsTemplateCode) {
                 getTemplate(this.goodsBean.logisticsTemplateCode).then(res => {
                   if (res.status === 200) {
@@ -181,6 +223,7 @@
 </script>
 
 <style scoped>
+  .mt10{margin-top: 10px;}
   .preview{padding: 10px 2%;}
   .banner-con{width: 400px;height: 300px;border: 1px solid #d9d9d9;overflow: hidden;}
   .banner-con img{width: 100%; height: 100%;}
@@ -192,4 +235,7 @@
   .goods-info span{font-size: 14px;font-weight: bold;}
   .corange{color: #f60;}
   .content{margin-top: 20px;padding: 20px;border: 1px solid #e4e7ed;}
+  .content p{margin: 0;}
+  .pleft{width: 100px;text-align: right;font-size: 13px;color: #787878;}
+  .pright{font-size: 13px;}
 </style>

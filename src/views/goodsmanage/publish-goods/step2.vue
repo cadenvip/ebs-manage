@@ -18,7 +18,7 @@
         <el-input style="width: 100px;" placeholder="特色卖点" :maxlength=20 v-model="ruleForm.maidian"></el-input>
       </el-form-item>
       <div>
-        <p style="font-size: 14px;color: #ccc;margin-left: 30px;margin-top: 0;">商品名称展示效果: <span style="color: #67c23a">{{ruleForm.cuxiao+"&nbsp&nbsp"+ruleForm.pinpai+"&nbsp&nbsp"+ruleForm.mingchen+"&nbsp&nbsp"}}<i v-show="ruleForm.guige">包装: </i>{{ruleForm.guige+"&nbsp&nbsp"+ruleForm.maidian}}</span></p>
+        <p style="font-size: 14px;color: #ccc;margin-left: 30px;margin-top: 0;">商品名称展示效果: <span style="color: #67c23a">{{(ruleForm.cuxiao?ruleForm.cuxiao: '')+"&nbsp&nbsp"+(ruleForm.pinpai?ruleForm.pinpai:'')+"&nbsp&nbsp"+(ruleForm.mingchen?ruleForm.mingchen:'')+"&nbsp&nbsp"}}<i v-show="ruleForm.guige">包装: </i> <i v-show="ruleForm.spgg">{{ruleForm.guige}}  长度：{{ruleForm.spgg?ruleForm.spgg:''}}</i>  {{ruleForm.maidian}}</span></p>
       </div>
       <el-form-item style="display: block;" label="市场价:" prop="shichangjia">
         <el-input style="width: 260px;" :maxlength=7 placeholder="输入同类市场价" v-model.number="ruleForm.shichangjia"></el-input>
@@ -267,7 +267,7 @@
         <p style="text-align:center;font-weight: bold;">手机端编辑</p>
         <div style="padding: 0 20px 40px 20px;">
           <quill-editor ref="myTextEditor"
-            v-model="content"
+            v-model="h5content"
             :options="editorOption"
             @blur="onEditorBlur($event)"
             @focus="onEditorFocus($event)"
@@ -413,6 +413,7 @@
               this.immediate = false
               this.immediateTime = this.goodsBean.takeEffectTime
             }
+            this.goodsBean.h5content = this.h5content
             console.log(this.ruleForm)
           } else {
             this.$message.error(res.msg)
@@ -433,7 +434,7 @@
     },
     data() {
       return {
-        content: '',
+        h5content: '',
         editorOption: {
           // something config
         },
@@ -661,7 +662,8 @@
               description: this.ruleForm.shangpjs,
               smsInfo: this.ruleForm.tuijdx,
               wapInfo: this.ruleForm.wappushnr,
-              wapUrl: this.ruleForm.wappushlj
+              wapUrl: this.ruleForm.wappushlj,
+              h5content: this.h5content
             }
             if (this.isFromModifyFlag === 1 || this.isFromModifyFlag === 2) {
               parmas.goodsId = this.$route.query.goodsId
