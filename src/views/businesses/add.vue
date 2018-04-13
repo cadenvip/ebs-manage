@@ -658,6 +658,11 @@
             validator: validateBusinessName,
             trigger: 'change'
           }],
+          validdate_str: [{
+            required: true,
+            message: '请选择有效时间',
+            trigger: 'blur'
+          }],
           locationCode: [{
             required: true,
             message: '请选择地址',
@@ -882,6 +887,13 @@
             })
             return
           }
+        }
+        if (this.registerForm.validdate_str === '') {
+          this.$message({
+            type: 'warning',
+            message: '请选择有效时间'
+          })
+          return
         }
         if (this.registerForm.locationCode === '') {
           this.$message({

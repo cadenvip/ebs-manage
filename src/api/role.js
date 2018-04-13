@@ -36,7 +36,7 @@ export function addRole(params) {
       'description': `${params.description}`,
       'resourceids': params.resourceids,
       'issystem': '1',
-      'ishidden': '0'
+      'ishidden': `${params.ishidden === true ? '1' : '0'}`
     }
   })
 }
@@ -49,7 +49,8 @@ export function updateRole(params) {
       'id': `${params.id}`,
       'rolename': `${params.rolename}`,
       'description': `${params.description}`,
-      'resourceids': params.resourceids
+      'resourceids': params.resourceids,
+      'ishidden': `${params.ishidden === true ? '1' : '0'}`
     }
   })
 }

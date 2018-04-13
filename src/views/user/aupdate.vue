@@ -10,7 +10,7 @@
       </el-form-item>
       <el-form-item label="角色：" prop="roleids">
         <el-checkbox-group v-model="userForm.roleids">
-          <el-checkbox v-for="(item, index) in allRoles" v-if="item.roletype === userForm.roletype" :key="item.id" :label="item.id">{{item.rolename}}</el-checkbox>
+          <el-checkbox v-for="(item, index) in allRoles" v-if="item.roletype === userForm.roletype && item.ishidden !== '1'" :key="item.id" :label="item.id">{{item.rolename}}</el-checkbox>
         </el-checkbox-group>
       </el-form-item>
       <el-form-item label="账号：" prop="loginname">

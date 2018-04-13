@@ -11,6 +11,9 @@
           <el-option label="商家角色" value="3"></el-option>
         </el-select>
       </el-form-item>
+      <el-form-item label="是否隐藏：" prop="ishidden">
+        <el-switch v-model="roleForm.ishidden"></el-switch>
+      </el-form-item>
       <el-form-item label="角色描述：" prop="description">
         <el-input type="textarea" v-model="roleForm.description" :maxlength=100 style="width: 600px;" placeholder="请输入角色描述"></el-input>
         <p>剩余字数:
@@ -51,6 +54,7 @@
         roleForm: {
           rolename: '',
           roletype: '1',
+          ishidden: false,
           description: '',
           resourceids: []
         },
