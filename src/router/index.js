@@ -703,6 +703,23 @@ export const asyncRouterMap = [
     ]
   },
 
+  // 短信管理
+  {
+    path: '/smsmanage',
+    redirect: '/smsmanage/index',
+    component: Layout,
+    name: '短信管理',
+    meta: { roles: ['2', '3'], title: '短信管理', icon: 'sms' },
+    children: [
+      {
+        path: 'index',
+        name: '短信管理2',
+        component: _import('smsmanage/index'),
+        meta: { roles: ['2', '3'], title: '短信管理', icon: 'sms' }
+      }
+    ]
+  },
+
   // {
   //   path: '/permission',
   //   component: Layout,

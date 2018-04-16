@@ -3,7 +3,7 @@
     <el-form :model="tab1Form" :rules="tab1rules" ref="tab1Form" label-width="100px">
       <el-form-item label="姓  名:" prop="name">
         <el-col :span="12">
-          <el-input id="addrName" placeholder="请输入姓名" v-model.trim="tab1Form.name"></el-input>
+          <el-input :maxlength="8" id="addrName" placeholder="请输入姓名" v-model.trim="tab1Form.name"></el-input>
         </el-col>
       </el-form-item>
       <el-form-item label="所在区域:"  prop="locationCode">
@@ -11,7 +11,7 @@
       </el-form-item>
       <el-form-item label="街道地区:" prop="block">
         <el-col :span="12">
-          <el-input placeholder="请输入街道地区" v-model.trim="tab1Form.block"></el-input>
+          <el-input :maxlength="30" placeholder="请输入街道地区" v-model.trim="tab1Form.block"></el-input>
         </el-col>
         <el-col :span="12">
           <span style="padding-left: 20px; color: #999;">不需要重复填写省/市/区</span>
@@ -140,7 +140,7 @@
           name: [{ required: true, message: '请输入姓名', trigger: 'blur' }],
           locationCode: [{ required: true, message: '请选择地址', trigger: 'change' }],
           block: [{ required: true, message: '请输入街道地区', trigger: 'blur' }],
-          postcode: [{ required: false, trigger: 'blur', validator: validatePostCode }]
+          postcode: [{ required: true, trigger: 'blur', validator: validatePostCode }]
         },
         tab1TableData: []
       }

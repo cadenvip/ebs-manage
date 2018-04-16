@@ -17,10 +17,10 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="快递电话：" prop="kddh">
+      <el-form-item v-if="ruleForm.kdfs==='0'" label="快递电话：" prop="kddh">
         <el-input size="medium" v-model.trim="ruleForm.kddh" :maxlength="11" style="width: 195px;"></el-input>
       </el-form-item>
-      <el-form-item label="运单号：">
+      <el-form-item label="运单号：" prop="ydh">
         <el-input size="medium" v-model.trim="ruleForm.ydh" style="width: 195px;"></el-input>
       </el-form-item>
       <el-form-item label="备注：">
@@ -76,11 +76,14 @@
           kdfs: [
             { required: true, message: '请选择快递方式', trigger: 'blur' }
           ],
-          kdgsmc: [
+          kdgsmcbm: [
             { required: true, message: '请选择快递公司名称', trigger: 'blur' }
           ],
           kddh: [
             { required: true, validator: validateMobile, trigger: 'blur' }
+          ],
+          ydh: [
+            { required: true, message: '请输入运单号', trigger: 'blur' }
           ]
         }
       }
@@ -105,13 +108,18 @@
               logisticNo: this.ruleForm.ydh,         // 运单号
               transportType: 'EXPRESS',             // 默认EXPRESS 有问题
               sendCompanyCode: this.ruleForm.kdgsmcbm, // 快递公司名称编码
-              sendExpTel: this.ruleForm.kddh,       // 快递电话
+              sendExpTel: this.ruleForm.kdfs === '0' ? this.ruleForm.kddh : '',       // 快递电话
               sendExpType: this.ruleForm.kdfs,      // 快递方式
               sendRemark: this.ruleForm.bz
             }
             console.log(params)
             sendGoods(this.ruleForm.oid, params).then(res => {
-              console.log(res)
+              if (res.status === 200) {
+                this.$message.success('订单发货成功！')
+                this.$router.push({ path: '/order/index' })
+              } else {
+                this.$message.error(res.msg)
+              }
             }).catch(err => {
               this.$message.error(err)
             })
