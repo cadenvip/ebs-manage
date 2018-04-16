@@ -451,6 +451,7 @@
   } from '@/api/businesses'
   import {
     validateMobilePhone,
+    validateCMMobilePhone,
     validateEmail,
     validateID,
     containSymbol,
@@ -491,6 +492,18 @@
         } else {
           if (!validateMobilePhone(value.trim())) {
             callback(new Error('请输入有效的手机号码'))
+          } else {
+            callback()
+          }
+        }
+      }
+      // 校验中国移动手机号
+      var validateCMMobile = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('请输入手机号码'))
+        } else {
+          if (!validateCMMobilePhone(value.trim())) {
+            callback(new Error('请输入有效的中国移动手机号码'))
           } else {
             callback()
           }
@@ -738,7 +751,7 @@
           }],
           relationPhone: [{
             required: true,
-            validator: validateMobile,
+            validator: validateCMMobile,
             trigger: 'blur'
           }],
           relationEmail: [{

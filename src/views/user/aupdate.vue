@@ -88,7 +88,8 @@
     updateUser
   } from '@/api/user'
   import {
-    validateMobilePhone,
+    validateCMMobilePhone,
+    containSymbol,
     validateEmail
   } from '@/utils/validate'
   import PasswordStrength from '@/components/PasswordStrength/index'
@@ -98,11 +99,25 @@
 
   export default {
     data() {
+      // 必填
+      var validateName = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('请输入姓名'))
+        } else {
+          if (value.indexOf(' ') >= 0) {
+            callback(new Error('不能包含空格'))
+          } else if (containSymbol(value.trim())) {
+            callback(new Error('不能包含特殊字符'))
+          } else {
+            callback()
+          }
+        }
+      }
       var validateCellphone = (rule, value, callback) => {
         if (value === '') {
           callback(new Error('请输入手机号码'))
         } else {
-          if (!validateMobilePhone(value.trim())) {
+          if (!validateCMMobilePhone(value.trim())) {
             callback(new Error('请输入有效的手机号码'))
           } else {
             callback()
@@ -138,8 +153,8 @@
         rules: {
           loginname: [{
             required: true,
-            message: '请输入账号',
-            trigger: 'blur'
+            trigger: 'change',
+            validator: validateName
           }],
           roleids: [{
             required: true,
@@ -148,8 +163,8 @@
           }],
           name: [{
             required: true,
-            message: '请输入名称',
-            trigger: 'blur'
+            trigger: 'change',
+            validator: validateName
           }],
           phoneno: [{
             required: true,

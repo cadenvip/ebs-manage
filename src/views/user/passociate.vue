@@ -88,7 +88,7 @@
     updateUser
   } from '@/api/user'
   import {
-    validateMobilePhone,
+    validateCMMobilePhone,
     validateEmail
   } from '@/utils/validate'
   import PasswordStrength from '@/components/PasswordStrength/index'
@@ -102,7 +102,7 @@
         if (value === '') {
           callback(new Error('请输入手机号码'))
         } else {
-          if (!validateMobilePhone(value.trim())) {
+          if (!validateCMMobilePhone(value.trim())) {
             callback(new Error('请输入有效的手机号码'))
           } else {
             callback()

@@ -6,7 +6,7 @@
         <span class="svg-container svg-container_login">
           <svg-icon icon-class="user" />
         </span>
-        <el-input name="loginname" type="text" v-model="loginForm.loginname" :maxlength=16 placeholder="请输入账号" clearable v-on:blur="getUnitids" />
+        <el-input name="loginname" type="text" v-model="loginForm.loginname" :maxlength=20 placeholder="请输入账号" clearable v-on:blur="getUnitids" />
       </el-form-item>
       <el-form-item prop="unitid">
         <span class="svg-container svg-container_login">
@@ -56,7 +56,7 @@
     getUnitInfos,
     getUnits
   } from '@/api/login'
-  // import { validateMobilePhone } from '@/utils/validate'
+  import { containSymbol } from '@/utils/validate'
   import {
     encryptPassword
   } from '@/utils/index'
@@ -74,6 +74,19 @@
       //     callback()
       //   }
       // }
+      var validateName = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('请输入账号'))
+        } else {
+          if (value.indexOf(' ') >= 0) {
+            callback(new Error('不含空格'))
+          } else if (containSymbol(value.trim())) {
+            callback(new Error('不含特殊字符'))
+          } else {
+            callback()
+          }
+        }
+      }
       return {
         unitinfos: [],
         loginForm: {
@@ -86,8 +99,8 @@
           // loginname: [{ required: true, trigger: 'blur', validator: validateCellphone }],
           loginname: [{
             required: true,
-            trigger: 'blur',
-            message: '请输入账号'
+            trigger: 'change',
+            validator: validateName
           }],
           password: [{
             required: true,
