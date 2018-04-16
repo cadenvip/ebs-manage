@@ -61,7 +61,7 @@
             <el-row :gutter="20">
               <el-col :span="9">
                 <el-form-item label="业务联系人：" prop="relationPerson">
-                  <el-input v-model="registerForm.relationPerson" :maxlength=16 clearable style="width: 220px;" placeholder="请输入业务联系人" disabled></el-input>
+                  <el-input v-model="registerForm.relationPerson" :maxlength=16 style="width: 220px;" placeholder="请输入业务联系人" disabled></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="15" style="padding-top:8px;padding-left:30px">
@@ -71,7 +71,7 @@
             <el-row :gutter="20">
               <el-col :span="9">
                 <el-form-item label="业务联系人手机号码：" prop="relationPhone">
-                  <el-input v-model="registerForm.relationPhone" clearable :maxlength=11 style="width: 220px;" placeholder="请输入业务联系人手机号码" disabled></el-input>
+                  <el-input v-model="registerForm.relationPhone" :maxlength=11 style="width: 220px;" placeholder="请输入业务联系人手机号码" disabled></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="15" style="padding-top:8px;padding-left:30px">
@@ -101,14 +101,17 @@
               </el-col>
             </el-row>
             <el-form-item label="售后处理点：" prop="sellAddressListForm">
-              <el-button size="mini" @click="addSellAddress">新增</el-button>
+              <el-button type="primary" size="mini" @click="addSellAddress">新增</el-button>
+              <div style="font-family: 宋体, Arial, sans-serif;font-size: 12px;color: #f30">
+                <span>注意：对售后处理点的新增、删除、修改操作只有提交才能生效！</span>
+              </div>              
               <div v-for="(item,index) in sellAddressListForm" v-show="item.valid" style="margin-top:10px">
                 <el-row>
                   <el-col :span="20">
                     <AddressSelector :locationId="item.locationcode" :detailAddress="item.selladdress" :index="index" @addressChanged="getAddressInfo"></AddressSelector>
                   </el-col>
                   <el-col :span="4">
-                    <el-button size="mini" @click="deleteSellAddress(item)">删除</el-button>
+                    <el-button type="primary" size="mini" @click="deleteSellAddress(item)">删除</el-button>
                   </el-col>
                 </el-row>
               </div>
@@ -440,12 +443,39 @@
     validateMobilePhone,
     validateEmail,
     validateID,
+    containSymbol,
     validatePostcode,
     validateDigit
   } from '@/utils/validate'
 
   export default {
     data() {
+      // 必填
+      var validateName = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('请输入姓名'))
+        } else {
+          if (value.indexOf(' ') >= 0) {
+            callback(new Error('不能包含空格'))
+          } else if (containSymbol(value.trim())) {
+            callback(new Error('不能包含特殊字符'))
+          } else {
+            callback()
+          }
+        }
+      }
+      // 非必填
+      var validateNameNotRequired = (rule, value, callback) => {
+        if (value !== null && value !== '') {
+          if (value.indexOf(' ') >= 0) {
+            callback(new Error('不能包含空格'))
+          } else if (containSymbol(value.trim())) {
+            callback(new Error('不能包含特殊字符'))
+          } else {
+            callback()
+          }
+        }
+      }
       // 校验手机号
       var validateMobile = (rule, value, callback) => {
         if (value === '') {
@@ -477,6 +507,30 @@
             callback(new Error('请输入有效的身份证号码'))
           } else {
             callback()
+          }
+        }
+      }
+      var validateLegalPaperNumber = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('请输入证件号码'))
+        } else {
+          switch (this.registerForm.legalPaperType) {
+            case '1':
+              if (!validateID(value.trim())) {
+                callback(new Error('请输入有效的身份证号码'))
+              } else {
+                callback()
+              }
+              break
+            case '2':
+              callback()
+              break
+            case '3':
+              callback()
+              break
+            default:
+              callback(new Error('请先选择证件类型'))
+              break
           }
         }
       }
@@ -632,8 +686,13 @@
         registerRules: {
           businessesName: [{
             required: true,
-            message: '请输入企业名称',
-            trigger: 'blur'
+            validator: validateName,
+            trigger: 'change'
+          }],
+          businessesShortName: [{
+            required: false,
+            validator: validateNameNotRequired,
+            trigger: 'change'
           }],
           validdate_str: [{
             required: true,
@@ -652,8 +711,8 @@
           }],
           legalName: [{
             required: true,
-            message: '请输入法人姓名',
-            trigger: 'blur'
+            validator: validateName,
+            trigger: 'change'
           }],
           legalPaperType: [{
             required: true,
@@ -662,13 +721,13 @@
           }],
           legalPaperNumber: [{
             required: true,
-            message: '请输入法人证件号码',
-            trigger: 'blur'
+            validator: validateLegalPaperNumber,
+            trigger: 'change'
           }],
           relationPerson: [{
             required: true,
-            message: '请输入业务联系人',
-            trigger: 'blur'
+            validator: validateName,
+            trigger: 'change'
           }],
           relationPhone: [{
             required: true,
@@ -682,8 +741,8 @@
           }],
           sellPersonName: [{
             required: true,
-            message: '请输入售后联系人',
-            trigger: 'blur'
+            validator: validateName,
+            trigger: 'change'
           }],
           sellPersonMobile: [{
             required: true,
@@ -699,8 +758,8 @@
           }],
           financePersonName: [{
             required: true,
-            message: '请输入财务联系人',
-            trigger: 'blur'
+            validator: validateName,
+            trigger: 'change'
           }],
           financePersonMobile: [{
             required: true,
@@ -1039,6 +1098,35 @@
             message: '请输入企业名称'
           })
           return
+        } else {
+          if (this.registerForm.businessesName.indexOf(' ') >= 0) {
+            this.$message({
+              type: 'warning',
+              message: '企业名称不能包含空格'
+            })
+            return
+          } else if (containSymbol(this.registerForm.businessesName)) {
+            this.$message({
+              type: 'warning',
+              message: '企业名称不能包含特殊字符'
+            })
+            return
+          }
+        }
+        if (this.registerForm.businessesShortName !== '') {
+          if (this.registerForm.businessesName.indexOf(' ') >= 0) {
+            this.$message({
+              type: 'warning',
+              message: '企业名称不能包含空格'
+            })
+            return
+          } else if (containSymbol(this.registerForm.businessesName)) {
+            this.$message({
+              type: 'warning',
+              message: '企业名称不能包含特殊字符'
+            })
+            return
+          }
         }
         if (this.registerForm.validdate_str === null || this.registerForm.validdate_str === '') {
           this.$message({
@@ -1061,13 +1149,29 @@
           })
           return
         }
+
         if (this.registerForm.legalName === '') {
           this.$message({
             type: 'warning',
             message: '请输入法人姓名'
           })
           return
+        } else {
+          if (this.registerForm.legalName.indexOf(' ') >= 0) {
+            this.$message({
+              type: 'warning',
+              message: '法人姓名不能包含空格'
+            })
+            return
+          } else if (containSymbol(this.registerForm.legalName)) {
+            this.$message({
+              type: 'warning',
+              message: '法人姓名不能包含特殊字符'
+            })
+            return
+          }
         }
+  
         if (this.registerForm.legalPaperType === '') {
           this.$message({
             type: 'warning',
@@ -1082,20 +1186,29 @@
           })
           return
         }
+
         if (this.registerForm.relationPerson === '') {
           this.$message({
             type: 'warning',
             message: '请输入业务联系人'
           })
           return
+        } else {
+          if (this.registerForm.relationPerson.indexOf(' ') >= 0) {
+            this.$message({
+              type: 'warning',
+              message: '业务联系人不能包含空格'
+            })
+            return
+          } else if (containSymbol(this.registerForm.relationPerson)) {
+            this.$message({
+              type: 'warning',
+              message: '业务联系人不能包含特殊字符'
+            })
+            return
+          }
         }
-        if (this.registerForm.relationPerson === '') {
-          this.$message({
-            type: 'warning',
-            message: '请输入业务联系人'
-          })
-          return
-        }
+
         if (this.registerForm.relationPhone === '') {
           this.$message({
             type: 'warning',
@@ -1109,6 +1222,20 @@
             message: '请输入售后联系人'
           })
           return
+        } else {
+          if (this.registerForm.sellPersonName.indexOf(' ') >= 0) {
+            this.$message({
+              type: 'warning',
+              message: '售后联系人不能包含空格'
+            })
+            return
+          } else if (containSymbol(this.registerForm.sellPersonName)) {
+            this.$message({
+              type: 'warning',
+              message: '售后联系人不能包含特殊字符'
+            })
+            return
+          }
         }
         if (this.registerForm.sellPersonMobile === '') {
           this.$message({
@@ -1139,6 +1266,20 @@
             message: '请输入财务联系人'
           })
           return
+        } else {
+          if (this.registerForm.financePersonName.indexOf(' ') >= 0) {
+            this.$message({
+              type: 'warning',
+              message: '财务联系人不能包含空格'
+            })
+            return
+          } else if (containSymbol(this.registerForm.financePersonName)) {
+            this.$message({
+              type: 'warning',
+              message: '财务联系人不能包含特殊字符'
+            })
+            return
+          }
         }
         if (this.registerForm.financePersonMobile === '') {
           this.$message({
