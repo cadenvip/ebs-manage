@@ -365,13 +365,11 @@
           if (res.status === 200) {
             this.tableData = res.data
             this.total = res.total
-          } else if (res.status === 400 && res.msg === '没有商品数据') {
-            this.tableData = []
           } else {
             this.$message.error(res.msg)
           }
         }).catch(err => {
-          console.log(err)
+          this.$message.error(err)
         })
       },
       handleSizeChange(val) {

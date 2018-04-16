@@ -559,7 +559,7 @@
             { required: true, message: '请输入生产厂家', trigger: 'blur' }
           ],
           spcd: [
-            { message: '请输入商品产地', trigger: 'blur' }
+            { required: true, message: '请输入商品产地', trigger: 'blur' }
           ],
           baozhiqi: [
             { required: true, message: '请输入保质期', trigger: 'blur' }

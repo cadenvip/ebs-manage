@@ -222,7 +222,15 @@
   export default {
     created () {
       this._getGoodsTopType()
-      this._getOnSaleGoods()
+      var tab = this.$route.query.tab
+      if (tab === 'tab2') {
+        alert('test')
+        this.activeTab = 'tab2'
+        this.currentTab = 2
+        this._getOnSaleGoods({ searchType: 3 })
+      } else {
+        this._getOnSaleGoods()
+      }
     },
     data() {
       return {
@@ -315,11 +323,9 @@
             if (this.currentTab === 1) {
               this.tableData = res.data
             } else {
-              this.this.tableData2 = res.data
+              this.tableData2 = res.data
             }
             this.total = res.total
-          } else if (res.status === 400 && res.msg === '没有商品数据') {
-            return
           } else {
             this.$message.error(res.msg)
           }

@@ -98,14 +98,12 @@
               <template slot-scope="scope">{{ scope.row.status === '1' ? '正常' : '错误' }}</template>
             </el-table-column>
             <el-table-column align="center" label="审核状态" show-overflow-tooltip>
-              <template slot-scope="scope">{{ scope.row.auditStatus === '1' ? '上架审批中' : scope.row.auditStatus === '2' ? '上架审批通过' : scope.row.auditStatus === '3' ? '上架审批驳回' : '错误' }}</template>
+              <template slot-scope="scope">{{scope.row.auditStatus ==='0' ? '待上架':scope.row.auditStatus ==='1' ? '待上架审批':scope.row.auditStatus ==='2' ? '上架审批通过':scope.row.auditStatus ==='3' ? '上架审批驳回':scope.row.auditStatus ==='4' ? '待下架审批':scope.row.auditStatus ==='5' ? '下架审批通过':scope.row.auditStatus ==='6' ? '下架审批驳回':'暂无'}}</template>
             </el-table-column>
             <el-table-column align="center" label="操作">
               <template slot-scope="scope">
                 <el-button @click="getGoodsDetail(scope.row)" type="text" size="small">详情</el-button>
-                <el-button v-if="scope.row.auditStatus === '3'" @click="_upGoods(scope.row)" type="text" size="small">上架</el-button>
                 <el-button v-if="scope.row.auditStatus === '3'" @click="modifyGoods(scope.row)" type="text" size="small">修改</el-button>
-                <el-button v-if="scope.row.auditStatus === '3'" @click="deleteGoods(scope.row)" type="text" size="small">删除</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -117,19 +115,60 @@
             </el-col>
             <el-col :span="18" style="text-align: right; padding-right: 20px;">
               <el-pagination
-                @size-change="handleDSJsizeChange"
                 @current-change="handleDSJcurrentChange"
-                layout="total, sizes, prev, pager, next, jumper"
-                :current-page.sync="DSJcurrentPage"
-                :page-sizes="pagesizes"
+                layout="total, prev, pager, next, jumper"
+                :current-page.sync="currentPage"
                 :page-size="pagesize"
                 :total="total">
               </el-pagination>
             </el-col>
           </el-row>
         </el-tab-pane>
-        <el-tab-pane label="草稿箱" name="second">草稿箱</el-tab-pane>
-        <el-tab-pane label="历史商品" name="third">历史商品</el-tab-pane>
+        <!-- <el-tab-pane label="草稿箱" name="second">草稿箱</el-tab-pane> -->
+        <el-tab-pane label="历史商品" name="third">
+          <el-table @selection-change="handleTableSelectionChange" v-loading="loading" element-loading-text="Loading" ref="multipleTable" :data="tableData" tooltip-effect="dark" border style="width: 100%" >
+            <el-table-column type="selection">
+            </el-table-column>
+            <el-table-column align="center" width="160" label="商品编码">
+              <template slot-scope="scope">{{ scope.row.goodsCode }}</template>
+            </el-table-column>
+            <el-table-column prop="goodsName" align="center" label="商品名称">
+            </el-table-column>
+            <el-table-column prop="categoryName" align="center" label="商品类型" show-overflow-tooltip>
+            </el-table-column>
+            <el-table-column prop="price" align="center" label="价格">
+            </el-table-column>
+            <el-table-column prop="stock" align="center" label="库存" show-overflow-tooltip>
+            </el-table-column>
+            <el-table-column prop="upTime" align="center" label="上架时间" show-overflow-tooltip>
+            </el-table-column>
+            <el-table-column align="center" label="状态" show-overflow-tooltip>
+              <template slot-scope="scope">{{ scope.row.status === '1' ? '正常' : '错误' }}</template>
+            </el-table-column>
+            <el-table-column align="center" label="审核状态" show-overflow-tooltip>
+              <template slot-scope="scope">{{scope.row.auditStatus ==='0' ? '待上架':scope.row.auditStatus ==='1' ? '待上架审批':scope.row.auditStatus ==='2' ? '上架审批通过':scope.row.auditStatus ==='3' ? '上架审批驳回':scope.row.auditStatus ==='4' ? '待下架审批':scope.row.auditStatus ==='5' ? '下架审批通过':scope.row.auditStatus ==='6' ? '下架审批驳回':'暂无'}}</template>
+            </el-table-column>
+            <el-table-column align="center" label="操作">
+              <template slot-scope="scope">
+                <el-button @click="getGoodsDetail(scope.row)" type="text" size="small">详情</el-button>
+                <el-button @click="modifyGoods(scope.row)" type="text" size="small">修改</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+          <el-row style="margin-top: 20px;">
+            <el-col :span="6" style="padding-left: 20px; text-align: left;padding-top: 5px;">
+            </el-col>
+            <el-col :span="18" style="text-align: right; padding-right: 20px;">
+              <el-pagination
+                @current-change="handleDSJcurrentChange"
+                layout="total, prev, pager, next, jumper"
+                :current-page.sync="currentPage"
+                :page-size="pagesize"
+                :total="total">
+              </el-pagination>
+            </el-col>
+          </el-row>
+        </el-tab-pane>
       </el-tabs>
     </div>
   </div>
@@ -142,22 +181,18 @@
   export default {
     created () {
       this._getGoodsTopType()
-      this.dsjflag = false
-      this.cgxflag = true
-      this.lsspflag = true
       this.selectAll = false
       this._getNoShelfGoods()
     },
     data() {
       return {
-        searchFlag: false,
         loading: false,  // 是否展示loading
         show: false,  // 下拉搜索内容是否展示
         activeTab: 'first', // 选择的tab
         total: 0, // 总条目数
-        pagesizes: [10, 20, 30, 50],  // 页码选项
         pagesize: 10, // 每页展示条数
-        DSJcurrentPage: 1,  // 待上架商品当前页
+        currentPage: 1,  // 待上架商品当前页
+        currentTab: 1,
         formT: {
           shangpmc: '',
           spzdjg: '',
@@ -207,16 +242,15 @@
       _getNoShelfGoods(obj) {
         this.loading = true
         const params = Object.assign({
-          searchType: 2,
-          pageSize: this.pagesize
+          searchType: this.currentTab === 1 ? '2' : this.currentTab === 3 ? '6' : '2',
+          pageSize: this.pagesize,
+          page: this.currentPage
         }, obj)
         getNoShelfGoods(params).then(res => {
           this.loading = false
           if (res.status === 200) {
             this.tableData = res.data
             this.total = res.total
-          } else if (res.status === 400 && res.msg === '没有商品数据') {
-            this.tableData = []
           } else {
             this.$message.error(res.msg)
           }
@@ -225,18 +259,28 @@
         })
       },
       handleTabClick(tab, event) {
-        if (this.dsjflag === true && tab.name === 'first') {
-          this.dsjflag = false
+        this.formT = {
+          shangpmc: '',
+          spzdjg: '',
+          spzgjg: '',
+          shangpbm: '',
+          ssspzt: '',
+          ssshzt: '',
+          sssplx: ''
         }
-        if (this.cgxflag === true && tab.name === 'second') {
-          this.cgxflag = false
-          console.log('request')
+        if (tab.name === 'first') {
+          this.currentPage = 1
+          this.currentTab = 1
+          this.submitForm('formT')
+        } else if (tab.name === 'second') {
+          this.currentPage = 1
+          this.currentTab = 2
+          this.submitForm('formT')
+        } else {
+          this.currentPage = 1
+          this.currentTab = 3
+          this.submitForm('formT')
         }
-        if (this.lsspflag === true && tab.name === 'third') {
-          this.lsspflag = false
-          console.log('request')
-        }
-        console.log(tab)
       },
       toggleSelection(rows) {
         this.selectAll = !this.selectAll
@@ -250,30 +294,18 @@
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            this.DSJcurrentPage = 1
-            this.searchFlag = true
-            for (var i in this.formT) {
-              if (this.formT[i] !== '') {
-                const params = {
-                  downPrice: this.formT.spzdjg,
-                  upPrice: this.formT.spzgjg,
-                  goodsCode: this.formT.shangpbm,
-                  typeCode: this.formT.sssplx,
-                  approvestatusCode: this.formT.ssshzt,
-                  statusCode: this.formT.ssspzt,
-                  name: this.formT.shangpmc,
-                  pageSize: this.pagesize
-                }
-                this.tableData = []
-                this._getNoShelfGoods(params)
-                return false
-              } else if (i === 'sssplx' && this.formT[i] === '') {
-                this.searchFlag = false
-                this.DSJcurrentPage = 1
-                this._getNoShelfGoods()
-                return false
-              }
+            const params = {
+              downPrice: this.formT.spzdjg,
+              upPrice: this.formT.spzgjg,
+              goodsCode: this.formT.shangpbm,
+              typeCode: this.formT.sssplx,
+              approvestatusCode: this.formT.ssshzt,
+              statusCode: this.formT.ssspzt,
+              name: this.formT.shangpmc
             }
+            this.tableData = []
+            this._getNoShelfGoods(params)
+            return false
           } else {
             this.$message.error('提交有误！,请按正确格式填写！')
             return false
@@ -302,7 +334,7 @@
             this.$message.error(res.msg)
           }
         }).catch(err => {
-          console.log(err)
+          this.$message.error(err)
         })
       },
       // 单个商品上架
@@ -382,22 +414,10 @@
           })
         }
       },
-      handleDSJsizeChange(val) {
-        this.pagesize = this.pagesize === val ? this.pagesize : val
-      },
       handleDSJcurrentChange(val) {
-        const params = this.objHasVal(this.formT) && this.searchFlag ? Object.assign({ page: val }, this.formT) : { page: val }
+        const params = Object.assign(this.formT, { page: val })
         this.tableData = []
         this._getNoShelfGoods(params)
-      },
-      objHasVal(val) {
-        var flag = false
-        for (var i in val) {
-          if (val[i] !== '') {
-            flag = true
-          }
-        }
-        return flag
       },
       formatGoodsId(obj) {
         var goodsIds = ''
