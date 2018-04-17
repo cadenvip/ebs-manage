@@ -224,7 +224,6 @@
       this._getGoodsTopType()
       var tab = this.$route.query.tab
       if (tab === 'tab2') {
-        alert('test')
         this.activeTab = 'tab2'
         this.currentTab = 2
         this._getOnSaleGoods({ searchType: 3 })
