@@ -138,6 +138,7 @@ export default {
         for (var i = 0; i < obj.orderFlowLogs.length; i++) {
           this.formateOperateType(obj.orderFlowLogs[i])
         }
+        this.active = this.stepsArr.length
         switch (obj.orderState) {
           case '1':
             this.stepsArr.push('商家发货')
@@ -158,7 +159,7 @@ export default {
             break
           default:break
         }
-      } else if (obj.orderPayBean.payType === '22' || obj.orderPayBean.payType === '23' || obj.orderPayBean.payType === '24') {
+      } else if (obj.orderPayBean.payType === '23' || obj.orderPayBean.payType === '33' || obj.orderPayBean.payType === '34') {
         for (var j = 0; j < obj.orderFlowLogs.length; j++) {
           this.formateOperateType(obj.orderFlowLogs[j])
         }
@@ -217,8 +218,6 @@ export default {
         } else if (obj.orderState === '11') {
           this.stepsArr.push('交易完成(退货失败)')
         }
-      } else {
-        this.$message.error('something must be wrong!')
       }
     },
     formateOperateType(obj) {
