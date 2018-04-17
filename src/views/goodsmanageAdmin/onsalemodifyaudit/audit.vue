@@ -116,7 +116,7 @@
             </el-form-item>
             <el-form-item style="text-align: center;">
               <el-button size="mini" @click="submit">确认</el-button>
-              <el-button size="mini">返回</el-button>
+              <el-button size="mini" @click="goBack">返回</el-button>
             </el-form-item>
           </el-form>
         </div>
@@ -220,6 +220,9 @@ export default {
       } else {
         return '年'
       }
+    },
+    goback() {
+      this.$router.go(-1)
     }
   },
   computed: {

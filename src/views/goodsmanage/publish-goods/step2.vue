@@ -82,7 +82,7 @@
       <el-form-item style="padding-left: 100px;">
         <el-upload
           class="avatar-uploader"
-          action="http://10.189.13.151:8080/ebs/common/upload"
+          action="http://183.230.101.142:58080/ebs/common/upload"
           :show-file-list="false"
           :on-success="handleAvatarSuccess"
           :before-upload="beforeAvatarUpload" style="display:inline-block">
@@ -308,6 +308,7 @@
   import 'quill/dist/quill.snow.css'
   import 'quill/dist/quill.bubble.css'
   import { quillEditor } from 'vue-quill-editor'
+  import { decryptStr } from '@/utils/index'
   export default {
     mounted() {
       // 计量单位
@@ -672,7 +673,7 @@
             if (this.isFromModifyFlag === 2) {
               parmas.takeEffectType = this.immediate ? '1' : '2'
               if (!this.immediate && this.immediateTime === '') {
-                this.$message.error('请输入修改生效时间！')
+                this.$message.error('请输入修改生效时间！！')
                 return
               } else {
                 parmas.takeEffectTime = parseTime(this.immediateTime)
@@ -707,7 +708,10 @@
         this.jietiItems.splice(index, 1)
       },
       handleAvatarSuccess(res, file) {
+        console.log(String(res), file)
+        console.log(decryptStr(String(res)))
         this.imageUrl = URL.createObjectURL(file.raw)
+        console.log(this.imageUrl)
       },
       beforeAvatarUpload(file) {
         const isJPG = file.type === 'image/jpeg'
