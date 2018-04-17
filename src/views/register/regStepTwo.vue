@@ -147,19 +147,6 @@
 
   export default {
     data() {
-      var validateBusinessName = (rule, value, callback) => {
-        if (value === '') {
-          callback(new Error('请输入企业名称'))
-        } else {
-          if (value.indexOf(' ') >= 0) {
-            callback(new Error('企业名称不能包含空格'))
-          } else if (containSymbol(value)) {
-            callback(new Error('企业名称不能包含特殊字符'))
-          } else {
-            callback()
-          }
-        }
-      }
       // 校验手机号
       var validateMobile = (rule, value, callback) => {
         if (value === '') {
@@ -167,6 +154,19 @@
         } else {
           if (!validateMobilePhone(value.trim())) {
             callback(new Error('请输入有效的手机号码'))
+          } else {
+            callback()
+          }
+        }
+      }
+      var validateName = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('请输入姓名'))
+        } else {
+          if (value.indexOf(' ') >= 0) {
+            callback(new Error('不能包含空格'))
+          } else if (containSymbol(value.trim())) {
+            callback(new Error('不能包含特殊字符'))
           } else {
             callback()
           }
@@ -260,7 +260,7 @@
         registerRules: {
           businessesName: [{
             required: true,
-            validator: validateBusinessName,
+            validator: validateName,
             trigger: 'change'
           }],
           locationCode: [{
@@ -275,8 +275,8 @@
           }],
           relationPerson: [{
             required: true,
-            message: '请输入业务联系人',
-            trigger: 'blur'
+            validator: validateName,
+            trigger: 'change'
           }],
           relationPhone: [{
             required: true,
@@ -285,8 +285,8 @@
           }],
           sellPersonName: [{
             required: true,
-            message: '请输入售后联系人',
-            trigger: 'blur'
+            validator: validateName,
+            trigger: 'change'
           }],
           sellPersonMobile: [{
             required: true,
@@ -296,8 +296,8 @@
           }],
           financePersonName: [{
             required: true,
-            message: '请输入财务联系人',
-            trigger: 'blur'
+            validator: validateName,
+            trigger: 'change'
           }],
           financePersonMobile: [{
             required: true,
@@ -361,7 +361,7 @@
             return
           }
         }
-  
+
         if (this.registerForm.locationCode === '') {
           this.$message({
             type: 'warning',
@@ -376,20 +376,29 @@
           })
           return
         }
+  
         if (this.registerForm.relationPerson === '') {
           this.$message({
             type: 'warning',
             message: '请输入业务联系人'
           })
           return
+        } else {
+          if (this.registerForm.relationPerson.indexOf(' ') >= 0) {
+            this.$message({
+              type: 'warning',
+              message: '业务联系人不能包含空格'
+            })
+            return
+          } else if (containSymbol(this.registerForm.relationPerson)) {
+            this.$message({
+              type: 'warning',
+              message: '业务联系人不能包含特殊字符'
+            })
+            return
+          }
         }
-        if (this.registerForm.relationPerson === '') {
-          this.$message({
-            type: 'warning',
-            message: '请输入业务联系人'
-          })
-          return
-        }
+
         if (this.registerForm.relationPhone === '') {
           this.$message({
             type: 'warning',
@@ -397,6 +406,29 @@
           })
           return
         }
+
+        if (this.registerForm.sellPersonName === '') {
+          this.$message({
+            type: 'warning',
+            message: '请输入售后联系人'
+          })
+          return
+        } else {
+          if (this.registerForm.sellPersonName.indexOf(' ') >= 0) {
+            this.$message({
+              type: 'warning',
+              message: '售后联系人不能包含空格'
+            })
+            return
+          } else if (containSymbol(this.registerForm.sellPersonName)) {
+            this.$message({
+              type: 'warning',
+              message: '售后联系人不能包含特殊字符'
+            })
+            return
+          }
+        }
+
         if (this.registerForm.sellPersonName === '') {
           this.$message({
             type: 'warning',
@@ -411,13 +443,29 @@
           })
           return
         }
+
         if (this.registerForm.financePersonName === '') {
           this.$message({
             type: 'warning',
             message: '请输入财务联系人'
           })
           return
+        } else {
+          if (this.registerForm.financePersonName.indexOf(' ') >= 0) {
+            this.$message({
+              type: 'warning',
+              message: '财务联系人不能包含空格'
+            })
+            return
+          } else if (containSymbol(this.registerForm.financePersonName)) {
+            this.$message({
+              type: 'warning',
+              message: '财务联系人不能包含特殊字符'
+            })
+            return
+          }
         }
+
         if (this.registerForm.financePersonMobile === '') {
           this.$message({
             type: 'warning',

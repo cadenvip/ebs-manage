@@ -2,7 +2,7 @@
   <el-container>
     <el-container style="width:1000px;margin:0 auto 20px">
       <el-main>
-        <div style="width:1000px;margin:0 auto 20px;border:1px solid #E6E6E6">
+        <div style="width:1000px;margin-left:10px;border:1px solid #E6E6E6">
           <el-form ref="registerForm" :model="registerForm" :rules="registerRules" label-width="170px" style="margin:6px">
             <h5>企业基本信息</h5>
             <el-row :gutter="20">
@@ -34,7 +34,8 @@
               </el-col>
             </el-row>
             <el-form-item label="企业地址：" prop="locationCode">
-              <RegionSelector v-model="registerForm.locationCode" :grade="4" :showCountry="false" @locationChanged="getLocationCode" :locationId="registerForm.locationCode" :editable="4"></RegionSelector>
+              <RegionSelector v-model="registerForm.locationCode" :grade="4" :showCountry="false" @locationChanged="getLocationCode" :locationId="registerForm.locationCode"
+                :editable="4"></RegionSelector>
             </el-form-item>
             <el-form-item label="详细地址：" prop="address">
               <el-input v-model="registerForm.address" :maxlength=32 clearable style="width: 400px;" placeholder="请输入企业详细地址"></el-input>
@@ -61,7 +62,7 @@
             <el-row :gutter="20">
               <el-col :span="9">
                 <el-form-item label="业务联系人：" prop="relationPerson">
-                  <el-input v-model="registerForm.relationPerson" :maxlength=16 clearable style="width: 220px;" placeholder="请输入业务联系人" disabled></el-input>
+                  <el-input v-model="registerForm.relationPerson" :maxlength=16 style="width: 220px;" placeholder="请输入业务联系人" disabled></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="15" style="padding-top:8px;padding-left:30px">
@@ -71,7 +72,7 @@
             <el-row :gutter="20">
               <el-col :span="9">
                 <el-form-item label="业务联系人手机号码：" prop="relationPhone">
-                  <el-input v-model="registerForm.relationPhone" clearable :maxlength=11 style="width: 220px;" placeholder="请输入业务联系人手机号码" disabled></el-input>
+                  <el-input v-model="registerForm.relationPhone" :maxlength=11 style="width: 220px;" placeholder="请输入业务联系人手机号码" disabled></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="15" style="padding-top:8px;padding-left:30px">
@@ -102,6 +103,9 @@
             </el-row>
             <el-form-item label="售后处理点：" prop="sellAddressListForm">
               <el-button type="primary" size="mini" @click="addSellAddress">新增</el-button>
+              <div style="font-family: 宋体, Arial, sans-serif;font-size: 12px;color: #f30">
+                <span>注意：对售后处理点的新增、删除、修改操作只有提交才能生效！</span>
+              </div>
               <div v-for="(item,index) in sellAddressListForm" v-show="item.valid" style="margin-top:10px">
                 <el-row>
                   <el-col :span="20">
@@ -241,12 +245,14 @@
               </el-col>
               <el-col :span="12">
                 <el-form-item label="支付宝平台签名Key：" prop="aliPaySignKey">
-                  <el-input v-model="registerForm.aliPaySignKey" :maxlength=16 clearable style="width: 220px;" placeholder="请输入支付宝平台签名Key" :disabled="!registerForm.aliPayNoPayable"></el-input>
+                  <el-input v-model="registerForm.aliPaySignKey" :maxlength=16 clearable style="width: 220px;" placeholder="请输入支付宝平台签名Key"
+                    :disabled="!registerForm.aliPayNoPayable"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
             <el-form-item label="支付宝卖家名字：" prop="aliPaySellerAccountName">
-              <el-input v-model="registerForm.aliPaySellerAccountName" :maxlength=16 clearable style="width: 220px;" placeholder="请输入支付宝卖家名字" :disabled="!registerForm.aliPayNoPayable"></el-input>
+              <el-input v-model="registerForm.aliPaySellerAccountName" :maxlength=16 clearable style="width: 220px;" placeholder="请输入支付宝卖家名字"
+                :disabled="!registerForm.aliPayNoPayable"></el-input>
             </el-form-item>
             <el-form-item label="启用手机和包支付：" prop="cmPayNoPayable">
               <el-checkbox v-model="registerForm.cmPayNoPayable"></el-checkbox>
@@ -254,12 +260,14 @@
             <el-row :gutter="20">
               <el-col :span="12">
                 <el-form-item label="和包支付平台商家ID：" prop="cmPayMerchantId">
-                  <el-input v-model="registerForm.cmPayMerchantId" :maxlength=16 clearable style="width: 220px;" placeholder="请输入和包支付平台商家ID" :disabled="!registerForm.cmPayNoPayable"></el-input>
+                  <el-input v-model="registerForm.cmPayMerchantId" :maxlength=16 clearable style="width: 220px;" placeholder="请输入和包支付平台商家ID"
+                    :disabled="!registerForm.cmPayNoPayable"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="12">
                 <el-form-item label="和包支付平台签名KEY：" prop="cmPaySignKey">
-                  <el-input v-model="registerForm.cmPaySignKey" :maxlength=16 clearable style="width: 220px;" placeholder="请输入和包支付平台签名KEY" :disabled="!registerForm.cmPayNoPayable"></el-input>
+                  <el-input v-model="registerForm.cmPaySignKey" :maxlength=16 clearable style="width: 220px;" placeholder="请输入和包支付平台签名KEY"
+                    :disabled="!registerForm.cmPayNoPayable"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -269,17 +277,20 @@
             <el-row :gutter="20">
               <el-col :span="12">
                 <el-form-item label="联动优势平台商家ID：" prop="umPayMerchantId">
-                  <el-input v-model="registerForm.umPayMerchantId" :maxlength=16 clearable style="width: 220px;" placeholder="请输入联动优势平台商家ID" :disabled="!registerForm.umPayNoPayable"></el-input>
+                  <el-input v-model="registerForm.umPayMerchantId" :maxlength=16 clearable style="width: 220px;" placeholder="请输入联动优势平台商家ID"
+                    :disabled="!registerForm.umPayNoPayable"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="12">
                 <el-form-item label="联动优势银行账号名：" prop="umPayBankAccountName">
-                  <el-input v-model="registerForm.umPayBankAccountName" :maxlength=16 clearable style="width: 220px;" placeholder="请输入联动优势银行账号名" :disabled="!registerForm.umPayNoPayable"></el-input>
+                  <el-input v-model="registerForm.umPayBankAccountName" :maxlength=16 clearable style="width: 220px;" placeholder="请输入联动优势银行账号名"
+                    :disabled="!registerForm.umPayNoPayable"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
             <el-form-item label="联动优势银行账号：" prop="umPayBankAccountNo">
-              <el-input v-model="registerForm.umPayBankAccountNo" :maxlength=20 clearable style="width: 220px;" placeholder="联动优势银行账号" :disabled="!registerForm.umPayNoPayable"></el-input>
+              <el-input v-model="registerForm.umPayBankAccountNo" :maxlength=20 clearable style="width: 220px;" placeholder="联动优势银行账号"
+                :disabled="!registerForm.umPayNoPayable"></el-input>
             </el-form-item>
             <hr style="height:1px;border:none;border-top:1px dashed #0066CC;" />
             <h5>企业经营资质</h5>
@@ -291,7 +302,8 @@
                 :before-upload="beforeAvatarUpload" style="display:inline-block">
                 <el-button size="small" type="primary">选择</el-button>
               </el-upload>
-              <el-button v-if="registerForm.licencepicpath" size="small" type="primary" @click="handlePictureCardPreview(registerForm.licencepicpath)" icon="el-icon-zoom-in" ></el-button>
+              <el-button v-if="registerForm.licencepicpath" size="small" type="primary" @click="handlePictureCardPreview(registerForm.licencepicpath)"
+                icon="el-icon-zoom-in"></el-button>
             </el-form-item>
             <el-form-item label="经办人身份证：" prop="operatoridnum">
               <el-input v-model="registerForm.operatoridnum" clearable :maxlength=18 style="width: 270px;" placeholder="输入身份证号码"></el-input>
@@ -301,14 +313,16 @@
                 :before-upload="beforeAvatarUpload" style="display:inline-block">
                 <el-button size="small" type="primary">选择</el-button>
               </el-upload>
-              <el-button v-if="registerForm.sfzmpicpath" size="small" type="primary" @click="handlePictureCardPreview(registerForm.sfzmpicpath)" icon="el-icon-zoom-in" ></el-button>
+              <el-button v-if="registerForm.sfzmpicpath" size="small" type="primary" @click="handlePictureCardPreview(registerForm.sfzmpicpath)"
+                icon="el-icon-zoom-in"></el-button>
             </el-form-item>
             <el-form-item label="身份证反面：" prop="sffmpicpath">
               <el-upload action="http://10.189.13.151:8080/ebs/common/upload" list-type="text" :show-file-list="false" :on-success="handleSffmSuccess"
                 :before-upload="beforeAvatarUpload" style="display:inline-block">
                 <el-button size="small" type="primary">选择</el-button>
               </el-upload>
-              <el-button v-if="registerForm.sffmpicpath" size="small" type="primary" @click="handlePictureCardPreview(registerForm.sffmpicpath)" icon="el-icon-zoom-in" ></el-button>
+              <el-button v-if="registerForm.sffmpicpath" size="small" type="primary" @click="handlePictureCardPreview(registerForm.sffmpicpath)"
+                icon="el-icon-zoom-in"></el-button>
             </el-form-item>
             <br/>
             <h5>产品经营许可</h5>
@@ -322,25 +336,28 @@
                 :before-upload="beforeAvatarUpload" style="display:inline-block">
                 <el-button size="small" type="primary">选择</el-button>
               </el-upload>
-              <el-button v-if="registerForm.proxytestifypicpath" size="small" type="primary" @click="handlePictureCardPreview(registerForm.proxytestifypicpath)" icon="el-icon-zoom-in" ></el-button>
+              <el-button v-if="registerForm.proxytestifypicpath" size="small" type="primary" @click="handlePictureCardPreview(registerForm.proxytestifypicpath)"
+                icon="el-icon-zoom-in"></el-button>
             </el-form-item>
             <el-form-item label="食品安全认证：">
               <el-upload action="http://10.189.13.151:8080/ebs/common/upload" list-type="text" :show-file-list="false" :on-success="handleFoodSafetySuccess"
                 :before-upload="beforeAvatarUpload" style="display:inline-block">
                 <el-button size="small" type="primary">选择</el-button>
               </el-upload>
-              <el-button v-if="registerForm.foodsafetypicpath" size="small" type="primary" @click="handlePictureCardPreview(registerForm.foodsafetypicpath)" icon="el-icon-zoom-in" ></el-button>
+              <el-button v-if="registerForm.foodsafetypicpath" size="small" type="primary" @click="handlePictureCardPreview(registerForm.foodsafetypicpath)"
+                icon="el-icon-zoom-in"></el-button>
             </el-form-item>
             <el-form-item label="食品流通许可：">
               <el-upload action="http://10.189.13.151:8080/ebs/common/upload" list-type="text" :show-file-list="false" :on-success="handleFoodCirculationSuccess"
                 :before-upload="beforeAvatarUpload" style="display:inline-block">
                 <el-button size="small" type="primary">选择</el-button>
               </el-upload>
-              <el-button v-if="registerForm.foodpathpicpath" size="small" type="primary" @click="handlePictureCardPreview(registerForm.foodpathpicpath)" icon="el-icon-zoom-in" ></el-button>
+              <el-button v-if="registerForm.foodpathpicpath" size="small" type="primary" @click="handlePictureCardPreview(registerForm.foodpathpicpath)"
+                icon="el-icon-zoom-in"></el-button>
             </el-form-item>
             <el-form-item label="其他：">
-              <el-upload action="http://10.189.13.151:8080/ebs/common/upload" list-type="picture-card" :on-success="handleFoodOtherSuccess" :limit="3"
-                :on-preview="handlePictureCardPreview" :on-remove="handleRemove" :before-upload="beforeAvatarUpload">
+              <el-upload action="http://10.189.13.151:8080/ebs/common/upload" list-type="picture-card" :on-success="handleFoodOtherSuccess"
+                :limit="3" :on-preview="handlePictureCardPreview" :on-remove="handleRemove" :before-upload="beforeAvatarUpload">
                 <i class="el-icon-plus"></i>
               </el-upload>
             </el-form-item>
@@ -436,14 +453,42 @@
   } from '@/api/businesses'
   import {
     validateMobilePhone,
+    validateCMMobilePhone,
     validateEmail,
     validateID,
+    containSymbol,
     validatePostcode,
     validateDigit
   } from '@/utils/validate'
 
   export default {
     data() {
+      // 必填
+      var validateName = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('请输入姓名'))
+        } else {
+          if (value.indexOf(' ') >= 0) {
+            callback(new Error('不能包含空格'))
+          } else if (containSymbol(value.trim())) {
+            callback(new Error('不能包含特殊字符'))
+          } else {
+            callback()
+          }
+        }
+      }
+      // 非必填
+      var validateNameNotRequired = (rule, value, callback) => {
+        if (value !== null && value !== '') {
+          if (value.indexOf(' ') >= 0) {
+            callback(new Error('不能包含空格'))
+          } else if (containSymbol(value.trim())) {
+            callback(new Error('不能包含特殊字符'))
+          } else {
+            callback()
+          }
+        }
+      }
       // 校验手机号
       var validateMobile = (rule, value, callback) => {
         if (value === '') {
@@ -451,6 +496,18 @@
         } else {
           if (!validateMobilePhone(value.trim())) {
             callback(new Error('请输入有效的手机号码'))
+          } else {
+            callback()
+          }
+        }
+      }
+      // 校验中国移动手机号
+      var validateCMMobile = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('请输入手机号码'))
+        } else {
+          if (!validateCMMobilePhone(value.trim())) {
+            callback(new Error('请输入有效的中国移动手机号码'))
           } else {
             callback()
           }
@@ -475,6 +532,30 @@
             callback(new Error('请输入有效的身份证号码'))
           } else {
             callback()
+          }
+        }
+      }
+      var validateLegalPaperNumber = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('请输入证件号码'))
+        } else {
+          switch (this.registerForm.legalPaperType) {
+            case '1':
+              if (!validateID(value.trim())) {
+                callback(new Error('请输入有效的身份证号码'))
+              } else {
+                callback()
+              }
+              break
+            case '2':
+              callback()
+              break
+            case '3':
+              callback()
+              break
+            default:
+              callback(new Error('请先选择证件类型'))
+              break
           }
         }
       }
@@ -629,8 +710,13 @@
         registerRules: {
           businessesName: [{
             required: true,
-            message: '请输入企业名称',
-            trigger: 'blur'
+            validator: validateName,
+            trigger: 'change'
+          }],
+          businessesShortName: [{
+            required: false,
+            validator: validateNameNotRequired,
+            trigger: 'change'
           }],
           validdate_str: [{
             required: true,
@@ -649,8 +735,8 @@
           }],
           legalName: [{
             required: true,
-            message: '请输入法人姓名',
-            trigger: 'blur'
+            validator: validateName,
+            trigger: 'change'
           }],
           legalPaperType: [{
             required: true,
@@ -659,17 +745,17 @@
           }],
           legalPaperNumber: [{
             required: true,
-            message: '请输入法人证件号码',
-            trigger: 'blur'
+            validator: validateLegalPaperNumber,
+            trigger: 'change'
           }],
           relationPerson: [{
             required: true,
-            message: '请输入业务联系人',
-            trigger: 'blur'
+            validator: validateName,
+            trigger: 'change'
           }],
           relationPhone: [{
             required: true,
-            validator: validateMobile,
+            validator: validateCMMobile,
             trigger: 'blur'
           }],
           relationEmail: [{
@@ -679,8 +765,8 @@
           }],
           sellPersonName: [{
             required: true,
-            message: '请输入售后联系人',
-            trigger: 'blur'
+            validator: validateName,
+            trigger: 'change'
           }],
           sellPersonMobile: [{
             required: true,
@@ -696,8 +782,8 @@
           }],
           financePersonName: [{
             required: true,
-            message: '请输入财务联系人',
-            trigger: 'blur'
+            validator: validateName,
+            trigger: 'change'
           }],
           financePersonMobile: [{
             required: true,
@@ -1028,6 +1114,35 @@
             message: '请输入企业名称'
           })
           return
+        } else {
+          if (this.registerForm.businessesName.indexOf(' ') >= 0) {
+            this.$message({
+              type: 'warning',
+              message: '企业名称不能包含空格'
+            })
+            return
+          } else if (containSymbol(this.registerForm.businessesName)) {
+            this.$message({
+              type: 'warning',
+              message: '企业名称不能包含特殊字符'
+            })
+            return
+          }
+        }
+        if (this.registerForm.businessesShortName !== '') {
+          if (this.registerForm.businessesName.indexOf(' ') >= 0) {
+            this.$message({
+              type: 'warning',
+              message: '企业名称不能包含空格'
+            })
+            return
+          } else if (containSymbol(this.registerForm.businessesName)) {
+            this.$message({
+              type: 'warning',
+              message: '企业名称不能包含特殊字符'
+            })
+            return
+          }
         }
         if (this.registerForm.validdate_str === null || this.registerForm.validdate_str === '') {
           this.$message({
@@ -1050,13 +1165,29 @@
           })
           return
         }
+
         if (this.registerForm.legalName === '') {
           this.$message({
             type: 'warning',
             message: '请输入法人姓名'
           })
           return
+        } else {
+          if (this.registerForm.legalName.indexOf(' ') >= 0) {
+            this.$message({
+              type: 'warning',
+              message: '法人姓名不能包含空格'
+            })
+            return
+          } else if (containSymbol(this.registerForm.legalName)) {
+            this.$message({
+              type: 'warning',
+              message: '法人姓名不能包含特殊字符'
+            })
+            return
+          }
         }
+  
         if (this.registerForm.legalPaperType === '') {
           this.$message({
             type: 'warning',
@@ -1071,20 +1202,29 @@
           })
           return
         }
+
         if (this.registerForm.relationPerson === '') {
           this.$message({
             type: 'warning',
             message: '请输入业务联系人'
           })
           return
+        } else {
+          if (this.registerForm.relationPerson.indexOf(' ') >= 0) {
+            this.$message({
+              type: 'warning',
+              message: '业务联系人不能包含空格'
+            })
+            return
+          } else if (containSymbol(this.registerForm.relationPerson)) {
+            this.$message({
+              type: 'warning',
+              message: '业务联系人不能包含特殊字符'
+            })
+            return
+          }
         }
-        if (this.registerForm.relationPerson === '') {
-          this.$message({
-            type: 'warning',
-            message: '请输入业务联系人'
-          })
-          return
-        }
+
         if (this.registerForm.relationPhone === '') {
           this.$message({
             type: 'warning',
@@ -1098,6 +1238,20 @@
             message: '请输入售后联系人'
           })
           return
+        } else {
+          if (this.registerForm.sellPersonName.indexOf(' ') >= 0) {
+            this.$message({
+              type: 'warning',
+              message: '售后联系人不能包含空格'
+            })
+            return
+          } else if (containSymbol(this.registerForm.sellPersonName)) {
+            this.$message({
+              type: 'warning',
+              message: '售后联系人不能包含特殊字符'
+            })
+            return
+          }
         }
         if (this.registerForm.sellPersonMobile === '') {
           this.$message({
@@ -1128,6 +1282,20 @@
             message: '请输入财务联系人'
           })
           return
+        } else {
+          if (this.registerForm.financePersonName.indexOf(' ') >= 0) {
+            this.$message({
+              type: 'warning',
+              message: '财务联系人不能包含空格'
+            })
+            return
+          } else if (containSymbol(this.registerForm.financePersonName)) {
+            this.$message({
+              type: 'warning',
+              message: '财务联系人不能包含特殊字符'
+            })
+            return
+          }
         }
         if (this.registerForm.financePersonMobile === '') {
           this.$message({

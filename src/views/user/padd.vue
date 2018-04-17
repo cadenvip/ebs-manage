@@ -149,7 +149,7 @@
     encryptPassword
   } from '@/utils/index'
   import {
-    validateMobilePhone,
+    validateCMMobilePhone,
     validateEmail
   } from '@/utils/validate'
   import {
@@ -162,7 +162,7 @@
         if (value === '') {
           callback(new Error('请输入手机号码'))
         } else {
-          if (!validateMobilePhone(value.trim())) {
+          if (!validateCMMobilePhone(value.trim())) {
             callback(new Error('请输入有效的手机号码'))
           }
           callback()

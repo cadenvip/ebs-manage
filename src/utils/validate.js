@@ -10,33 +10,33 @@ export function validateURL(textval) {
   return urlregex.test(textval)
 }
 
-/* 小写数字*/
+/* 全是数字*/
 export function validateDigit(str) {
   const reg = /^[0-9]+$/
   return reg.test(str)
 }
 
-/* 小写字母*/
+/* 全是小写字母*/
 export function validateLowerCase(str) {
   const reg = /^[a-z]+$/
   return reg.test(str)
 }
 
-/* 大写字母*/
+/* 全是大写字母*/
 export function validateUpperCase(str) {
   const reg = /^[A-Z]+$/
   return reg.test(str)
 }
 
-/* 大小写字母*/
+/* 全是大小写字母*/
 export function validateAlphabets(str) {
   const reg = /^[A-Za-z]+$/
   return reg.test(str)
 }
 
-/* 字符 */
+/* 全是字符 */
 export function validateSymbol(str) {
-  const reg = /^[~!@#$%^&*]+$/
+  const reg = /^[\~\`\!\@\#\$\%\^\&\*\(\)\-\_\=\+\[\]\\\;\:\'\"\,\<\.\>\/\?]+$/
   return reg.test(str)
 }
 
@@ -128,8 +128,34 @@ export function containUpperCase(str) {
   return reg.test(str)
 }
 
-/* 字符 */
+/* 字符
+  打印可见字符的
+  需要转义的字符 * . ? + $ ^ [ ] ( ) { } | \ /
+*/
 export function containSymbol(str) {
-  const reg = /(?=.*?[#?!@$%^&*-])/
+  // const reg = /(?=.*?[#?!@$%^&*-/\\])/
+  const reg = /(?=.*?[\~\`\!\@\#\$\%\^\&\*\(\)\-\_\=\+\[\]\\\;\:\'\"\,\<\.\>\/\?])/
   return reg.test(str)
+}
+
+export function validateBytes(str, limit) {
+  // 校验字串字节数
+  // /<summary>获得字符串实际长度，中文2，英文1</summary>
+  // /<param name="str">要获得长度的字符串</param>
+  var realLength = 0
+  var len = str.length
+  var charCode = -1
+  for (var i = 0; i < len; i++) {
+    charCode = str.charCodeAt(i)
+    if (charCode >= 0 && charCode <= 128) {
+      realLength += 1
+    } else {
+      realLength += 2
+    }
+  }
+  if (limit === undefined || limit === null || limit === '' || limit <= 0) {
+    return realLength
+  } else {
+    return (realLength <= limit)
+  }
 }
