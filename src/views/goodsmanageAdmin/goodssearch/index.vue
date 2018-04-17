@@ -163,7 +163,7 @@
       </div>
     </el-dialog>
     <el-dialog width="30%" center title="支付配置" :visible.sync="dialogVisible2">
-      <el-form :model="payForm">
+      <el-form :model="payForm">{{payForm}}
         <el-form-item label="是否支持支付宝：" label-width="150px">
           <el-switch v-model="payForm.alipay"></el-switch>
         </el-form-item>
@@ -427,7 +427,10 @@
       edit(row) {
         getGoodsDetail(row.goodsId).then(res => {
           if (res.status === 200) {
-            console.log(res.data)
+            res.data.goodsBean.alipay === '0' ? this.payForm.alipay = true : this.payForm.alipay = false
+            res.data.goodsBean.codpay === '0' ? this.payForm.codpay = true : this.payForm.codpay = false
+            res.data.goodsBean.cmpay === '0' ? this.payForm.cmpay = true : this.payForm.cmpay = false
+            res.data.goodsBean.umpay === '0' ? this.payForm.umpay = true : this.payForm.umpay = false
           } else {
             this.$message.error(res.msg)
           }
