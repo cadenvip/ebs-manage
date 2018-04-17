@@ -17,9 +17,9 @@
         <p>使用物流：<span v-if="goodsBean.logisticsTypes">{{goodsBean.logisticsTypes.indexOf('1') > -1 ? '自提' : ''}} {{goodsBean.logisticsTypes.indexOf('2')>-1 ? '快递' : ''}} <span v-if="templateName">{{templateName}}</span></span></p>
         <p class="payway">支付方式：
           <span>货到付款</span>
-          <span v-if="goodsBean.alipay==='0'">支付宝</span>
-          <span v-if="goodsBean.cmpay==='0'">和包支付</span>
-          <span v-if="goodsBean.umpay==='0'">联动支付</span>
+          <span v-if="goodsBean.alipay==='1'">支付宝</span>
+          <span v-if="goodsBean.cmpay==='1'">和包支付</span>
+          <span v-if="goodsBean.umpay==='1'">联动支付</span>
         </p>
       </div>
     </div>

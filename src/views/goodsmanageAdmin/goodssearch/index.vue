@@ -427,10 +427,10 @@
       edit(row) {
         getGoodsDetail(row.goodsId).then(res => {
           if (res.status === 200) {
-            res.data.goodsBean.alipay === '0' ? this.payForm.alipay = true : this.payForm.alipay = false
-            res.data.goodsBean.codpay === '0' ? this.payForm.codpay = true : this.payForm.codpay = false
-            res.data.goodsBean.cmpay === '0' ? this.payForm.cmpay = true : this.payForm.cmpay = false
-            res.data.goodsBean.umpay === '0' ? this.payForm.umpay = true : this.payForm.umpay = false
+            res.data.goodsBean.alipay === '1' ? this.payForm.alipay = true : this.payForm.alipay = false
+            res.data.goodsBean.codpay === '1' ? this.payForm.codpay = true : this.payForm.codpay = false
+            res.data.goodsBean.cmpay === '1' ? this.payForm.cmpay = true : this.payForm.cmpay = false
+            res.data.goodsBean.umpay === '1' ? this.payForm.umpay = true : this.payForm.umpay = false
           } else {
             this.$message.error(res.msg)
           }
