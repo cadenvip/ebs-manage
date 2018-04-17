@@ -1,252 +1,186 @@
 <template>
   <div class="app-container">
-    <h4 class="title">修改人员信息</h4>
-    <el-form ref="userForm" :model="userForm" :rules="rules" label-width="120px">
-      <el-form-item label="账号类型：" prop="roletype">
-        <el-select v-model="userForm.roletype" disabled>
-          <el-option label="移动人员" value="1"></el-option>
-          <el-option label="商家人员" value="3"></el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="角色：" prop="roleids">
-        <el-checkbox-group v-model="userForm.roleids">
-          <el-checkbox v-for="(item, index) in allRoles" v-if="item.roletype === userForm.roletype" :key="item.id" :label="item.id">{{item.rolename}}</el-checkbox>
-        </el-checkbox-group>
-      </el-form-item>
-      <el-form-item label="账号：" prop="loginname">
-        <el-input v-model="userForm.loginname" :maxlength=16 style="width: 220px;" placeholder="请输入账号" disabled></el-input>
-      </el-form-item>
-      <el-row :gutter="20">
-        <el-col :span="8">
-          <el-form-item label="手机号：" prop="phoneno">
-            <el-input v-model="userForm.phoneno" :maxlength=11 clearable style="width: 220px;" placeholder="请输入手机号"></el-input>
-          </el-form-item>
+    <h4 class="title">人员信息详情</h4>
+    <div style="color: #606266;font-size:14px;width:960px;overflow:auto;border:#E6E6E6 solid 1px;">
+      <el-row :gutter="6" style="margin-left:0px;margin-right:0px;margin-top:20px;">
+        <el-col :span="4" style="text-align:right">
+          <span>
+            账号：
+          </span>
         </el-col>
-        <el-col :span="16" style="padding-top:8px">
-          <span style="font-family: 宋体, Arial, sans-serif;font-size: 12px;color: #999;">账号必须为11位中国移动手机号码</span>
+        <el-col :span="8">
+          <span>
+            {{ userForm.loginname }}
+          </span>
+        </el-col>
+        <el-col :span="4" style="text-align:right">
+          <span>
+            姓名：
+          </span>
+        </el-col>
+        <el-col :span="8">
+          <span>
+            {{ nameFormat }}
+          </span>
         </el-col>
       </el-row>
-      <el-row :gutter="20">
-        <el-col :span="8">
-          <el-form-item label="姓名：" prop="name">
-            <el-input v-model="userForm.name" :maxlength=16 clearable style="width: 220px;" placeholder="请输入姓名"></el-input>
-          </el-form-item>
+      <el-row :gutter="6" style="margin-left:0px;margin-right:0px;margin-top:12px;">
+        <el-col :span="4" style="text-align:right">
+          <span>
+            手机号码：
+          </span>
         </el-col>
-        <el-col :span="16" style="padding-top:8px">
-          <span style="font-family: 宋体, Arial, sans-serif;font-size: 12px;color: #999;">姓名必须为1-20位，可以是字母或中文</span>
+        <el-col :span="8">
+          <span>
+            {{ phonenoFormat }}
+          </span>
+        </el-col>
+        <el-col :span="4" style="text-align:right">
+          <span>
+            账号类型：
+          </span>
+        </el-col>
+        <el-col :span="8">
+          <span>
+            {{ roletypes }}
+          </span>
         </el-col>
       </el-row>
-      <el-row :gutter="20">
+      <el-row :gutter="6" style="margin-left:0px;margin-right:0px;margin-top:12px;">
+        <el-col :span="4" style="text-align:right">
+          <span>
+            归属区域：
+          </span>
+        </el-col>
         <el-col :span="8">
-          <el-form-item label="归属区域：" prop="locationname">
-            <el-input v-model="userForm.locationname" style="width: 220px;" placeholder="请选择地址" @focus="dialogVisible = true" :disabled="true"></el-input>
-          </el-form-item>
+          <span>
+            {{ userForm.locationname }}
+          </span>
+        </el-col>
+        <el-col :span="4" style="text-align:right">
+          <span>
+            邮件：
+          </span>
+        </el-col>
+        <el-col :span="8">
+          <span>
+            {{ userForm.email }}
+          </span>
         </el-col>
       </el-row>
-      <el-row :gutter="20">
+      <el-row :gutter="6" style="margin-left:0px;margin-right:0px;margin-top:12px;">
+        <el-col :span="4" style="text-align:right">
+          <span>
+            地址：
+          </span>
+        </el-col>
         <el-col :span="8">
-          <el-form-item label="单位：" prop="unitname">
-            <el-input v-model="userForm.unitname" :maxlength=16 style="width: 220px;" :disabled="true"></el-input>
-          </el-form-item>
+          <span>
+            {{ userForm.address ? userForm.address : '&nbsp;' }}
+          </span>
+        </el-col>
+        <el-col :span="4" style="text-align:right">
+          <span>
+            角色：
+          </span>
+        </el-col>
+        <el-col :span="8">
+          <span>
+            {{ rolenames }}
+          </span>
         </el-col>
       </el-row>
-      <el-row :gutter="20">
-        <el-col :span="8">
-          <el-form-item label="邮件：" prop="email">
-            <el-input v-model="userForm.email" :maxlength=32 clearable style="width: 220px;" placeholder="请输入邮件"></el-input>
-          </el-form-item>
+      <el-row :gutter="6" style="margin-left:0px;margin-right:0px;margin-top:12px;margin-bottom:20px">
+        <el-col :span="4" style="text-align:right">
+          <span>
+            最近登录时间：
+          </span>
         </el-col>
-        <el-col :span="16" style="padding-top:8px">
-          <span style="font-family: 宋体, Arial, sans-serif;font-size: 12px;color: #999;">请输入有效电子邮箱地址，如：linux@139.com</span>
+        <el-col :span="8">
+          <span>
+            {{ userForm.logintime ? userForm.logintime : '&nbsp;' }}
+          </span>
+        </el-col>
+        <el-col :span="4" style="text-align:right" v-if="roletypes === '商家人员'">
+          <span>
+            商家：
+          </span>
+        </el-col>
+        <el-col :span="8" v-if="roletypes === '商家人员'">
+          <span>
+            {{ userForm.unitname }}
+          </span>
         </el-col>
       </el-row>
-      <el-row :gutter="20">
-        <el-col :span="8">
-          <el-form-item label="地址：" prop="address">
-            <el-input v-model="userForm.address" :maxlength=32 clearable style="width: 220px;" placeholder="请输入地址"></el-input>
-          </el-form-item>
-        </el-col>
-      </el-row>
-      <br/>
-      <div style="text-align: center;font-family: 宋体, Arial, sans-serif;font-size: 12px;color: #f30">
-        <span>
-          温馨提示：请避免设置与其他系统相同的密码
-        </span>
-      </div>
-      <br/>
-      <div style="text-align: center">
-        <el-button type="primary" @click="onSubmit">提交</el-button>
-        <el-button type="primary" @click="onCancel">返回</el-button>
-      </div>
-    </el-form>
+    </div>
+    <br/>
+    <div style="text-align: center">
+      <el-button type="primary" @click="onCancel">返回</el-button>
+    </div>
   </div>
 </template>
 
 <script>
   import {
-    getUserDetail,
-    updateUser
+    getUserDetail
   } from '@/api/user'
   import {
-    validateCMMobilePhone,
-    validateEmail
-  } from '@/utils/validate'
-  import PasswordStrength from '@/components/PasswordStrength/index'
-  import {
-    getAllRoles
-  } from '@/api/role'
+    phoneCutSensitive,
+    nameCutSensitive
+  } from '@/utils/index'
 
   export default {
     data() {
-      var validateCellphone = (rule, value, callback) => {
-        if (value === '') {
-          callback(new Error('请输入手机号码'))
-        } else {
-          if (!validateCMMobilePhone(value.trim())) {
-            callback(new Error('请输入有效的手机号码'))
-          } else {
-            callback()
-          }
-        }
-      }
-      var validateMail = (rule, value, callback) => {
-        if (value !== null && value !== '') {
-          if (!validateEmail(value.trim())) {
-            callback(new Error('请输入有效的邮箱地址'))
-          } else {
-            callback()
-          }
-        } else {
-          callback()
-        }
-      }
       return {
-        allRoles: [],
-        userForm: {
-          roletype: '',
-          roleids: [],
-          loginname: '',
-          phoneno: '',
-          password: '',
-          repassword: '',
-          name: '',
-          locationname: '',
-          unitname: '',
-          email: '',
-          address: ''
-        },
-        rules: {
-          loginname: [{
-            required: true,
-            message: '请输入账号',
-            trigger: 'blur'
-          }],
-          roleids: [{
-            required: true,
-            message: '请选择角色',
-            trigger: 'change'
-          }],
-          name: [{
-            required: true,
-            message: '请输入名称',
-            trigger: 'blur'
-          }],
-          phoneno: [{
-            required: true,
-            trigger: 'blur',
-            validator: validateCellphone
-          }],
-          locationname: [{
-            required: true,
-            message: '请选择归属区域',
-            trigger: 'blur'
-          }],
-          unitname: [{
-            required: true,
-            message: '请选输入单位',
-            trigger: 'blur'
-          }],
-          email: [{
-            required: false,
-            validator: validateMail,
-            trigger: 'blur'
-          }],
-          address: [{
-            required: false,
-            message: '请输入地址',
-            trigger: 'blur'
-          }]
-        },
-        pwdInfo: {},
-        pwdBack: ''
+        roletypes: '',
+        userForm: {},
+        rolenames: ''
       }
-    },
-    components: {
-      PasswordStrength
     },
     created() {
-      this.getUserInfo()
-      this.getRoleList()
+      this.getUserForm()
+    },
+    computed: {
+      phonenoFormat: function() {
+        return phoneCutSensitive(this.userForm.phoneno)
+      },
+      nameFormat: function() {
+        return nameCutSensitive(this.userForm.name)
+      }
     },
     methods: {
-      getUserInfo() {
+      setRoles(roles) {
+        var arrRoleNames = []
+        if (roles.length > 0) {
+          switch (roles[0].roletype) {
+            case '1':
+              this.roletypes = '移动人员'
+              break
+            case '2':
+              this.roletypes = '商家人员'
+              break
+            case '3':
+              this.roletypes = '商家人员'
+              break
+            default:
+              break
+          }
+        }
+        for (var i = 0; i < roles.length; i++) {
+          arrRoleNames.push(roles[i].rolename)
+        }
+        this.rolenames = arrRoleNames.join()
+      },
+      getUserForm() {
         getUserDetail(this.$route.query.id).then(response => {
           if (response.status === 200) {
             this.userForm = response.data
-            this.userForm.repassword = this.userForm.password
-            this.pwdBack = response.data.password
-            this.userForm.roleids = response.data.roleIds
-            if (response.data.role.length > 0) {
-              this.userForm.roletype = response.data.role[0].roletype
-            }
+            this.setRoles(this.userForm.role)
           } else {
             this.$message.error(response.msg)
           }
         }).catch(error => {
           this.$message.error(error.msg)
-        })
-      },
-      getPwdInfo(data) {
-        this.pwdInfo = data
-      },
-      getRoleList() {
-        // 角色应该不会超过100个吧！
-        getAllRoles('1', '100').then(response => {
-          if (response.status === 200) {
-            this.allRoles = response.data.list
-          } else {
-            this.$message.error(response.msg)
-          }
-        }).catch(error => {
-          this.$message.error(error.msg)
-        })
-      },
-      onSubmit() {
-        this.$refs.userForm.validate(valid => {
-          if (valid) {
-            var params = {
-              'id': `${this.userForm.id}`,
-              'name': `${this.userForm.name}`,
-              'phoneno': `${this.userForm.phoneno}`,
-              'email': `${this.userForm.email !== null ? this.userForm.email : ''}`,
-              'address': `${this.userForm.address !== null ? this.userForm.address : ''}`,
-              'roleids': `${this.userForm.roleids.join(',')}`
-            }
-            updateUser(params).then(response => {
-              if (response.status === 200) {
-                this.$message.success('修改人员成功！')
-                this.$router.push({
-                  path: '/system/user/alist'
-                })
-              } else {
-                this.$message.error(response.msg)
-              }
-            }).catch(error => {
-              this.$message.error(error.msg)
-            })
-          } else {
-            this.$message.error('error submit!!')
-          }
         })
       },
       onCancel() {

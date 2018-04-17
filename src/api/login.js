@@ -34,6 +34,14 @@ export function getVercode(params) {
   })
 }
 
+export function resetLoginPassword(params) {
+  return request({
+    url: '/reloadpassword',
+    method: 'post',
+    data: params
+  })
+}
+
 export function getUnitInfos(params) {
   return request({
     url: '/sreachunit',

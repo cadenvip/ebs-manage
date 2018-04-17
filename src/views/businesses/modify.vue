@@ -594,7 +594,7 @@
           businesslicenseNum: '',
           merchantKind: '1',
           legalName: '',
-          legalPaperType: '',
+          legalPaperType: '1',
           legalPaperNumber: '',
           address: '',
           relationPerson: '',
@@ -870,6 +870,11 @@
         getBusinessesDetail(this.registerForm.id).then(response => {
           if (response.status === 200) {
             this.registerForm = response.data.businesses
+            this.registerForm.merchantPayable = response.data.businesses.merchantPayable === '1'
+            this.registerForm.aliPayNoPayable = response.data.businesses.aliPayNoPayable === '1'
+            this.registerForm.cmPayNoPayable = response.data.businesses.cmPayNoPayable === '1'
+            this.registerForm.umPayNoPayable = response.data.businesses.umPayNoPayable === '1'
+            this.registerForm.wirelesscitypayable = response.data.businesses.wirelesscitypayable === '1'
             this.registerForm.locationCode = response.data.businesses.locationCode.toString()
             response.data.sellAddresslist.forEach(element => {
               element.valid = true
@@ -1126,17 +1131,17 @@
             return
           }
         }
-        if (this.registerForm.businessesShortName !== '') {
-          if (this.registerForm.businessesName.indexOf(' ') >= 0) {
+        if (this.registerForm.businessesShortName !== null && this.registerForm.businessesShortName !== '') {
+          if (this.registerForm.businessesShortName.indexOf(' ') >= 0) {
             this.$message({
               type: 'warning',
-              message: '企业名称不能包含空格'
+              message: '不能包含空格'
             })
             return
-          } else if (containSymbol(this.registerForm.businessesName)) {
+          } else if (containSymbol(this.registerForm.businessesShortName)) {
             this.$message({
               type: 'warning',
-              message: '企业名称不能包含特殊字符'
+              message: '不能包含特殊字符'
             })
             return
           }
@@ -1163,7 +1168,7 @@
           return
         }
 
-        if (this.registerForm.legalName === '') {
+        if (this.registerForm.legalName === null || this.registerForm.legalName === '') {
           this.$message({
             type: 'warning',
             message: '请输入法人姓名'
@@ -1185,19 +1190,41 @@
           }
         }
   
-        if (this.registerForm.legalPaperType === '') {
+        if (this.registerForm.legalPaperType === null || this.registerForm.legalPaperType === '') {
           this.$message({
             type: 'warning',
             message: '请选择法人证件类型'
           })
           return
         }
-        if (this.registerForm.legalPaperNumber === '') {
+        if (this.registerForm.legalPaperNumber === null || this.registerForm.legalPaperNumber === '') {
           this.$message({
             type: 'warning',
             message: '请输入法人证件号码'
           })
           return
+        } else {
+          switch (this.registerForm.legalPaperType) {
+            case '1':
+              if (!validateID(this.registerForm.legalPaperNumber)) {
+                this.$message({
+                  type: 'warning',
+                  message: '请输入有效的身份证号码'
+                })
+                return
+              }
+              break
+            case '2':
+              break
+            case '3':
+              break
+            default:
+              this.$message({
+                type: 'warning',
+                message: '请先选择证件类型'
+              })
+              return
+          }
         }
 
         if (this.registerForm.relationPerson === '') {

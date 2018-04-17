@@ -601,7 +601,7 @@
           businesslicenseNum: '',
           merchantKind: '1',
           legalName: '',
-          legalPaperType: '',
+          legalPaperType: '1',
           legalPaperNumber: '',
           address: '',
           relationPerson: '',
@@ -945,16 +945,16 @@
           }
         }
         if (this.registerForm.businessesShortName !== '') {
-          if (this.registerForm.businessesName.indexOf(' ') >= 0) {
+          if (this.registerForm.businessesShortName.indexOf(' ') >= 0) {
             this.$message({
               type: 'warning',
-              message: '企业名称不能包含空格'
+              message: '不能包含空格'
             })
             return
-          } else if (containSymbol(this.registerForm.businessesName)) {
+          } else if (containSymbol(this.registerForm.businessesShortName)) {
             this.$message({
               type: 'warning',
-              message: '企业名称不能包含特殊字符'
+              message: '不能包含特殊字符'
             })
             return
           }

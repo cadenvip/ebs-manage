@@ -148,3 +148,10 @@ export function resetBusinessUserPassword(params) {
     }
   })
 }
+
+export function getPorxyUserList(userinfo, currentpage, pagesize) {
+  return request({
+    url: '/user/getPorxyUserList',
+    method: 'post'
+  })
+}

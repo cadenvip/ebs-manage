@@ -58,9 +58,6 @@
       <el-table-column label="操作" align="center">
         <template slot-scope="scope">
           <el-button @click="updateUser(scope.row)" type="text" size="small">修改</el-button>
-          <el-button @click="resetPassword(scope.row)" type="text" size="small">重置密码</el-button>
-          <el-button @click="opLock(scope.row, '1')" v-if="scope.row.locked === '0'" type="text" size="small">锁定</el-button>
-          <el-button @click="opLock(scope.row, '0')" v-if="scope.row.locked === '1'" type="text" size="small">解锁</el-button>
           <el-button @click="detail(scope.row)" type="text" size="small">详细</el-button>
         </template>
       </el-table-column>
@@ -76,9 +73,7 @@
 <script>
   import {
     getAllUsers,
-    getUserList,
-    resetUserPassword,
-    lockUser
+    getUserList
   } from '@/api/user'
   import locationselector from '@/components/LocationSelector/index'
   import {
@@ -130,7 +125,7 @@
       },
       addUser() {
         this.$router.push({
-          path: '/system/user/aadd'
+          path: '/system/user/padd'
         })
       },
       initUserList() {
@@ -172,45 +167,10 @@
       },
       updateUser(user) {
         this.$router.push({
-          path: '/system/user/aupdate',
+          path: '/system/user/passociate',
           query: {
             id: user.id
           }
-        })
-      },
-      resetPassword(user) {
-        this.$confirm(`您确定重置[${user.loginname}]的密码为123456吗, 是否继续?`, '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          resetUserPassword(user).then(response => {
-            if (response.status === 200) {
-              this.$message.success('重置成功!')
-            } else {
-              this.$message.error(response.msg)
-            }
-          })
-        }).catch(() => {
-          this.$message.info('已取消重置')
-        })
-      },
-      opLock(user, locked) {
-        this.$confirm(`您确定锁定账号[${user.loginname}]的吗, 是否继续?`, '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          lockUser(user, locked).then(response => {
-            if (response.status === 200) {
-              this.$message.success('操作成功!')
-              user.locked = locked
-            } else {
-              this.$message.error(response.msg)
-            }
-          })
-        }).catch(() => {
-          this.$message.info('已取消操作')
         })
       },
       detail(user) {

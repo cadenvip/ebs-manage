@@ -2,18 +2,18 @@
   <div class="app-container">
     <h4 class="title">新增人员</h4>
     <el-form ref="userForm" :model="userForm" :rules="rules" label-width="120px">
-      <el-form-item label="账号类型：" prop="roletype">
+      <!-- <el-form-item label="账号类型：" prop="roletype">
         <el-select v-model="userForm.roletype" @change="roletypeChanged">
           <el-option label="移动人员" value="1"></el-option>
           <el-option label="商家人员" value="3"></el-option>
         </el-select>
-      </el-form-item>
-      <el-form-item v-show="userForm.roletype === '2' || userForm.roletype === '3'" label="商家：" prop="unitname">
+      </el-form-item> -->
+      <!-- <el-form-item v-show="userForm.roletype === '2' || userForm.roletype === '3'" label="商家：" prop="unitname">
         <el-input v-model="userForm.unitname" style="width: 220px;" placeholder="请选择商家" @focus="unitDialogVisible = true"></el-input>
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item label="角色：" prop="roleids">
         <el-checkbox-group v-model="userForm.roleids">
-          <el-checkbox v-for="(item, index) in allRoles" v-if="item.roletype === userForm.roletype" :key="item.id" :label="item.id">{{item.rolename}}</el-checkbox>
+          <el-checkbox v-for="(item, index) in allRoles" v-if="item.roletype === userForm.roletype && item.ishidden !== '1'" :key="item.id" :label="item.id">{{item.rolename}}</el-checkbox>
         </el-checkbox-group>
       </el-form-item>
       <el-form-item label="账号：" prop="loginname">
@@ -84,11 +84,26 @@
           </el-form-item>
         </el-col>
       </el-row>
-      <br/>
       <div style="text-align: center;font-family: 宋体, Arial, sans-serif;font-size: 12px;color: #f30">
         <span>
           温馨提示：请避免设置与其他系统相同的密码
         </span>
+      </div>
+      <br/>
+      <div style="width:1000px;">
+        <h5>运营的商家</h5>
+        <el-button type="primary" @click="selectBusiness">选择商家</el-button>
+        <el-table :data="unitidList" border stripe fit highlight-current-row style="width:100%;margin-top:10px" align="center">
+          <el-table-column label='业务名称' prop="operationname" align="center"></el-table-column>
+          <el-table-column label="业务编号" prop="operationcode" align="center"></el-table-column>
+          <el-table-column label="业务启用时间" prop="startdate" align="center"></el-table-column>
+          <el-table-column label="业务到期时间" prop="enddate" align="center"></el-table-column>
+          <el-table-column label="操作" align="center">
+            <template slot-scope="scope">
+              <el-button @click="deleteBusiness(scope.row)" type="text" size="small">删除</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
       </div>
       <br/>
       <div style="text-align: center">
@@ -118,9 +133,10 @@
         </el-row>
       </el-form>
       <br/>
-      <el-table :data="businessList" ref="businessTable" tooltip-effect="dark" @current-change="businessSelectionChange" highlight-current-row>
-        <el-table-column label='商家名称' prop="businessesName" width="400" align="center"></el-table-column>
-        <el-table-column label="商家类型" prop="businessType" :formatter="businessTypeFormat" width="120" align="center"></el-table-column>
+      <el-table :data="businessList" ref="businessTable" tooltip-effect="dark" @selection-change="businessSelectionChange" border highlight-current-row style="width:100%">
+        <el-table-column type="selection" align="center"></el-table-column>
+        <el-table-column label='商家名称' prop="businessesName" align="center"></el-table-column>
+        <el-table-column label="商家类型" prop="businessType" :formatter="businessTypeFormat" align="center"></el-table-column>
       </el-table>
       <div class="block" align="right" style="padding-right:20px">
         <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" layout="total, sizes, prev, pager, next, jumper"
@@ -150,6 +166,7 @@
   } from '@/utils/index'
   import {
     validateCMMobilePhone,
+    containSymbol,
     validateEmail
   } from '@/utils/validate'
   import {
@@ -158,6 +175,20 @@
 
   export default {
     data() {
+      // 必填
+      var validateName = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('请输入姓名'))
+        } else {
+          if (value.indexOf(' ') >= 0) {
+            callback(new Error('不能包含空格'))
+          } else if (containSymbol(value.trim())) {
+            callback(new Error('不能包含特殊字符'))
+          } else {
+            callback()
+          }
+        }
+      }
       var validateCellphone = (rule, value, callback) => {
         if (value === '') {
           callback(new Error('请输入手机号码'))
@@ -205,7 +236,7 @@
       return {
         allRoles: [],
         userForm: {
-          roletype: '1',
+          roletype: '3',
           roleids: [],
           loginname: '',
           password: '',
@@ -215,16 +246,16 @@
           locationid: '',
           locationname: '',
           unitname: '',
-          unitid: '',
+          unitidList: [],
           email: '',
           address: ''
         },
         rules: {
-          roletype: [{
-            required: true,
-            message: '请选择类型',
-            trigger: 'change'
-          }],
+          // roletype: [{
+          //   required: true,
+          //   message: '请选择类型',
+          //   trigger: 'change'
+          // }],
           roleids: [{
             required: true,
             message: '请选择角色',
@@ -237,8 +268,8 @@
           }],
           loginname: [{
             required: true,
-            message: '请输入账号',
-            trigger: 'blur'
+            trigger: 'change',
+            validator: validateName
           }],
           password: [{
             required: true,
@@ -252,8 +283,8 @@
           }],
           name: [{
             required: true,
-            message: '请输入名称',
-            trigger: 'blur'
+            trigger: 'change',
+            validator: validateName
           }],
           locationname: [{
             required: true,
@@ -281,7 +312,7 @@
           locationCode: ''
         },
         businessList: [],
-        preSelectedBusiness: {},
+        preSelectedBusiness: [],
         pagesizes: [10, 20, 30, 50],
         pagesize: 10,
         currentPage: 1,
@@ -352,6 +383,9 @@
         this.regionDialogVisible = false
         this.locationInfo = {}
       },
+      selectBusiness() {
+        this.unitDialogVisible = true
+      },
       confirmSelected() {
         this.userForm.unitid = this.preSelectedBusiness.id
         this.userForm.unitname = this.preSelectedBusiness.businessesName
@@ -390,7 +424,7 @@
               'password': encryptPassword(this.userForm.password),
               'name': `${this.userForm.name}`,
               'phoneno': `${this.userForm.phoneno}`,
-              'unitid': `${this.userForm.unitid}`,
+              'unitidList': this.userForm.unitidList,
               'locationid': `${this.userForm.locationid}`,
               'email': `${this.userForm.email}`,
               'address': `${this.userForm.address}`,

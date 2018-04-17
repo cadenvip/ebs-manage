@@ -20,10 +20,13 @@
         <span class="svg-container">
           <svg-icon icon-class="password"></svg-icon>
         </span>
-        <el-input name="password" :type="pwdType" @keyup.enter.native="handleLogin" :maxlength=20 clearable v-model="loginForm.password" placeholder="请输入密码"></el-input>
-        <span class="show-pwd" @click="showPwd">
+        <el-input name="password" :type="pwdType" @keyup.enter.native="handleLogin" :maxlength=20 clearable v-model="loginForm.password" placeholder="请输入密码" style="width:50%;display:inline-block;"></el-input>
+        <!-- <span class="show-pwd" @click="showPwd">
           <svg-icon icon-class="eye" />
-        </span>
+        </span> -->
+        <el-button type="text" style="margin-top:6px;margin-left: 64px;" @click.native.prevent="reloadPassword">
+          重置密码
+        </el-button>
       </el-form-item>
       <el-form-item prop="vercode">
         <span class="svg-container svg-container_login">
@@ -52,6 +55,7 @@
 
 <script>
   import {
+    resetLoginPassword,
     getVercode,
     getUnitInfos,
     getUnits
@@ -205,6 +209,35 @@
         if (this.unitinfos === undefined || this.unitinfos.length <= 0) {
           this.getUnitids()
         }
+      },
+      reloadPassword() {
+        if (this.loginForm.loginname === '') {
+          this.$message.error('请输入账号')
+          return
+        }
+        if (this.loginForm.unitid === '') {
+          this.$message.error('请选择归属单位')
+          return
+        }
+        this.$confirm(`您确定重置密码吗, 是否继续?`, '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          var params = {
+            'loginname': this.loginForm.loginname,
+            'unitid': this.loginForm.unitid
+          }
+          resetLoginPassword(params).then(response => {
+            if (response.status === 200) {
+              this.$message.success(response.msg)
+            } else {
+              this.$message.error(response.msg)
+            }
+          })
+        }).catch(() => {
+          this.$message.info('已取消重置')
+        })
       },
       getVercode() {
         // this.loginForm.loginname = this.loginForm.loginname.trim()
