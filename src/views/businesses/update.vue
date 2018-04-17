@@ -66,7 +66,7 @@
                 </el-form-item>
               </el-col>
               <el-col :span="15" style="padding-top:8px;padding-left:30px">
-                <span style="font-family: 宋体, Arial, sans-serif;font-size: 12px;color: #999;">该联系人用户业务联系，请填写主要平台使用负责人</span>
+                <span style="font-family: 宋体, Arial, sans-serif;font-size: 12px;color: #999;">该联系人用于业务联系，请填写主要平台使用负责人</span>
               </el-col>
             </el-row>
             <el-row :gutter="20">
@@ -76,7 +76,7 @@
                 </el-form-item>
               </el-col>
               <el-col :span="15" style="padding-top:8px;padding-left:30px">
-                <span style="font-family: 宋体, Arial, sans-serif;font-size: 12px;color: #999;">该手机将用于平台登陆帐号，接收发送的关键信息，请填写有效移动手机号码</span>
+                <span style="font-family: 宋体, Arial, sans-serif;font-size: 12px;color: #999;">该手机将用于平台登录，接收发送的关键信息，请填写有效移动手机号码</span>
               </el-col>
             </el-row>
             <el-form-item label="业务联系人邮箱：" prop="relationEmail">
@@ -1428,7 +1428,7 @@
             'merchantKind': `${this.registerForm.merchantKind !== null ? this.registerForm.merchantKind : ''}`,
             'address': `${this.registerForm.address}`, // 详细地址
             'relationPerson': `${this.registerForm.relationPerson}`, // 联系人姓名
-            'relationPhone': `${this.registerForm.relationPhone}`, // 联系人电话，用于登陆，初始密码123456
+            'relationPhone': `${this.registerForm.relationPhone}`, // 联系人电话，用于登录，初始密码123456
             'sellPersonName': `${this.registerForm.sellPersonName}`, // 售后联系人
             'sellPersonMobile': `${this.registerForm.sellPersonMobile}`, // 售后联系人电话
             'financePersonName': `${this.registerForm.financePersonName}`, // 财务姓名
