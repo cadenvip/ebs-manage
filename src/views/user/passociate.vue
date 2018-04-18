@@ -137,8 +137,8 @@
         </el-row>
       </el-form>
       <br/>
-      <el-table :data="businessList" ref="businessTable" tooltip-effect="dark" @selection-change="businessSelectionChange" border highlight-current-row style="width:100%">
-        <el-table-column type="selection" align="center"></el-table-column>
+      <el-table :data="businessList" ref="businessTable" :row-key="getRowKey" tooltip-effect="dark" @selection-change="businessSelectionChange" border stripe fit highlight-current-row style="width:100%">
+        <el-table-column type="selection" align="center" :reserve-selection="true"></el-table-column>
         <el-table-column label='商家名称' prop="businessesName" align="center"></el-table-column></el-table-column>
         <el-table-column label="区域" prop="locationName" align="center"></el-table-column>
         <el-table-column label="企业状态" prop="state" :formatter="stateFormat" align="center"></el-table-column>
@@ -187,6 +187,9 @@
         },
         businessList: [],
         // preSelectedBusiness: [],
+        getRowKey(row) {
+          return row.id
+        },
         selectedList: [],
         pagesizes: [10, 20, 30, 50],
         pagesize: 10,
@@ -205,9 +208,9 @@
         return nameCutSensitive(this.userForm.name)
       }
     },
-    mounted() {
-      this.queryBusinessesList()
-    },
+    // mounted() {
+    //   this.queryBusinessesList()
+    // },
     methods: {
       setRoles(roles) {
         var arrRoleNames = []
@@ -240,7 +243,6 @@
         this.queryBusinessesList()
       },
       businessSelectionChange(val) {
-        // this.preSelectedBusiness = val
         this.selectedList = val
       },
       stateFormat(row, column, cellValue) {
@@ -287,10 +289,7 @@
       },
       selectBusiness() {
         this.unitDialogVisible = true
-        // TODO 设置默认选中
-        if (this.selectedList.length > 0) {
-          this.$refs.businessTable.toggleRowSelection(this.selectedList)
-        }
+        this.queryBusinessesList()
       },
       deleteBusiness(business) {
         var index = this.selectedList.indexOf(business)
@@ -299,17 +298,20 @@
         }
       },
       queryBusinessesList() {
-        this.loading = true
         getBusinessesList(this.businessSearchForm, this.currentPage, this.pagesize).then(response => {
           if (response.status === 200) {
             this.businessList = response.data.list
             this.total = response.data.total
+            // TODO 设置默认选中(:reserve-selection="true" 特别重要****)
+            if (this.selectedList.length > 0) {
+              this.selectedList.forEach(row => {
+                this.$refs.businessTable.toggleRowSelection(row, true)
+              })
+            }
           } else {
             this.$message.error(response.msg)
           }
-          this.loading = false
         }).catch(error => {
-          this.loading = false
           this.$message.error(error.msg)
         })
       },

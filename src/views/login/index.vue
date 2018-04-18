@@ -171,6 +171,7 @@
               }).catch(err => {
                 this.$message.error(err)
               })
+              // TODO获取所有敏感词
             }).catch(errpr => {
               this.$message.error(errpr)
             })
