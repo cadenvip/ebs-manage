@@ -1113,7 +1113,7 @@
       },
       goNext() {
         // 校验填写有效性
-        debugger
+        // debugger
         if (this.registerForm.businessesName === '') {
           this.$message({
             type: 'warning',
