@@ -93,11 +93,11 @@
       <div style="width:1000px;">
         <h5>运营的商家</h5>
         <el-button type="primary" @click="selectBusiness">选择商家</el-button>
-        <el-table :data="unitidList" border stripe fit highlight-current-row style="width:100%;margin-top:10px" align="center">
-          <el-table-column label='业务名称' prop="operationname" align="center"></el-table-column>
-          <el-table-column label="业务编号" prop="operationcode" align="center"></el-table-column>
-          <el-table-column label="业务启用时间" prop="startdate" align="center"></el-table-column>
-          <el-table-column label="业务到期时间" prop="enddate" align="center"></el-table-column>
+        <el-table :data="selectedList" border stripe fit highlight-current-row style="width:100%;margin-top:10px" align="center">
+          <el-table-column label='商家名称' prop="businessesName" align="center"></el-table-column></el-table-column>
+          <el-table-column label="区域" prop="locationName" align="center"></el-table-column>
+          <el-table-column label="企业状态" prop="state" :formatter="stateFormat" align="center"></el-table-column>
+          <el-table-column label="商家类型" prop="businessType" :formatter="businessTypeFormat" align="center"></el-table-column>
           <el-table-column label="操作" align="center">
             <template slot-scope="scope">
               <el-button @click="deleteBusiness(scope.row)" type="text" size="small">删除</el-button>
@@ -135,7 +135,9 @@
       <br/>
       <el-table :data="businessList" ref="businessTable" tooltip-effect="dark" @selection-change="businessSelectionChange" border highlight-current-row style="width:100%">
         <el-table-column type="selection" align="center"></el-table-column>
-        <el-table-column label='商家名称' prop="businessesName" align="center"></el-table-column>
+        <el-table-column label='商家名称' prop="businessesName" align="center"></el-table-column></el-table-column>
+        <el-table-column label="区域" prop="locationName" align="center"></el-table-column>
+        <el-table-column label="企业状态" prop="state" :formatter="stateFormat" align="center"></el-table-column>
         <el-table-column label="商家类型" prop="businessType" :formatter="businessTypeFormat" align="center"></el-table-column>
       </el-table>
       <div class="block" align="right" style="padding-right:20px">
@@ -144,17 +146,17 @@
         </el-pagination>
       </div>
       <br/>
-      <span slot="footer" class="dialog-footer">
+      <!-- <span slot="footer" class="dialog-footer">
         <el-button @click="unitDialogVisible = false">取 消</el-button>
         <el-button type="primary" @click="confirmSelected">确 定</el-button>
-      </span>
+      </span> -->
     </el-dialog>
   </div>
 </template>
 
 <script>
   import {
-    addUser
+    addProxyUser
   } from '@/api/user'
   import {
     getAllRoles
@@ -246,7 +248,7 @@
           locationid: '',
           locationname: '',
           unitname: '',
-          unitidList: [],
+          // unitidList: [],
           email: '',
           address: ''
         },
@@ -312,7 +314,8 @@
           locationCode: ''
         },
         businessList: [],
-        preSelectedBusiness: [],
+        // preSelectedBusiness: [],
+        selectedList: [],
         pagesizes: [10, 20, 30, 50],
         pagesize: 10,
         currentPage: 1,
@@ -363,9 +366,9 @@
           this.$message.error(error.msg)
         })
       },
-      roletypeChanged() {
-        this.userForm.roleids = []
-      },
+      // roletypeChanged() {
+      //   this.userForm.roleids = []
+      // },
       handleSizeChange(val) {
         this.pagesize = val
         this.queryBusinessesList()
@@ -375,7 +378,8 @@
         this.queryBusinessesList()
       },
       businessSelectionChange(val) {
-        this.preSelectedBusiness = val
+        // this.preSelectedBusiness = val
+        this.selectedList = val
       },
       confirmSelectedRegion() {
         this.userForm.locationid = this.locationInfo.id
@@ -383,14 +387,49 @@
         this.regionDialogVisible = false
         this.locationInfo = {}
       },
+      deleteBusiness(business) {
+        var index = this.selectedList.indexOf(business)
+        if (index > -1) {
+          this.selectedList.splice(index, 1)
+        }
+      },
       selectBusiness() {
         this.unitDialogVisible = true
       },
-      confirmSelected() {
-        this.userForm.unitid = this.preSelectedBusiness.id
-        this.userForm.unitname = this.preSelectedBusiness.businessesName
-        this.unitDialogVisible = false
-        this.preSelectedBusiness = {}
+      // confirmSelected() {
+      //   this.userForm.unitid = this.preSelectedBusiness.id
+      //   this.userForm.unitname = this.preSelectedBusiness.businessesName
+      //   this.unitDialogVisible = false
+      //   this.preSelectedBusiness = []
+      // },
+      stateFormat(row, column, cellValue) {
+        var state = ''
+        switch (cellValue) {
+          case '0':
+            state = '企业待审核'
+            break
+          case '1':
+            state = '正常'
+            break
+          case '2':
+            state = '驳回'
+            break
+          case '3':
+            state = '暂停'
+            break
+            // case '4':
+            //   state = '过期'
+            //   break
+            // case '5':
+            //   state = '网店待审核'
+            //   break
+            // case '6':
+            //   state = '待付款'
+            //   break
+          default:
+            break
+        }
+        return state
       },
       businessTypeFormat(row, column, cellValue) {
         var businessType = ''
@@ -408,33 +447,26 @@
       onSubmit() {
         this.$refs.userForm.validate(valid => {
           if (valid) {
-            if ((this.userForm.roletype === '2' || this.userForm.roletype === '3') && (this.userForm.unitname ===
-                undefined || this.userForm.unitname === '')) {
-              this.$message.error('请选择商家')
-              return
-            } else {
-              var userInfo = window.sessionStorage.getItem('userInfo')
-              if (userInfo !== undefined && userInfo !== '') {
-                userInfo = JSON.parse(userInfo)
-                this.userForm.unitid = userInfo.unitid
-              }
-            }
+            var unitidList = []
+            this.selectedList.forEach(item => {
+              unitidList.push(item.id)
+            })
             var params = {
               'loginname': `${this.userForm.loginname}`,
               'password': encryptPassword(this.userForm.password),
               'name': `${this.userForm.name}`,
               'phoneno': `${this.userForm.phoneno}`,
-              'unitidList': this.userForm.unitidList,
+              'unitidList': unitidList,
               'locationid': `${this.userForm.locationid}`,
               'email': `${this.userForm.email}`,
               'address': `${this.userForm.address}`,
               'roleids': `${this.userForm.roleids.join(',')}`
             }
-            addUser(params).then(response => {
+            addProxyUser(params).then(response => {
               if (response.status === 200) {
-                this.$message.success('新增人员成功')
+                this.$message.success('新增代运营人员成功！')
                 this.$router.push({
-                  path: '/system/user/alist'
+                  path: '/system/user/plist'
                 })
               } else {
                 this.$message.error(response.msg)
@@ -449,7 +481,7 @@
       },
       onCancel() {
         this.$router.push({
-          path: '/system/user/alist'
+          path: '/system/user/plist'
         })
       }
     }

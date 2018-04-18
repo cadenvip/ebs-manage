@@ -347,7 +347,7 @@
             'businesslicenseNum': this.registerForm.businesslicenseNum, // 企业营业执照号码
             'address': this.registerForm.address, // 详细地址
             'relationPerson': this.registerForm.relationPerson, // 联系人姓名
-            'relationPhone': this.registerForm.relationPhone, // 联系人电话，用于登陆，初始密码123456
+            'relationPhone': this.registerForm.relationPhone, // 联系人电话，用于登录，初始密码123456
             'sellPersonName': this.registerForm.sellPersonName, // 售后联系人
             'sellPersonMobile': this.registerForm.sellPersonMobile, // 售后联系人电话
             'financePersonName': this.registerForm.financePersonName, // 财务姓名

@@ -24,8 +24,8 @@
         <!-- <span class="show-pwd" @click="showPwd">
           <svg-icon icon-class="eye" />
         </span> -->
-        <el-button type="text" style="margin-top:6px;margin-left: 64px;" @click.native.prevent="reloadPassword">
-          重置密码
+        <el-button type="text" style="margin-top:6px;margin-left: 50px;" @click.native.prevent="reloadPassword">
+          忘记密码？
         </el-button>
       </el-form-item>
       <el-form-item prop="vercode">

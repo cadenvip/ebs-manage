@@ -30,7 +30,7 @@
                 </el-form-item>
               </el-col>
               <el-col :span="14" style="padding-top:8px">
-                <span style="font-family: 宋体, Arial, sans-serif;font-size: 12px;color: #999;">该联系人用户业务联系，请填写主要平台使用负责人</span>
+                <span style="font-family: 宋体, Arial, sans-serif;font-size: 12px;color: #999;">该联系人用于业务联系，请填写主要平台使用负责人</span>
               </el-col>
             </el-row>
             <el-row :gutter="20">
@@ -40,7 +40,7 @@
                 </el-form-item>
               </el-col>
               <el-col :span="14" style="padding-top:8px">
-                <span style="font-family: 宋体, Arial, sans-serif;font-size: 12px;color: #999;">该手机将用于平台登陆帐号，接收发送的关键信息，请填写有效移动手机号码</span>
+                <span style="font-family: 宋体, Arial, sans-serif;font-size: 12px;color: #999;">该手机将用于平台登录，接收发送的关键信息，请填写有效移动手机号码</span>
               </el-col>
             </el-row>
             <el-row :gutter="20">

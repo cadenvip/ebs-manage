@@ -101,22 +101,59 @@
             {{ userForm.logintime ? userForm.logintime : '&nbsp;' }}
           </span>
         </el-col>
-        <el-col :span="4" style="text-align:right" v-if="roletypes === '商家人员'">
-          <span>
-            商家：
-          </span>
-        </el-col>
-        <el-col :span="8" v-if="roletypes === '商家人员'">
-          <span>
-            {{ userForm.unitname }}
-          </span>
-        </el-col>
       </el-row>
+    </div>
+    <div style="width:1000px;">
+      <h5>运营的商家</h5>
+      <el-button type="primary" @click="selectBusiness">选择商家</el-button>
+      <el-table :data="selectedList" border stripe fit highlight-current-row style="width:100%;margin-top:10px" align="center">
+        <el-table-column label='商家名称' prop="businessesName" align="center"></el-table-column></el-table-column>
+        <el-table-column label="区域" prop="locationName" align="center"></el-table-column>
+        <el-table-column label="企业状态" prop="state" :formatter="stateFormat" align="center"></el-table-column>
+        <el-table-column label="商家类型" prop="businessType" :formatter="businessTypeFormat" align="center"></el-table-column>
+        <el-table-column label="操作" align="center">
+          <template slot-scope="scope">
+            <el-button @click="deleteBusiness(scope.row)" type="text" size="small">删除</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
     </div>
     <br/>
     <div style="text-align: center">
       <el-button type="primary" @click="onCancel">返回</el-button>
     </div>
+    <el-dialog title="请选择商家" :visible.sync="unitDialogVisible" width="770px">
+      <el-form ref="businessSearchForm" :model="businessSearchForm" label-width="100px">
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <el-form-item label="商家名称: ">
+              <el-input v-model="businessSearchForm.businessesName" style="width: 220px;" placeholder="请输入商家名称"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-button @click="queryBusinessesList()" type="primary">查询</el-button>
+          </el-col>
+        </el-row>
+      </el-form>
+      <br/>
+      <el-table :data="businessList" ref="businessTable" tooltip-effect="dark" @selection-change="businessSelectionChange" border highlight-current-row style="width:100%">
+        <el-table-column type="selection" align="center"></el-table-column>
+        <el-table-column label='商家名称' prop="businessesName" align="center"></el-table-column></el-table-column>
+        <el-table-column label="区域" prop="locationName" align="center"></el-table-column>
+        <el-table-column label="企业状态" prop="state" :formatter="stateFormat" align="center"></el-table-column>
+        <el-table-column label="商家类型" prop="businessType" :formatter="businessTypeFormat" align="center"></el-table-column>
+      </el-table>
+      <div class="block" align="right" style="padding-right:20px">
+        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" layout="total, sizes, prev, pager, next, jumper"
+          :current-page="currentPage" :page-sizes="pagesizes" :page-size="pagesize" :total="total">
+        </el-pagination>
+      </div>
+      <br/>
+      <!-- <span slot="footer" class="dialog-footer">
+        <el-button @click="unitDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="confirmSelected">确 定</el-button>
+      </span> -->
+    </el-dialog>
   </div>
 </template>
 
@@ -128,13 +165,30 @@
     phoneCutSensitive,
     nameCutSensitive
   } from '@/utils/index'
+  import {
+    getBusinessesList
+  } from '@/api/businesses'
 
   export default {
     data() {
       return {
         roletypes: '',
         userForm: {},
-        rolenames: ''
+        rolenames: '',
+        unitDialogVisible: false,
+        businessSearchForm: {
+          businessesName: '',
+          state: '',
+          createsource: '',
+          locationCode: ''
+        },
+        businessList: [],
+        // preSelectedBusiness: [],
+        selectedList: [],
+        pagesizes: [10, 20, 30, 50],
+        pagesize: 10,
+        currentPage: 1,
+        total: 0
       }
     },
     created() {
@@ -170,6 +224,78 @@
           arrRoleNames.push(roles[i].rolename)
         }
         this.rolenames = arrRoleNames.join()
+      },
+      handleSizeChange(val) {
+        this.pagesize = val
+        this.queryBusinessesList()
+      },
+      handleCurrentChange(val) {
+        this.currentPage = val
+        this.queryBusinessesList()
+      },
+      businessSelectionChange(val) {
+        // this.preSelectedBusiness = val
+        this.selectedList = val
+      },
+      stateFormat(row, column, cellValue) {
+        var state = ''
+        switch (cellValue) {
+          case '0':
+            state = '企业待审核'
+            break
+          case '1':
+            state = '正常'
+            break
+          case '2':
+            state = '驳回'
+            break
+          case '3':
+            state = '暂停'
+            break
+            // case '4':
+            //   state = '过期'
+            //   break
+            // case '5':
+            //   state = '网店待审核'
+            //   break
+            // case '6':
+            //   state = '待付款'
+            //   break
+          default:
+            break
+        }
+        return state
+      },
+      businessTypeFormat(row, column, cellValue) {
+        var businessType = ''
+        if (cellValue !== null) {
+          switch (cellValue) {
+            case '1':
+              businessType = '合作商家'
+              break
+            default:
+              break
+          }
+        }
+        return businessType
+      },
+      selectBusiness() {
+        this.unitDialogVisible = true
+      },
+      queryBusinessesList() {
+        this.loading = true
+        getBusinessesList(this.businessSearchForm, this.currentPage, this.pagesize).then(response => {
+          if (response.status === 200) {
+            this.businessList = response.data.list
+            this.total = response.data.total
+          } else {
+            this.$message.error(response.msg)
+          }
+          this.loading = false
+        }).catch(error => {
+          this.loading = false
+          this.$message.error(error.msg)
+        })
       },
       getUserForm() {
         getUserDetail(this.$route.query.id).then(response => {

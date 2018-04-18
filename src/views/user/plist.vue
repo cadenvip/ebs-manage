@@ -1,6 +1,6 @@
 <template>
   <div style="padding-left: 20px;">
-    <h4>人员查询条件</h4>
+    <h4>代运营人员查询条件</h4>
     <el-form ref="searchForm" :model="searchForm" label-width="100px" class="demo-ruleForm">
       <el-row>
         <el-col :span="10">
@@ -58,7 +58,7 @@
       <el-table-column label="操作" align="center">
         <template slot-scope="scope">
           <el-button @click="updateUser(scope.row)" type="text" size="small">修改</el-button>
-          <el-button @click="detail(scope.row)" type="text" size="small">详细</el-button>
+          <!-- <el-button @click="detail(scope.row)" type="text" size="small">详细</el-button> -->
         </template>
       </el-table-column>
     </el-table>
@@ -72,8 +72,7 @@
 
 <script>
   import {
-    getAllUsers,
-    getUserList
+    getPorxyUserList
   } from '@/api/user'
   import locationselector from '@/components/LocationSelector/index'
   import {
@@ -110,7 +109,15 @@
     methods: {
       queryUserList() {
         this.loading = true
-        getUserList(this.searchForm, this.currentPage, this.pagesize).then(response => {
+        var params = {
+          'loginname': `${this.searchForm.loginname}`,
+          'phoneno': `${this.searchForm.phoneno}`,
+          'name': `${this.searchForm.name}`,
+          'locationid': `${this.searchForm.locationid}`,
+          'page': `${this.currentPage}`,
+          'limit': `${this.pagesize}`
+        }
+        getPorxyUserList(params).then(response => {
           if (response.status === 200) {
             this.list = response.data.list
             this.total = response.data.total
@@ -130,7 +137,11 @@
       },
       initUserList() {
         this.loading = true
-        getAllUsers(this.currentPage, this.pagesize).then(response => {
+        var params = {
+          'page': `${this.currentPage}`,
+          'limit': `${this.pagesize}`
+        }
+        getPorxyUserList(params).then(response => {
           if (response.status === 200) {
             this.list = response.data.list
             this.total = response.data.total
@@ -173,14 +184,14 @@
           }
         })
       },
-      detail(user) {
-        this.$router.push({
-          path: '/system/user/adetail',
-          query: {
-            id: user.id
-          }
-        })
-      },
+      // detail(user) {
+      //   this.$router.push({
+      //     path: '/system/user/adetail',
+      //     query: {
+      //       id: user.id
+      //     }
+      //   })
+      // },
       resetForm(formname) {
         this.searchForm.loginname = ''
         this.searchForm.phoneno = ''
