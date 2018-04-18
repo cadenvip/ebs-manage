@@ -601,12 +601,12 @@ export const asyncRouterMap = [
         component: _import('order/admin/commonorderquery'),
         meta: { roles: ['1'], title: '普通订单查询', icon: 'order' }
       },
-      {
-        path: 'businessorder2',
-        name: 'businessorder2',
-        component: _import('order/businessorder2'),
-        meta: { roles: ['1'], title: '普通订单管理', icon: 'order' }
-      },
+      // {
+      //   path: 'businessorder2',
+      //   name: 'businessorder2',
+      //   component: _import('order/businessorder2'),
+      //   meta: { roles: ['2', '3'], title: '普通订单管理', icon: 'order' }
+      // },
       {
         path: 'orderdetail',
         name: 'orderdetail',
