@@ -287,6 +287,10 @@
       },
       selectBusiness() {
         this.unitDialogVisible = true
+        // TODO 设置默认选中
+        if (this.selectedList.length > 0) {
+          this.$refs.businessTable.toggleRowSelection(this.selectedList)
+        }
       },
       deleteBusiness(business) {
         var index = this.selectedList.indexOf(business)

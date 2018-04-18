@@ -416,6 +416,9 @@
                 </el-form-item>
               </el-col>
             </el-row>
+            <el-form-item label="满额免邮：" prop="fullMoney">
+              <el-input v-model="registerForm.fullMoney" :maxlength=16 clearable style="width: 220px;" placeholder="请输入满额"></el-input>
+            </el-form-item>
           </el-form>
           <br/>
         </div>
@@ -638,6 +641,7 @@
           wirelesstpcode: '', // 无线城市话费支付渠道编码
           wirelesstpname: '', // 无线城市话费支付渠道名称
           validdate_str: '',
+          fullMoney: '',
           // },
           // sellAddressListForm: [],
           // attachmentForm: {
@@ -875,6 +879,7 @@
             this.registerForm.cmPayNoPayable = response.data.businesses.cmPayNoPayable === '1'
             this.registerForm.umPayNoPayable = response.data.businesses.umPayNoPayable === '1'
             this.registerForm.wirelesscitypayable = response.data.businesses.wirelesscitypayable === '1'
+            // this.registerForm.fullMoney = ''
             this.registerForm.locationCode = response.data.businesses.locationCode.toString()
             response.data.sellAddresslist.forEach(element => {
               element.valid = true
@@ -1450,25 +1455,26 @@
             'fax': `${this.registerForm.fax !== null ? this.registerForm.fax : ''}`,
             'zipCode': `${this.registerForm.zipCode !== null ? this.registerForm.zipCode : ''}`,
             'ownershipType': `${this.registerForm.ownershipType !== null ? this.registerForm.ownershipType : ''}`,
-            'merchantPayable': `${this.registerForm.merchantPayable !== null ? this.registerForm.merchantPayable : ''}`,
+            'merchantPayable': `${this.registerForm.merchantPayable === null ? '' : this.registerForm.merchantPayable ? '1' : '0'}`,
             'merchantNo': `${this.registerForm.merchantNo !== null ? this.registerForm.merchantNo : ''}`,
-            'aliPayNoPayable': `${this.registerForm.aliPayNoPayable !== null ? this.registerForm.aliPayNoPayable : ''}`,
+            'aliPayNoPayable': `${this.registerForm.aliPayNoPayable === null ? '' : this.registerForm.aliPayNoPayable ? '1' : '0'}`,
             'aliPayAccount': `${this.registerForm.aliPayAccount !== null ? this.registerForm.aliPayAccount : ''}`,
             'aliPaySignKey': `${this.registerForm.aliPaySignKey !== null ? this.registerForm.aliPaySignKey : ''}`,
             'aliPaySellerAccountName': `${this.registerForm.aliPaySellerAccountName !== null ? this.registerForm.aliPaySellerAccountName : ''}`,
-            'cmPayNoPayable': `${this.registerForm.cmPayNoPayable !== null ? this.registerForm.cmPayNoPayable : ''}`,
+            'cmPayNoPayable': `${this.registerForm.cmPayNoPayable === null ? '' : this.registerForm.cmPayNoPayable ? '1' : '0'}`,
             'cmPayMerchantId': `${this.registerForm.cmPayMerchantId !== null ? this.registerForm.cmPayMerchantId : ''}`,
             'cmPaySignKey': `${this.registerForm.cmPaySignKey !== null ? this.registerForm.cmPaySignKey : ''}`,
-            'umPayNoPayable': `${this.registerForm.umPayNoPayable !== null ? this.registerForm.umPayNoPayable : ''}`,
+            'umPayNoPayable': `${this.registerForm.umPayNoPayable === null ? '' : this.registerForm.umPayNoPayable ? '1' : '0'}`,
             'umPayMerchantId': `${this.registerForm.umPayMerchantId !== null ? this.registerForm.umPayMerchantId : ''}`,
             'umPayBankAccountName': `${this.registerForm.umPayBankAccountName !== null ? this.registerForm.umPayBankAccountName : ''}`,
             'umPayBankAccountNo': `${this.registerForm.umPayBankAccountNo !== null ? this.registerForm.umPayBankAccountNo : ''}`,
             'wirelesscityno': `${this.registerForm.wirelesscityno !== null ? this.registerForm.wirelesscityno : ''}`,
             'wirelesscityname': `${this.registerForm.wirelesscityname !== null ? this.registerForm.wirelesscityname : ''}`,
-            'wirelesscitypayable': `${this.registerForm.wirelesscitypayable !== null ? this.registerForm.wirelesscitypayable : ''}`,
+            'wirelesscitypayable': `${this.registerForm.wirelesscitypayable === null ? '' : this.registerForm.wirelesscitypayable ? '1' : '0'}`,
             'wirelesstpcode': `${this.registerForm.wirelesstpcode !== null ? this.registerForm.wirelesstpcode : ''}`,
             'wirelesstpname': `${this.registerForm.wirelesstpname !== null ? this.registerForm.wirelesstpname : ''}`,
-            'validdate_str': `${this.registerForm.validdate_str !== null ? this.registerForm.validdate_str : ''}`
+            'validdate_str': `${this.registerForm.validdate_str !== null ? this.registerForm.validdate_str : ''}`,
+            'fullMoney': `${this.registerForm.fullMoney}`
           },
           'goodsSamplelist': goodsSamplelist,
           'sellAddressList': sellAddressList,
