@@ -171,7 +171,7 @@
                   <el-button v-else-if="scope.row.orderState==='5'" @click="_returnSigned(scope.row)" type="text" size="small">退货签收</el-button>
                   <el-button v-else @click="_getOrderDetail(scope.row.orderCode)" type="text" size="small">订单详情</el-button>
                 </div>
-                <div v-else-if="scope.row.payType === '22'||scope.row.payType === '23'||scope.row.payType === '24'">
+                <div v-else-if="scope.row.payType === '23'||scope.row.payType === '33'||scope.row.payType === '34'">
                   <el-button v-if="scope.row.orderState==='1'&&scope.row.payState==='0'" @click="_shipments(scope.row)" type="text" size="small">订单发货</el-button>
                   <el-button v-else-if="scope.row.orderState==='9'&&scope.row.payState==='0'" @click="_returnAudit(scope.row)" type="text" size="small">退货审核</el-button>
                   <el-button v-else-if="scope.row.orderState==='5'&&scope.row.payState==='3'" @click="_returnSigned(scope.row)" type="text" size="small">退货签收</el-button>

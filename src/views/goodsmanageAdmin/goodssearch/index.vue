@@ -94,7 +94,6 @@
         <el-table-column prop="goodsName" label="名称" align="center"></el-table-column>
         <el-table-column label="商品类型" align="center">
           <template slot-scope="scope">
-              {{goodsType}}
           </template>
         </el-table-column>
         <el-table-column prop="businessesName" label="所属商户" align="center"></el-table-column>
@@ -171,10 +170,10 @@
           <el-switch v-model="payForm.codpay"></el-switch>
         </el-form-item>
         <el-form-item label="支持联动支付：" label-width="150px">
-          <el-switch v-model="payForm.cmpay"></el-switch>
+          <el-switch v-model="payForm.umpay"></el-switch>
         </el-form-item>
         <el-form-item label="支持和包：" label-width="150px">
-          <el-switch v-model="payForm.umpay"></el-switch>
+          <el-switch v-model="payForm.cmpay"></el-switch>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
