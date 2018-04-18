@@ -94,6 +94,7 @@
         <el-table-column prop="goodsName" label="名称" align="center"></el-table-column>
         <el-table-column label="商品类型" align="center">
           <template slot-scope="scope">
+            {{scope.row.goodsType}}
           </template>
         </el-table-column>
         <el-table-column prop="businessesName" label="所属商户" align="center"></el-table-column>
@@ -162,7 +163,7 @@
       </div>
     </el-dialog>
     <el-dialog width="30%" center title="支付配置" :visible.sync="dialogVisible2">
-      <el-form :model="payForm">{{payForm}}
+      <el-form :model="payForm">
         <el-form-item label="是否支持支付宝：" label-width="150px">
           <el-switch v-model="payForm.alipay"></el-switch>
         </el-form-item>
@@ -200,11 +201,15 @@
         dialogVisible2: false,
         payForm: {
           goodsId: '',
-          alipay: false,
-          cmpay: false,
-          codpay: false,
-          umpay: false
+          alipay: true,
+          cmpay: true,
+          codpay: true,
+          umpay: true
         },
+        codpay: true,
+        alipay: true,
+        cmpay: true,
+        umpay: true,
         goodsType: '普通商品',
         selectedOptions3: [],
         goodsOptions: [], // 商品对象
@@ -426,10 +431,15 @@
       edit(row) {
         getGoodsDetail(row.goodsId).then(res => {
           if (res.status === 200) {
-            res.data.goodsBean.alipay === '1' ? this.payForm.alipay = true : this.payForm.alipay = false
-            res.data.goodsBean.codpay === '1' ? this.payForm.codpay = true : this.payForm.codpay = false
-            res.data.goodsBean.cmpay === '1' ? this.payForm.cmpay = true : this.payForm.cmpay = false
-            res.data.goodsBean.umpay === '1' ? this.payForm.umpay = true : this.payForm.umpay = false
+            res.data.goodsBean.alipay === '1' ? this.payForm.alipay = false : this.payForm.alipay = true
+            res.data.goodsBean.codpay === '1' ? this.payForm.codpay = false : this.payForm.codpay = true
+            res.data.goodsBean.cmpay === '1' ? this.payForm.cmpay = false : this.payForm.cmpay = true
+            res.data.goodsBean.umpay === '1' ? this.payForm.umpay = false : this.payForm.umpay = true
+
+            res.data.goodsBean.alipay === '1' ? this.alipay = true : this.alipay = false
+            res.data.goodsBean.codpay === '1' ? this.codpay = true : this.codpay = false
+            res.data.goodsBean.cmpay === '1' ? this.cmpay = true : this.cmpay = false
+            res.data.goodsBean.umpay === '1' ? this.umpay = true : this.umpay = false
           } else {
             this.$message.error(res.msg)
           }
@@ -441,7 +451,14 @@
       },
       submitEdit() {
         this.dialogVisible2 = false
-        updatePayment(this.payForm).then(res => {
+        const params =  {
+          goodsId: this.payForm.goodsId,
+          alipay: !this.payForm.alipay,
+          cmpay: !this.payForm.cmpay,
+          codpay: !this.payForm.codpay,
+          umpay: !this.payForm.umpay
+        }
+        updatePayment(params).then(res => {
           if (res.status === 200) {
             this.$message.success('支付方式更新成功！')
           } else {

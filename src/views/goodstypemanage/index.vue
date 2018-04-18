@@ -41,7 +41,7 @@
       center>
       <span>{{tipInfo}}</span>
       <span slot="footer" >
-        <el-button type="primary" @click="closeDialog">确 定</el-button>
+        <el-button type="primary" size="mini" @click="closeDialog">关 闭</el-button>
       </span>
     </el-dialog>
     <el-dialog

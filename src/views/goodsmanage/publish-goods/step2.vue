@@ -310,7 +310,7 @@
   import { quillEditor } from 'vue-quill-editor'
   import { decryptStr } from '@/utils/index'
   export default {
-    mounted() {
+    created() {
       // 计量单位
       this.jiliangdwOptions = getUnitsOptions()
       this.isFromModifyFlag = Number(this.$route.query.isFromModifyFlag)
@@ -351,13 +351,13 @@
             this.ruleForm.kucun = Number(this.goodsBean.stock)
             this.ruleForm.kucuntx = this.goodsBean.stockAlarmFlag
             this.ruleForm.kucuntxNum = this.goodsBean.stockAlarmFlag ? this.goodsBean.stockAlarm : ''
-            if (this.goodsBean.alipay === '1') {
+            if (this.goodsBean.alipay === '0') {
               this.ruleForm.zhifufs.push('支付宝支付')
             }
-            if (this.goodsBean.cmpay === '1') {
+            if (this.goodsBean.cmpay === '0') {
               this.ruleForm.zhifufs.push('和包支付')
             }
-            if (this.goodsBean.umpay === '1') {
+            if (this.goodsBean.umpay === '0') {
               this.ruleForm.zhifufs.push('联动支付')
             }
             // 阶梯价格
@@ -624,10 +624,10 @@
               stock: this.ruleForm.kucun,
               stockAlarmFlag: this.ruleForm.kucuntx ? 1 : 0,
               stockAlarm: this.ruleForm.kucuntx ? this.ruleForm.kucuntxNum : '',
-              alipay: this.ruleForm.zhifufs.indexOf('支付宝支付') > -1 ? 1 : 0,
+              alipay: this.ruleForm.zhifufs.indexOf('支付宝支付') > -1 ? 0 : 1,
               codpay: 1,
-              cmpay: this.ruleForm.zhifufs.indexOf('和包支付') > -1 ? 1 : 0,
-              umpay: this.ruleForm.zhifufs.indexOf('联动支付') > -1 ? 1 : 0,
+              cmpay: this.ruleForm.zhifufs.indexOf('和包支付') > -1 ? 0 : 1,
+              umpay: this.ruleForm.zhifufs.indexOf('联动支付') > -1 ? 0 : 1,
               imageList: ['http://image1.qianqianhua.com/uploads/20171227/14/1514356264-OpIVSzBPAM.jpg'],
               gradientPriceFlag: this.ruleForm.jietiFlag ? 1 : 0,  // true or false  this.ruleForm.Jieti
               gradientNumber: this.convertJTnums,

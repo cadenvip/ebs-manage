@@ -386,7 +386,8 @@
         width="30%"
         center>
         <p>物流方式: {{getLogisticWay}}</p>
-        <p>物流公司: {{logisticsBean.orderDeliveryBean.logisticName?logisticsBean.orderDeliveryBean.logisticName:'暂无'}}</p>
+        <p v-if="logisticsBean.orderDeliveryBean.sendCompanyCode && logisticsBean.orderDeliveryBean.sendCompanyCode!=='privateLogistics'">物流公司: {{logisticsBean.logisticCompanyBean.companyName?logisticsBean.logisticCompanyBean.companyName:'暂无'}}</p>
+        <p v-else>物流公司: {{logisticsBean.orderDeliveryBean.logisticName?logisticsBean.orderDeliveryBean.logisticName:'暂无'}}</p>
         <p>运单号码: {{logisticsBean.orderDeliveryBean.logisticNo?logisticsBean.orderDeliveryBean.logisticNo:'暂无'}}</p>
         <span slot="footer" class="dialog-footer">
           <el-button @click="dialogVisible = false">取 消</el-button>
@@ -413,7 +414,8 @@
     data() {
       return {
         logisticsBean: {
-          orderDeliveryBean: {}
+          orderDeliveryBean: {},
+          logisticCompanyBean: {}
         },
         dialogVisible: false,
         tableData: [],

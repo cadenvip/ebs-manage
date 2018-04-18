@@ -13,7 +13,7 @@
             <p class="must"><span class="title" :class="{'modify':isModify('')}">送货时限:</span> <span>{{gBean.deliveryLimit}}小时</span></p>
             <p class="must"><span class="title" :class="{'modify':isModify('supplierName')}">供应商:</span> <span>{{gBean.supplierName}}</span></p>
             <p><span class="title" :class="{'modify':isModify('brand')}">品牌:</span> <span>{{gBean.brand}}</span></p>
-            <p class="must"><span class="title" :class="{'modify':isModify('')}">支付方式:</span> <span class="plr5" v-show="gBean.alipay==='1'">支付宝</span><span class="plr5" v-show="gBean.cmpay==='1'">和包支付</span><span class="plr5"v-show="gBean.umpay==='1'">联动支付</span><span class="plr5"v-show="gBean.codpay==='1'">货到付款</span></p>
+            <p class="must"><span class="title" :class="{'modify':isModify('')}">支付方式:</span> <span class="plr5" v-show="gBean.alipay==='0'">支付宝</span><span class="plr5" v-show="gBean.cmpay==='0'">和包支付</span><span class="plr5"v-show="gBean.umpay==='0'">联动支付</span><span class="plr5"v-show="gBean.codpay==='0'">货到付款</span></p>
             <p class="must"><span class="title">物流：</span><span v-if="gBean.logisticsTypes">{{gBean.logisticsTypes.indexOf('1') > -1 ? '自提' : ''}} {{gBean.logisticsTypes.indexOf('2')>-1 ? '快递' : ''}}{{gBean.logisticsTypes.indexOf('3')>-1 ? '免邮' : ''}}{{gBean.logisticsTypes.indexOf('20')>-1 ? 'EMAIL' : ''}}{{gBean.logisticsTypes.indexOf('21')>-1 ? 'FAX' : ''}}</span></p>
           </el-col>
           <el-col :span="12">
@@ -221,7 +221,7 @@ export default {
         return '年'
       }
     },
-    goback() {
+    goBack() {
       this.$router.go(-1)
     }
   },

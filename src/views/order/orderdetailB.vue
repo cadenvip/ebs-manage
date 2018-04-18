@@ -58,7 +58,8 @@
     <div class="info-box" v-if="orderObj.orderDeliveryBean.logisticName !== null">
       <h1>物流信息</h1>
       <p>物流方式：<span>快递</span></p>
-      <p>物流公司：<span>{{getVal(orderObj.orderDeliveryBean.logisticName)}}</span></p>
+      <p v-if="orderObj.orderDeliveryBean.sendCompanyCode && orderObj.orderDeliveryBean.sendCompanyCode!=='privateLogistics'">物流公司: <span>{{orderObj.logisticCompanyBean.companyName?orderObj.logisticCompanyBean.companyName:'暂无'}}</span></p>
+      <p v-else>物流公司: <span>{{orderObj.orderDeliveryBean.logisticName?orderObj.orderDeliveryBean.logisticName:'暂无'}}</span></p>
       <p>运单编号：<span>{{getVal(orderObj.orderDeliveryBean.logisticNo)}}</span></p>
     </div>
     <div v-else class="logistics-box info-box">
@@ -108,7 +109,8 @@ export default {
         orderRejectedBean: {
           orderRejectedImgBeanList: []
         },
-        orderInvoiceBean: {}
+        orderInvoiceBean: {},
+        logisticCompanyBean: {}
       },
       payWay: [],
       payState: '',
