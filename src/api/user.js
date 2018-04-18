@@ -164,3 +164,19 @@ export function addProxyUser(params) {
     data: params
   })
 }
+
+export function linkProxyUser(params) {
+  return request({
+    url: '/user/linkProxyUser',
+    method: 'post',
+    data: params
+  })
+}
+
+export function getProxyLinkedUnit(params) {
+  return request({
+    url: '/user/sreachLinkedUnit',
+    method: 'post',
+    data: params
+  })
+}

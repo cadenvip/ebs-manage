@@ -120,6 +120,7 @@
     </div>
     <br/>
     <div style="text-align: center">
+      <el-button type="primary" @click="onSubmit">提交</el-button>
       <el-button type="primary" @click="onCancel">返回</el-button>
     </div>
     <el-dialog title="请选择商家" :visible.sync="unitDialogVisible" width="770px">
@@ -159,7 +160,9 @@
 
 <script>
   import {
-    getUserDetail
+    getUserDetail,
+    linkProxyUser,
+    getProxyLinkedUnit
   } from '@/api/user'
   import {
     phoneCutSensitive,
@@ -201,6 +204,9 @@
       nameFormat: function() {
         return nameCutSensitive(this.userForm.name)
       }
+    },
+    mounted() {
+      this.queryBusinessesList()
     },
     methods: {
       setRoles(roles) {
@@ -282,6 +288,12 @@
       selectBusiness() {
         this.unitDialogVisible = true
       },
+      deleteBusiness(business) {
+        var index = this.selectedList.indexOf(business)
+        if (index > -1) {
+          this.selectedList.splice(index, 1)
+        }
+      },
       queryBusinessesList() {
         this.loading = true
         getBusinessesList(this.businessSearchForm, this.currentPage, this.pagesize).then(response => {
@@ -308,10 +320,48 @@
         }).catch(error => {
           this.$message.error(error.msg)
         })
+        var params = {
+          'userid': `${this.$route.query.id}`
+        }
+        getProxyLinkedUnit(params).then(response => {
+          if (response.status === 200) {
+            this.selectedList = response.data
+          } else {
+            this.$message.error(response.msg)
+          }
+        }).catch(error => {
+          this.$message.error(error.msg)
+        })
+      },
+      onSubmit() {
+        if (this.selectedList.length <= 0) {
+          this.$message.error('请至少选择一个商家！')
+          return
+        }
+        var unitidList = []
+        this.selectedList.forEach(item => {
+          unitidList.push(item.id)
+        })
+        var params = {
+          'userid': `${this.$route.query.id}`,
+          'addUnitidList': unitidList
+        }
+        linkProxyUser(params).then(response => {
+          if (response.status === 200) {
+            this.$message.success('关联商家成功！')
+            this.$router.push({
+              path: '/system/user/plist'
+            })
+          } else {
+            this.$message.error(response.msg)
+          }
+        }).catch(error => {
+          this.$message.error(error.msg)
+        })
       },
       onCancel() {
         this.$router.push({
-          path: '/system/user/alist'
+          path: '/system/user/plist'
         })
       }
     }

@@ -29,6 +29,8 @@ service.interceptors.request.use(config => {
   //   // config.headers['Content-Type'] = 'application/json;charset=UTF-8'
   //   config.headers['X-Token'] = getToken() // 让每个请求携带自定义token 请根据实际情况自行修改
   // }
+  var strData = JSON.stringify(config.data)
+  console.log('上传的参数', strData)
   // 登录成功后，将JSESSIONID上传以鉴权
   if (store.getters.sessionid !== undefined && store.getters.sessionid !== '') {
     // config['url'] = config.url + `?JSESSIONID=${store.getters.sessionid}`

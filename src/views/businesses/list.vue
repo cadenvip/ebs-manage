@@ -75,7 +75,7 @@
       <el-table-column label="操作" align="center">
         <template slot-scope="scope">
           <el-button @click="detail(scope.row)" type="text" size="small">详细</el-button>
-          <el-button @click="updateBusinesse(scope.row)" type="text" size="small">修改</el-button>
+          <!-- <el-button @click="updateBusinesse(scope.row)" type="text" size="small">修改</el-button> -->
           <el-button @click="disableBusiness(scope.row)" v-if="scope.row.state === '1'" type="text" size="small">暂停</el-button>
           <el-button @click="enableBusiness(scope.row)" v-if="scope.row.state === '3'" type="text" size="small">激活</el-button>
         </template>

@@ -52,12 +52,12 @@
       <el-table-column label="姓名" prop="name" :formatter="nameFormat" align="center"></el-table-column>
       <el-table-column label="手机号码" prop="phoneno" :formatter="phonenoFormat" align="center"></el-table-column>
       <el-table-column label="归属区域" prop="locationname" align="center"></el-table-column>
-      <el-table-column label="商家" prop="unitname" align="center"></el-table-column>
+      <!-- <el-table-column label="商家" prop="unitname" align="center"></el-table-column> -->
       <el-table-column label="状态" prop="locked" :formatter="lockedFormat" align="center"></el-table-column>
       <el-table-column label="最近登录时间" prop="logintime" align="center"></el-table-column>
       <el-table-column label="操作" align="center">
         <template slot-scope="scope">
-          <el-button @click="updateUser(scope.row)" type="text" size="small">修改</el-button>
+          <el-button @click="updateUser(scope.row)" type="text" size="small">关联商家</el-button>
           <!-- <el-button @click="detail(scope.row)" type="text" size="small">详细</el-button> -->
         </template>
       </el-table-column>

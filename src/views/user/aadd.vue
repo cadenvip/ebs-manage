@@ -8,7 +8,7 @@
           <el-option label="商家人员" value="3"></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item v-show="userForm.roletype === '2' || userForm.roletype === '3'" label="商家：" prop="unitname">
+      <el-form-item v-if="userForm.roletype === '2' || userForm.roletype === '3'" label="商家：" prop="unitname">
         <el-input v-model="userForm.unitname" style="width: 220px;" placeholder="请选择商家" @focus="unitDialogVisible = true"></el-input>
       </el-form-item>
       <el-form-item label="角色：" prop="roleids">
@@ -275,7 +275,11 @@
             message: '请选择归属区域',
             trigger: 'change'
           }],
-          // unitname: [{ required: true, message: '请选择商家', trigger: 'blur' }],
+          unitname: [{
+            required: true,
+            message: '请选择商家',
+            trigger: 'change'
+          }],
           email: [{
             required: false,
             validator: validateMail,
@@ -389,10 +393,11 @@
       onSubmit() {
         this.$refs.userForm.validate(valid => {
           if (valid) {
-            if ((this.userForm.roletype === '2' || this.userForm.roletype === '3') && (this.userForm.unitname ===
-                undefined || this.userForm.unitname === '')) {
-              this.$message.error('请选择商家')
-              return
+            if (this.userForm.roletype === '2' || this.userForm.roletype === '3') {
+              if (this.userForm.unitname === undefined || this.userForm.unitname === '') {
+                this.$message.error('请选择商家')
+                return
+              }
             } else {
               var userInfo = window.sessionStorage.getItem('userInfo')
               if (userInfo !== undefined && userInfo !== '') {
