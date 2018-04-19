@@ -20,23 +20,16 @@ import {
 
 const CancelToken = axios.CancelToken
 var source = CancelToken.source()
-function cancel() {
-  source.cancel('request cancel')
+function cancel(word) {
+  source.cancel('hasSensitive:' + word)
 }
 
 // 创建axios实例
 const service = axios.create({
   baseURL: process.env.BASE_API, // api的base_url
-  timeout: 60000, // 请求超时时间
-  cancelToken: source.token
+  timeout: 60000 // 请求超时时间
+  // cancelToken: source.token
 })
-
-const SensitiveError = {
-  'status': 400,
-  'msg': '含有敏感词，提交失败！',
-  'error': '含有敏感词，提交失败！',
-  'data': null
-}
 
 // request拦截器
 service.interceptors.request.use(config => {
@@ -54,23 +47,25 @@ service.interceptors.request.use(config => {
   }
   var strData = JSON.stringify(config.data)
   console.log('上传的参数', strData)
+  console.log('config', config)
+  console.log('source.token', source.token)
+  // source.token.cancelToken.Promise = {}
+  // source.token.cancelToken.reason = {}
+  config.cancelToken = source.token
   var sensitives = JSON.parse(window.localStorage.getItem('sensitives'))
-  console.log('敏感词', sensitives)
-  if (sensitives.length > 0) {
+  if (sensitives !== null && sensitives.length > 0) {
     for (let i = 0; i < sensitives.length; i++) {
       if (strData.indexOf(sensitives[i]) >= 0) {
-        console.log('含有敏感词')
-        // source.cancel('maanjun.')
-        cancel()
-        Promise.reject(SensitiveError)
+        cancel(sensitives[i])
         return config
       }
     }
   }
+  console.log(config)
   return config
 }, error => {
   // Do something with request error
-  console.log('ddd', error) // for debug
+  console.log(error) // for debug
   Promise.reject(error)
 })
 
@@ -131,15 +126,23 @@ error => {
     }
     return Promise.reject(responseData)
   } else {
-    // Message({
-    //   message: error.message,
-    //   type: 'error',
-    //   duration: 5 * 1000
-    // })
-    router.push({
-      path: '/404'
-    })
-    return Promise.reject(error)
+    var errorInfo = {
+      'status': 402,
+      'msg': '未知错误！',
+      'error': '未知错误！',
+      'data': null
+    }
+    if (error.message.indexOf('hasSensitive') === 0) {
+      var word = error.message.substr(13, error.message.length - 13)
+      errorInfo.msg = `提交的内容包含敏感词[${word}]，提交失败！`
+      error = {}
+      return Promise.reject(errorInfo)
+    } else {
+      router.push({
+        path: '/404'
+      })
+      return Promise.reject(errorInfo)
+    }
   }
 })
 
