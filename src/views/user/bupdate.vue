@@ -2,11 +2,11 @@
   <div class="app-container">
     <h4 class="title">修改人员信息</h4>
     <el-form ref="userForm" :model="userForm" :rules="rules" label-width="120px">
-      <!-- <el-form-item label="角色：" prop="roleids">
+      <el-form-item label="角色：" prop="roleids">
         <el-checkbox-group v-model="userForm.roleids">
           <el-checkbox v-for="(item, index) in allRoles" v-if="item.roletype === '2' || item.roletype === '3'" :key="item.id" :label="item.id">{{item.rolename}}</el-checkbox>
         </el-checkbox-group>
-      </el-form-item> -->
+      </el-form-item>
       <el-form-item label="账号：" prop="loginname">
         <el-input v-model="userForm.loginname" :maxlength=16 style="width: 220px;" placeholder="请输入账号" disabled></el-input>
       </el-form-item>
@@ -87,7 +87,7 @@
     validateEmail
   } from '@/utils/validate'
   import PasswordStrength from '@/components/PasswordStrength/index'
-  // import { getAllRoles } from '@/api/role'
+  import { getAllRoles } from '@/api/role'
 
   export default {
     data() {
@@ -128,9 +128,9 @@
         }
       }
       return {
-        // allRoles: [],
+        allRoles: [],
         userForm: {
-          // roleids: [],
+          roleids: [],
           loginname: '',
           phoneno: '',
           password: '',
@@ -147,7 +147,7 @@
             trigger: 'change',
             validator: validateName
           }],
-          // roleids: [{ required: true, message: '请选择角色', trigger: 'change' }],
+          roleids: [{ required: true, message: '请选择角色', trigger: 'change' }],
           name: [{
             required: true,
             trigger: 'change',
@@ -188,7 +188,7 @@
     },
     created() {
       this.getUserInfo()
-      // this.getRoleList()
+      this.getRoleList()
     },
     methods: {
       getUserInfo() {
@@ -215,18 +215,18 @@
       getPwdInfo(data) {
         this.pwdInfo = data
       },
-      // getRoleList() {
-      //   // 角色应该不会超过100个吧！
-      //   getAllRoles('1', '100').then(response => {
-      //     if (response.status === 200) {
-      //       this.allRoles = response.data.list
-      //     } else {
-      //       this.$message.error(response.msg)
-      //     }
-      //   }).catch(error => {
-      //     this.$message.error(error.msg)
-      //   })
-      // },
+      getRoleList() {
+        // 角色应该不会超过100个吧！
+        getAllRoles('1', '100').then(response => {
+          if (response.status === 200) {
+            this.allRoles = response.data.list
+          } else {
+            this.$message.error(response.msg)
+          }
+        }).catch(error => {
+          this.$message.error(error.msg)
+        })
+      },
       onSubmit() {
         this.$refs.userForm.validate(valid => {
           if (valid) {
@@ -235,7 +235,7 @@
               'name': `${this.userForm.name}`,
               'phoneno': `${this.userForm.phoneno}`,
               'email': `${this.userForm.email !== null ? this.userForm.email : ''}`,
-              // 'roleids': `${this.userForm.roleids.join(',')}`,
+              'roleids': `${this.userForm.roleids.join(',')}`,
               'address': `${this.userForm.address !== null ? this.userForm.address : ''}`
             }
             updateBusinessUser(params).then(response => {

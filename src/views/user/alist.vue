@@ -2,27 +2,35 @@
   <div style="padding-left: 20px;">
     <h4>人员查询条件</h4>
     <el-form ref="searchForm" :model="searchForm" label-width="100px" class="demo-ruleForm">
-      <el-row>
-        <el-col :span="10">
+      <el-row :gutter="20">
+        <el-col :span="7">
           <el-form-item label="账号：">
-            <el-input v-model="searchForm.loginname" clearable style="width: 300px;" placeholder="请输入账号"></el-input>
+            <el-input v-model="searchForm.loginname" clearable style="width: 220px;" placeholder="请输入账号"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="10">
+        <el-col :span="7">
           <el-form-item label="手机号码：">
-            <el-input v-model="searchForm.phoneno" clearable style="width: 300px;" placeholder="请输入手机号码"></el-input>
+            <el-input v-model="searchForm.phoneno" clearable style="width: 220px;" placeholder="请输入手机号码"></el-input>
           </el-form-item>
         </el-col>
+        <el-col :span="7">
+          <el-form-item label="状态：">
+            <el-select v-model="searchForm.locked" clearable style="width: 220px;" placeholder="请输入状态">
+              <el-option label="正常" value="0"></el-option>
+              <el-option label="锁定" value="1"></el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>        
       </el-row>
-      <el-row>
-        <el-col :span="10">
+      <el-row :gutter="20">
+        <el-col :span="7">
           <el-form-item label="姓名：">
-            <el-input v-model="searchForm.name" clearable style="width: 300px;" placeholder="请输入姓名"></el-input>
+            <el-input v-model="searchForm.name" clearable style="width: 220px;" placeholder="请输入姓名"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="10">
+        <el-col :span="7">
           <el-form-item label="归属区域：">
-            <el-input v-model="searchForm.locationname" clearable style="width: 300px;" @focus="handleLocationFocus" placeholder="请选择归属区域"></el-input>
+            <el-input v-model="searchForm.locationname" clearable style="width: 220px;" @focus="handleLocationFocus" placeholder="请选择归属区域"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -94,6 +102,7 @@
           loginname: '',
           phoneno: '',
           name: '',
+          locked: '',
           locationid: '',
           locationname: ''
         },

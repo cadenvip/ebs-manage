@@ -41,3 +41,10 @@ export function deleteSensitive(id) {
     // data: { 'id': `${params}` }
   })
 }
+
+export function getAllSensitiveWords() {
+  return request({
+    url: '/sensitive/getAllSensitiveWords',
+    method: 'post'
+  })
+}
