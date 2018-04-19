@@ -24,7 +24,7 @@
         <!-- <span class="show-pwd" @click="showPwd">
           <svg-icon icon-class="eye" />
         </span> -->
-        <el-button type="text" style="margin-top:6px;margin-left: 50px;" @click.native.prevent="reloadPassword">
+        <el-button type="text" style="margin-top:6px;margin-left: 50px;" @click.native.prevent="reloadPassword" :disabled="disableBtn">
           忘记密码？
         </el-button>
       </el-form-item>
@@ -60,6 +60,7 @@
     getUnitInfos,
     getUnits
   } from '@/api/login'
+  import { getAllSensitiveWords } from '@/api/sensitive'
   import { containSymbol } from '@/utils/validate'
   import {
     encryptPassword
@@ -171,6 +172,17 @@
               }).catch(err => {
                 this.$message.error(err)
               })
+              // TODO获取所有敏感词
+              getAllSensitiveWords().then(resp => {
+                if (resp.status === 200) {
+                  this.sensitiveWords = resp.data
+                  window.localStorage.setItem('sensitives', JSON.stringify(this.sensitiveWords))
+                } else {
+                  this.$message.error(resp.msg)
+                }
+              }).catch(erro => {
+                this.$message.error(erro)
+              })
             }).catch(errpr => {
               this.$message.error(errpr)
             })
@@ -230,7 +242,23 @@
           }
           resetLoginPassword(params).then(response => {
             if (response.status === 200) {
-              this.$message.success(response.msg)
+              // this.$message.success(response.msg)
+              const TIME_COUNT = 60
+              if (!this.timer) {
+                this.count = TIME_COUNT
+                this.disableBtn = false
+                this.timer = setInterval(() => {
+                  if (this.count > 0 && this.count <= TIME_COUNT) {
+                    this.timerCodeMsg = `密码已发送到您的手机，${this.count}秒后重新尝试。`
+                    this.count--
+                    this.disableBtn = true
+                  } else {
+                    this.disableBtn = false
+                    clearInterval(this.timer)
+                    this.timer = null
+                  }
+                }, 1000)
+              }
             } else {
               this.$message.error(response.msg)
             }
@@ -269,7 +297,7 @@
         this.disableBtn = true
         getVercode(params).then(response => {
           if (response.status === 200) {
-            const TIME_COUNT = 300
+            const TIME_COUNT = 60
             if (!this.timer) {
               this.count = TIME_COUNT
               this.disableBtn = false

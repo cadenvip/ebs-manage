@@ -22,6 +22,7 @@ export function getUserList(userinfo, currentpage, pagesize) {
       'loginname': `${userinfo.loginname}`,
       'name': `${userinfo.name}`,
       'phoneno': `${userinfo.phoneno}`,
+      'locked': `${userinfo.locked}`,
       'locationid': `${userinfo.locationid}`,
       'page': `${currentpage}`,
       'limit': `${pagesize}`
@@ -105,6 +106,7 @@ export function getBusinessUserList(userinfo, currentpage, pagesize) {
       'loginname': `${userinfo.loginname}`,
       'name': `${userinfo.name}`,
       'phoneno': `${userinfo.phoneno}`,
+      'locked': `${userinfo.locked}`,
       'locationid': `${userinfo.locationid}`,
       'page': `${currentpage}`,
       'limit': `${pagesize}`

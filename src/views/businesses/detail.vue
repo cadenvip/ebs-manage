@@ -454,11 +454,13 @@
                     <p>办公室电话:</p>
                     <p>营业时间:</p>
                     <p>雇员数量:</p>
+                    <p>满额免邮:</p>
                   </el-col>
                   <el-col class="text-l" :span="16">
                     <p v-html="officePhoneFormat"></p>
                     <p>{{ registerForm.operateHours ? registerForm.operateHours : '&nbsp;' }}</p>
                     <p>{{ registerForm.employeesNum ? registerForm.employeesNum : '&nbsp' }}</p>
+                    <p>{{ registerForm.fullMoney ? registerForm.fullMoney : '&nbsp' }}</p>
                   </el-col>
                 </el-row>
               </div>

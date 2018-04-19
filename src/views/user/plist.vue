@@ -46,7 +46,7 @@
       </span>
     </el-dialog>
     <br/>
-    <div class="list">人员列表</div>
+    <div class="list">代运营人员列表</div>
     <el-table :data="list" v-loading.body="loading" element-loading-text="Loading" border stripe fit highlight-current-row style="width:100%;">
       <el-table-column label='账号' prop="loginname" align="center"></el-table-column>
       <el-table-column label="姓名" prop="name" :formatter="nameFormat" align="center"></el-table-column>
