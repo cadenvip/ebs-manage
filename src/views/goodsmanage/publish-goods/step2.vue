@@ -124,7 +124,7 @@
           </el-form-item>  
         </el-col>
         <el-col :span="8">
-          <el-form-item label="商品产地:" prop="spcd" class="spcd">
+          <el-form-item class="spcd" label="商品产地:">
             <el-input :maxlength=25 v-model="ruleForm.spcd" @focus="regionVisible = true"></el-input>
           </el-form-item>
         </el-col>
@@ -625,7 +625,7 @@
               stockAlarmFlag: this.ruleForm.kucuntx ? 1 : 0,
               stockAlarm: this.ruleForm.kucuntx ? this.ruleForm.kucuntxNum : '',
               alipay: this.ruleForm.zhifufs.indexOf('支付宝支付') > -1 ? 0 : 1,
-              codpay: 1,
+              codpay: 0,
               cmpay: this.ruleForm.zhifufs.indexOf('和包支付') > -1 ? 0 : 1,
               umpay: this.ruleForm.zhifufs.indexOf('联动支付') > -1 ? 0 : 1,
               imageList: ['http://image1.qianqianhua.com/uploads/20171227/14/1514356264-OpIVSzBPAM.jpg'],
@@ -900,6 +900,14 @@
     content: '*';
     color: #f56c6c;
     margin-right: 4px;
+  } 
+  .spcd, .goods-name{position: relative;}
+  .spcd:before, .goods-name:before{
+    content: '*';
+    color: #f56c6c;
+    position: absolute;
+    top: 14px;
+    left: 7%;
   } 
   .el-dialog__footer {
     text-align: center;

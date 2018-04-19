@@ -11,7 +11,8 @@
       <el-row :gutter="20" class="clearfix">
         <el-col :span="8">
           <p>订单编号：<span>{{getVal(orderObj.orderCode)}}</span></p>
-          <p>订购人姓名： <span>{{getVal(orderObj.userName)}}</span></p>
+          {{this.orderObj.userName}}
+          <p>订购人姓名： <span>{{getSensitiveName}}</span></p>
           <p>优惠金额： <span class="money">{{getMoney(orderObj.specialOffer)}}</span></p>
           <p>备注：<span>{{getVal(orderObj.remark)}}</span></p>
         </el-col>
@@ -89,7 +90,13 @@
 
 <script>
 import { orderDetail } from '@/api/order/index.js'
+import { nameCutSensitive } from '@/utils/index.js'
 export default {
+  computed: {
+    getSensitiveName: function() {
+      return nameCutSensitive(this.orderObj.userName)
+    }
+  },
   created() {
     this.oid = this.$route.query.oid
     if (this.oid) {
@@ -101,6 +108,7 @@ export default {
       stepsArr: [],
       active: 0,
       orderObj: {
+        userName: '',
         expQueryResultBean: {},
         orderDeliveryBean: {},
         orderFlowLogs: [],
