@@ -11,7 +11,6 @@
       <el-row :gutter="20" class="clearfix">
         <el-col :span="8">
           <p>订单编号：<span>{{getVal(orderObj.orderCode)}}</span></p>
-          {{this.orderObj.userName}}
           <p>订购人姓名： <span>{{getSensitiveName}}</span></p>
           <p>优惠金额： <span class="money">{{getMoney(orderObj.specialOffer)}}</span></p>
           <p>备注：<span>{{getVal(orderObj.remark)}}</span></p>
@@ -22,7 +21,7 @@
           <p>应支付金额：<span class="money">{{getMoney(orderObj.totalPrice)}}</span></p>
         </el-col>
         <el-col :span="8">
-          <p>订购人电话：<span>{{getVal(orderObj.userPhone)}}</span></p>
+          <p>订购人电话：<span>{{getSensitivePhone}}</span></p>
           <p>订购渠道： <span>{{orderObj.comeFrom==='1'?'热线':orderObj.comeFrom==='2'?'WEP':orderObj.comeFrom==='3'?'WAP':orderObj.comeFrom==='4'?'手机客户端':orderObj.comeFrom==='5'?'触屏版':orderObj.comeFrom==='6'?'第三方平台':orderObj.comeFrom==='7'?'农资商城':'暂无'}}</span></p>
         </el-col>
       </el-row>
@@ -73,7 +72,11 @@
       <h1>操作记录</h1>
       <el-table :data="tableData3" border>
         <el-table-column prop="operateTime" label="操作时间" align="center"></el-table-column>
-        <el-table-column prop="outOperator" label="操作人" align="center"></el-table-column>
+        <el-table-column label="操作人" align="center">
+          <template slot-scope="scope">
+            {{getOperater(scope.row.outOperator)}}
+          </template>
+        </el-table-column>
         <el-table-column label="订单状态" align="center">
           <template slot-scope="scope">
             {{getOrderState(scope.row.orderState)}}
@@ -90,11 +93,14 @@
 
 <script>
 import { orderDetail } from '@/api/order/index.js'
-import { nameCutSensitive } from '@/utils/index.js'
+import { nameCutSensitive, phoneCutSensitive } from '@/utils/index.js'
 export default {
   computed: {
     getSensitiveName: function() {
       return nameCutSensitive(this.orderObj.userName)
+    },
+    getSensitivePhone() {
+      return phoneCutSensitive(this.orderObj.userPhone)
     }
   },
   created() {
@@ -109,6 +115,7 @@ export default {
       active: 0,
       orderObj: {
         userName: '',
+        userPhone: '',
         expQueryResultBean: {},
         orderDeliveryBean: {},
         orderFlowLogs: [],
@@ -127,6 +134,9 @@ export default {
     }
   },
   methods: {
+    getOperater(operater) {
+      return nameCutSensitive(operater)
+    },
     _getOrderDetail(oid) {
       orderDetail(oid).then(res => {
         if (res.status === 200) {
