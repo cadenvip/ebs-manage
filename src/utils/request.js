@@ -14,13 +14,29 @@ import {
 
 // import router from './router'
 import router from '@/router'
-import { decryptStr } from '@/utils/index'
+import {
+  decryptStr
+} from '@/utils/index'
+
+const CancelToken = axios.CancelToken
+var source = CancelToken.source()
+function cancel() {
+  source.cancel('request cancel')
+}
 
 // 创建axios实例
 const service = axios.create({
   baseURL: process.env.BASE_API, // api的base_url
-  timeout: 60000 // 请求超时时间
+  timeout: 60000, // 请求超时时间
+  cancelToken: source.token
 })
+
+const SensitiveError = {
+  'status': 400,
+  'msg': '含有敏感词，提交失败！',
+  'error': '含有敏感词，提交失败！',
+  'data': null
+}
 
 // request拦截器
 service.interceptors.request.use(config => {
@@ -29,8 +45,6 @@ service.interceptors.request.use(config => {
   //   // config.headers['Content-Type'] = 'application/json;charset=UTF-8'
   //   config.headers['X-Token'] = getToken() // 让每个请求携带自定义token 请根据实际情况自行修改
   // }
-  var strData = JSON.stringify(config.data)
-  console.log('上传的参数', strData)
   // 登录成功后，将JSESSIONID上传以鉴权
   if (store.getters.sessionid !== undefined && store.getters.sessionid !== '') {
     // config['url'] = config.url + `?JSESSIONID=${store.getters.sessionid}`
@@ -38,10 +52,25 @@ service.interceptors.request.use(config => {
       config['url'] = config.url + '?JSESSIONID=' + getSessionid()
     }
   }
+  var strData = JSON.stringify(config.data)
+  console.log('上传的参数', strData)
+  var sensitives = JSON.parse(window.localStorage.getItem('sensitives'))
+  console.log('敏感词', sensitives)
+  if (sensitives.length > 0) {
+    for (let i = 0; i < sensitives.length; i++) {
+      if (strData.indexOf(sensitives[i]) >= 0) {
+        console.log('含有敏感词')
+        // source.cancel('maanjun.')
+        cancel()
+        Promise.reject(SensitiveError)
+        return config
+      }
+    }
+  }
   return config
 }, error => {
   // Do something with request error
-  console.log(error) // for debug
+  console.log('ddd', error) // for debug
   Promise.reject(error)
 })
 
