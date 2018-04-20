@@ -14,12 +14,21 @@ import {
 
 // import router from './router'
 import router from '@/router'
-import { decryptStr } from '@/utils/index'
+import {
+  decryptStr
+} from '@/utils/index'
+
+const CancelToken = axios.CancelToken
+var source = CancelToken.source()
+function cancel(word) {
+  source.cancel('hasSensitive:' + word)
+}
 
 // 创建axios实例
 const service = axios.create({
   baseURL: process.env.BASE_API, // api的base_url
   timeout: 60000 // 请求超时时间
+  // cancelToken: source.token
 })
 
 // request拦截器
@@ -29,8 +38,6 @@ service.interceptors.request.use(config => {
   //   // config.headers['Content-Type'] = 'application/json;charset=UTF-8'
   //   config.headers['X-Token'] = getToken() // 让每个请求携带自定义token 请根据实际情况自行修改
   // }
-  var strData = JSON.stringify(config.data)
-  console.log('上传的参数', strData)
   // 登录成功后，将JSESSIONID上传以鉴权
   if (store.getters.sessionid !== undefined && store.getters.sessionid !== '') {
     // config['url'] = config.url + `?JSESSIONID=${store.getters.sessionid}`
@@ -38,6 +45,23 @@ service.interceptors.request.use(config => {
       config['url'] = config.url + '?JSESSIONID=' + getSessionid()
     }
   }
+  var strData = JSON.stringify(config.data)
+  console.log('上传的参数', strData)
+  console.log('config', config)
+  console.log('source.token', source.token)
+  // source.token.cancelToken.Promise = {}
+  // source.token.cancelToken.reason = {}
+  config.cancelToken = source.token
+  var sensitives = JSON.parse(window.localStorage.getItem('sensitives'))
+  if (sensitives !== null && sensitives.length > 0) {
+    for (let i = 0; i < sensitives.length; i++) {
+      if (strData.indexOf(sensitives[i]) >= 0) {
+        cancel(sensitives[i])
+        return config
+      }
+    }
+  }
+  console.log(config)
   return config
 }, error => {
   // Do something with request error
@@ -102,15 +126,23 @@ error => {
     }
     return Promise.reject(responseData)
   } else {
-    // Message({
-    //   message: error.message,
-    //   type: 'error',
-    //   duration: 5 * 1000
-    // })
-    router.push({
-      path: '/404'
-    })
-    return Promise.reject(error)
+    var errorInfo = {
+      'status': 402,
+      'msg': '未知错误！',
+      'error': '未知错误！',
+      'data': null
+    }
+    if (error.message.indexOf('hasSensitive') === 0) {
+      var word = error.message.substr(13, error.message.length - 13)
+      errorInfo.msg = `提交的内容包含敏感词[${word}]，提交失败！`
+      error = {}
+      return Promise.reject(errorInfo)
+    } else {
+      router.push({
+        path: '/404'
+      })
+      return Promise.reject(errorInfo)
+    }
   }
 })
 
