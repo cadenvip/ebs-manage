@@ -46,9 +46,9 @@
               <el-col :span="12">
                 <el-form-item label="法人证件类型：" prop="legalPaperType">
                   <el-select v-model="registerForm.legalPaperType" clearable style="width: 220px;" placeholder="请选择法人证件类型">
-                    <el-option label="身份证" value="1"></el-option>
-                    <el-option label="户口本" value="2"></el-option>
-                    <el-option label="驾驶本" value="3"></el-option>
+                    <el-option label="身份证" value="身份证"></el-option>
+                    <el-option label="户口本" value="户口本"></el-option>
+                    <el-option label="驾驶本" value="驾驶本"></el-option>
                   </el-select>
                 </el-form-item>
               </el-col>
@@ -531,17 +531,17 @@
           callback(new Error('请输入证件号码'))
         } else {
           switch (this.registerForm.legalPaperType) {
-            case '1':
+            case '身份证':
               if (!validateID(value.trim())) {
                 callback(new Error('请输入有效的身份证号码'))
               } else {
                 callback()
               }
               break
-            case '2':
+            case '户口本':
               callback()
               break
-            case '3':
+            case '驾驶本':
               callback()
               break
             default:
@@ -1210,7 +1210,7 @@
           return
         } else {
           switch (this.registerForm.legalPaperType) {
-            case '1':
+            case '身份证':
               if (!validateID(this.registerForm.legalPaperNumber)) {
                 this.$message({
                   type: 'warning',
@@ -1219,9 +1219,9 @@
                 return
               }
               break
-            case '2':
+            case '户口本':
               break
-            case '3':
+            case '驾驶本':
               break
             default:
               this.$message({
