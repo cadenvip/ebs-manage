@@ -456,7 +456,7 @@
     data() {
       // 必填
       var validateName = (rule, value, callback) => {
-        if (value === '') {
+        if (value === null || value === '') {
           callback(new Error('请输入姓名'))
         } else {
           if (value.indexOf(' ') >= 0) {
@@ -1115,7 +1115,7 @@
       },
       goNext() {
         // 校验填写有效性
-        if (this.registerForm.businessesName === '') {
+        if (this.registerForm.businessesName === null || this.registerForm.businessesName === '') {
           this.$message({
             type: 'warning',
             message: '请输入企业名称'

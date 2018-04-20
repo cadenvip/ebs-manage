@@ -45,19 +45,20 @@ service.interceptors.request.use(config => {
       config['url'] = config.url + '?JSESSIONID=' + getSessionid()
     }
   }
-  var strData = JSON.stringify(config.data)
-  console.log('上传的参数', strData)
-  console.log('config', config)
-  console.log('source.token', source.token)
-  // source.token.cancelToken.Promise = {}
-  // source.token.cancelToken.reason = {}
-  config.cancelToken = source.token
-  var sensitives = JSON.parse(window.localStorage.getItem('sensitives'))
-  if (sensitives !== null && sensitives.length > 0) {
-    for (let i = 0; i < sensitives.length; i++) {
-      if (strData.indexOf(sensitives[i]) >= 0) {
-        cancel(sensitives[i])
-        return config
+  if (config.data !== undefined) {
+    var strData = JSON.stringify(config.data)
+    console.log('上传的参数', strData)
+    console.log('config', config)
+    console.log('source.token', source.token)
+    config.cancelToken = source.token
+    var sensitives = JSON.parse(window.localStorage.getItem('sensitives'))
+    if (sensitives !== null && sensitives.length > 0) {
+      for (let i = 0; i < sensitives.length; i++) {
+        if (strData.indexOf(sensitives[i]) >= 0) {
+          console.log('提交的内容包含敏感词！')
+          cancel(sensitives[i])
+          return config
+        }
       }
     }
   }
