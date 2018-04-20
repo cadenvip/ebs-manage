@@ -463,7 +463,6 @@ export default {
             if (this.dialogForm.orderDeliveryBean.logisticName) {
               this.getTransportType(this.dialogForm.orderDeliveryBean.transportType)
             }
-            this.dialogVisible = true
           } else {
             this.$message.error(res.msg)
           }
