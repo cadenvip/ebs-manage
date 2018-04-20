@@ -308,7 +308,6 @@
   import 'quill/dist/quill.snow.css'
   import 'quill/dist/quill.bubble.css'
   import { quillEditor } from 'vue-quill-editor'
-  import { decryptStr } from '@/utils/index'
   export default {
     created() {
       // 计量单位
@@ -709,7 +708,6 @@
       },
       handleAvatarSuccess(res, file) {
         console.log(String(res), file)
-        console.log(decryptStr(String(res)))
         this.imageUrl = URL.createObjectURL(file.raw)
         console.log(this.imageUrl)
       },
