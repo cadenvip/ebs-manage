@@ -376,7 +376,8 @@
     <el-dialog title="物流信息" :visible.sync="dialogVisible" center>
       <div v-if="dialogForm.orderDeliveryBean.logisticName">
         <p>物流方式：<span>{{dialogTransport}}</span></p>
-        <p>物流公司：<span>{{dialogForm.orderDeliveryBean.logisticName}}</span></p>
+        <p v-if="dialogForm.orderDeliveryBean.sendCompanyCode && dialogForm.orderDeliveryBean.sendCompanyCode!=='privateLogistics'">物流公司: {{dialogForm.logisticCompanyBean.companyName?dialogForm.logisticCompanyBean.companyName:'暂无'}}</p>
+        <p v-else>物流公司: {{dialogForm.orderDeliveryBean.logisticName?dialogForm.orderDeliveryBean.logisticName:'暂无'}}</p>
         <p>运单号码：<span>{{dialogForm.orderDeliveryBean.logisticNo}}</span></p>
         <p v-if="dialogForm.orderDeliveryBean.sendCompanyCode === 'privateLogistics'">查询电话：<span>{{dialogForm.orderDeliveryBean.sendExpTel}}</span></p>
         <p v-else>
