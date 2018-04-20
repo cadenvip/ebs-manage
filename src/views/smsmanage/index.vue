@@ -26,6 +26,7 @@
 <script>
   import { getSms, savaSms } from '@/api/sms.js'
   import { getBusinessAllUsers } from '@/api/user.js'
+  import { phoneCutSensitive } from '@/utils/index.js'
   export default {
     created() {
       this._getSms()
@@ -60,12 +61,12 @@
           if (arr[i].name && arr[i].name.length > 4) {
             temparr.push({
               key: arr[i].loginname,
-              label: arr[i].name.substring(0, 4) + '.. ' + arr[i].loginname
+              label: arr[i].name.substring(0, 4) + '.. ' + phoneCutSensitive(arr[i].loginname)
             })
           } else {
             temparr.push({
               key: arr[i].loginname,
-              label: arr[i].name + ' ' + arr[i].loginname
+              label: arr[i].name + ' ' + phoneCutSensitive(arr[i].loginname)
             })
           }
         }

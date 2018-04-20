@@ -78,9 +78,15 @@
           <el-table :data="tableData" style="width: 100%" border>
             <el-table-column prop="orderCode" label="订单编号" align="center">
             </el-table-column>
-            <el-table-column width="110" prop="userName" label="订购人姓名" align="center">
+            <el-table-column width="110" label="订购人姓名" align="center">
+              <template slot-scope="scope">
+                {{getSensitiveName(scope.row.userName)}}
+              </template>
             </el-table-column>
-            <el-table-column width="110" prop="userPhone" label="订购人电话" align="center">
+            <el-table-column width="110" label="订购人电话" align="center">
+              <template slot-scope="scope">
+                {{getSensitivePhone(scope.row.userPhone)}}
+              </template>
             </el-table-column>
             <el-table-column prop="totalEccouponMoney" label="电子券金额(元)" align="center">
             </el-table-column>
@@ -114,9 +120,15 @@
           <el-table :data="tableData" style="width: 100%" border>
             <el-table-column prop="orderCode" label="订单编号" align="center">
             </el-table-column>
-            <el-table-column width="110" prop="userName" label="订购人姓名" align="center">
+            <el-table-column width="110" label="订购人姓名" align="center">
+              <template slot-scope="scope">
+                {{getSensitiveName(scope.row.userName)}}
+              </template>
             </el-table-column>
-            <el-table-column width="110" prop="userPhone" label="订购人电话" align="center">
+            <el-table-column width="110" label="订购人电话" align="center">
+              <template slot-scope="scope">
+                {{getSensitivePhone(scope.row.userPhone)}}
+              </template>
             </el-table-column>
             <el-table-column prop="totalEccouponMoney" label="电子券金额(元)" align="center">
             </el-table-column>
@@ -150,9 +162,15 @@
           <el-table :data="tableData" style="width: 100%" border>
             <el-table-column prop="orderCode" label="订单编号" align="center">
             </el-table-column>
-            <el-table-column width="110" prop="userName" label="订购人姓名" align="center">
+            <el-table-column width="110" label="订购人姓名" align="center">
+              <template slot-scope="scope">
+                {{getSensitiveName(scope.row.userName)}}
+              </template>
             </el-table-column>
-            <el-table-column width="110" prop="userPhone" label="订购人电话" align="center">
+            <el-table-column width="110" label="订购人电话" align="center">
+              <template slot-scope="scope">
+                {{getSensitivePhone(scope.row.userPhone)}}
+              </template>
             </el-table-column>
             <el-table-column prop="totalEccouponMoney" label="电子券金额(元)" align="center">
             </el-table-column>
@@ -186,9 +204,15 @@
           <el-table :data="tableData" style="width: 100%" border>
             <el-table-column prop="orderCode" label="订单编号" align="center">
             </el-table-column>
-            <el-table-column width="110" prop="userName" label="订购人姓名" align="center">
+            <el-table-column width="110" label="订购人姓名" align="center">
+              <template slot-scope="scope">
+                {{getSensitiveName(scope.row.userName)}}
+              </template>
             </el-table-column>
-            <el-table-column width="110" prop="userPhone" label="订购人电话" align="center">
+            <el-table-column width="110" label="订购人电话" align="center">
+              <template slot-scope="scope">
+                {{getSensitivePhone(scope.row.userPhone)}}
+              </template>
             </el-table-column>
             <el-table-column prop="totalEccouponMoney" label="电子券金额(元)" align="center">
             </el-table-column>
@@ -222,9 +246,15 @@
           <el-table :data="tableData" style="width: 100%" border>
             <el-table-column prop="orderCode" label="订单编号" align="center">
             </el-table-column>
-            <el-table-column width="110" prop="userName" label="订购人姓名" align="center">
+            <el-table-column width="110" label="订购人姓名" align="center">
+              <template slot-scope="scope">
+                {{getSensitiveName(scope.row.userName)}}
+              </template>
             </el-table-column>
-            <el-table-column width="110" prop="userPhone" label="订购人电话" align="center">
+            <el-table-column width="110" label="订购人电话" align="center">
+              <template slot-scope="scope">
+                {{getSensitivePhone(scope.row.userPhone)}}
+              </template>
             </el-table-column>
             <el-table-column prop="totalEccouponMoney" label="电子券金额(元)" align="center">
             </el-table-column>
@@ -258,9 +288,15 @@
           <el-table :data="tableData" style="width: 100%" border>
             <el-table-column prop="orderCode" label="订单编号" align="center">
             </el-table-column>
-            <el-table-column width="110" prop="userName" label="订购人姓名" align="center">
+            <el-table-column width="110" label="订购人姓名" align="center">
+              <template slot-scope="scope">
+                {{getSensitiveName(scope.row.userName)}}
+              </template>
             </el-table-column>
-            <el-table-column width="110" prop="userPhone" label="订购人电话" align="center">
+            <el-table-column width="110" label="订购人电话" align="center">
+              <template slot-scope="scope">
+                {{getSensitivePhone(scope.row.userPhone)}}
+              </template>
             </el-table-column>
             <el-table-column prop="totalEccouponMoney" label="电子券金额(元)" align="center">
             </el-table-column>
@@ -294,9 +330,15 @@
           <el-table :data="tableData" style="width: 100%" border>
             <el-table-column prop="orderCode" label="订单编号" align="center">
             </el-table-column>
-            <el-table-column width="110" prop="userName" label="订购人姓名" align="center">
+            <el-table-column width="110" label="订购人姓名" align="center">
+              <template slot-scope="scope">
+                {{getSensitiveName(scope.row.userName)}}
+              </template>
             </el-table-column>
-            <el-table-column width="110" prop="userPhone" label="订购人电话" align="center">
+            <el-table-column width="110" label="订购人电话" align="center">
+              <template slot-scope="scope">
+                {{getSensitivePhone(scope.row.userPhone)}}
+              </template>
             </el-table-column>
             <el-table-column prop="totalEccouponMoney" label="电子券金额(元)" align="center">
             </el-table-column>
@@ -333,9 +375,15 @@
                 <el-button @click="_getOrderDetail(scope.row)" type="text" size="small">{{scope.row.orderCode}}</el-button>
               </template>
             </el-table-column>
-            <el-table-column width="110" prop="userName" label="订购人姓名" align="center">
+            <el-table-column width="110" label="订购人姓名" align="center">
+              <template slot-scope="scope">
+                {{getSensitiveName(scope.row.userName)}}
+              </template>
             </el-table-column>
-            <el-table-column width="110" prop="userPhone" label="订购人电话" align="center">
+            <el-table-column width="110" label="订购人电话" align="center">
+              <template slot-scope="scope">
+                {{getSensitivePhone(scope.row.userPhone)}}
+              </template>
             </el-table-column>
             <el-table-column prop="totalEccouponMoney" label="电子券金额(元)" align="center">
             </el-table-column>
@@ -402,6 +450,7 @@
   import LocationSelector from '@/components/LocationSelector/index'
   import { parseTime } from '@/utils/index'
   import { getOrderList, getDeleveryDetail, orderExport, orderRefuse } from '@/api/order/index.js'
+  import { phoneCutSensitive, nameCutSensitive } from '@/utils/index.js'
   export default {
     created () {
       this.tabName = this.$route.query.tab
@@ -503,6 +552,12 @@
       }
     },
     methods: {
+      getSensitiveName(name) {
+        return nameCutSensitive(name)
+      },
+      getSensitivePhone(phone) {
+        return phoneCutSensitive(phone)
+      },
       _getDeleveryDetail(row) {
         this.logisticsBean = {
           orderDeliveryBean: {}

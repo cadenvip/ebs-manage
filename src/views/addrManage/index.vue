@@ -58,13 +58,17 @@
         :data="tab1TableData"
         border
         style="width: 100%">
-        <el-table-column  align="center" prop="name" label="姓名"></el-table-column>
+        <el-table-column  align="center" label="姓名">
+          <template slot-scope="scope">
+            {{getName(scope.row.name)}}
+          </template>
+        </el-table-column>
         <el-table-column  align="center" prop="locationName" label="所在区域"></el-table-column>
         <el-table-column  align="center" prop="street" label="街道地址"></el-table-column>
         <el-table-column  align="center" prop="postCode" label="邮编"></el-table-column>
         <el-table-column  align="center" label="手机/电话">
           <template slot-scope="scope">
-            {{scope.row.mobileTelephone}}
+            {{getPhone(scope.row.mobileTelephone)}}
             <span v-show="scope.row.mobileTelephone && scope.row.telephone">/</span>
             {{scope.row.telephone}}
           </template>
@@ -106,6 +110,7 @@
   import RegionSelector from '@/components/RegionSelector/index'
   import { validateMobilePhone, validatePostcode } from '@/utils/validate'
   import { saveAddr, getAddr, getAddrDetail, deleteAddr } from '@/api/addrmanage.js'
+  import { phoneCutSensitive, nameCutSensitive } from '@/utils/index.js'
   export default {
     created() {
       this._getAddr()
@@ -146,6 +151,12 @@
       }
     },
     methods: {
+      getPhone(phone) {
+        return phoneCutSensitive(phone)
+      },
+      getName(name) {
+        return nameCutSensitive(name)
+      },
       getLocationCode(locationInfo) {
         this.tab1Form.locationCode = locationInfo.id.toString()
         this.tab1Form.locationName = locationInfo.locationName

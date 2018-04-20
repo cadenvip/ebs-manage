@@ -84,9 +84,15 @@
             <el-table :data="tableData" style="width: 100%" border>
               <el-table-column prop="orderCode" label="订单编号" align="center">
               </el-table-column>
-              <el-table-column prop="userName" label="订购人姓名" align="center">
+              <el-table-column label="订购人姓名" align="center">
+                <template slot-scope="scope">
+                  {{getSensitiveName(scope.row.userName)}}
+                </template>
               </el-table-column>
-              <el-table-column prop="userPhone" label="订购人电话" align="center">
+              <el-table-column label="订购人电话" align="center">
+                <template slot-scope="scope">
+                  {{getSensitivePhone(scope.row.userPhone)}}
+                </template>
               </el-table-column>
               <el-table-column prop="totalEccouponMoney" label="电子券金额(元)" align="center">
               </el-table-column>
@@ -159,6 +165,7 @@ import { getBusiness } from '@/api/admin/onsalemodifyaudit.js'
 import { getOrderList } from '@/api/order/index.js'
 import CollapseTransition from 'element-ui/lib/transitions/collapse-transition'
 import { parseTime } from '@/utils/index'
+import { phoneCutSensitive, nameCutSensitive } from '@/utils/index.js'
 export default {
   data() {
     return {
@@ -272,6 +279,12 @@ export default {
     this._getOrderList()
   },
   methods: {
+    getSensitiveName(name) {
+      return nameCutSensitive(name)
+    },
+    getSensitivePhone(phone) {
+      return phoneCutSensitive(phone)
+    },
     _getOrderList(obj) {
       this.tableData = []
       var defaultParam = {

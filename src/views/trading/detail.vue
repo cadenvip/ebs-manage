@@ -44,7 +44,7 @@
             </div>
             <div class="clearfix mt10">
               <p class="textr fl bold">手机号码：</p>
-              <p class="fl">{{bean.customerPhone}}</p>
+              <p class="fl">{{getSensitivePhone(bean.customerPhone)}}</p>
             </div>
             <div class="clearfix mt10">
               <p class="textr fl bold">付款方式：</p>
@@ -102,6 +102,7 @@
 
 <script>
 import { getTradeDetail } from '@/api/trading'
+import { phoneCutSensitive } from '@/utils/index.js'
 export default {
   created() {
     this.gid = this.$route.query.gid
@@ -122,6 +123,9 @@ export default {
     }
   },
   methods: {
+    getSensitivePhone(phone) {
+      return phoneCutSensitive(phone)
+    },
     getMessage(row) {
       this.baowen = row.logContent
       this.dialogVisible = true
