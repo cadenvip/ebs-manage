@@ -19,7 +19,7 @@
               <el-input v-model="registerForm.businesslicenseNum" :maxlength=32 clearable style="width: 270px;" placeholder="请输入营业执照号码"></el-input>
             </el-form-item>
             <el-form-item label="营业执照：" prop="licencepicpath">
-              <el-upload action="http://183.230.100.168/upload" list-type="text" :show-file-list="false" :on-success="handleLicenceSuccess"
+              <el-upload action="http://10.189.15.190:8080/ebs/common/upload" list-type="text" :show-file-list="false" :on-success="handleLicenceSuccess"
                 :before-upload="beforeAvatarUpload" style="display:inline-block">
                 <el-button size="small" type="primary">选择</el-button>
               </el-upload>
@@ -29,7 +29,7 @@
               <el-input v-model="registerForm.operatoridnum" clearable :maxlength=18 style="width: 270px;" placeholder="输入身份证号码"></el-input>
             </el-form-item>
             <el-form-item label="身份证正面：" prop="sfzmpicpath">
-              <el-upload action="http://183.230.100.168/upload" list-type="text" :show-file-list="false" :on-success="handleSfzmSuccess"
+              <el-upload action="http://218.201.73.186:8777" list-type="text" :show-file-list="false" :on-success="handleSfzmSuccess"
                 :before-upload="beforeAvatarUpload" style="display:inline-block">
                 <el-button size="small" type="primary">选择</el-button>
               </el-upload>

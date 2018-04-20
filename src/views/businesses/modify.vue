@@ -1110,7 +1110,7 @@
       },
       goBack() {
         this.$router.push({
-          path: '/'
+          path: '/home/bhome'
         })
       },
       goNext() {

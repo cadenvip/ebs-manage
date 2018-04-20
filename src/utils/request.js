@@ -21,7 +21,7 @@ import router from '@/router'
 // 创建axios实例
 const service = axios.create({
   baseURL: process.env.BASE_API, // api的base_url
-  timeout: 60000 // 请求超时时间
+  timeout: 120000 // 请求超时时间
 })
 
 // request拦截器
@@ -62,7 +62,6 @@ service.interceptors.request.use(config => {
 
 // 下载
 const downloadUrl = url => {
-  console.log('下载地址:' + url)
   const iframe = document.createElement('iframe')
   iframe.style.display = 'none'
   iframe.src = url
@@ -74,7 +73,6 @@ const downloadUrl = url => {
 
 // respone拦截器
 service.interceptors.response.use(response => {
-  console.log(response)
   if (response.headers && (response.headers['content-type'] === 'application/x-msdownload' || response.headers['content-type'] === 'application/msexcel;charset=UTF-8' || response.headers['content-type'] === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')) {
     downloadUrl(response.request.responseURL)
     return response
