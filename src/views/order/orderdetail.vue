@@ -85,7 +85,7 @@
               </el-col>
               <el-col class="text-l" :span="16">
                 <p>{{getVal(orderObj.orderCode)}}</p>
-                <p>{{getVal(orderObj.userName)}}</p>
+                <p>{{getSensitiveName(getVal(orderObj.userName))}}</p>
                 <p class="money">{{getMoney(orderObj.specialOffer)}}</p>
               </el-col>
             </el-row>
@@ -112,7 +112,7 @@
                 <p>订购渠道:</p>
               </el-col>
               <el-col class="text-l" :span="12">
-                <p>{{getVal(orderObj.userPhone)}}</p>
+                <p>{{getSensitivePhone(getVal(orderObj.userPhone))}}</p>
                 <p>{{getVal(orderObj.operator)}}</p>
                 <p>{{orderObj.comeFrom==='1'?'热线':orderObj.comeFrom==='2'?'WEP':orderObj.comeFrom==='3'?'WAP':orderObj.comeFrom==='4'?'手机客户端':orderObj.comeFrom==='5'?'触屏版':orderObj.comeFrom==='6'?'第三方平台':orderObj.comeFrom==='7'?'农资商城':'暂无'}}</p>
               </el-col>
@@ -220,7 +220,7 @@
               </el-col>
               <el-col class="text-l" :span="16">
                 <p>{{getVal(orderObj.receiverName)}}</p>
-                <p>{{getVal(orderObj.receiverMobile)}}</p>
+                <p>{{getSensitivePhone(getVal(orderObj.receiverMobile))}}</p>
                 <p>{{getVal(orderObj.receiverPostCode)}}</p>
               </el-col>
             </el-row>
@@ -349,7 +349,11 @@
       <h1>操作记录</h1>
       <el-table :data="tableData3" border style="width: 770px;">
         <el-table-column prop="operateTime" label="操作时间" align="center"></el-table-column>
-        <el-table-column prop="outOperator" label="操作人" align="center"></el-table-column>
+        <el-table-column label="操作人" align="center">
+          <template slot-scope="scope">
+            {{getSensitiveName(scope.row.outOperator)}}
+          </template>
+        </el-table-column>
         <el-table-column label="订单状态" align="center">
           <template slot-scope="scope">
             {{getOrderState(scope.row.orderState)}}
@@ -398,6 +402,7 @@
 
 <script>
 import { orderDetail, getDeleveryDetail } from '@/api/order/index.js'
+import { phoneCutSensitive, nameCutSensitive } from '@/utils/index.js'
 export default {
   created() {
     this.oid = this.$route.query.oid
@@ -443,6 +448,12 @@ export default {
     }
   },
   methods: {
+    getSensitivePhone(phone) {
+      return phoneCutSensitive(phone)
+    },
+    getSensitiveName(name) {
+      return nameCutSensitive(name)
+    },
     _getDeleveryDetail(oid) {
       if (oid) {
         getDeleveryDetail({ orderId: oid }).then(res => {

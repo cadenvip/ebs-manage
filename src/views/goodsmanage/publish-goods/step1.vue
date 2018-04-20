@@ -55,6 +55,7 @@
       isFromModify() {
         this.goodsId = this.$route.query.goodsId
         this.modifyFlag = String(this.$route.query.modifyFlag)
+        // 修改状态为驳回，应该显示放弃按钮
         this.gFlag = this.$route.query.gFlag
         console.log(typeof this.modifyFlag)
         if (this.goodsId) {

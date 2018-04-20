@@ -313,6 +313,7 @@
       // 计量单位
       this.jiliangdwOptions = getUnitsOptions()
       this.isFromModifyFlag = Number(this.$route.query.isFromModifyFlag)
+      // 修改状态为驳回，应该显示放弃按钮
       if (this.$route.query.gFlag) {
         this.gFlag = true
       }
