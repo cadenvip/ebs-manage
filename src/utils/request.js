@@ -14,21 +14,14 @@ import {
 
 // import router from './router'
 import router from '@/router'
-import {
-  decryptStr
-} from '@/utils/index'
-
-const CancelToken = axios.CancelToken
-var source = CancelToken.source()
-function cancel(word) {
-  source.cancel('hasSensitive:' + word)
-}
+// import {
+//   decryptStr
+// } from '@/utils/index'
 
 // 创建axios实例
 const service = axios.create({
   baseURL: process.env.BASE_API, // api的base_url
-  timeout: 60000 // 请求超时时间
-  // cancelToken: source.token
+  timeout: 120000 // 请求超时时间
 })
 
 // request拦截器
@@ -40,29 +33,26 @@ service.interceptors.request.use(config => {
   // }
   // 登录成功后，将JSESSIONID上传以鉴权
   if (store.getters.sessionid !== undefined && store.getters.sessionid !== '') {
-    // config['url'] = config.url + `?JSESSIONID=${store.getters.sessionid}`
     if (config.url !== '/login') {
       config['url'] = config.url + '?JSESSIONID=' + getSessionid()
     }
   }
   if (config.data !== undefined) {
     var strData = JSON.stringify(config.data)
-    console.log('上传的参数', strData)
-    console.log('config', config)
-    console.log('source.token', source.token)
-    config.cancelToken = source.token
     var sensitives = JSON.parse(window.localStorage.getItem('sensitives'))
     if (sensitives !== null && sensitives.length > 0) {
       for (let i = 0; i < sensitives.length; i++) {
         if (strData.indexOf(sensitives[i]) >= 0) {
           console.log('提交的内容包含敏感词！')
-          cancel(sensitives[i])
+          var CancelToken = axios.CancelToken
+          var source = CancelToken.source()
+          config.cancelToken = source.token
+          source.cancel(`hasSensitive:${sensitives[i]}`)
           return config
         }
       }
     }
   }
-  console.log(config)
   return config
 }, error => {
   // Do something with request error
@@ -109,8 +99,8 @@ error => {
   console.log('error', error)
   if (error.response !== undefined) {
     var responseData = error.response.data
-    console.log('error.response.data解密前', responseData)
-    responseData = decryptStr(responseData)
+    // console.log('error.response.data解密前', responseData)
+    // responseData = decryptStr(responseData)
     console.log('error.response.data解密后', responseData)
     if (responseData.status === 408) {
       router.push({
@@ -135,7 +125,7 @@ error => {
     }
     if (error.message.indexOf('hasSensitive') === 0) {
       var word = error.message.substr(13, error.message.length - 13)
-      errorInfo.msg = `提交的内容包含敏感词[${word}]，提交失败！`
+      errorInfo.msg = `提交的内容包含敏感词 [${word}]，提交失败！`
       error = {}
       return Promise.reject(errorInfo)
     } else {

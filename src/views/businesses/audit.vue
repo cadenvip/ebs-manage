@@ -34,8 +34,7 @@
                     <p>{{ registerForm.locationName ? registerForm.locationName : '&nbsp;' }}</p>
                     <p>{{ registerForm.address ? registerForm.address : '&nbsp;' }}</p>
                     <p>{{ legalNameFormat }}</p>
-                    <p>{{ registerForm.legalPaperType === '1' ? '身份证' : registerForm.editApproveStatus === '2' ? '户口本' : registerForm.editApproveStatus
-                      === '3' ? '驾驶本' : '&nbsp;' }}</p>
+                    <p>{{ registerForm.legalPaperType ? registerForm.legalPaperType : '&nbsp;' }}</p>
                   </el-col>
                 </el-row>
               </div>

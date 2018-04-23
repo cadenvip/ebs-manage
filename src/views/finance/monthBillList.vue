@@ -25,7 +25,7 @@
 
 <script>
   import {
-    getBillList
+    adminGetMoreHisBillByYearmonth
   } from '@/api/finance'
 
   export default {
@@ -62,14 +62,19 @@
     methods: {
       queryBillList() {
         this.loading = true
+        // var params = {
+        //   'merchantname': '',
+        //   'yearmonth': `${this.$route.query.yearmonth}`,
+        //   'status': '',
+        //   'locationcode': '',
+        //   'greater500': true
+        // }
         var params = {
-          'merchantname': '',
           'yearmonth': `${this.$route.query.yearmonth}`,
-          'status': '',
-          'locationcode': '',
-          'greater500': true
+          'page': `${this.currentPage}`,
+          'limit': `${this.pagesize}`
         }
-        getBillList(params, this.currentPage, this.pagesize).then(response => {
+        adminGetMoreHisBillByYearmonth(params).then(response => {
           if (response.status === 200) {
             this.billlist = response.data.list
             this.total = response.data.total
