@@ -418,7 +418,7 @@
           selectedGoodsIds = tempArr.join(',')
           params.goodsIds = selectedGoodsIds
         }
-        if (this.auditForm.auditStatus === '1' && this.auditForm.auditAdvice === '') {
+        if (this.auditForm.auditStatus === '0' && this.auditForm.auditAdvice === '') {
           this.$message.error('请填写审批意见！')
           return false
         } else {
