@@ -54,13 +54,16 @@
     methods: {
       isFromModify() {
         this.goodsId = this.$route.query.goodsId
+        // modifyFlag： 1:未上架修改  2:在售商品修改  3:历史商品修改  4: 缺货商品修改
         this.modifyFlag = String(this.$route.query.modifyFlag)
-        // 修改状态为驳回，应该显示放弃按钮
+        // gFlag 修改状态为驳回，应该显示放弃按钮
         this.gFlag = this.$route.query.gFlag
-        console.log(typeof this.modifyFlag)
+        this.gpFlag = this.$route.query.gpFlag
         if (this.goodsId) {
           if (this.modifyFlag === '2') {
             this.isFromModifyFlag = 2
+          } else if (this.modifyFlag === '3') {
+            this.isFromModifyFlag = 3
           } else {
             this.isFromModifyFlag = 1
           }
@@ -77,6 +80,8 @@
           }).catch(err => {
             this.$message.error(err)
           })
+        } else if (this.gpFlag) {
+          this.goodstype = []
         } else if (this.getSelectedOption.length > 0) {
           this.goodstype = this.getSelectedOption
         }
@@ -140,6 +145,8 @@
           this.$router.push({ path: '/goodsmanage/noshelfgoods' })
         } else if (this.isFromModifyFlag === 2) {
           this.$router.push({ path: '/goodsmanage/onsalegoods' })
+        } else if (this.isFromModifyFlag === 3) {
+          this.$router.push({ name: 'noshelfgoods', query: { tab: 3 }})
         } else {
           this.$router.push({ path: '/goodsmanage/publishgoods' })
         }
@@ -168,6 +175,16 @@
                 } else {
                   this.$router.push({ name: 'publishstep2', query: { typeCode: this.goodstype[1], goodsCode: this.goodsCode, goodsId: this.goodsId, isFromModifyFlag: this.isFromModifyFlag }})
                 }
+              } else {
+                this.$message.error(res.msg)
+              }
+            }).catch(err => {
+              this.$message.error(err)
+            })
+          } else if (this.isFromModifyFlag === 3) {
+            checkGoStepTwo(params).then(res => {
+              if (res.status === 200) {
+                this.$router.push({ name: 'publishstep2', query: { typeCode: this.goodstype[1], goodsCode: this.goodsCode, goodsId: this.goodsId, isFromModifyFlag: this.isFromModifyFlag }})
               } else {
                 this.$message.error(res.msg)
               }

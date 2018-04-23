@@ -55,7 +55,8 @@
       <p>库存预警：{{goodsBean.stockAlarm}}</p>
     </div>
     <div>
-      <p>手机端描述:{{goodsBean.h5content}}</p>
+      <p>手机端描述:</p>
+      <div style="border: 1px solid #ccc; padding: 10px;" v-html="goodsBean.h5content"></div>
     </div>
     <div style="text-align: center; margin-top:20px;">
       <el-button size="medium" type="primary" @click="goBack">返回</el-button>
@@ -92,7 +93,7 @@
         getGoodsDetail(this.$route.query.goodsId).then(res => {
           this.loading = false
           if (res.status === 200) {
-            this.goodsBean = res.data.goodsBean
+            this.goodsBean = Object.assign(res.data.goodsBean, res.data.editGoodsBean)
             for (var i in this.unitsOptions) {
               if (this.unitsOptions[i].value === this.goodsBean.quantityUnits) {
                 this.actualUnit = this.unitsOptions[i].label

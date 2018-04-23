@@ -79,18 +79,22 @@
           <el-button size="mini" @click="delejieti(index)">删除</el-button>
         </div>
       </div>
-      <el-form-item style="padding-left: 100px;">
-        <el-upload
-          class="avatar-uploader"
-          action="http://183.230.101.142:58080/ebs/common/upload"
-          :show-file-list="false"
-          :on-success="handleAvatarSuccess"
-          :before-upload="beforeAvatarUpload" style="display:inline-block">
-          <img v-if="imageUrl" :src="imageUrl" class="avatar">
-          <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-        </el-upload>
-        <span style="color: #aaa;">单个图片的大小不能超过500K。图片至少上传1张，可在图片预览栏选择商品图片。按住Ctrl可多选商品图片</span>
-      </el-form-item>
+      <div style="padding: 20px 30px 0 30px;">
+        <span style="color: #606266; font-size: 14px;">商品图片：</span>
+        <el-form-item>
+          <el-upload
+            class="avatar-uploader"
+            action="http://183.230.101.142:58080/ebs/common/upload"
+            :show-file-list="true"
+            list-type="picture-card"
+            :on-success="handleAvatarSuccess"
+            :file-list="fileList"
+            :before-upload="beforeAvatarUpload" style="display:inline-block">
+            <i class="el-icon-plus"></i>
+          </el-upload>
+          <p style="color: #aaa;margin: 0;">只能上传jpg/png文件，且不超过<span style="color: red;">500kb</span>，图片至少上传1张！</p>
+        </el-form-item>
+      </div>
       <h2 style="padding-left: 20px;">商品参数信息</h2>
       <el-row>
         <el-col :span="8">
@@ -154,7 +158,7 @@
           </el-form-item> 
         </el-col>
         <el-col :span="8">
-          <el-form-item label="商品分类:" prop="spfl">
+          <el-form-item label="商品分类:">
             <el-input disabled="" v-model="goodsType.typeCodeName"></el-input>
           </el-form-item>
         </el-col>
@@ -320,7 +324,7 @@
       if (this.isFromModifyFlag === 2) {
         this.belongPublish = false
       }
-      if (this.isFromModifyFlag === 1 && this.$route.query.goodsId || this.isFromModifyFlag === 2) {
+      if ((this.isFromModifyFlag === 1 || this.isFromModifyFlag === 2 || this.isFromModifyFlag === 3)) {
         getGoodsDetail(this.$route.query.goodsId).then(res => {
           if (res.status === 200) {
             // 状态为驳回是 展示放弃修改
@@ -377,7 +381,11 @@
                 }
               }
             }
-            // 图片上传 先不管
+            if (this.goodsBean.imageList.length > 0) {
+              for (var j = 0; j < this.goodsBean.imageList.length; j++) {
+                this.fileList.push({ name: j, url: this.goodsBean.imageList[j] })
+              }
+            }
             this.ruleForm.spzl = Number(this.goodsBean.weight)
             this.danwei = this.goodsBean.weightUnit
             this.ruleForm.spgg = this.goodsBean.orderGoodsSpec2
@@ -422,8 +430,6 @@
         }).catch(err => {
           this.$message.error(err)
         })
-      } else {
-        console.log('error')
       }
       this.goodsType.typeCode = this.$route.query.typeCode
       this.goodsType.typeCodeName = this.selectedlabel.label + '/' + this.selectedlabel.subLabel
@@ -435,6 +441,7 @@
     },
     data() {
       return {
+        fileList: [],   // 上传文件
         h5content: '',
         editorOption: {
           // something config
@@ -510,7 +517,6 @@
           spcd: '', // 商品产地
           spcdcode: '', // 商品产地代码
           scrq: '', // 生产日期
-          spfl: '从前一页取',
           jldw: '',
           dingssj: true,
           zdsjsj: parseTime(new Date()),
@@ -565,9 +571,6 @@
           baozhiqi: [
             { required: true, message: '请输入保质期', trigger: 'blur' }
           ],
-          spfl: [
-            { required: true }
-          ],
           zdsjsj: [
             { required: true, message: '请输入自动上架时间', trigger: 'blur' }
           ]
@@ -597,6 +600,10 @@
               return false
             }
           }
+          if (this.fileList.length === '0') {
+            this.$message.error('至少上传一张图片！')
+            return false
+          }
           if (this.ruleForm.spcd === '') {
             this.$message.error('商品产地不能为空！')
             return false
@@ -610,7 +617,7 @@
             return false
           }
           if (valid) {
-            const parmas = {
+            var parmas = {
               name: this.ruleForm.mingchen,
               promotionInfo: this.ruleForm.cuxiao,
               brand: this.ruleForm.pinpai,
@@ -628,7 +635,7 @@
               codpay: 0,
               cmpay: this.ruleForm.zhifufs.indexOf('和包支付') > -1 ? 0 : 1,
               umpay: this.ruleForm.zhifufs.indexOf('联动支付') > -1 ? 0 : 1,
-              imageList: ['http://image1.qianqianhua.com/uploads/20171227/14/1514356264-OpIVSzBPAM.jpg'],
+              imageList: [],
               gradientPriceFlag: this.ruleForm.jietiFlag ? 1 : 0,  // true or false  this.ruleForm.Jieti
               gradientNumber: this.convertJTnums,
               gradientPrice: this.convertJTamount,
@@ -666,7 +673,7 @@
               wapUrl: this.ruleForm.wappushlj,
               h5content: this.h5content
             }
-            if (this.isFromModifyFlag === 1 || this.isFromModifyFlag === 2) {
+            if (this.isFromModifyFlag === 1 || this.isFromModifyFlag === 2 || this.isFromModifyFlag === 3) {
               parmas.goodsId = this.$route.query.goodsId
               parmas.goodsCode = this.$route.query.goodsCode
             }
@@ -678,6 +685,9 @@
               } else {
                 parmas.takeEffectTime = parseTime(this.immediateTime)
               }
+            }
+            for (var i in this.fileList) {
+              parmas.imageList.push(this.fileList[i].url)
             }
             console.log(parmas)
             goodsRelease(parmas).then(res => {
@@ -708,21 +718,19 @@
         this.jietiItems.splice(index, 1)
       },
       handleAvatarSuccess(res, file) {
-        console.log(String(res), file)
-        this.imageUrl = URL.createObjectURL(file.raw)
-        console.log(this.imageUrl)
+        this.fileList.push({ name: file.name, url: res })
       },
       beforeAvatarUpload(file) {
         const isJPG = file.type === 'image/jpeg'
-        const isLt2M = file.size / 1024 / 1024 < 2
+        const isLt500K = file.size / 1024  < 500
 
         if (!isJPG) {
           this.$message.error('上传头像图片只能是 JPG 格式!')
         }
-        if (!isLt2M) {
-          this.$message.error('上传头像图片大小不能超过 2MB!')
+        if (!isLt500K) {
+          this.$message.error('上传头像图片大小不能超过 500kb!')
         }
-        return isJPG && isLt2M
+        return isJPG && isLt500K
       },
       deleArrElement(originArr, ele) {
         if (originArr.length > 0) {

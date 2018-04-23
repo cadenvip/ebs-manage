@@ -117,8 +117,7 @@
           <p style="color:grey;font-size:13px;margin-top:10px;" v-show="goodsBean.orderGoodsSpec2">长度：{{goodsBean.orderGoodsSpec2}}</p>
         </el-tab-pane>
         <el-tab-pane label="手机端描述" name="eighth">
-          <p style="color:grey;font-size:13px;">
-            {{goodsBean.h5content}}
+          <p v-html="goodsBean.h5content" style="color:grey;font-size:13px;">
           </p>
         </el-tab-pane>
       </el-tabs>    
@@ -160,8 +159,7 @@
           getGoodsDetail(this.$route.query.goodsId).then(res => {
             this.loading = false
             if (res.status === 200) {
-              this.goodsBean = res.data.goodsBean
-              console.log('222', this.goodsBean)
+              this.goodsBean = Object.assign(res.data.goodsBean, res.data.editGoodsBean)
               for (var i in this.unitsOptions) {
                 if (this.unitsOptions[i].value === this.goodsBean.quantityUnits) {
                   this.actualUnit = this.unitsOptions[i].label

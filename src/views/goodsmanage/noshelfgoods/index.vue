@@ -151,7 +151,7 @@
             <el-table-column align="center" label="操作">
               <template slot-scope="scope">
                 <el-button @click="getGoodsDetail(scope.row)" type="text" size="small">详情</el-button>
-                <el-button @click="modifyGoods(scope.row)" type="text" size="small">修改</el-button>
+                <el-button @click="modifyGoods2(scope.row)" type="text" size="small">修改</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -180,6 +180,14 @@
   import { getNoShelfGoods, upGoods, deleteGoods, batchDeleteGoods } from '@/api/noshelfgoods'
   export default {
     created () {
+      if (this.$route.query.tab) {
+        this.currentTab = Number(this.$route.query.tab)
+        if (this.currentTab === 1) {
+          this.activeTab = 'first'
+        } else if (this.currentTab === 3) {
+          this.activeTab = 'third'
+        }
+      }
       this._getGoodsTopType()
       this.selectAll = false
       this._getNoShelfGoods()
@@ -324,6 +332,9 @@
       // 修改商品
       modifyGoods(val) {
         this.$router.push({ name: 'publishstep1', query: { goodsId: val.goodsId, modifyFlag: 2 }})
+      },
+      modifyGoods2(val) {
+        this.$router.push({ name: 'publishstep1', query: { goodsId: val.goodsId, modifyFlag: 3 }})
       },
       deleteGoods(val) {
         deleteGoods(val.goodsId).then(res => {

@@ -87,6 +87,7 @@
       </div>
     </el-form>
     <div style="padding: 0 2%;">
+      <p class="oos" v-show="isOOS">有商品库存不足，请及时补货！</p>
       <el-tabs v-model="activeTab" type="border-card" @tab-click="handleTabClick">
         <el-tab-pane label="销售中商品" name="tab1">
           <el-table :row-class-name="tableRowClassName" @selection-change="handleTableSelectionChange" ref="multipleTable" :data="tableData" tooltip-effect="dark" border style="width: 100%" >
@@ -140,7 +141,7 @@
           </el-row>
         </el-tab-pane>
         <el-tab-pane label="缺货的商品" name="tab2">
-          <el-table :row-class-name="tableRowClassName" @selection-change="handleTableSelectionChange2" ref="multipleTable2" :data="tableData2" tooltip-effect="dark" border style="width: 100%" >
+          <el-table @selection-change="handleTableSelectionChange2" ref="multipleTable2" :data="tableData2" tooltip-effect="dark" border style="width: 100%" >
             <el-table-column type="selection" width="55">
             </el-table-column>
             <el-table-column prop="goodsCode" align="center" label="商品编码" width="140"></el-table-column>
@@ -215,6 +216,20 @@
   </div>
 </template>
 
+<style>
+.price .el-input__inner {
+  padding: 0 5px !important;
+}
+.el-table .warning-row {
+  background-color: oldlace !important;
+}
+.oos{
+  margin: 5px;
+  color: lightsalmon;
+  font-size: 13px;
+}
+</style>
+
 <script>
   import CollapseTransition from 'element-ui/lib/transitions/collapse-transition'
   import { getGoodsTopType } from '@/api/goodsRelease'
@@ -233,6 +248,8 @@
     },
     data() {
       return {
+        // 是否展示缺货提醒
+        isOOS: false,
         popupVisible: false,
         stockForm: {
           nowStock: 0, // 最新库存
@@ -338,6 +355,7 @@
         if (tab.name === 'tab2') {
           this.currentPage = 1
           this.currentTab = 2
+          this.isOOS = false
           this.submitForm('formT')
         } else {
           this.currentPage = 1
@@ -509,9 +527,11 @@
         if (Number(row.stock) <= 10) {
           var index = this.tableData.indexOf(row)
           if (rowIndex === index) {
+            this.isOOS = true
             return 'warning-row'
           }
         }
+        return ''
       },
       modifyGoods(gid, modifyStatus) {
         // 修改状态为驳回，应该显示放弃按钮
@@ -539,12 +559,3 @@
     }
   }
 </script>
-<style scoped>
-.price .el-input__inner {
-  padding: 0 5px !important;
-}
-.el-table .warning-row {
-    background: oldlace;
-  }
-
-</style>

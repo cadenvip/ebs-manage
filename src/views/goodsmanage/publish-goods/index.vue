@@ -342,7 +342,8 @@
         this.isClick = true
         checkSeller().then((res) => {
           if (res.status === 200) {
-            this.$router.push({ path: '/goodsmanage/publishstep1' })
+            // gpFlag: 发布商品为1
+            this.$router.push({ name: 'publishstep1', query: { gpFlag: 1 }})
           } else {
             this.$message.error(res.msg)
           }
