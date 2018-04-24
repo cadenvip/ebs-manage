@@ -223,7 +223,7 @@
               this.$message.error(error.msg)
             })
           } else {
-            this.$message.error('error submit!!')
+            this.$message.error('填写内容不规范，提交失败！')
           }
         })
       },

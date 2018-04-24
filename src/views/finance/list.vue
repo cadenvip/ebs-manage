@@ -209,7 +209,6 @@
         })
       },
       clearBill(bill) {
-        alert('清账')
         var params = {
           'billid': `${bill.id}`
         }

@@ -37,18 +37,22 @@ service.interceptors.request.use(config => {
       config['url'] = config.url + '?JSESSIONID=' + getSessionid()
     }
   }
-  if (config.data !== undefined) {
-    var strData = JSON.stringify(config.data)
-    var sensitives = JSON.parse(window.localStorage.getItem('sensitives'))
-    if (sensitives !== null && sensitives.length > 0) {
-      for (let i = 0; i < sensitives.length; i++) {
-        if (strData.indexOf(sensitives[i]) >= 0) {
-          console.log('提交的内容包含敏感词！')
-          var CancelToken = axios.CancelToken
-          var source = CancelToken.source()
-          config.cancelToken = source.token
-          source.cancel(`hasSensitive:${sensitives[i]}`)
-          return config
+  // 校验提交的内容中是否包含敏感词（敏感词操作本身不做校验）
+  console.log('请求配置', config)
+  if (config.url.indexOf('/sensitive') < 0) {
+    if (config.data !== undefined) {
+      var strData = JSON.stringify(config.data)
+      var sensitives = JSON.parse(window.localStorage.getItem('sensitives'))
+      if (sensitives !== null && sensitives.length > 0) {
+        for (let i = 0; i < sensitives.length; i++) {
+          if (strData.indexOf(sensitives[i]) >= 0) {
+            console.log('提交的内容包含敏感词！')
+            var CancelToken = axios.CancelToken
+            var source = CancelToken.source()
+            config.cancelToken = source.token
+            source.cancel(`hasSensitive:${sensitives[i]}`)
+            return config
+          }
         }
       }
     }
@@ -80,12 +84,19 @@ service.interceptors.response.use(response => {
   var responseData = response.data
   // responseData = decryptStr(responseData)
   // console.log('response.data解密后', responseData)
-  if (responseData.status === 408) {
+  console.log('response.data', responseData)
+  if (responseData.status === 10086) {
+    router.push({
+      path: '/timeout'
+    })
+    return Promise.reject(responseData)
+  } else if (responseData.status === 408) {
     router.push({
       path: '/timeout'
     })
     return Promise.reject(responseData)
   } else if (responseData.status === 403) {
+    console.log('asdjf;aksd', responseData)
     router.push({
       path: '/403/index'
     })
@@ -102,7 +113,11 @@ error => {
     // console.log('error.response.data解密前', responseData)
     // responseData = decryptStr(responseData)
     console.log('error.response.data解密后', responseData)
-    if (responseData.status === 408) {
+    if (responseData.status === 10086) {
+      router.push({
+        path: '/timeout'
+      })
+    } else if (responseData.status === 408) {
       router.push({
         path: '/timeout'
       })
