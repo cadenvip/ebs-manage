@@ -19,7 +19,7 @@
               <el-input v-model="registerForm.businesslicenseNum" :maxlength=32 clearable style="width: 270px;" placeholder="请输入营业执照号码"></el-input>
             </el-form-item>
             <el-form-item label="营业执照：" prop="licencepicpath">
-              <el-upload action="http://10.189.15.190:8080/ebs/common/upload" list-type="text" :show-file-list="false" :on-success="handleLicenceSuccess"
+              <el-upload action="http://183.230.101.142:58080/ebs/common/upload" list-type="text" :show-file-list="false" :on-success="handleLicenceSuccess"
                 :before-upload="beforeAvatarUpload" style="display:inline-block">
                 <el-button size="small" type="primary">选择</el-button>
               </el-upload>
@@ -29,14 +29,14 @@
               <el-input v-model="registerForm.operatoridnum" clearable :maxlength=18 style="width: 270px;" placeholder="输入身份证号码"></el-input>
             </el-form-item>
             <el-form-item label="身份证正面：" prop="sfzmpicpath">
-              <el-upload action="http://218.201.73.186:8777" list-type="text" :show-file-list="false" :on-success="handleSfzmSuccess"
+              <el-upload action="http://183.230.101.142:58080/ebs/common/upload" list-type="text" :show-file-list="false" :on-success="handleSfzmSuccess"
                 :before-upload="beforeAvatarUpload" style="display:inline-block">
                 <el-button size="small" type="primary">选择</el-button>
               </el-upload>
               <el-button v-if="registerForm.sfzmpicpath" size="small" type="primary" @click="handlePictureCardPreview(registerForm.sfzmpicpath)" icon="el-icon-zoom-in" ></el-button>
             </el-form-item>
             <el-form-item label="身份证反面：" prop="sffmpicpath">
-              <el-upload action="http://183.230.100.168/upload" list-type="text" :show-file-list="false" :on-success="handleSffmSuccess"
+              <el-upload action="http://183.230.101.142:58080/ebs/common/upload" list-type="text" :show-file-list="false" :on-success="handleSffmSuccess"
                 :before-upload="beforeAvatarUpload" style="display:inline-block">
                 <el-button size="small" type="primary">选择</el-button>
               </el-upload>
@@ -52,28 +52,28 @@
               </el-radio-group>
             </el-form-item>
             <el-form-item v-show="registerForm.merchantKind === '2'" label="代理授权证明：" prop="proxytestifypicpath">
-              <el-upload action="http://183.230.100.168/upload" list-type="text" :show-file-list="false" :on-success="handleProxySuccess"
+              <el-upload action="http://183.230.101.142:58080/ebs/common/upload" list-type="text" :show-file-list="false" :on-success="handleProxySuccess"
                 :before-upload="beforeAvatarUpload" style="display:inline-block">
                 <el-button size="small" type="primary">选择</el-button>
               </el-upload>
               <el-button v-if="registerForm.proxytestifypicpath" size="small" type="primary" @click="handlePictureCardPreview(registerForm.proxytestifypicpath)" icon="el-icon-zoom-in" ></el-button>
             </el-form-item>
             <el-form-item label="食品安全认证：">
-              <el-upload action="http://183.230.100.168/upload" list-type="text" :show-file-list="false" :on-success="handleFoodSafetySuccess"
+              <el-upload action="http://183.230.101.142:58080/ebs/common/upload" list-type="text" :show-file-list="false" :on-success="handleFoodSafetySuccess"
                 :before-upload="beforeAvatarUpload" style="display:inline-block">
                 <el-button size="small" type="primary">选择</el-button>
               </el-upload>
               <el-button v-if="registerForm.foodsafetypicpath" size="small" type="primary" @click="handlePictureCardPreview(registerForm.foodsafetypicpath)" icon="el-icon-zoom-in" ></el-button>
             </el-form-item>
             <el-form-item label="食品流通许可：">
-              <el-upload action="http://183.230.100.168/upload" list-type="text" :show-file-list="false" :on-success="handleFoodCirculationSuccess"
+              <el-upload action="http://183.230.101.142:58080/ebs/common/upload" list-type="text" :show-file-list="false" :on-success="handleFoodCirculationSuccess"
                 :before-upload="beforeAvatarUpload" style="display:inline-block">
                 <el-button size="small" type="primary">选择</el-button>
               </el-upload>
               <el-button v-if="registerForm.foodpathpicpath" size="small" type="primary" @click="handlePictureCardPreview(registerForm.foodpathpicpath)" icon="el-icon-zoom-in" ></el-button>
             </el-form-item>
             <el-form-item label="其他：">
-              <el-upload action="http://183.230.100.168/upload" list-type="picture-card" :on-success="handleFoodOtherSuccess" :limit="3"
+              <el-upload action="http://183.230.101.142:58080/ebs/common/upload" list-type="picture-card" :on-success="handleFoodOtherSuccess" :limit="3"
                 :on-preview="handlePictureCardPreview" :on-remove="handleRemove" :before-upload="beforeAvatarUpload">
                 <i class="el-icon-plus"></i>
               </el-upload>
@@ -112,7 +112,7 @@
         if (value === '') {
           callback(new Error('请输入身份证号码'))
         } else {
-          if (!validateID(value.trim())) {
+          if (!validateID(value)) {
             callback(new Error('请输入有效的身份证号码'))
           }
           callback()
@@ -246,43 +246,52 @@
         const isJPG = file.type === 'image/jpeg'
         const isLt2M = file.size / 1024 / 1024 < 2
         if (!isJPG) {
-          this.$message.error('上传头像图片只能是 JPG 格式!')
+          this.$message.error('上传图片只能是 JPG 格式!')
         }
         if (!isLt2M) {
-          this.$message.error('上传头像图片大小不能超过 2MB!')
+          this.$message.error('上传图片大小不能超过 2MB!')
         }
         return isJPG && isLt2M
       },
-      handleLicenceSuccess(res, file, fileList) {
+      handleLicenceSuccess(res, file) {
         console.log('res', res)
         console.log('file', file)
-        console.log('fileList', fileList)
-        this.registerForm.licencepicpath = URL.createObjectURL(file.raw)
+        console.log('url', URL.createObjectURL(file.raw))
+        this.registerForm.licencepicpath = res
       },
       handleSfzmSuccess(res, file) {
-        this.registerForm.sfzmpicpath = URL.createObjectURL(file.raw)
+        this.registerForm.sfzmpicpath = res
       },
       handleSffmSuccess(res, file) {
-        this.registerForm.sffmpicpath = URL.createObjectURL(file.raw)
+        this.registerForm.sffmpicpath = res
       },
       handleProxySuccess(res, file) {
-        this.registerForm.proxytestifypicpath = URL.createObjectURL(file.raw)
+        this.registerForm.proxytestifypicpath = res
       },
       handleFoodSafetySuccess(res, file) {
-        this.registerForm.foodsafetypicpath = URL.createObjectURL(file.raw)
+        this.registerForm.foodsafetypicpath = res
       },
       handleFoodCirculationSuccess(res, file) {
-        this.registerForm.foodpathpicpath = URL.createObjectURL(file.raw)
+        this.registerForm.foodpathpicpath = res
       },
-      handleFoodOtherSuccess(res, file) {
-        this.registerForm.foodotherpicpath.push(URL.createObjectURL(file.raw))
+      handleFoodOtherSuccess(res, file, fileList) {
+        this.registerForm.foodotherpicpath = []
+        fileList.forEach(item => {
+          this.registerForm.foodotherpicpath.push(item.response)
+        })
       },
       handleRemove(file, fileList) {
-        console.log(file, fileList)
-        console.log(this.registerForm.foodotherpicpath)
+        this.registerForm.foodotherpicpath = []
+        fileList.forEach(item => {
+          this.registerForm.foodotherpicpath.push(item.response)
+        })
       },
       handlePictureCardPreview(file) {
-        this.dialogImageUrl = file
+        if (typeof file === 'string') {
+          this.dialogImageUrl = file
+        } else {
+          this.dialogImageUrl = file.response
+        }
         this.dialogVisible = true
       },
       goBack() {
@@ -299,10 +308,10 @@
           })
           return
         }
-        // if (this.registerForm.sfzmpicpath === '') {
-        //   this.$message({ type: 'warning', message: '请上传营业执照' })
-        //   return
-        // }
+        if (this.registerForm.sfzmpicpath === '') {
+          this.$message({ type: 'warning', message: '请上传营业执照' })
+          return
+        }
         if (this.registerForm.operatoridnum === '') {
           this.$message({
             type: 'warning',
@@ -310,18 +319,20 @@
           })
           return
         }
-        // if (this.registerForm.sfzmpicpath === '') {
-        //   this.$message({ type: 'warning', message: '请上传身份证正面' })
-        //   return
-        // }
-        // if (this.registerForm.sffmpicpath === '') {
-        //   this.$message({ type: 'warning', message: '请上传身份证反面' })
-        //   return
-        // }
-        // if (this.registerForm.proxytestifypicpath === '') {
-        //   this.$message({ type: 'warning', message: '请上传代理授权证明' })
-        //   return
-        // }
+        if (this.registerForm.sfzmpicpath === '') {
+          this.$message({ type: 'warning', message: '请上传身份证正面' })
+          return
+        }
+        if (this.registerForm.sffmpicpath === '') {
+          this.$message({ type: 'warning', message: '请上传身份证反面' })
+          return
+        }
+        if (this.registerForm.merchantKind === '2') {
+          if (this.registerForm.proxytestifypicpath === '') {
+            this.$message({ type: 'warning', message: '请上传代理授权证明' })
+            return
+          }
+        }
         var registerInfo = JSON.stringify(this.registerForm)
         window.localStorage.setItem('registerInfo', registerInfo)
         // 提交到后台
@@ -356,19 +367,6 @@
             'isInvoice': `${this.registerForm.isInvoice}`, // 是否可开发票，0:不开，1：可以开发票
             'createsource': '1' // 录入渠道 1、商家注册 2、管理员添加
           },
-          // 'registerAttachmentBean': {
-          //   'sfzmpicpath': `http:www.baidu.com`,
-          //   'sffmpicpath': `http:www.baidu.com`,
-          //   'licencepicpath': `http:www.baidu.com`,
-          //   'proxytestifypicpath': `http:www.baidu.com`,
-          //   'foodsafetypicpath': `http:www.baidu.com`,
-          //   'foodpathpicpath': `http:www.baidu.com`,
-          //   'foodotherpicpath': [
-          //     'http:www.baidu.com',
-          //     'http:www.baidu.com',
-          //     'http:www.baidu.com'
-          //   ]
-          // },
           'registerAttachmentBean': {
             'sfzmpicpath': this.registerForm.sfzmpicpath,
             'sffmpicpath': this.registerForm.sffmpicpath,
@@ -376,7 +374,7 @@
             'proxytestifypicpath': this.registerForm.proxytestifypicpath,
             'foodsafetypicpath': this.registerForm.foodsafetypicpath,
             'foodpathpicpath': this.registerForm.foodpathpicpath,
-            'foodotherpicpath': []
+            'foodotherpicpath': this.registerForm.foodotherpicpath
           },
           'goodsSamplelist': goodsSamplelist
         }

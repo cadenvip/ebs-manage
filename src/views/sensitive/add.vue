@@ -3,7 +3,7 @@
     <h4 class="title">新增敏感词</h4>
     <el-form ref="sensitiveForm" :model="sensitiveForm" :rules="rules" label-width="120px">
       <el-form-item label="敏感词：" prop="word">
-        <el-input v-model="sensitiveForm.word" :maxlength=16 style="width: 300px;" placeholder="请输入账号"></el-input>
+        <el-input v-model="sensitiveForm.word" :maxlength=16 style="width: 300px;" placeholder="请输入敏感词"></el-input>
       </el-form-item>
       <br/>
       <div style="text-align: center">
@@ -29,7 +29,7 @@
         rules: {
           word: [{
             required: true,
-            message: '请输入账号',
+            message: '请输入敏感词',
             trigger: 'blur'
           }]
         }
@@ -52,7 +52,7 @@
               this.$message.error(error.msg)
             })
           } else {
-            this.$message.error('error submit!!')
+            this.$message.error('填写内容不规范，提交失败！')
           }
         })
       },

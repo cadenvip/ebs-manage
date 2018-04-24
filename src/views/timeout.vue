@@ -1,6 +1,6 @@
 <template>
   <div style="text-align: center">
-    <p>由于长时间未操作，页面已经超时！</p>
+    <p>您已被登出或者您长时间未操作页面已超时！</p>
     <el-button type="primary" @click="relogin()">重新登录</el-button>
   </div>
 </template>
