@@ -126,7 +126,7 @@
         </el-tab-pane>
         <!-- <el-tab-pane label="草稿箱" name="second">草稿箱</el-tab-pane> -->
         <el-tab-pane label="历史商品" name="third">
-          <el-table @selection-change="handleTableSelectionChange" v-loading="loading" element-loading-text="Loading" ref="multipleTable" :data="tableData" tooltip-effect="dark" border style="width: 100%" >
+          <el-table @selection-change="handleTableSelectionChange" v-loading="loading" element-loading-text="Loading" :data="tableData" tooltip-effect="dark" border style="width: 100%" >
             <el-table-column type="selection">
             </el-table-column>
             <el-table-column align="center" width="160" label="商品编码">
@@ -189,7 +189,6 @@
         }
       }
       this._getGoodsTopType()
-      this.selectAll = false
       this._getNoShelfGoods()
     },
     data() {
@@ -291,9 +290,8 @@
         }
       },
       toggleSelection(rows) {
-        this.selectAll = !this.selectAll
         rows.forEach(row => {
-          this.$refs.multipleTable.toggleRowSelection(row, this.selectAll)
+          this.$refs.multipleTable.toggleRowSelection(row)
         })
       },
       handleTableSelectionChange(val) {

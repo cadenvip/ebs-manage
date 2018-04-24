@@ -213,13 +213,13 @@
             </el-date-picker>
           </el-form-item>
         </el-form-item>
-        <el-form-item style="display: block;" label="上架提醒:">
-          <el-checkbox-group v-model="ruleForm.sjtx">
-            <el-checkbox label="邮件" name="sjtx"></el-checkbox>
-            <el-checkbox label="短信" name="sjtx"></el-checkbox>
-          </el-checkbox-group>
-        </el-form-item>
       </div>
+      <el-form-item style="display: block;" label="上架提醒:">
+        <el-checkbox-group v-model="ruleForm.sjtx">
+          <el-checkbox label="邮件" name="sjtx"></el-checkbox>
+          <el-checkbox label="短信" name="sjtx"></el-checkbox>
+        </el-checkbox-group>
+      </el-form-item>
       <el-form-item style="display: block;" label="发布渠道:">
         <el-checkbox-group v-model="ruleForm.fbqd">
           <el-checkbox checked label="12582网站" name="fbqd"></el-checkbox>

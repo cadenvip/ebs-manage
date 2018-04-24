@@ -94,7 +94,7 @@
         <el-table-column prop="goodsName" label="名称" align="center"></el-table-column>
         <el-table-column label="商品类型" align="center">
           <template slot-scope="scope">
-            {{scope.row.goodsType}}
+            {{scope.row.goodsType === '0' ? '普通商品' : '套餐商品'}}
           </template>
         </el-table-column>
         <el-table-column prop="businessesName" label="所属商户" align="center"></el-table-column>
@@ -389,6 +389,7 @@
           upStartTime: '',
           upEndTime: ''
         }
+        this.selectedOptions3 = []
       },
       submitForm() {
         this.currentPage = 1

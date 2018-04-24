@@ -32,10 +32,10 @@
       </el-form-item>
       <el-form-item label="电话号码:" prop="telephone">
         <el-col :span="12">
-          <el-input placeholder="请输入电话号码" v-model.trim="tab1Form.telephone"></el-input>
+          <el-input :maxlength="12" placeholder="请输入电话号码" v-model.trim="tab1Form.telephone"></el-input>
         </el-col>
         <el-col :span="12">
-          <span style="padding-left: 20px; color: #999;">区号-电话号码-分机</span>
+          <span style="padding-left: 20px; color: #999;">区号-电话号码</span>
         </el-col>
       </el-form-item>
       <el-form-item label="设为默认" prop="isDefault">
@@ -70,7 +70,7 @@
           <template slot-scope="scope">
             {{getPhone(scope.row.mobileTelephone)}}
             <span v-show="scope.row.mobileTelephone && scope.row.telephone">/</span>
-            {{scope.row.telephone}}
+            {{getPhone(scope.row.telephone)}}
           </template>
         </el-table-column>
         <el-table-column align="center" label="操作">
@@ -108,7 +108,7 @@
 </template>
 <script>
   import RegionSelector from '@/components/RegionSelector/index'
-  import { validateMobilePhone, validatePostcode } from '@/utils/validate'
+  import { validateMobilePhone, validateTelephone, validatePostcode } from '@/utils/validate'
   import { saveAddr, getAddr, getAddrDetail, deleteAddr } from '@/api/addrmanage.js'
   import { phoneCutSensitive, nameCutSensitive } from '@/utils/index.js'
   export default {
@@ -184,10 +184,13 @@
                 return
               }
             } else if (this.tab1Form.cellphone.trim().length === 0 && this.tab1Form.telephone.trim().length !== 0) {
-              // 接口
+              if (!validateTelephone(this.tab1Form.telephone)) {
+                this.$message.error('请输入有效的电话号码！')
+                return
+              }
             } else {
-              if (!validateMobilePhone(this.tab1Form.cellphone)) {
-                this.$message.error('请输入有效的手机号码！')
+              if (!validateMobilePhone(this.tab1Form.cellphone) || !validateTelephone(this.tab1Form.telephone)) {
+                this.$message.error('请输入有效的手机号码或座机号码！')
                 return
               }
             }

@@ -432,9 +432,11 @@
               this.submitForm('searchFrom') // 重新请求数据
               console.log(res)
             } else {
+              this.dialogFormVisible = false
               this.$message.error(res.msg)
             }
           }).catch(err => {
+            this.dialogFormVisible = false
             this.$message.error(err)
           })
         }

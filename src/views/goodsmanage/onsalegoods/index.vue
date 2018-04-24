@@ -201,7 +201,7 @@
           </el-form-item>
           <el-form-item label-width="120px">
             <el-checkbox :checked="stockForm.stockFlag" v-model="stockForm.stockFlag"></el-checkbox>
-            库存提醒: 低于 <el-input :disabled="!stockForm.stockFlag" size="mini" v-model.trim="stockForm.stockAlarm" style="width: 20%;" type="text">10</el-input>
+            库存提醒: 低于 <el-input :disabled="!stockForm.stockFlag" size="mini" v-model.trim="stockForm.stockAlarm" style="width: 20%;" type="text"></el-input>
             <div>
               <span style="color: #FF6600;">空或者0表示取消库存提醒</span>
             </div>
@@ -471,6 +471,10 @@
       showStockPop(row) {   // 弹出框显示
         this.goodsId = row.goodsId
         this.stockForm.nowStock = row.stock
+        this.stockForm.stockAlarm = row.stockAlarm
+        if (!this.stockForm.stockAlarm || Number(this.stockForm.stockAlarm) === 0) {
+          this.stockForm.stockFlag = false
+        }
         this.popupVisible = true
       },
       modifyStock() {   // 修改库存
@@ -524,7 +528,8 @@
         }
       },
       tableRowClassName({ row, rowIndex }) {
-        if (Number(row.stock) <= 10) {
+        var stockAlarmFlag = Number(row.stockAlarm)
+        if (stockAlarmFlag && Number(row.stock) <= stockAlarmFlag) {
           var index = this.tableData.indexOf(row)
           if (rowIndex === index) {
             this.isOOS = true
