@@ -166,7 +166,7 @@ export default {
           this.$message.error(res.msg)
         }
       }).catch(err => {
-        this.$message.error(err)
+        this.$message.error(err.msg)
       })
     },
     compareObj(obj1, obj2) {
@@ -208,7 +208,7 @@ export default {
             this.$message.error(res.msg)
           }
         }).catch(err => {
-          this.$message.error(err)
+          this.$message.error(err.msg)
         })
       }
     },
@@ -239,7 +239,7 @@ export default {
           this.$message.error(res.msg)
         }
       }).catch(function(err) {
-        this.$message.error(err)
+        this.$message.error(err.msg)
       })
     }
   }

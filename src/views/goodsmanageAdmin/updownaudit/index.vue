@@ -279,7 +279,7 @@
             this.$message.error(res.msg)
           }
         }).catch(err => {
-          this.$message.error(err)
+          this.$message.error(err.msg)
         })
       },
       format(val) {
@@ -369,7 +369,7 @@
             this.$message.error(res.msg)
           }
         }).catch(err => {
-          this.$message.error(err)
+          this.$message.error(err.msg)
         })
       },
       handleSizeChange(val) {
@@ -437,7 +437,7 @@
             }
           }).catch(err => {
             this.dialogFormVisible = false
-            this.$message.error(err)
+            this.$message.error(err.msg)
           })
         }
       }

@@ -27,6 +27,22 @@
       </el-row>
     </div>
     <div class="info-box">
+      <h1>商品信息</h1>
+      <el-table :data="tableData2" border style="width: 770px;">
+        <el-table-column prop="goodsCode" label="商品编号" align="center"></el-table-column>
+        <el-table-column prop="goodsName" label="商品名称" align="center"></el-table-column>
+        <el-table-column prop="weight" label="商品重量(克)" align="center"></el-table-column>
+        <el-table-column prop="unitName" label="计量单位" align="center"></el-table-column>
+        <el-table-column prop="price" label="价格 (元)" align="center"></el-table-column>
+        <el-table-column prop="quantity" label="数量" align="center"></el-table-column>
+        <el-table-column prop="total" label="小计 (元)" align="center"></el-table-column>
+      </el-table>
+      <div class="totalPrice">
+        <span style="color: #787878;font-size: 15px;font-weight: bold;">总计 (元)：</span>
+        <span style="color: #FE8D47;font-size: 15px;">{{getMoney(orderObj.plusPrice)}}</span>
+      </div>
+    </div>
+    <div class="info-box">
       <el-row :gutter="20">
         <el-col :span="8">
           <h1>订单支付信息</h1>
@@ -146,11 +162,12 @@ export default {
           this.getPayState(this.orderObj.orderPayBean.payState)
           this.getTransportType(this.orderObj.orderDeliveryBean.transportType)
           this.tableData3 = this.orderObj.orderFlowLogs
+          this.tableData2 = this.orderObj.orderGoodsList
         } else {
           this.$message.error(res.msg)
         }
       }).catch(err => {
-        this.$message.error(err)
+        this.$message.error(err.msg)
       })
     },
     formatSteps(obj) {
@@ -468,4 +485,13 @@ h1{height: 30px;line-height: 30px;font-size: 16px;color: #e47911;padding-left: 1
 .info-box span{color:#2b2b2b;}
 .money{color: #ff7e00 !important;font-weight: bold;}
 .tip{display: inline-block;color: #656565;font-size: 13px; padding-left: 25px;clear: right;padding-right: 25px; height: 24px;line-height: 24px;border: #ffcc7f solid 1px;}
+.totalPrice {
+  width: 770px;
+  height: 40px;
+  border: 1px solid #ebeef5;
+  border-top: none;
+  line-height: 40px;
+  text-align: right;
+  padding-right: 90px;
+}
 </style>

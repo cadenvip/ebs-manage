@@ -90,7 +90,7 @@ export default {
           this.$message.error(res.msg)
         }
       }).catch(err => {
-        this.$message.error(err)
+        this.$message.error(err.msg)
       })
     },
     addGetMyself() {
@@ -116,7 +116,7 @@ export default {
             this.$message.error(res.msg)
           }
         }).catch(err => {
-          this.$message.error(err)
+          this.$message.error(err.msg)
         })
       } else {
         this.$message.error('请输入完整信息！')
@@ -136,7 +136,7 @@ export default {
           this.$message.error(res.msg)
         }
       }).catch(err => {
-        this.$message.error(err)
+        this.$message.error(err.msg)
       })
     },
     modifyRow(tid) {
@@ -154,7 +154,7 @@ export default {
           this.$message.error(res.msg)
         }
       }).catch(err => {
-        this.$message.error(err)
+        this.$message.error(err.msg)
       })
     },
     searchByName() {
@@ -168,7 +168,7 @@ export default {
           this.tableData = []
         }
       }).catch(err => {
-        this.$message.error(err)
+        this.$message.error(err.msg)
       })
     }
   },

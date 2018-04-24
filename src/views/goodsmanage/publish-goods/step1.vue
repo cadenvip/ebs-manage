@@ -78,7 +78,7 @@
               this.$message.error(res.msg)
             }
           }).catch(err => {
-            this.$message.error(err)
+            this.$message.error(err.msg)
           })
         } else if (this.gpFlag) {
           this.goodstype = []
@@ -96,7 +96,7 @@
             this.$message.error('网络错误' + res.status)
           }
         }).catch(err => {
-          this.$message.error(err)
+          this.$message.error(err.msg)
         })
       },
       format() {
@@ -165,7 +165,7 @@
                 this.$message.error(res.msg)
               }
             }).catch(err => {
-              this.$message.error(err)
+              this.$message.error(err.msg)
             })
           } else if (this.isFromModifyFlag === 2) {
             checkGoStepTwo(params).then(res => {
@@ -179,7 +179,7 @@
                 this.$message.error(res.msg)
               }
             }).catch(err => {
-              this.$message.error(err)
+              this.$message.error(err.msg)
             })
           } else if (this.isFromModifyFlag === 3) {
             checkGoStepTwo(params).then(res => {
@@ -189,7 +189,7 @@
                 this.$message.error(res.msg)
               }
             }).catch(err => {
-              this.$message.error(err)
+              this.$message.error(err.msg)
             })
           } else {
             checkGoStepTwo(params).then(res => {
@@ -199,7 +199,7 @@
                 this.$message.error(res.msg)
               }
             }).catch(err => {
-              this.$message.error(err)
+              this.$message.error(err.msg)
             })
           }
         } else {

@@ -262,7 +262,7 @@
             this.$message.error(res.msg)
           }
         }).catch(err => {
-          this.$message.error(err)
+          this.$message.error(err.msg)
         })
       },
       handleTabClick(tab, event) {
@@ -343,7 +343,7 @@
             this.$message.error(res.msg)
           }
         }).catch(err => {
-          this.$message.error(err)
+          this.$message.error(err.msg)
         })
       },
       // 单个商品上架
@@ -363,7 +363,7 @@
             this.$message.error(res.msg)
           }
         }).catch(err => {
-          this.$message.error(err)
+          this.$message.error(err.msg)
         })
       },
       // 批量上架
@@ -391,7 +391,7 @@
               this.$message.error(res.msg)
             }
           }).catch(err => {
-            this.$message.error(err)
+            this.$message.error(err.msg)
           })
         }
       },
@@ -419,7 +419,7 @@
               this.$message.error(res.msg)
             }
           }).catch(err => {
-            this.$message.error(err)
+            this.$message.error(err.msg)
           })
         }
       },

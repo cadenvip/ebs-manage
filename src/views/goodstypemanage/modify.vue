@@ -39,7 +39,7 @@
           this.$message.error(res.msg)
         }
       }).catch(err => {
-        this.$message.error(err)
+        this.$message.error(err.msg)
       })
     },
     data() {
@@ -69,7 +69,7 @@
               this.$message.error(res.msg)
             }
           }).catch(err => {
-            this.$message.error(err)
+            this.$message.error(err.msg)
           })
         }
       },

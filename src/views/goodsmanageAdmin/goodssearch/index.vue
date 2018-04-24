@@ -302,7 +302,7 @@
             this.$message.error(res.msg)
           }
         }).catch(err => {
-          this.$message.error(err)
+          this.$message.error(err.msg)
         })
       },
       _getBusiness(obj) {
@@ -323,7 +323,7 @@
             this.$message.error(res.msg)
           }
         }).catch(err => {
-          this.$message.error(err)
+          this.$message.error(err.msg)
         })
       },
       _getGoodsType() {
@@ -335,7 +335,7 @@
             this.$message.error(res.mgs)
           }
         }).catch(err => {
-          this.$message.error(err)
+          this.$message.error(err.msg)
         })
       },
       goPreview(val) {
@@ -445,7 +445,7 @@
             this.$message.error(res.msg)
           }
         }).catch(err => {
-          this.$message.error(err)
+          this.$message.error(err.msg)
         })
         this.payForm.goodsId = row.goodsId
         this.dialogVisible2 = true

@@ -571,7 +571,7 @@
               this.$message.error(res.msg)
             }
           }).catch(err => {
-            this.$message.error(err)
+            this.$message.error(err.msg)
           })
         }
       },
@@ -593,7 +593,7 @@
             this._getOrderList()
           }
         }).catch(err => {
-          this.$message.error(err)
+          this.$message.error(err.msg)
         })
       },
       _returnAudit() {
@@ -614,7 +614,7 @@
             this.$message.success('成功！')
           }
         }).catch(err => {
-          this.$message.error(err)
+          this.$message.error(err.msg)
         })
       },
       _getOrderList(obj) {
@@ -637,7 +637,7 @@
             this.$message.error(res.msg)
           }
         }).catch(err => {
-          this.$message.error(err)
+          this.$message.error(err.msg)
         })
       },
       handleCurrentChange(val) {

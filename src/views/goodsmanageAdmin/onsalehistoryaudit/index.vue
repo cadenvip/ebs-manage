@@ -85,7 +85,7 @@ export default {
           this.$message.error(res.msg)
         }
       }).catch(err => {
-        this.$message.error(err)
+        this.$message.error(err.msg)
       })
     },
     handleCurrentChange(val) {

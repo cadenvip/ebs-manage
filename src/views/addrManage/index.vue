@@ -169,7 +169,7 @@
             this.$message.error(res.msg)
           }
         }).catch(err => {
-          this.$message.error(err)
+          this.$message.error(err.msg)
         })
       },
       submitForm(formName) {
@@ -229,7 +229,7 @@
                 this.$message.error(res.msg)
               }
             }).catch(err => {
-              this.$message.error(err)
+              this.$message.error(err.msg)
             })
           } else {
             console.log('error submit!!')
@@ -264,7 +264,7 @@
             this.$message.error(res.msg)
           }
         }).catch(err => {
-          this.$message.error(err)
+          this.$message.error(err.msg)
         })
       },
       deleteAddr(gid) {
@@ -282,7 +282,7 @@
             this.$message.error(res.msg)
           }
         }).catch(err => {
-          this.$message.error(err)
+          this.$message.error(err.msg)
         })
       },
       checkNull(data) {

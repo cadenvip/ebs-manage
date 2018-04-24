@@ -76,7 +76,7 @@
             this.$message.error(res.msg)
           }
         }).catch(err => {
-          this.$message.error(err)
+          this.$message.error(err.msg.msg)
         })
       },
       _deleteTemplate(id) {
@@ -94,7 +94,7 @@
             this.$message.error(res.msg)
           }
         }).catch(err => {
-          this.$message.error(err)
+          this.$message.error(err.msg)
         })
       },
       modifyTemplate(id) {

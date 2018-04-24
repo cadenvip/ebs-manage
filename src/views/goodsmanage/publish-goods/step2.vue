@@ -428,7 +428,7 @@
             this.$message.error(res.msg)
           }
         }).catch(err => {
-          this.$message.error(err)
+          this.$message.error(err.msg.msg)
         })
       }
       this.goodsType.typeCode = this.$route.query.typeCode
@@ -797,7 +797,7 @@
           }
         }).catch(err => {
           this.templateLoading = false
-          this.$message.error(err)
+          this.$message.error(err.msg.msg)
         })
       },
       confirmLogisticsTemplate() {
@@ -820,7 +820,7 @@
             this.$message.error(res.msg)
           }
         }).catch(err => {
-          this.$message.error(err)
+          this.$message.error(err.msg.msg)
         })
       }
     },

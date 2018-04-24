@@ -69,7 +69,7 @@ export default {
         this.tableData = res.list
         this.total = res.total
       }).catch(err => {
-        this.$message.error(err)
+        this.$message.error(err.msg)
       })
     },
     handleSortChange(val) {

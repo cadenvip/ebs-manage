@@ -347,7 +347,7 @@
           }
           this.loading = false
         }).catch(err => {
-          this.$message.error(err)
+          this.$message.error(err.msg)
           this.loading = false
         })
       },
@@ -465,7 +465,7 @@
             this.$message.error(res.msg)
           }
         }).catch(err => {
-          this.$message.error(err)
+          this.$message.error(err.msg)
         })
       },
       showStockPop(row) {   // 弹出框显示
@@ -500,7 +500,7 @@
             this.$message.error(res.msg)
           }
         }).catch(err => {
-          this.$message.error(err)
+          this.$message.error(err.msg)
         })
       },
       batchOff() {  // 批量下架
@@ -523,7 +523,7 @@
               this.$message.error(res.msg)
             }
           }).catch(err => {
-            this.$message.error(err)
+            this.$message.error(err.msg)
           })
         }
       },
@@ -555,7 +555,7 @@
             this.$message.error(res.msg)
           }
         }).catch(err => {
-          this.$message.error(err)
+          this.$message.error(err.msg)
         })
       }
     },

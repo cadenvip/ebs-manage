@@ -26,7 +26,7 @@
           this.$message.error(res.data.msg)
         }
       }).catch(err => {
-        this.$message.error(err)
+        this.$message.error(err.msg)
       })
     },
     data() {

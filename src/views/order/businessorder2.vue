@@ -396,7 +396,7 @@ export default {
           this.$message.error(res.msg)
         }
       }).catch(err => {
-        this.$message.error(err)
+        this.$message.error(err.msg)
       })
     },
     _shipments(row) {
@@ -417,7 +417,7 @@ export default {
       orderRefuse(row.orderCode).then(res => {
         console.log(res)
       }).catch(err => {
-        this.$message.error(err)
+        this.$message.error(err.msg)
       })
     },
     resetForm() {
