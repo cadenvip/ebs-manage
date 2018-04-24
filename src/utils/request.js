@@ -38,7 +38,6 @@ service.interceptors.request.use(config => {
     }
   }
   // 校验提交的内容中是否包含敏感词（敏感词操作本身不做校验）
-  console.log('请求配置', config)
   if (config.url.indexOf('/sensitive') < 0) {
     if (config.data !== undefined) {
       var strData = JSON.stringify(config.data)

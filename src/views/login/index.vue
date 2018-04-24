@@ -170,7 +170,7 @@
                   this.$message.error(res.msg)
                 }
               }).catch(err => {
-                this.$message.error(err.msg)
+                this.$message.error(err)
               })
               // TODO获取所有敏感词
               getAllSensitiveWords().then(resp => {
@@ -181,10 +181,10 @@
                   this.$message.error(resp.msg)
                 }
               }).catch(erro => {
-                this.$message.error(err.msgo)
+                this.$message.error(erro.msg)
               })
             }).catch(errpr => {
-              this.$message.error(err.msgpr)
+              this.$message.error(errpr.msg)
             })
           } else {
             return
@@ -213,7 +213,7 @@
             this.$message.error(response.msg)
           }
         }).catch(error => {
-          this.$message.error(err.msgor.msg)
+          this.$message.error(error.msg)
         })
       },
       selectUnit() {
@@ -317,7 +317,7 @@
             this.disableBtn = false
           }
         }).catch(error => {
-          this.$message.error(err.msgor.msg)
+          this.$message.error(error.msg)
           this.disableBtn = false
         })
       },

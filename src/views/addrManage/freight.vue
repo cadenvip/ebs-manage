@@ -76,7 +76,7 @@
             this.$message.error(res.msg)
           }
         }).catch(err => {
-          this.$message.error(err.msg.msg)
+          this.$message.error(err.msg)
         })
       },
       _deleteTemplate(id) {
