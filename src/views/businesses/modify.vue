@@ -296,7 +296,7 @@
                 :before-upload="beforeAvatarUpload" style="display:inline-block">
                 <el-button size="small" type="primary">选择</el-button>
               </el-upload>
-              <el-button v-if="registerForm.licencepicpath !== undefined && registerForm.licencepicpath !== null" size="small" type="primary" @click="handlePictureCardPreview(registerForm.licencepicpath)" icon="el-icon-zoom-in" ></el-button>
+              <el-button v-if="registerForm.licencepicpath" size="small" type="primary" @click="handlePictureCardPreview(registerForm.licencepicpath)" icon="el-icon-zoom-in"></el-button>
             </el-form-item>
             <el-form-item label="经办人身份证：" prop="operatoridnum">
               <el-input v-model="registerForm.operatoridnum" clearable :maxlength=18 style="width: 270px;" placeholder="输入身份证号码"></el-input>
@@ -306,14 +306,14 @@
                 :before-upload="beforeAvatarUpload" style="display:inline-block">
                 <el-button size="small" type="primary">选择</el-button>
               </el-upload>
-              <el-button v-if="registerForm.sfzmpicpath" size="small" type="primary" @click="handlePictureCardPreview(registerForm.sfzmpicpath)" icon="el-icon-zoom-in" ></el-button>
+              <el-button v-if="registerForm.sfzmpicpath" size="small" type="primary" @click="handlePictureCardPreview(registerForm.sfzmpicpath)" icon="el-icon-zoom-in"></el-button>
             </el-form-item>
             <el-form-item label="身份证反面：" prop="sffmpicpath">
               <el-upload action="http://183.230.101.142:58080/ebs/common/upload" list-type="text" :show-file-list="false" :on-success="handleSffmSuccess"
                 :before-upload="beforeAvatarUpload" style="display:inline-block">
                 <el-button size="small" type="primary">选择</el-button>
               </el-upload>
-              <el-button v-if="registerForm.sffmpicpath" size="small" type="primary" @click="handlePictureCardPreview(registerForm.sffmpicpath)" icon="el-icon-zoom-in" ></el-button>
+              <el-button v-if="registerForm.sffmpicpath" size="small" type="primary" @click="handlePictureCardPreview(registerForm.sffmpicpath)" icon="el-icon-zoom-in"></el-button>
             </el-form-item>
             <br/>
             <h5>产品经营许可</h5>
@@ -327,25 +327,24 @@
                 :before-upload="beforeAvatarUpload" style="display:inline-block">
                 <el-button size="small" type="primary">选择</el-button>
               </el-upload>
-              <el-button v-if="registerForm.proxytestifypicpath" size="small" type="primary" @click="handlePictureCardPreview(registerForm.proxytestifypicpath)" icon="el-icon-zoom-in" ></el-button>
+              <el-button v-if="registerForm.proxytestifypicpath" size="small" type="primary" @click="handlePictureCardPreview(registerForm.proxytestifypicpath)" icon="el-icon-zoom-in"></el-button>
             </el-form-item>
-            <el-form-item label="食品安全认证：" prop="foodsafetypicpath">
+            <el-form-item label="食品安全认证：">
               <el-upload action="http://183.230.101.142:58080/ebs/common/upload" list-type="text" :show-file-list="false" :on-success="handleFoodSafetySuccess"
                 :before-upload="beforeAvatarUpload" style="display:inline-block">
                 <el-button size="small" type="primary">选择</el-button>
               </el-upload>
-              <el-button v-if="registerForm.foodsafetypicpath" size="small" type="primary" @click="handlePictureCardPreview(registerForm.foodsafetypicpath)" icon="el-icon-zoom-in" ></el-button>
+              <el-button v-if="registerForm.foodsafetypicpath" size="small" type="primary" @click="handlePictureCardPreview(registerForm.foodsafetypicpath)" icon="el-icon-zoom-in"></el-button>
             </el-form-item>
-            <el-form-item label="食品流通许可：" prop="foodpathpicpath">
+            <el-form-item label="食品流通许可：">
               <el-upload action="http://183.230.101.142:58080/ebs/common/upload" list-type="text" :show-file-list="false" :on-success="handleFoodCirculationSuccess"
                 :before-upload="beforeAvatarUpload" style="display:inline-block">
                 <el-button size="small" type="primary">选择</el-button>
               </el-upload>
-              <el-button v-if="registerForm.foodpathpicpath" size="small" type="primary" @click="handlePictureCardPreview(registerForm.foodpathpicpath)" icon="el-icon-zoom-in" ></el-button>
+              <el-button v-if="registerForm.foodpathpicpath" size="small" type="primary" @click="handlePictureCardPreview(registerForm.foodpathpicpath)" icon="el-icon-zoom-in"></el-button>
             </el-form-item>
-            <el-form-item label="其他：" prop="foodsafetypicpath">
-              <el-upload action="http://183.230.101.142:58080/ebs/common/upload" list-type="picture-card" :on-success="handleFoodOtherSuccess" :limit="3"
-                :on-preview="handlePictureCardPreview" :on-remove="handleRemove" :before-upload="beforeAvatarUpload">
+            <el-form-item label="其他：">
+              <el-upload action="http://183.230.101.142:58080/ebs/common/upload" :file-list="registerForm.foodotherpicpath" list-type="picture-card" :on-success="handleFoodOtherSuccess" :limit="3" :on-preview="handlePictureCardPreview" :on-remove="handleRemove" :before-upload="beforeAvatarUpload">
                 <i class="el-icon-plus"></i>
               </el-upload>
             </el-form-item>
@@ -589,7 +588,7 @@
           businesslicenseNum: '',
           merchantKind: '1',
           legalName: '',
-          legalPaperType: '1',
+          legalPaperType: '身份证',
           legalPaperNumber: '',
           address: '',
           relationPerson: '',
@@ -866,6 +865,7 @@
         getBusinessesDetail(this.registerForm.id).then(response => {
           if (response.status === 200) {
             this.registerForm = response.data.businesses
+            this.registerForm.businessType = this.registerForm.businessType !== null ? this.registerForm.businessType : ''
             this.registerForm.legalPaperType = this.registerForm.legalPaperType !== null ? this.registerForm.legalPaperType : '身份证'
             this.registerForm.merchantPayable = response.data.businesses.merchantPayable === '1'
             this.registerForm.aliPayNoPayable = response.data.businesses.aliPayNoPayable === '1'
@@ -1023,10 +1023,12 @@
             this.registerForm.foodpathpicpath = this.getItem(response.data.attachmentlist, '食品流通许可').attachmenturl
             const foodothers = this.getItem(response.data.attachmentlist, '其他资质证明')
             var foodotherpics = []
+            var timestamp = new Date().getTime()
             for (var i = 0; i < foodothers.length; i++) {
-              foodotherpics.push(foodothers[i].attachmenturl)
+              foodotherpics.push({ 'url': foodothers[i].attachmenturl, 'uid': `${timestamp + i}` })
             }
             this.registerForm.foodotherpicpath = foodotherpics
+            console.log(this.registerForm.foodotherpicpath)
           } else {
             this.$message.error(response.msg)
           }
@@ -1094,20 +1096,28 @@
       handleFoodOtherSuccess(res, file, fileList) {
         this.registerForm.foodotherpicpath = []
         fileList.forEach(item => {
-          this.registerForm.foodotherpicpath.push(item.response)
+          if (item.response === undefined) {
+            this.registerForm.foodotherpicpath.push({ 'url': item.url, 'uid': `${item.uid}` })
+          } else {
+            this.registerForm.foodotherpicpath.push({ 'url': item.response, 'uid': `${item.uid}` })
+          }
         })
       },
       handleRemove(file, fileList) {
         this.registerForm.foodotherpicpath = []
         fileList.forEach(item => {
-          this.registerForm.foodotherpicpath.push(item.response)
+          if (item.response === undefined) {
+            this.registerForm.foodotherpicpath.push({ 'url': item.url, 'uid': `${item.uid}` })
+          } else {
+            this.registerForm.foodotherpicpath.push({ 'url': item.response, 'uid': `${item.uid}` })
+          }
         })
       },
       handlePictureCardPreview(file) {
         if (typeof file === 'string') {
           this.dialogImageUrl = file
         } else {
-          this.dialogImageUrl = file.response
+          this.dialogImageUrl = file.url
         }
         this.dialogVisible = true
       },
@@ -1118,7 +1128,7 @@
       },
       goNext() {
         // 校验填写有效性
-        if (this.registerForm.businessesName === null || this.registerForm.businessesName === '') {
+        if (this.registerForm.businessesName === '') {
           this.$message({
             type: 'warning',
             message: '请输入企业名称'
@@ -1424,6 +1434,10 @@
             })
           }
         }
+        var foodOtherPicpath = []
+        this.registerForm.foodotherpicpath.forEach(item => {
+          foodOtherPicpath.push(item.url)
+        })
         var params = {
           'businessesBean': {
             'id': `${this.registerForm.id}`,
@@ -1489,7 +1503,7 @@
             'proxytestifypicpath': `${this.registerForm.proxytestifypicpath}`,
             'foodsafetypicpath': `${this.registerForm.foodsafetypicpath}`,
             'foodpathpicpath': `${this.registerForm.foodpathpicpath}`,
-            'foodotherpicpath': this.registerForm.foodotherpicpath
+            'foodotherpicpath': foodOtherPicpath
           }
         }
         updateBusinesses(params, '2').then(response => {
