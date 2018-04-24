@@ -721,16 +721,11 @@
         this.fileList.push({ name: file.name, url: res })
       },
       beforeAvatarUpload(file) {
-        const isJPG = file.type === 'image/jpeg'
         const isLt500K = file.size / 1024  < 500
-
-        if (!isJPG) {
-          this.$message.error('上传头像图片只能是 JPG 格式!')
-        }
         if (!isLt500K) {
           this.$message.error('上传头像图片大小不能超过 500kb!')
         }
-        return isJPG && isLt500K
+        return isLt500K
       },
       deleArrElement(originArr, ele) {
         if (originArr.length > 0) {
