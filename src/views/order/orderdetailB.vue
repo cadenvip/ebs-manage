@@ -28,7 +28,7 @@
     </div>
     <div class="info-box">
       <h1>商品信息</h1>
-      <el-table :data="tableData2" border style="width: 770px;">
+      <el-table :data="tableData2" border style="width: 100%;">
         <el-table-column prop="goodsCode" label="商品编号" align="center"></el-table-column>
         <el-table-column prop="goodsName" label="商品名称" align="center"></el-table-column>
         <el-table-column prop="weight" label="商品重量(克)" align="center"></el-table-column>
@@ -146,7 +146,8 @@ export default {
       payWay: [],
       payState: '',
       transportType: '',
-      tableData3: []
+      tableData3: [],
+      tableData2: []
     }
   },
   methods: {
@@ -486,7 +487,8 @@ h1{height: 30px;line-height: 30px;font-size: 16px;color: #e47911;padding-left: 1
 .money{color: #ff7e00 !important;font-weight: bold;}
 .tip{display: inline-block;color: #656565;font-size: 13px; padding-left: 25px;clear: right;padding-right: 25px; height: 24px;line-height: 24px;border: #ffcc7f solid 1px;}
 .totalPrice {
-  width: 770px;
+  margin-bottom: 30px;
+  width: 100%;
   height: 40px;
   border: 1px solid #ebeef5;
   border-top: none;
