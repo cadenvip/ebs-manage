@@ -1,6 +1,6 @@
 <template>
   <div style="text-align: center">
-    <p>您已被登出或者您长时间未操作页面已超时！</p>
+    <p>由于页面长时间未操作已超时或此账号在其他地方登录，您以被迫下线，请重新登录或修改密码。</p>
     <el-button type="primary" @click="relogin()">重新登录</el-button>
   </div>
 </template>
