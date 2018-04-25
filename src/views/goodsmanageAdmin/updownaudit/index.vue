@@ -327,6 +327,7 @@
           sjkssj: '',
           sjjssj: ''
         }
+        this.goodsCate = []
       },
       submitForm(formName) {
         const params = {
