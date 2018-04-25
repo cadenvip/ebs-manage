@@ -214,7 +214,7 @@
           </el-form-item>
         </el-form-item>
       </div>
-      <el-form-item style="display: block;" label="上架提醒:">
+      <el-form-item v-if="isShowUpRemind" style="display: block;" label="上架提醒:">
         <el-checkbox-group v-model="ruleForm.sjtx">
           <el-checkbox label="邮件" name="sjtx"></el-checkbox>
           <el-checkbox label="短信" name="sjtx"></el-checkbox>
@@ -319,7 +319,8 @@
       this.isFromModifyFlag = Number(this.$route.query.isFromModifyFlag)
       // 修改状态为驳回，应该显示放弃按钮
       if (this.$route.query.gFlag) {
-        this.gFlag = true
+        this.gFlag = true // 显示放弃按钮
+        this.isShowUpRemind = false  // 不显示上架提醒
       }
       if (this.isFromModifyFlag === 2) {
         this.belongPublish = false
@@ -441,6 +442,7 @@
     },
     data() {
       return {
+        isShowUpRemind: true, // 是否显示上架提醒 在售修改不现实
         fileList: [],   // 上传文件
         h5content: '',
         editorOption: {

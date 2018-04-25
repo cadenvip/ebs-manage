@@ -22,7 +22,7 @@
             </div>
             <div class="clearfix mt10">
               <p class="textr fl bold">支付账户：</p>
-              <p class="fl">{{bean.payAccount}}</p>
+              <p class="fl">{{getAccountSensitive(bean.payAccount)}}</p>
             </div>
             <div class="clearfix mt10">
               <p class="textr fl bold">退款金额：</p>
@@ -52,7 +52,7 @@
             </div>
             <div class="clearfix mt10">
               <p class="textr fl bold">收款账户：</p>
-              <p class="fl">{{bean.receiveAccount}}</p>
+              <p class="fl">{{getAccountSensitive(bean.receiveAccount)}}</p>
             </div>
             <div class="clearfix mt10">
               <p class="textr fl bold">交易次数：</p>
@@ -102,7 +102,7 @@
 
 <script>
 import { getTradeDetail } from '@/api/trading'
-import { phoneCutSensitive } from '@/utils/index.js'
+import { phoneCutSensitive, accountCutSensitive } from '@/utils/index.js'
 export default {
   created() {
     this.gid = this.$route.query.gid
@@ -125,6 +125,9 @@ export default {
   methods: {
     getSensitivePhone(phone) {
       return phoneCutSensitive(phone)
+    },
+    getAccountSensitive(name) {
+      return accountCutSensitive(name)
     },
     getMessage(row) {
       this.baowen = row.logContent
