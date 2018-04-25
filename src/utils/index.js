@@ -1,7 +1,7 @@
 import JSEncrypt from 'jsencrypt'
 import CryptoJS from 'crypto-js'
 
-export function parseTime(time, cFormat) {
+export function parseTime (time, cFormat) {
   if (arguments.length === 0) {
     return null
   }
@@ -34,7 +34,7 @@ export function parseTime(time, cFormat) {
   return time_str
 }
 
-export function formatTime(time, option) {
+export function formatTime (time, option) {
   time = +time * 1000
   const d = new Date(time)
   const now = Date.now()
@@ -57,12 +57,12 @@ export function formatTime(time, option) {
   }
 }
 
-export function str2Timestamp(strDatetime) {
+export function str2Timestamp (strDatetime) {
   var d = new Date(strDatetime)
   return Math.round(d.getTime())
 }
 
-export function getUnitsOptions() {
+export function getUnitsOptions () {
   const Units = JSON.parse(window.localStorage.getItem('units'))
   var unitsOptions = []
   if (Units) {
@@ -78,7 +78,7 @@ export function getUnitsOptions() {
 }
 
 const publicKey = 'MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDAkMbtAysvfRui7QxlDx8z39WpIGOOMHxDf6qJyNDGZtsSRyu69IOBNn3rOz7eywJNMBTB4XswyWNnilUYmAGSH1gRz2UXk+MeXV4f7Osk7Ig5uRer1BBM91yfstQuwJFUFD6tUHVqmAc4Tt51dp/3E6BTvHc/lCH1W8blMitf2QIDAQAB'
-export function encryptPassword(password) {
+export function encryptPassword (password) {
   var encryptedPassword = ''
   if (password !== undefined && password !== null && password !== '') {
     var encrypt = new JSEncrypt()
@@ -91,7 +91,7 @@ export function encryptPassword(password) {
 }
 
 const praviteKey = 'abcdefgabcdefg12'
-export function decryptStr(encryptedStr) {
+export function decryptStr (encryptedStr) {
   var key = CryptoJS.enc.Utf8.parse(praviteKey)
   var bytes = CryptoJS.AES.decrypt(encryptedStr, key, { mode: CryptoJS.mode.ECB, padding: CryptoJS.pad.Pkcs7 })
   var decrypt = JSON.parse(bytes.toString(CryptoJS.enc.Utf8))
@@ -99,7 +99,7 @@ export function decryptStr(encryptedStr) {
 }
 
 // 手机号码脱敏
-export function phoneCutSensitive(phone) {
+export function phoneCutSensitive (phone) {
   var result = ''
   if (phone !== undefined && phone !== null && phone !== '') {
     // TODO
@@ -113,7 +113,7 @@ export function phoneCutSensitive(phone) {
 }
 
 // 身份证脱敏（15/18位）
-export function idcardCutSensitive(idCardNo) {
+export function idcardCutSensitive (idCardNo) {
   var result = ''
   if (idCardNo !== undefined && idCardNo !== null && idCardNo !== '') {
     if (idCardNo.length === 15) {
@@ -130,7 +130,7 @@ export function idcardCutSensitive(idCardNo) {
 }
 
 // 姓名脱敏
-export function nameCutSensitive(name) {
+export function nameCutSensitive (name) {
   var result = ''
   if (name !== undefined && name !== null && name !== '') {
     switch (name.length) {
@@ -157,7 +157,7 @@ export function nameCutSensitive(name) {
 }
 
 // 银行卡脱敏(13--19位)
-export function bankCardNoCutSensitive(bankCardNo) {
+export function bankCardNoCutSensitive (bankCardNo) {
   var result = ''
   if (bankCardNo !== undefined && bankCardNo !== null && bankCardNo !== '') {
     switch (bankCardNo.length) {
@@ -190,4 +190,23 @@ export function bankCardNoCutSensitive(bankCardNo) {
     console.log('bankCardNo is null.')
   }
   return result
+}
+// 收款账户脱敏
+export function accountCutSensitive (name) {
+  var result = ''
+  var len = name.length
+  if (name !== undefined && name !== null && name !== '') {
+    if (len >= 6) {
+      result = name.substr(0, (len - 5)) + '****' + name.substr((len - 1), len)
+    } else if (len === 5) {
+      result = name.substr(0, (len - 4)) + '***' + name.substr((len - 1), len)
+    } else if (len === 4) {
+      result = name.substr(0, (len - 3)) + '**' + name.substr((len - 1), len)
+    } else if (len === 3) {
+      result = name.substr(0, (len - 2)) + '*' + name.substr((len - 1), len)
+    } else {
+      result = name
+    }
+    return result
+  }
 }
