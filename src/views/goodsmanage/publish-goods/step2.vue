@@ -616,6 +616,9 @@
             this.$message.error('库存不能小于库存提醒！')
             return false
           }
+          if (!this.compareTime) {
+            this.$message.error('下架时间不能小于上架时间！')
+          }
           if (valid) {
             var parmas = {
               name: this.ruleForm.mingchen,
