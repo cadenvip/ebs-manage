@@ -52,7 +52,7 @@
       </el-form-item>
       <el-form-item style="display: block;" :maxlength=5 label="库存:" prop="kucun">
         <el-input style="width: 100px;" placeholder="输入库存" v-model.number="ruleForm.kucun"></el-input>
-        <el-checkbox style="margin-left: 50px;" v-model.number="ruleForm.kucuntx">库存提醒</el-checkbox>
+        <el-checkbox style="margin-left: 50px;" v-model="ruleForm.kucuntx">库存提醒</el-checkbox>
         <span style="margin: 0 10px;color: #606266;">低于</span><el-input  :maxlength=5 :disabled="!ruleForm.kucuntx" v-model="ruleForm.kucuntxNum" style="width: 100px;"></el-input>
       </el-form-item>
       <el-form-item style="display: block;" label="支付方式:" prop="zhifufs">
@@ -612,7 +612,7 @@
             this.$message.error('物流模板不能为空！')
             return false
           }
-          if (this.ruleForm.kucun < this.ruleForm.kucuntxNum) {
+          if (this.ruleForm.kucun < this.ruleForm.kucuntxNum && this.ruleForm.kucuntx) {
             this.$message.error('库存不能小于库存提醒！')
             return false
           }
