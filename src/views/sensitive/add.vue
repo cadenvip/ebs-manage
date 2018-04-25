@@ -8,8 +8,8 @@
       <br/>
       <div style="text-align: center">
         <el-button type="primary" @click="onSubmit">提交</el-button>
-        <el-button type="primary" @click="resetForm('searchForm')">重置</el-button>
-        <el-button @click="onCancel">返回</el-button>
+        <el-button type="primary" @click="resetForm('sensitiveForm')">重置</el-button>
+        <el-button type="primary" @click="onCancel">返回</el-button>
       </div>
     </el-form>
   </div>
@@ -57,7 +57,7 @@
         })
       },
       resetForm(formname) {
-        this.searchForm.word = ''
+        this.sensitiveForm.word = ''
       },
       onCancel() {
         this.$router.push({
