@@ -458,6 +458,7 @@
     validatePostcode,
     validateDigit
   } from '@/utils/validate'
+  import { decryptStr } from '@/utils/index'
 
   export default {
     data() {
@@ -889,31 +890,76 @@
         return isJPG && isLt2M
       },
       handleLicenceSuccess(res, file) {
-        this.registerForm.licencepicpath = URL.createObjectURL(file.raw)
+        var url = decryptStr(res)
+        if (url !== 'error') {
+          this.registerForm.licencepicpath = url
+        } else {
+          this.$message.error('图片上传失败！')
+        }
       },
       handleSfzmSuccess(res, file) {
-        this.registerForm.sfzmpicpath = URL.createObjectURL(file.raw)
+        var url = decryptStr(res)
+        if (url !== 'error') {
+          this.registerForm.sfzmpicpath = url
+        } else {
+          this.$message.error('图片上传失败！')
+        }
       },
       handleSffmSuccess(res, file) {
-        this.registerForm.sffmpicpath = URL.createObjectURL(file.raw)
+        var url = decryptStr(res)
+        if (url !== 'error') {
+          this.registerForm.sffmpicpath = url
+        } else {
+          this.$message.error('图片上传失败！')
+        }
       },
       handleProxySuccess(res, file) {
-        this.registerForm.proxytestifypicpath = URL.createObjectURL(file.raw)
+        var url = decryptStr(res)
+        if (url !== 'error') {
+          this.registerForm.proxytestifypicpath = url
+        } else {
+          this.$message.error('图片上传失败！')
+        }
       },
       handleFoodSafetySuccess(res, file) {
-        this.registerForm.foodsafetypicpath = URL.createObjectURL(file.raw)
+        var url = decryptStr(res)
+        if (url !== 'error') {
+          this.registerForm.foodsafetypicpath = url
+        } else {
+          this.$message.error('图片上传失败！')
+        }
       },
       handleFoodCirculationSuccess(res, file) {
-        this.registerForm.foodpathpicpath = URL.createObjectURL(file.raw)
+        var url = decryptStr(res)
+        if (url !== 'error') {
+          this.registerForm.foodpathpicpath = url
+        } else {
+          this.$message.error('图片上传失败！')
+        }
       },
-      handleFoodOtherSuccess(res, file) {
-        this.registerForm.foodotherpicpath.push(URL.createObjectURL(file.raw))
+      handleFoodOtherSuccess(res, file, fileList) {
+        var url = decryptStr(res)
+        if (url !== 'error') {
+          this.registerForm.foodotherpicpath = []
+          fileList.forEach(item => {
+            this.registerForm.foodotherpicpath.push(decryptStr(item.response))
+          })
+        } else {
+          this.$message.error('图片上传失败！')
+        }
       },
       handleRemove(file, fileList) {
-        console.log(file, fileList)
+        this.registerForm.foodotherpicpath = []
+        fileList.forEach(item => {
+          this.registerForm.foodotherpicpath.push(decryptStr(item.response))
+        })
       },
       handlePictureCardPreview(file) {
-        this.dialogImageUrl = file
+        if (typeof file === 'string') {
+          this.dialogImageUrl = file
+        } else {
+          this.dialogImageUrl = decryptStr(file.response)
+        }
         this.dialogVisible = true
       },
       goBack() {
@@ -1176,36 +1222,31 @@
         }
 
         if (this.registerForm.businesslicenseNum === '') {
-          this.$message({
-            type: 'warning',
-            message: '请输入营业执照号码'
-          })
+          this.$message({ type: 'warning', message: '请输入营业执照号码' })
           return
         }
-        // if (this.registerForm.sfzmpicpath === '') {
-        //   this.$message({ type: 'warning', message: '请上传营业执照' })
-        //   return
-        // }
+        if (this.registerForm.sfzmpicpath === '') {
+          this.$message({ type: 'warning', message: '请上传营业执照' })
+          return
+        }
         if (this.registerForm.operatoridnum === '') {
-          this.$message({
-            type: 'warning',
-            message: '请输入经办人身份证号码'
-          })
+          this.$message({ type: 'warning', message: '请输入经办人身份证号码' })
           return
         }
-        // if (this.registerForm.sfzmpicpath === '') {
-        //   this.$message({ type: 'warning', message: '请上传身份证正面' })
-        //   return
-        // }
-        // if (this.registerForm.sffmpicpath === '') {
-        //   this.$message({ type: 'warning', message: '请上传身份证反面' })
-        //   return
-        // }
-        // if (this.registerForm.proxytestifypicpath === '') {
-        //   this.$message({ type: 'warning', message: '请上传代理授权证明' })
-        //   return
-        // }
-
+        if (this.registerForm.sfzmpicpath === '') {
+          this.$message({ type: 'warning', message: '请上传身份证正面' })
+          return
+        }
+        if (this.registerForm.sffmpicpath === '') {
+          this.$message({ type: 'warning', message: '请上传身份证反面' })
+          return
+        }
+        if (this.registerForm.merchantKind === '2') {
+          if (this.registerForm.proxytestifypicpath === '') {
+            this.$message({ type: 'warning', message: '请上传代理授权证明' })
+            return
+          }
+        }
         // 提交到后台
         var goodsSamplelist = []
         for (let i = 1; i < this.registerForm.goodsListForm.length; i++) {
@@ -1278,31 +1319,14 @@
           'goodsSamplelist': goodsSamplelist,
           'sellAddressList': sellAddressList,
           'registerAttachmentBean': {
-            'sfzmpicpath': `http:www.baidu.com`,
-            'sffmpicpath': `http:www.baidu.com`,
-            'licencepicpath': `http:www.baidu.com`,
-            'proxytestifypicpath': `http:www.baidu.com`,
-            'foodsafetypicpath': `http:www.baidu.com`,
-            'foodpathpicpath': `http:www.baidu.com`,
-            'foodotherpicpath': [
-              'http:www.baidu.com',
-              'http:www.baidu.com',
-              'http:www.baidu.com'
-            ]
+            'sfzmpicpath': this.registerForm.sfzmpicpath,
+            'sffmpicpath': this.registerForm.sffmpicpath,
+            'licencepicpath': this.registerForm.licencepicpath,
+            'proxytestifypicpath': this.registerForm.proxytestifypicpath,
+            'foodsafetypicpath': this.registerForm.foodsafetypicpath,
+            'foodpathpicpath': this.registerForm.foodpathpicpath,
+            'foodotherpicpath': this.registerForm.foodotherpicpath
           }
-          // 'registerAttachmentBean': {
-          //   'sfzmpicpath': `${this.registerForm.sfzmpicpath}`,
-          //   'sffmpicpath': `${this.registerForm.sffmpicpath}`,
-          //   'licencepicpath': `${this.registerForm.licencepicpath}`,
-          //   'proxytestifypicpath': `${this.registerForm.proxytestifypicpath}`,
-          //   'foodsafetypicpath': `${this.registerForm.foodsafetypicpath}`,
-          //   'foodpathpicpath': `${this.registerForm.foodpathpicpath}`,
-          //   'foodotherpicpath': [
-          //     '其他URL1',
-          //     '其他URL2',
-          //     '其他URL3'
-          //   ]
-          // },
         }
         adnminAddBusniess(params).then(response => {
           if (response.status === 200) {

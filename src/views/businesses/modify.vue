@@ -450,6 +450,7 @@
     validatePostcode,
     validateDigit
   } from '@/utils/validate'
+  import { decryptStr } from '@/utils/index'
 
   export default {
     data() {
@@ -1076,22 +1077,52 @@
         return isJPG && isLt2M
       },
       handleLicenceSuccess(res, file) {
-        this.registerForm.licencepicpath = res
+        var url = decryptStr(res)
+        if (url !== 'error') {
+          this.registerForm.licencepicpath = url
+        } else {
+          this.$message.error('图片上传失败！')
+        }
       },
       handleSfzmSuccess(res, file) {
-        this.registerForm.sfzmpicpath = res
+        var url = decryptStr(res)
+        if (url !== 'error') {
+          this.registerForm.sfzmpicpath = url
+        } else {
+          this.$message.error('图片上传失败！')
+        }
       },
       handleSffmSuccess(res, file) {
-        this.registerForm.sffmpicpath = res
+        var url = decryptStr(res)
+        if (url !== 'error') {
+          this.registerForm.sffmpicpath = url
+        } else {
+          this.$message.error('图片上传失败！')
+        }
       },
       handleProxySuccess(res, file) {
-        this.registerForm.proxytestifypicpath = res
+        var url = decryptStr(res)
+        if (url !== 'error') {
+          this.registerForm.proxytestifypicpath = url
+        } else {
+          this.$message.error('图片上传失败！')
+        }
       },
       handleFoodSafetySuccess(res, file) {
-        this.registerForm.foodsafetypicpath = res
+        var url = decryptStr(res)
+        if (url !== 'error') {
+          this.registerForm.foodsafetypicpath = url
+        } else {
+          this.$message.error('图片上传失败！')
+        }
       },
       handleFoodCirculationSuccess(res, file) {
-        this.registerForm.foodpathpicpath = res
+        var url = decryptStr(res)
+        if (url !== 'error') {
+          this.registerForm.foodpathpicpath = url
+        } else {
+          this.$message.error('图片上传失败！')
+        }
       },
       handleFoodOtherSuccess(res, file, fileList) {
         this.registerForm.foodotherpicpath = []
@@ -1099,7 +1130,7 @@
           if (item.response === undefined) {
             this.registerForm.foodotherpicpath.push({ 'url': item.url, 'uid': `${item.uid}` })
           } else {
-            this.registerForm.foodotherpicpath.push({ 'url': item.response, 'uid': `${item.uid}` })
+            this.registerForm.foodotherpicpath.push({ 'url': decryptStr(item.response), 'uid': `${item.uid}` })
           }
         })
       },
@@ -1109,7 +1140,7 @@
           if (item.response === undefined) {
             this.registerForm.foodotherpicpath.push({ 'url': item.url, 'uid': `${item.uid}` })
           } else {
-            this.registerForm.foodotherpicpath.push({ 'url': item.response, 'uid': `${item.uid}` })
+            this.registerForm.foodotherpicpath.push({ 'url': decryptStr(item.response), 'uid': `${item.uid}` })
           }
         })
       },

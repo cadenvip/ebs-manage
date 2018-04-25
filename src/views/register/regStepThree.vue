@@ -105,6 +105,7 @@
   import {
     validateID
   } from '@/utils/validate'
+  import { decryptStr } from '@/utils/index'
 
   export default {
     data() {
@@ -254,43 +255,75 @@
         return isJPG && isLt2M
       },
       handleLicenceSuccess(res, file) {
-        console.log('res', res)
-        console.log('file', file)
-        console.log('url', URL.createObjectURL(file.raw))
-        this.registerForm.licencepicpath = res
+        var url = decryptStr(res)
+        if (url !== 'error') {
+          this.registerForm.licencepicpath = url
+        } else {
+          this.$message.error('图片上传失败！')
+        }
       },
       handleSfzmSuccess(res, file) {
-        this.registerForm.sfzmpicpath = res
+        var url = decryptStr(res)
+        if (url !== 'error') {
+          this.registerForm.sfzmpicpath = url
+        } else {
+          this.$message.error('图片上传失败！')
+        }
       },
       handleSffmSuccess(res, file) {
-        this.registerForm.sffmpicpath = res
+        var url = decryptStr(res)
+        if (url !== 'error') {
+          this.registerForm.sffmpicpath = url
+        } else {
+          this.$message.error('图片上传失败！')
+        }
       },
       handleProxySuccess(res, file) {
-        this.registerForm.proxytestifypicpath = res
+        var url = decryptStr(res)
+        if (url !== 'error') {
+          this.registerForm.proxytestifypicpath = url
+        } else {
+          this.$message.error('图片上传失败！')
+        }
       },
       handleFoodSafetySuccess(res, file) {
-        this.registerForm.foodsafetypicpath = res
+        var url = decryptStr(res)
+        if (url !== 'error') {
+          this.registerForm.foodsafetypicpath = url
+        } else {
+          this.$message.error('图片上传失败！')
+        }
       },
       handleFoodCirculationSuccess(res, file) {
-        this.registerForm.foodpathpicpath = res
+        var url = decryptStr(res)
+        if (url !== 'error') {
+          this.registerForm.foodpathpicpath = url
+        } else {
+          this.$message.error('图片上传失败！')
+        }
       },
       handleFoodOtherSuccess(res, file, fileList) {
-        this.registerForm.foodotherpicpath = []
-        fileList.forEach(item => {
-          this.registerForm.foodotherpicpath.push(item.response)
-        })
+        var url = decryptStr(res)
+        if (url !== 'error') {
+          this.registerForm.foodotherpicpath = []
+          fileList.forEach(item => {
+            this.registerForm.foodotherpicpath.push(decryptStr(item.response))
+          })
+        } else {
+          this.$message.error('图片上传失败！')
+        }
       },
       handleRemove(file, fileList) {
         this.registerForm.foodotherpicpath = []
         fileList.forEach(item => {
-          this.registerForm.foodotherpicpath.push(item.response)
+          this.registerForm.foodotherpicpath.push(decryptStr(item.response))
         })
       },
       handlePictureCardPreview(file) {
         if (typeof file === 'string') {
           this.dialogImageUrl = file
         } else {
-          this.dialogImageUrl = file.response
+          this.dialogImageUrl = decryptStr(file.response)
         }
         this.dialogVisible = true
       },
@@ -302,10 +335,7 @@
       goNext() {
         // 校验输入数据
         if (this.registerForm.businesslicenseNum === '') {
-          this.$message({
-            type: 'warning',
-            message: '请输入营业执照号码'
-          })
+          this.$message({ type: 'warning', message: '请输入营业执照号码' })
           return
         }
         if (this.registerForm.sfzmpicpath === '') {
@@ -313,10 +343,7 @@
           return
         }
         if (this.registerForm.operatoridnum === '') {
-          this.$message({
-            type: 'warning',
-            message: '请输入经办人身份证号码'
-          })
+          this.$message({ type: 'warning', message: '请输入经办人身份证号码' })
           return
         }
         if (this.registerForm.sfzmpicpath === '') {
