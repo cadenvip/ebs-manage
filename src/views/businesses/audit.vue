@@ -15,9 +15,9 @@
                     <p>有效时间:</p>
                   </el-col>
                   <el-col class="text-l" :span="16">
-                    <p>{{ registerForm.businessesName }}</p>
-                    <p>{{ registerForm.businessesShortName }}</p>
-                    <p>{{ registerForm.businessType ? registerForm.businessType : '&nbsp;'}}</p>
+                    <p>{{ registerForm.businessesName ? registerForm.businessesName : '&nbsp;' }}</p>
+                    <p>{{ registerForm.businessesShortName ? registerForm.businessesShortName : '&nbsp;' }}</p>
+                    <p>{{ registerForm.businessType ? registerForm.businessType : '&nbsp;' }}</p>
                     <p>{{ registerForm.validdate_str }}</p>
                   </el-col>
                 </el-row>
