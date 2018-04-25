@@ -24,6 +24,14 @@ export function orderExport (params) {
     params: params
   })
 }
+// 商品导出
+export function goodsExport (params) {
+  return request({
+    url: '/goods/export',
+    method: 'get',
+    params: params
+  })
+}
 // 订单详情
 export function orderDetail (oid) {
   return request({

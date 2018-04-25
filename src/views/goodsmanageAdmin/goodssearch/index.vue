@@ -31,8 +31,9 @@
         <el-col :span="6">
           <el-form-item label-width="0" style="text-align: center;">
             <el-button size="small" type="primary" @click="submitForm">确定</el-button>
+            <el-button size="small" type="primary" @click="exportGoods">导出</el-button>
             <el-button size="small" type="primary" @click="resetForm('searchForm')">重置</el-button>
-            <el-button @click="showMore = !showMore" size="small">更多搜索</el-button>
+            <el-button @click="showMore = !showMore" size="small">更多</el-button>
           </el-form-item>
         </el-col>
       </el-row>
@@ -188,11 +189,12 @@
 <script>
   import CollapseTransition from 'element-ui/lib/transitions/collapse-transition'
   import { getGoodsType, updatePayment } from '@/api/goodsRelease'
+  import { goodsExport } from '@/api/order/index.js'
   import { parseTime } from '@/utils/index'
   import { getBusiness, getGoodsDetail } from '@/api/admin/onsalemodifyaudit.js'
   import { getGoods } from '@/api/onsale.js'
   export default {
-    mounted () {
+    created () {
       this._getGoodsType()
       this._getGoods()
     },
@@ -285,6 +287,22 @@
       }
     },
     methods: {
+      exportGoods() {
+        var defaultParam = {
+          page: this.currentPage,
+          searchType: '5',
+          order: 'desc',
+          sort: 'createTime'
+        }
+        var params = Object.assign(defaultParam, this.searchForm)
+        goodsExport(params).then(res => {
+          if (res.status === 200) {
+            this.$message.success('成功！')
+          }
+        }).catch(err => {
+          this.$message.error(err.msg)
+        })
+      },
       _getGoods(obj) {
         var defaultParam = {
           page: this.currentPage,
@@ -400,7 +418,6 @@
         this.searchForm.typeCode = val.pop()
       },
       handleCurrentChange(val) {
-        console.log(val)
         this.currentPage = val
         this._getGoods(this.searchForm)
       },

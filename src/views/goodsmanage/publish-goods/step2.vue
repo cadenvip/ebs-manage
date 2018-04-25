@@ -84,12 +84,12 @@
         <el-form-item>
           <el-upload
             class="avatar-uploader"
+            :on-remove="handleRemove"
             action="http://183.230.101.142:58080/ebs/common/upload"
             :show-file-list="true"
             list-type="picture-card"
-            :on-success="handleAvatarSuccess"
             :file-list="fileList"
-            :before-upload="beforeAvatarUpload" style="display:inline-block">
+            :before-upload="beforeAvatarUpload" :on-success="handleAvatarSuccess" style="display:inline-block">
             <i class="el-icon-plus"></i>
           </el-upload>
           <p style="color: #aaa;margin: 0;">只能上传jpg/png文件，且不超过<span style="color: red;">500kb</span>，图片至少上传1张！</p>
@@ -312,6 +312,7 @@
   import 'quill/dist/quill.snow.css'
   import 'quill/dist/quill.bubble.css'
   import { quillEditor } from 'vue-quill-editor'
+  import { decryptStr } from '@/utils/index'
   export default {
     created() {
       // 计量单位
@@ -724,7 +725,19 @@
         this.jietiItems.splice(index, 1)
       },
       handleAvatarSuccess(res, file) {
-        this.fileList.push({ name: file.name, url: res })
+        var url = decryptStr(res)
+        if (url !== 'error') {
+          this.fileList.push({ name: file.name, url: url })
+        } else {
+          this.$message.error('图片上传失败！')
+        }
+      },
+      handleRemove(file, fileList) {
+        for (var i in this.fileList) {
+          if (file.name === this.fileList[i].name) {
+            this.fileList.splice(i, 1)
+          }
+        }
       },
       beforeAvatarUpload(file) {
         const isLt500K = file.size / 1024  < 500

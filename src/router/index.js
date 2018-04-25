@@ -482,6 +482,12 @@ export const asyncRouterMap = [
         meta: { roles: ['1'], title: '在售商品历史审核', icon: 'goodsManage' }
       },
       {
+        path: 'adgoodsmodify',  // 二次采编
+        name: '二次采编',
+        component: _import('goodsmanageAdmin/adgoodsmodify/index'),
+        meta: { roles: ['1'], title: '商品二次采编', icon: 'goodsModifyAudit' }
+      },
+      {
         path: 'preview',  // 预览
         name: 'preview',
         component: _import('goodsmanageAdmin/preview/index'),
