@@ -618,6 +618,7 @@
           }
           if (!this.compareTime) {
             this.$message.error('下架时间不能小于上架时间！')
+            return false
           }
           if (valid) {
             var parmas = {
