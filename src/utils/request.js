@@ -14,9 +14,9 @@ import {
 
 // import router from './router'
 import router from '@/router'
-// import {
-//   decryptStr
-// } from '@/utils/index'
+import {
+  decryptStr
+} from '@/utils/index'
 
 // 创建axios实例
 const service = axios.create({
@@ -81,8 +81,8 @@ service.interceptors.response.use(response => {
     return response
   }
   var responseData = response.data
-  // responseData = decryptStr(responseData)
-  // console.log('response.data解密后', responseData)
+  responseData = decryptStr(responseData)
+  console.log('response.data解密后', responseData)
   console.log('response.data', responseData)
   if (responseData.status === 10086) {
     router.push({
@@ -109,8 +109,8 @@ error => {
   console.log('error', error)
   if (error.response !== undefined) {
     var responseData = error.response.data
-    // console.log('error.response.data解密前', responseData)
-    // responseData = decryptStr(responseData)
+    console.log('error.response.data解密前', responseData)
+    responseData = decryptStr(responseData)
     console.log('error.response.data解密后', responseData)
     if (responseData.status === 10086) {
       router.push({
