@@ -434,9 +434,9 @@
               <div class="fl">
                 <el-row style="overflow: hidden;">
                   <el-col class="text-r" :span="8">
-                    <p>注册资金:</p>
-                    <p>保证金:</p>
-                    <p>违约金:</p>
+                    <p>注册资金(万元):</p>
+                    <p>保证金(元):</p>
+                    <p>违约金(元):</p>
                     <p>税务登记号:</p>
                   </el-col>
                   <el-col class="text-l" :span="16">
@@ -452,8 +452,8 @@
                   <el-col class="text-r" :span="8">
                     <p>办公室电话:</p>
                     <p>营业时间:</p>
-                    <p>雇员数量:</p>
-                    <p>满额免邮:</p>
+                    <p>雇员数量(人):</p>
+                    <p>满额免邮(元):</p>
                   </el-col>
                   <el-col class="text-l" :span="16">
                     <p v-html="officePhoneFormat"></p>

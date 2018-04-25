@@ -357,19 +357,19 @@
             <h5>其他信息</h5>
             <el-row :gutter="20">
               <el-col :span="12">
-                <el-form-item label="注册资金：" prop="registerMoney">
+                <el-form-item label="注册资金(万元)：" prop="registerMoney">
                   <el-input v-model="registerForm.registerMoney" :maxlength=16 clearable style="width: 220px;" placeholder="请输入注册资金"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="12">
-                <el-form-item label="保证金：" prop="margin">
+                <el-form-item label="保证金(元)：" prop="margin">
                   <el-input v-model="registerForm.margin" :maxlength=16 clearable style="width: 220px;" placeholder="请输入保证金"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
             <el-row :gutter="20">
               <el-col :span="12">
-                <el-form-item label="违约金：" prop="liquidatedDamages">
+                <el-form-item label="违约金(元)：" prop="liquidatedDamages">
                   <el-input v-model="registerForm.liquidatedDamages" :maxlength=16 clearable style="width: 220px;" placeholder="请输入违约金"></el-input>
                 </el-form-item>
               </el-col>
@@ -393,7 +393,7 @@
             </el-row>
             <el-row :gutter="20">
               <el-col :span="12">
-                <el-form-item label="雇员数量：" prop="employeesNum">
+                <el-form-item label="雇员数量(人)：" prop="employeesNum">
                   <el-input v-model="registerForm.employeesNum" :maxlength=16 clearable style="width: 220px;" placeholder="请输入雇员数量"></el-input>
                 </el-form-item>
               </el-col>
