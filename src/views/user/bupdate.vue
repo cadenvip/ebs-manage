@@ -197,7 +197,7 @@
             this.userForm = response.data
             this.userForm.repassword = this.userForm.password
             this.pwdBack = response.data.password
-            // this.userForm.roleids = response.data.roleIds
+            this.userForm.roleids = response.data.roleIds
             if (response.data.unitname === null) {
               var userInfo = window.sessionStorage.getItem('userInfo')
               if (userInfo !== undefined && userInfo !== '') {

@@ -2,7 +2,7 @@
   <div>
     <div style="margin:20px">
       <h5>所有财务账单</h5>
-      <span v-for="(item, index) in historyBillList" v-if="item !== undefined" style="margin-top:10px;margin-left:50px">
+      <span v-for="(item, index) in historyBillList" v-if="item !== undefined" style="display:inline-block;margin-top:10px;margin-left:50px">
         <el-button @click="chechMonthBillDetail(item)" type="text">{{ formatYearMonth(item) }}</el-button>
         <el-button @click="downloadHistoryMonthBill(item)" type="primary" icon="el-icon-download" size="mini"></el-button>
       </span>

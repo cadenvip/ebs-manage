@@ -45,7 +45,7 @@ service.interceptors.request.use(config => {
       if (sensitives !== null && sensitives.length > 0) {
         for (let i = 0; i < sensitives.length; i++) {
           if (strData.indexOf(sensitives[i]) >= 0) {
-            console.log('提交的内容包含敏感词！')
+            console.log(`提交的内容包含敏感词 [${sensitives[i]}]`)
             var CancelToken = axios.CancelToken
             var source = CancelToken.source()
             config.cancelToken = source.token
@@ -83,7 +83,6 @@ service.interceptors.response.use(response => {
   var responseData = response.data
   responseData = decryptStr(responseData)
   console.log('response.data解密后', responseData)
-  console.log('response.data', responseData)
   if (responseData.status === 10086) {
     router.push({
       path: '/timeout'
@@ -95,7 +94,6 @@ service.interceptors.response.use(response => {
     })
     return Promise.reject(responseData)
   } else if (responseData.status === 403) {
-    console.log('asdjf;aksd', responseData)
     router.push({
       path: '/403/index'
     })
@@ -109,7 +107,6 @@ error => {
   console.log('error', error)
   if (error.response !== undefined) {
     var responseData = error.response.data
-    console.log('error.response.data解密前', responseData)
     responseData = decryptStr(responseData)
     console.log('error.response.data解密后', responseData)
     if (responseData.status === 10086) {
