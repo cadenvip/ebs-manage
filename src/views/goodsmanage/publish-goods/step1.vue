@@ -54,7 +54,7 @@
     methods: {
       isFromModify() {
         this.goodsId = this.$route.query.goodsId
-        // modifyFlag： 1:未上架修改  2:在售商品修改  3:历史商品修改  4: 缺货商品修改
+        // modifyFlag： 1:未上架修改  2:在售商品修改和缺货商品修改  3:历史商品修改
         this.modifyFlag = String(this.$route.query.modifyFlag)
         // gFlag 修改状态为驳回，应该显示放弃按钮
         this.gFlag = this.$route.query.gFlag
@@ -141,14 +141,18 @@
         })
       },
       goBack() {
-        if (this.isFromModifyFlag === 1) {
-          this.$router.push({ path: '/goodsmanage/noshelfgoods' })
-        } else if (this.isFromModifyFlag === 2) {
-          this.$router.push({ path: '/goodsmanage/onsalegoods' })
-        } else if (this.isFromModifyFlag === 3) {
-          this.$router.push({ name: 'noshelfgoods', query: { tab: 3 }})
+        if (this.$route.query.tab) {
+          this.$router.push({ name: '二次采编', query: { tab: this.$route.query.tab }})
         } else {
-          this.$router.push({ path: '/goodsmanage/publishgoods' })
+          if (this.isFromModifyFlag === 1) {
+            this.$router.push({ path: '/goodsmanage/noshelfgoods' })
+          } else if (this.isFromModifyFlag === 2) {
+            this.$router.push({ path: '/goodsmanage/onsalegoods' })
+          } else if (this.isFromModifyFlag === 3) {
+            this.$router.push({ name: 'noshelfgoods', query: { tab: 3 }})
+          } else {
+            this.$router.push({ path: '/goodsmanage/publishgoods' })
+          }
         }
       },
       goNext() {

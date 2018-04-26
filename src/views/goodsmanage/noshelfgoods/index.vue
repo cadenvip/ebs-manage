@@ -103,7 +103,7 @@
             <el-table-column align="center" label="操作">
               <template slot-scope="scope">
                 <el-button @click="getGoodsDetail(scope.row)" type="text" size="small">详情</el-button>
-                <el-button v-if="scope.row.auditStatus === '3'" @click="modifyGoods(scope.row)" type="text" size="small">修改</el-button>
+                <el-button v-if="(scope.row.auditStatus === '3'||scope.row.auditStatus === '0'||scope.row.auditStatus === '')&&scope.row.status==='1'" @click="modifyGoods(scope.row)" type="text" size="small">修改</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -329,7 +329,7 @@
       },
       // 修改商品
       modifyGoods(val) {
-        this.$router.push({ name: 'publishstep1', query: { goodsId: val.goodsId, modifyFlag: 2 }})
+        this.$router.push({ name: 'publishstep1', query: { goodsId: val.goodsId, modifyFlag: 1 }})
       },
       modifyGoods2(val) {
         this.$router.push({ name: 'publishstep1', query: { goodsId: val.goodsId, modifyFlag: 3 }})

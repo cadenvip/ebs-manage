@@ -407,28 +407,28 @@ export const asyncRouterMap = [
         name: 'publishstep1',
         hidden: true,
         component: _import('goodsmanage/publish-goods/step1'),
-        meta: { roles: ['2', '3'], title: '选择类别' }
+        meta: { roles: ['1', '2', '3'], title: '选择类别' }
       },
       {
         path: 'publishstep2',
         name: 'publishstep2',
         hidden: true,
         component: _import('goodsmanage/publish-goods/step2'),
-        meta: { roles: ['2', '3'], title: '填写详情' }
+        meta: { roles: ['1', '2', '3'], title: '填写详情' }
       },
       {
         path: 'publishstep3',
         name: 'publishstep3',
         hidden: true,
         component: _import('goodsmanage/publish-goods/step3'),
-        meta: { roles: ['2', '3'], title: '提交入库' }
+        meta: { roles: ['1', '2', '3'], title: '提交入库' }
       },
       {
         path: 'publishstep4',
         name: 'publishstep4',
         hidden: true,
         component: _import('goodsmanage/publish-goods/step4'),
-        meta: { roles: ['2', '3'], title: 'test4' }
+        meta: { roles: ['1', '2', '3'], title: 'test4' }
       },
       {
         path: 'onsalegoods',

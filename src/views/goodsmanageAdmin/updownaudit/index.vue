@@ -346,7 +346,7 @@
       },
       getLocationInfo(data) {
         this.searchForm.spcd = data.label
-        this.searchForm.spcdcode = data.locationCode
+        this.searchForm.spcdcode = data.id
       },
       goPreview(val) {
         if (val.goodsId) {

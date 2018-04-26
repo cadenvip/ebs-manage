@@ -96,8 +96,9 @@
               </el-table-column>
               <el-table-column label="操作" align="center">
                 <template slot-scope="scope">
-                  <el-button @click="edit(scope.row)" type="text" size="small">修改</el-button>
+                  <el-button v-show="scope.row.auditStatus !== '4'" @click="modifyGoods(scope.row.goodsId, scope.row.editApproveStatus)" type="text" size="small">修改</el-button>
                   <el-button @click="goPreview(scope.row)" type="text" size="small">详情</el-button>
+                  <el-button v-show="scope.row.auditStatus !== '4' && scope.row.editApproveStatus === '3'" @click="giveUp(scope.row.goodsId)" type="text" size="small">放弃</el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -132,7 +133,7 @@
               </el-table-column>
               <el-table-column label="操作" align="center">
                 <template slot-scope="scope">
-                  <el-button @click="edit(scope.row)" type="text" size="small">修改</el-button>
+                  <el-button v-if="(scope.row.auditStatus === '3'||scope.row.auditStatus === '0'||scope.row.auditStatus === '')&&scope.row.status==='1'" @click="modifyGoods2(scope.row)" type="text" size="small">修改</el-button>
                   <el-button @click="goPreview(scope.row)" type="text" size="small">详情</el-button>
                 </template>
               </el-table-column>
@@ -168,8 +169,9 @@
               </el-table-column>
               <el-table-column label="操作" align="center">
                 <template slot-scope="scope">
-                  <el-button @click="edit(scope.row)" type="text" size="small">修改</el-button>
+                  <el-button v-show="scope.row.auditStatus !== '4'" @click="modifyGoods(scope.row.goodsId, scope.row.editApproveStatus)" type="text" size="small">修改</el-button>
                   <el-button @click="goPreview(scope.row)" type="text" size="small">详情</el-button>
+                  <el-button v-show="scope.row.auditStatus !== '4' && scope.row.editApproveStatus === '3'" @click="giveUp(scope.row.goodsId)" type="text" size="small">放弃</el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -204,7 +206,7 @@
               </el-table-column>
               <el-table-column label="操作" align="center">
                 <template slot-scope="scope">
-                  <el-button @click="edit(scope.row)" type="text" size="small">修改</el-button>
+                  <el-button @click="modifyGoods3(scope.row)" type="text" size="small">修改</el-button>
                   <el-button @click="goPreview(scope.row)" type="text" size="small">详情</el-button>
                 </template>
               </el-table-column>
@@ -255,7 +257,7 @@
 </template>
 
 <script>
-import { getGoods } from '@/api/onsale.js'
+import { getGoods, giveUp } from '@/api/onsale.js'
 import { getGoodsTopType } from '@/api/goodsRelease'
 import { getBusiness } from '@/api/admin/onsalemodifyaudit.js'
 export default {
@@ -265,15 +267,19 @@ export default {
     if (this.formerTab === 'tab1') {
       this.searchType = '1'
       this.activeTab = 'tab1'
+      this.currentTab = 'tab1'
     } else if (this.formerTab === 'tab2') {
       this.searchType = '2'
       this.activeTab = 'tab2'
+      this.currentTab = 'tab2'
     } else if (this.formerTab === 'tab3') {
       this.searchType = '3'
       this.activeTab = 'tab3'
+      this.currentTab = 'tab3'
     } else if (this.formerTab === 'tab4') {
       this.searchType = '6'
       this.activeTab = 'tab4'
+      this.currentTab = 'tab4'
     }
     this._getGoods()
   },
@@ -324,6 +330,37 @@ export default {
     }
   },
   methods: {
+    modifyGoods(gid, modifyStatus) {
+      // 在售和缺货修改  修改状态为驳回，应该显示放弃按钮
+      if (modifyStatus === '3') {
+        this.$router.push({ name: 'publishstep1', query: { goodsId: gid, modifyFlag: 2, gFlag: 1, tab: this.currentTab }})
+      } else {
+        this.$router.push({ name: 'publishstep1', query: { goodsId: gid, modifyFlag: 2, tab: this.currentTab }})
+      }
+    },
+    // 未上架商品修改
+    modifyGoods2(val) {
+      this.$router.push({ name: 'publishstep1', query: { goodsId: val.goodsId, modifyFlag: 2, tab: this.currentTab }})
+    },
+    // 历史商品修改
+    modifyGoods3(val) {
+      this.$router.push({ name: 'publishstep1', query: { goodsId: val.goodsId, modifyFlag: 3, tab: this.currentTab }})
+    },
+    giveUp(id) {
+      giveUp(id).then(res => {
+        if (res.status === 200) {
+          this.$message.success(res.msg)
+          this.submitForm('formT')
+        } else {
+          this.$message.error(res.msg)
+        }
+      }).catch(err => {
+        this.$message.error(err.msg)
+      })
+    },
+    modify(row) {
+      console.log(row)
+    },
     _getGoodsTopType() {
       getGoodsTopType().then(res => {
         if (res.status === 200) {

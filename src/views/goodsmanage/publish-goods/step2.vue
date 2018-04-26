@@ -59,7 +59,7 @@
         <el-checkbox-group v-model="ruleForm.zhifufs">
           <el-checkbox :disabled="zfbDisable" @change="_checkPayWay(23, 1)" label="支付宝支付" name="zhifufs"></el-checkbox>
           <el-checkbox :disabled="sjzfDisable" @change="_checkPayWay(33, 2)" label="联动支付" name="zhifufs"></el-checkbox>
-          <el-checkbox :checked=true disabled label="货到付款" name="zhifufs"></el-checkbox>
+          <el-checkbox label="货到付款" name="zhifufs"></el-checkbox>
           <el-checkbox :disabled="wyzjDisable" @change="_checkPayWay(34, 3)" label="和包支付" name="zhifufs"></el-checkbox>
           <el-alert title="温馨提示：在线支付将由支付渠道收取交易手续费，由商户承担，支付宝0.5%，手机支付0.3%。" type="error" :closable="false"></el-alert>
         </el-checkbox-group>
@@ -360,6 +360,9 @@
             if (this.goodsBean.alipay === '0') {
               this.ruleForm.zhifufs.push('支付宝支付')
             }
+            if (this.goodsBean.codpay === '0') {
+              this.ruleForm.zhifufs.push('货到付款')
+            }
             if (this.goodsBean.cmpay === '0') {
               this.ruleForm.zhifufs.push('和包支付')
             }
@@ -639,7 +642,7 @@
               stockAlarmFlag: this.ruleForm.kucuntx ? 1 : 0,
               stockAlarm: this.ruleForm.kucuntx ? this.ruleForm.kucuntxNum : '',
               alipay: this.ruleForm.zhifufs.indexOf('支付宝支付') > -1 ? 0 : 1,
-              codpay: 0,
+              codpay: this.ruleForm.zhifufs.indexOf('货到付款') > -1 ? 0 : 1,
               cmpay: this.ruleForm.zhifufs.indexOf('和包支付') > -1 ? 0 : 1,
               umpay: this.ruleForm.zhifufs.indexOf('联动支付') > -1 ? 0 : 1,
               imageList: [],
@@ -716,7 +719,7 @@
       },
       getLocationInfo(data) {
         this.ruleForm.spcd = data.label
-        this.ruleForm.spcdcode = data.locationCode
+        this.ruleForm.spcdcode = data.id
       },
       addJieti() {
         this.jietiItems.push({})
