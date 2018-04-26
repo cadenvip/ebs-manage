@@ -91,8 +91,7 @@
                 </template>
               </el-table-column>
               <el-table-column label="修改状态" align="center">
-                <template slot-scope="scope">
-                </template>
+                <template slot-scope="scope">{{ scope.row.editApproveStatus === '1' ? '修改待审核' : scope.row.editApproveStatus === '2' ? '修改审核通过' : scope.row.editApproveStatus === '3' ? '修改审核驳回' : '' }}</template>
               </el-table-column>
               <el-table-column label="操作" align="center">
                 <template slot-scope="scope">
@@ -128,8 +127,7 @@
                 </template>
               </el-table-column>
               <el-table-column label="修改状态" align="center">
-                <template slot-scope="scope">
-                </template>
+                <template slot-scope="scope">{{ scope.row.editApproveStatus === '1' ? '修改待审核' : scope.row.editApproveStatus === '2' ? '修改审核通过' : scope.row.editApproveStatus === '3' ? '修改审核驳回' : '' }}</template>
               </el-table-column>
               <el-table-column label="操作" align="center">
                 <template slot-scope="scope">
@@ -164,8 +162,7 @@
                 </template>
               </el-table-column>
               <el-table-column label="修改状态" align="center">
-                <template slot-scope="scope">
-                </template>
+                <template slot-scope="scope">{{ scope.row.editApproveStatus === '1' ? '修改待审核' : scope.row.editApproveStatus === '2' ? '修改审核通过' : scope.row.editApproveStatus === '3' ? '修改审核驳回' : '' }}</template>
               </el-table-column>
               <el-table-column label="操作" align="center">
                 <template slot-scope="scope">
@@ -201,8 +198,7 @@
                 </template>
               </el-table-column>
               <el-table-column label="修改状态" align="center">
-                <template slot-scope="scope">
-                </template>
+                <template slot-scope="scope">{{ scope.row.editApproveStatus === '1' ? '修改待审核' : scope.row.editApproveStatus === '2' ? '修改审核通过' : scope.row.editApproveStatus === '3' ? '修改审核驳回' : '' }}</template>
               </el-table-column>
               <el-table-column label="操作" align="center">
                 <template slot-scope="scope">
