@@ -26,7 +26,7 @@
           <el-form-item label-width="0" style="text-align: center;">
             <el-button @click="submitForm" size="small" type="primary">确定</el-button>
             <el-button @click="resetForm" size="small" type="primary">重置</el-button>
-            <el-button @click="exportFile" size="small" type="primary">导出</el-button>
+            <el-button @click="orderExport" size="small" type="primary">导出</el-button>
             <el-button @click="showMore = !showMore" size="small">更多</el-button>
           </el-form-item>
         </el-col>
@@ -162,7 +162,7 @@
 
 <script>
 import { getBusiness } from '@/api/admin/onsalemodifyaudit.js'
-import { getOrderList } from '@/api/order/index.js'
+import { getOrderList, orderExport } from '@/api/order/index.js'
 import CollapseTransition from 'element-ui/lib/transitions/collapse-transition'
 import { parseTime } from '@/utils/index'
 import { phoneCutSensitive, nameCutSensitive } from '@/utils/index.js'
@@ -349,8 +349,20 @@ export default {
         comeFrom: ''
       }
     },
-    exportFile() {
-
+    orderExport() {
+      const defaultParam = {
+        searchType: 1,
+        page: this.currentPage,
+        pageSize: 10
+      }
+      const params = Object.assign(defaultParam, this.searchForm)
+      orderExport(params).then(res => {
+        if (res.status === 200) {
+          this.$message.success('成功！')
+        }
+      }).catch(err => {
+        this.$message.error(err.msg)
+      })
     },
     _getOrderDetail(oid) {
       if (oid) {
@@ -368,7 +380,6 @@ export default {
       this._getBusiness()
     },
     handleCurrentChange(val) {
-      console.log(val + '111')
       this.currentPage = val
       this._getOrderList(this.searchForm)
     },
