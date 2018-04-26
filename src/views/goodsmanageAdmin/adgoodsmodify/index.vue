@@ -260,8 +260,22 @@ import { getGoodsTopType } from '@/api/goodsRelease'
 import { getBusiness } from '@/api/admin/onsalemodifyaudit.js'
 export default {
   created() {
-    this._getGoods()
     this._getGoodsTopType()
+    this.formerTab = this.$route.query.tab
+    if (this.formerTab === 'tab1') {
+      this.searchType = '1'
+      this.activeTab = 'tab1'
+    } else if (this.formerTab === 'tab2') {
+      this.searchType = '2'
+      this.activeTab = 'tab2'
+    } else if (this.formerTab === 'tab3') {
+      this.searchType = '3'
+      this.activeTab = 'tab3'
+    } else if (this.formerTab === 'tab4') {
+      this.searchType = '6'
+      this.activeTab = 'tab4'
+    }
+    this._getGoods()
   },
   data() {
     return {
@@ -436,7 +450,7 @@ export default {
     },
     goPreview(val) {
       if (val.goodsId) {
-        this.$router.push({ name: 'preview', query: { goodsId: val.goodsId }})
+        this.$router.push({ name: 'preview', query: { goodsId: val.goodsId, tab: this.currentTab }})
       }
     }
   }

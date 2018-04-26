@@ -192,9 +192,11 @@
         console.log(tab, event)
       },
       goBack () {
-        window.history.length > 1
-          ? this.$router.go(-1)
-          : this.$router.push('/')
+        if (this.$route.query.tab) {
+          this.$router.push({ name: '二次采编', query: { tab: this.$route.query.tab }})
+        } else {
+          window.history.length > 1 ? this.$router.go(-1) : this.$router.push('/')
+        }
       }
     },
     computed: {
