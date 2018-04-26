@@ -1065,11 +1065,15 @@
         //   this.$message.error('上传图片大小不能超过 2MB!')
         // }
         // return isJPG && isLt2M
+        const isImage = file.type.substr(0, 5) === 'image'
         const isLt500k = file.size / 1024 < 500
-        if (!isLt500k) {
-          this.$message.error('上传图片大小不能超过500K!')
+        if (!isImage) {
+          this.$message.error('只能上传图片!')
         }
-        return isLt500k
+        if (!isLt500k) {
+          this.$message.error('上传图片大小不能超过 500kb!')
+        }
+        return isImage && isLt500k
       },
       handleLicenceSuccess(res, file) {
         var url = decryptStr(res)

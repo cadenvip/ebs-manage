@@ -760,7 +760,7 @@
         const isLt500K = file.size / 1024  < 500
         const isJPG = file.type.substr(0, 5) === 'image'
         if (!isJPG) {
-          this.$message.error('只能上传图片是!')
+          this.$message.error('只能上传图片!')
         }
         if (!isLt500K) {
           this.$message.error('上传头像图片大小不能超过 500kb!')
