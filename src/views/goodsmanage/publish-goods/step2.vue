@@ -88,6 +88,7 @@
             action="http://183.230.101.142:58080/ebs/common/upload"
             :show-file-list="true"
             list-type="picture-card"
+            :on-preview="handlePictureCardPreview"
             :file-list="fileList"
             :before-upload="beforeAvatarUpload" :on-success="handleAvatarSuccess" style="display:inline-block">
             <i class="el-icon-plus"></i>
@@ -287,7 +288,10 @@
           <el-button @click="giveUp" v-if="gFlag">放弃修改</el-button>         
         </el-form-item>
       </div>      
-    </el-form>   
+    </el-form> 
+    <el-dialog :visible.sync="dialogVisible">
+      <img width="100%" :src="dialogImageUrl" alt="">
+    </el-dialog>  
     <el-dialog
       title="请选择区域"
       :visible.sync="regionVisible"
@@ -446,6 +450,8 @@
     },
     data() {
       return {
+        dialogImageUrl: '',
+        dialogVisible: false,
         isShowUpRemind: true, // 是否显示上架提醒 在售修改不现实
         fileList: [],   // 上传文件
         h5content: '',
@@ -734,6 +740,14 @@
         } else {
           this.$message.error('图片上传失败！')
         }
+      },
+      handlePictureCardPreview(file) {
+        if (typeof file === 'string') {
+          this.dialogImageUrl = file
+        } else {
+          this.dialogImageUrl = file.url
+        }
+        this.dialogVisible = true
       },
       handleRemove(file, fileList) {
         for (var i in this.fileList) {

@@ -69,7 +69,8 @@
                 <el-form-item>
                     <el-date-picker style="width:100%;"
                       v-model="searchForm.upStartTime"
-                      type="date"
+                      type="datetime"
+                      value-format="yyyy-MM-dd HH:mm:ss"
                       placeholder="上架开始时间">
                     </el-date-picker>
                 </el-form-item>
@@ -78,7 +79,8 @@
                 <el-form-item>
                     <el-date-picker style="width:100%;"
                       v-model="searchForm.upEndTime"
-                      type="date"
+                      type="datetime"
+                      value-format="yyyy-MM-dd HH:mm:ss"
                       placeholder="上架结束时间">
                     </el-date-picker>
                 </el-form-item>

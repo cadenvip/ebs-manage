@@ -485,7 +485,7 @@ export const asyncRouterMap = [
         path: 'adgoodsmodify',  // 二次采编
         name: '二次采编',
         component: _import('goodsmanageAdmin/adgoodsmodify/index'),
-        meta: { roles: ['1'], title: '商品二次采编', icon: 'goodsModifyAudit' }
+        meta: { roles: ['1'], title: '商品二次采编', icon: 'goodsmodify' }
       },
       {
         path: 'preview',  // 预览
