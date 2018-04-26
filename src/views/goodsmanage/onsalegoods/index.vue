@@ -332,7 +332,9 @@
         this.loading = true
         const params = Object.assign({
           searchType: 1,
-          pageSize: this.pagesize
+          pageSize: this.pagesize,
+          order: 'desc',
+          sort: 'createTime'
         }, obj)
         getOnSaleGoods(params).then(res => {
           if (res.status === 200) {
@@ -378,9 +380,6 @@
       handleTableSelectionChange2(val) {
         // this.multipleSelection = val
         // console.log(val)
-      },
-      _getStockOutGoods() {
-
       },
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {

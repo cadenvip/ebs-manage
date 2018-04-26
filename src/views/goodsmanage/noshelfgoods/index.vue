@@ -251,7 +251,9 @@
         const params = Object.assign({
           searchType: this.currentTab === 1 ? '2' : this.currentTab === 3 ? '6' : '2',
           pageSize: this.pagesize,
-          page: this.currentPage
+          page: this.currentPage,
+          order: 'desc',
+          sort: 'createTime'
         }, obj)
         getNoShelfGoods(params).then(res => {
           this.loading = false
