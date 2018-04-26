@@ -19,11 +19,12 @@
   export default {
     created() {
       this.csid = this.$route.query.csid
-      getCategoryDetail.get(this.csid).then(res => {
-        if (res.data.status === 200) {
-          this.detailObj = res.data.data
+      console.log(this.csid)
+      getCategoryDetail(this.csid).then(res => {
+        if (res.status === 200) {
+          this.detailObj = res.data
         } else {
-          this.$message.error(res.data.msg)
+          this.$message.error(res.msg)
         }
       }).catch(err => {
         this.$message.error(err.msg)
