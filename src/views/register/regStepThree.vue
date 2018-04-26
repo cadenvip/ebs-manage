@@ -257,9 +257,11 @@
         const isLt500k = file.size / 1024 < 500
         if (!isImage) {
           this.$message.error('只能上传图片!')
+          return isImage
         }
         if (!isLt500k) {
           this.$message.error('上传图片大小不能超过 500kb!')
+          return isLt500k
         }
         return isImage && isLt500k
       },
