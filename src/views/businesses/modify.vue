@@ -28,7 +28,7 @@
               <el-col :span="12">
                 <el-form-item label="有效时间：" prop="validdate_str">
                   <el-date-picker v-model="registerForm.validdate_str" type="date" format="yyyy-MM-dd" value-format="yyyy-MM-dd" style="width: 220px;"
-                    placeholder="选择日期">
+                    placeholder="选择日期" :picker-options="pickerBeginDateBefore">
                   </el-date-picker>
                 </el-form-item>
               </el-col>
@@ -576,6 +576,11 @@
         callback()
       }
       return {
+        pickerBeginDateBefore: {
+          disabledDate(time) {
+            return time.getTime() < Date.now() - 8.64e7
+          }
+        },
         dialogImageUrl: '',
         dialogVisible: false,
         sellAddressListForm: [],
