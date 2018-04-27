@@ -223,10 +223,10 @@
       </el-form-item>
       <el-form-item style="display: block;" label="发布渠道:">
         <el-checkbox-group v-model="ruleForm.fbqd">
-          <el-checkbox checked label="12582网站" name="fbqd"></el-checkbox>
-          <el-checkbox checked label="12582热线" name="fbqd"></el-checkbox>
-          <el-checkbox checked label="WAP" name="fbqd"></el-checkbox>
-          <el-checkbox checked label="手机客户端" name="fbqd"></el-checkbox>
+          <el-checkbox label="12582网站" name="fbqd"></el-checkbox>
+          <el-checkbox label="12582热线" name="fbqd"></el-checkbox>
+          <el-checkbox label="WAP" name="fbqd"></el-checkbox>
+          <el-checkbox label="手机客户端" name="fbqd"></el-checkbox>
           <el-checkbox label="农资商城" name="fbqd"></el-checkbox>
         </el-checkbox-group>
       </el-form-item>

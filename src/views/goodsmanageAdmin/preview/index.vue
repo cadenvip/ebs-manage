@@ -25,7 +25,7 @@
               剩余库存：<span>{{goodsBean.stock}}{{actualUnit}}</span>
             </p>
             <p>
-              支持换货：<span>{{goodsBean.isexchange==='1'?'否':'是'}}</span>
+              支持换货：<span>{{goodsBean.isExchange==='1'?'否':'是'}}</span>
             </p>
             <p>
               物流方式：<span v-if="goodsBean.logisticsTypes">{{goodsBean.logisticsTypes.indexOf('1') > -1 ? '自提' : ''}} {{goodsBean.logisticsTypes.indexOf('2')>-1 ? '快递' : ''}}{{goodsBean.logisticsTypes.indexOf('3')>-1 ? '免邮' : ''}}{{goodsBean.logisticsTypes.indexOf('20')>-1 ? 'EMAIL' : ''}}{{goodsBean.logisticsTypes.indexOf('21')>-1 ? 'FAX' : ''}}</span>
