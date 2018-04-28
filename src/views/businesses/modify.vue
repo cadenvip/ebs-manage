@@ -1047,6 +1047,7 @@
       },
       getAddressInfo(addressInfo) {
         this.sellAddressListForm[addressInfo.index].locationcode = (addressInfo.id !== undefined ? addressInfo.id.toString() : '')
+        this.sellAddressListForm[addressInfo.index].code = (addressInfo.locationCode !== undefined ? addressInfo.locationCode : '')
         this.sellAddressListForm[addressInfo.index].selladdress = addressInfo.town_village
       },
       addSellAddress() {
@@ -1059,6 +1060,7 @@
         var sellAddress = {
           'id': this.sellAddressListForm.length,
           'locationcode': '',
+          'code': '',
           'selladdress': '',
           'merchantcode': '',
           'valid': true
@@ -1352,7 +1354,7 @@
         for (let i = 0; i < this.sellAddressListForm.length; i++) {
           if (this.sellAddressListForm[i].valid === true) {
             sellAddressList.push({
-              'locationcode': `${this.sellAddressListForm[i].locationcode}`,
+              'locationcode': `${this.sellAddressListForm[i].code}`,
               'selladdress': `${this.sellAddressListForm[i].selladdress}`
             })
           }
