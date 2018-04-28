@@ -129,12 +129,51 @@
         <p><span class="title">彩信文件:{{gBean.mmsInfo}}</span></p>
       </div>
     </div>
-    <!-- <div class="part part3">
-      <h1>属性信息</h1>
-      <div>
-
-      </div>
-    </div> -->
+    <div class="content" style="margin-top: 20px;">
+      <el-tabs v-model="activeTab" type="border-card" @tab-click="handleTabClick">
+        <el-tab-pane label="商品信息" name="first">
+          <el-row>
+            <el-col :span="12" style="border-right: 1px solid #999;">
+              <div class="clearfix mt10">
+                <p class="fl pleft">商品名称：</p> <p class="fl pright">{{gBean.name}}</p>
+              </div>
+              <div class="clearfix mt10">
+                <p class="fl pleft">商品重量：</p> <p class="fl pright">{{gBean.weight}}克(g)</p>
+              </div>
+              <div class="clearfix mt10">
+                <p class="fl pleft">供应商：</p> <p class="fl pright">{{gBean.supplierName}}</p>
+              </div>
+              <div class="clearfix mt10">
+                <p class="fl pleft">推介短信：</p> <p class="fl pright">{{gBean.smsInfo}}</p>
+              </div>
+            </el-col>
+            <el-col :span="12">
+              <div class="clearfix mt10">
+                <p class="fl pleft">商家名称：</p> <p class="fl pright">{{gBean.shopName}}</p>
+              </div>
+              <div class="clearfix mt10">
+                <p class="fl pleft">商品产地：</p> <p class="fl pright">{{gBean.placeofOriginName}}</p>
+              </div>
+              <div class="clearfix mt10">
+                <p class="fl pleft">商品分类信息：</p> <p class="fl pright">{{gBean.typeCodeName}}</p>
+              </div>
+              <div class="clearfix mt10">
+                <p class="fl pleft">商品清单：</p> <p class="fl pright">{{gBean.itemList?gBean.itemList:''}}</p>
+              </div>
+            </el-col>
+          </el-row>
+        </el-tab-pane>
+        <el-tab-pane label="商品简述" name="third"><p style="color:grey;font-size:13px;">{{gBean.goodsDesc}}</p></el-tab-pane>
+        <el-tab-pane label="规格参数" name="fourth">
+          <p style="color:grey;font-size:13px;" v-show="gBean.orderGoodsSpec1">包装：{{gBean.orderGoodsSpec1}}</p>
+          <p style="color:grey;font-size:13px;margin-top:10px;" v-show="gBean.orderGoodsSpec2">长度：{{gBean.orderGoodsSpec2}}</p>
+        </el-tab-pane>
+        <el-tab-pane label="手机端描述" name="eighth">
+          <p v-html="gBean.h5content" style="color:grey;font-size:13px;">
+          </p>
+        </el-tab-pane>
+      </el-tabs>    
+    </div>
     <div class="part part4">
       <h1>执行类型</h1>
       <div v-if="gBean.takeEffectType==='1'">
@@ -186,6 +225,7 @@ export default {
   },
   data() {
     return {
+      activeTab: 'first',
       goodsId: '',
       yesOrNo: '1',
       auditReason: '',
@@ -284,6 +324,8 @@ export default {
       } else {
         return '年'
       }
+    },
+    handleTabClick(tab, event) {
     },
     goBack() {
       this.$router.go(-1)
@@ -425,4 +467,6 @@ export default {
   .el-carousel__item:nth-child(2n+1) {
      background-color: #d3dce6;
   }  
+  .pleft{width: 100px;text-align: right;font-size: 13px;color: #787878;}
+  .pright{font-size: 13px;}
 </style>

@@ -336,6 +336,7 @@
             // 状态为驳回是 展示放弃修改
             this.goodsBean = Object.assign(res.data.goodsBean, res.data.editGoodsBean)
             console.log(this.goodsBean)
+            this.ruleForm.shopId = this.goodsBean.shopId
             this.ruleForm.cuxiao =  this.goodsBean.promotionInfo
             this.ruleForm.mingchen =  this.goodsBean.name
             this.ruleForm.pinpai = this.goodsBean.brand
@@ -780,7 +781,7 @@
         this.$router.go(-1)
       },
       _checkPayWay(val, index) {
-        const params = { payAccountType: val }
+        const params = { payAccountType: val, unitId: this.ruleForm.shopId }
         checkPayWay(params).then((res) => {
           if (res.status === 200) {
             console.log(res)
