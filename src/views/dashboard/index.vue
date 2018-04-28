@@ -258,51 +258,56 @@
         this.pwdInfo = data
       },
       onSubmit() {
-        console.log(this.userInfo)
-        if (window.sessionStorage.getItem('userInfo') === JSON.stringify(this.userForm)) {
-          this.$message.warning('未做任何修改！')
-          return
-        }
-        if (this.userForm.name === undefined || this.userForm.name === null || this.userForm.name === '') {
-          this.$message.error('请输入姓名！')
-          return
-        }
-        var params = {
-          'id': `${this.userForm.id}`,
-          'loginname': this.userForm.loginname,
-          'name': this.userForm.name,
-          'locationid': this.userForm.locationid,
-          'phoneno': this.userForm.phoneno,
-          'unitid': this.userForm.unitid,
-          'email': this.userForm.email !== null ? this.userForm.email : '',
-          'address': this.userForm.address !== null ? this.userForm.address : ''
-        }
-        var roletype = getRoleType()
-        if (roletype !== '1') {
-          // 商家
-          updateBusinessUser(params).then(response => {
-            if (response.status === 200) {
-              this.$message.success('修改个人信息成功！')
-              window.sessionStorage.setItem('userInfo', JSON.stringify(this.userForm))
-            } else {
-              this.$message.error(response.msg)
+        this.$refs.userForm.validate(valid => {
+          if (valid) {
+            if (window.sessionStorage.getItem('userInfo') === JSON.stringify(this.userForm)) {
+              this.$message.warning('未做任何修改！')
+              return
             }
-          }).catch(error => {
-            this.$message.error(error.msg)
-          })
-        } else {
-          // 管理员
-          updateUser(params).then(response => {
-            if (response.status === 200) {
-              this.$message.success('修改个人信息成功！')
-              window.sessionStorage.setItem('userInfo', JSON.stringify(this.userForm))
-            } else {
-              this.$message.error(response.msg)
+            if (this.userForm.name === undefined || this.userForm.name === null || this.userForm.name === '') {
+              this.$message.error('请输入姓名！')
+              return
             }
-          }).catch(error => {
-            this.$message.error(error.msg)
-          })
-        }
+            var params = {
+              'id': `${this.userForm.id}`,
+              'loginname': this.userForm.loginname,
+              'name': this.userForm.name,
+              'locationid': this.userForm.locationid,
+              'phoneno': this.userForm.phoneno,
+              'unitid': this.userForm.unitid,
+              'email': this.userForm.email !== null ? this.userForm.email : '',
+              'address': this.userForm.address !== null ? this.userForm.address : ''
+            }
+            var roletype = getRoleType()
+            if (roletype !== '1') {
+              // 商家
+              updateBusinessUser(params).then(response => {
+                if (response.status === 200) {
+                  this.$message.success('修改个人信息成功！')
+                  window.sessionStorage.setItem('userInfo', JSON.stringify(this.userForm))
+                } else {
+                  this.$message.error(response.msg)
+                }
+              }).catch(error => {
+                this.$message.error(error.msg)
+              })
+            } else {
+              // 管理员
+              updateUser(params).then(response => {
+                if (response.status === 200) {
+                  this.$message.success('修改个人信息成功！')
+                  window.sessionStorage.setItem('userInfo', JSON.stringify(this.userForm))
+                } else {
+                  this.$message.error(response.msg)
+                }
+              }).catch(error => {
+                this.$message.error(error.msg)
+              })
+            }
+          } else {
+            this.$message.error('填写内容不规范，提交失败！')
+          }
+        })
       },
       modifyPwd() {
         this.dialogVisible = true
@@ -311,31 +316,37 @@
         this.modifyPwdForm.repassword = ''
       },
       confirmModify() {
-        var params = {
-          'userid': `${this.userForm.id}`,
-          'oldPassword': encryptPassword(this.modifyPwdForm.opassword),
-          'newPassword': encryptPassword(this.modifyPwdForm.password)
-        }
-        modifyPassword(params).then(response => {
-          if (response.status === 200) {
-            // this.$message.success('修改密码成功！')
-            this.dialogVisible = false
-            this.$confirm(`修改密码成功！是否重新登录?`, '提示', {
-              confirmButtonText: '是',
-              cancelButtonText: '否',
-              type: 'warning'
-            }).then(() => {
-              this.$router.push({
-                path: '/login'
-              })
-            }).catch(() => {
-              console.log('未重新登录')
+        this.$refs.modifyPwdForm.validate(valid => {
+          if (valid) {
+            var params = {
+              'userid': `${this.userForm.id}`,
+              'oldPassword': encryptPassword(this.modifyPwdForm.opassword),
+              'newPassword': encryptPassword(this.modifyPwdForm.password)
+            }
+            modifyPassword(params).then(response => {
+              if (response.status === 200) {
+                // this.$message.success('修改密码成功！')
+                this.dialogVisible = false
+                this.$confirm(`修改密码成功！是否重新登录?`, '提示', {
+                  confirmButtonText: '是',
+                  cancelButtonText: '否',
+                  type: 'warning'
+                }).then(() => {
+                  this.$router.push({
+                    path: '/login'
+                  })
+                }).catch(() => {
+                  console.log('未重新登录')
+                })
+              } else {
+                this.$message.error(response.msg)
+              }
+            }).catch(error => {
+              this.$message.error(error.msg)
             })
           } else {
-            this.$message.error(response.msg)
+            this.$message.error('填写内容不规范，提交失败！')
           }
-        }).catch(error => {
-          this.$message.error(error.msg)
         })
       },
       onCancel() {
